@@ -10,10 +10,6 @@ First, create `config/application.yml`
 cp config/application.yml.example config/application.yml
 ```
 
-### Convetional setup
-
-Follow the process to setup a local DB at https://bitbucket.org/syit/shivyog-rails/wiki/Setup_local_database
-
 ### Docker
 
 Replace `config/database.yml` content with `config/database.yml.docker.example`
