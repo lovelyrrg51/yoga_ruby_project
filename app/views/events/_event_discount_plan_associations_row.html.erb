@@ -1,0 +1,34 @@
+<% if @discount_plan.present? %>
+	    <div class="tableCntrl">
+	        <div class="table-responsive tableScrollbar ">
+	            <table class="table">
+	                <thead>
+	                    <tr>
+	                        <th>Amount</th>
+	                        <th>Type</th>
+	                        <th width="350">Events</th>
+	                    </tr>
+	                </thead>
+	                <tbody>
+											<tr>
+											    <td class="primary-color primarybold"><%= @discount_plan.discount_amount.to_f %></td>
+											    <td class="primarybold"><%= @discount_plan.percentage? ? '%' : "fixed" %></td>
+													<td>
+														<div class="listoffer">
+															<ul class="mCustomScrollbar">
+																 <% Event.where('id IN (?)', @discount_plan_events.pluck(:id)).each do |event|%>
+									                	<li><%= event.event_name %></li>
+									                <% end %>
+															</ul>
+														</div>
+													</td>
+											</tr>
+	                </tbody>
+	            </table>
+	        </div>
+	    </div>
+	    <div class="pannel-btn text-right">
+	      <button type="reset" class="btn btn-danger mg-r10" onClick="Turbolinks.visit(window.location.href)" type="button">CLEAR</button>
+	      <button type="submit" class="btn btn-info" >SAVE</button>
+	    </div>
+<% end %>

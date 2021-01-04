@@ -1,0 +1,12 @@
+<tr id="<%= @sadhak_profile.syid %>">
+  <td><span class="primary-color"><%= @sadhak_profile.syid %></span></td>
+  <td><%= @sadhak_profile.full_name %></td>
+  <td><span class="primary-color"><%= @sadhak_profile.email %></span></td>
+  <td><%= @sadhak_profile.city_name %></td>
+  <td class="text-center"><a href="javascript:void(0)" class="primary-color"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
+  <%= hidden_field_tag "event_order[event_order_line_items_attributes][#{@sadhak_profile.id}][syid]", @sadhak_profile.id %>
+  <%= hidden_field_tag "event_order[event_order_line_items_attributes][#{@sadhak_profile.id}][event_seating_category_association_id]", @clp_event.event_seating_category_associations.first.try(:id) %>
+</tr>
+<script>
+  $(".basic-single").select2();
+</script>

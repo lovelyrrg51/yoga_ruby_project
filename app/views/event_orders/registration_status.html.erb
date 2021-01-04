@@ -1,0 +1,21 @@
+<div class="headingtittle-h2 text-center">
+    <h2>Registration Status</h2>
+</div>
+<form action="<%= check_registration_exists_event_orders_path %>" method="get">
+    <div class="boxsection-lg boxsection-xs boxshadow registrationstatusCntrl">
+        <div class="display-table">
+            <div class="display-table-cell">
+                <div class="searchCntrl">
+                    <label>Enter Registration Reference Number</label>
+                    <div class="input-group prelative">
+                        <input type="text" class="form-control searchbox" name="reg_ref_number" placeholder="Search reg. ref. number">
+                        <button class="close-icon" type="reset">&times;</button>
+                        <span class="input-group-addon">
+                            <button type="submit" class=""><i class="icon-search"></i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

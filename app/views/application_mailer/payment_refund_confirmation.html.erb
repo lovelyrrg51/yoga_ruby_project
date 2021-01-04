@@ -1,0 +1,169 @@
+<tr>
+  <td style="padding: 20px 30px; background: #f8f8f8;" colspan="2">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EAE8E8" style="font-family:Verdana, Geneva, Helvetica, Arial, sans-serif;">
+      <% @refunds = @options[:refunds] || [] %>
+      <% @line_items = @options[:line_items] || [] %>
+      <% @event = @options[:event] %>
+      <% @total_refunded_amount = @options[:total_refunded_amount] || 0.0 %>
+      <% @partial_refund = @options[:partial_refund] %>
+      <tr>
+        <% if @refunds.present? %>
+          <td style="padding: 20px 0; text-align: center; font-size: 1em; font-weight: bold; color:#900; line-height: 24px;">Refund(s) <%= @partial_refund ? 'partially' : 'successfully' %> processed for event <i><%=@event.event_name_with_location%></i>. Below are the details regarding refund(s). </td>
+        <% else %>
+          <td style="padding: 20px 0; text-align: center; font-size: 1em; font-weight: bold; color:#900; line-height: 24px;">Update request successfully processed for event <i><%= @event.try(:event_name_with_location) %></i>. Below are the details regarding updates.</td>
+        <% end %>
+      </tr>
+      <% if @partial_refund %>
+        <tr>
+          <td style="padding: 20px 0; text-align: center; font-size: 1em; font-weight: bold; color:#900; line-height: 24px;"><b>NOTE:<i>Due to some technical error, We could not processed full refund. Sorry for the inconvenience. For remaining refund, Please contact to the Ashram.</i></b></td>
+        </tr>
+      <% end %>
+      <tr>
+        <td>
+          <table width="80%" border="0" cellspacing="0" cellpadding="0" style="padding:10px 0; margin:0 auto;">
+            <% if @refunds.present? %>
+              <tr>
+                <td style="text-align: center; font-size:1.2em; font-weight: bold; color:#900; padding-bottom: 10px;">Refund Details</td>
+              </tr>
+              <tr>
+                <td align="center">
+                  <table border="0" width="100%"cellpadding="0" cellspacing="0" style=" border: 1px solid #ccc;">
+                    <tr>
+                      <td width="20%" align="center" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.05em; color: #252525; padding:10px;">
+                        <b>S.No</b>
+                      </td>
+                      <td width="30%" align="center" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.05em; color: #252525; padding:10px;">
+                        <b>Refund Id</b>
+                      </td>
+                      <td width="30%" align="center" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.05em; color: #252525; padding:10px;">
+                        <b>Payment Method</b>
+                      </td>
+                      <td width="20%" align="center" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.05em; color: #252525; padding:10px;">
+                        <b>Amount</b>
+                      </td>
+                    </tr>
+                    <% @refunds.each_with_index do |refund, index| %>
+                      <tr>
+                        <td width="20%" align="center" bgcolor="<%= index%2 == 0 ? '#FFFFFF' : '#EEEEEE' %>" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 0.875em; color: #252525; padding:10px;">
+                          <%= index+1 %>.
+                        </td>
+                        <td width="30%" align="center" bgcolor="<%= index%2 == 0 ? '#FFFFFF' : '#EEEEEE' %>" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 0.875em; color: #252525; padding:10px;">
+                          <b><%= if refund[:payment_method] == "Cash Payment" then
+                                  refund[:txn_refund_object][:transaction_number]
+                                else
+                                  if refund[:payment_method] == 'Demand draft' then
+                                    refund[:txn_refund_object][:dd_number]
+                                  else
+                                    if refund[:payment_method] == "Stripe Payment" then
+                                      refund[:txn_refund_object][:id]
+                                    else
+                                      if refund[:payment_method] == "Razorpay Payment" then
+                                        refund[:txn_refund_object][:id]
+                                      else
+                                        if refund[:payment_method] == "Paypal Payment" then
+                                          refund[:txn_refund_object][:REFUNDTRANSACTIONID]
+                                        else
+                                          if refund[:payment_method] == "Braintree Payment" then
+                                            refund[:txn_refund_object][:id]
+                                          else
+                                            if refund[:payment_method] == "Ccavenue Payment" then
+                                              refund[:txn_refund_object][:ccavenue_tracking_id]
+                                            else
+                                              refund[:payment_method] == "Payfast Payment" ? refund[:txn_refund_object][:pf_payment_id] : 'No Payment Method'
+                                            end
+                                          end
+                                        end
+                                      end
+                                    end
+                                  end
+                                end %></b>
+                        </td>
+                        <td width="30%" align="center" bgcolor="<%= index%2 == 0 ? '#FFFFFF' : '#EEEEEE' %>" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 0.875em; color: #252525; padding:10px;">
+                          <%= refund[:payment_method] %>
+                        </td>
+                        <td width="20%" align="center" bgcolor="<%= index%2 == 0 ? '#FFFFFF' : '#EEEEEE' %>" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 0.875em; color: #252525; padding:10px;">
+                          <%= refund[:refunded_amount].to_f %>
+                        </td>
+                      </tr>
+                    <% end %>
+                    <tr>
+                      <td width="20%" align="center" bgcolor="#A9A9A9" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.05em; color: #252525; padding:10px;"></td>
+                      <td width="30%" align="center" bgcolor="#A9A9A9" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.05em; color: #252525; padding:10px;"></td>
+                      <td width="30%" align="center" bgcolor="#A9A9A9" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.05em; color: #252525; padding:10px;">
+                        <b>Total Amount Refunded:</b>
+                      </td>
+                      <td width="20%" align="center" bgcolor="#A9A9A9" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.05em; color: #252525; padding:10px;">
+                        <b><%= @total_refunded_amount %></b>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            <% else %>
+              <tr>
+                <td style="text-align: center; font-size:1.2em; font-weight: bold; color:#900; padding-bottom: 10px;">No refunds found as refundable amount is <%= @total_refunded_amount.to_f.round(2) %>.</td>        
+              </tr>
+            <% end %>
+            <tr>
+              <td align="center" style="text-align: center; font-size:1.2em; font-weight: bold; color:#900; padding: 20px;">Sadhak Profile(s)</td>
+            </tr>
+            <tr>
+              <td align= "<%= @line_items.count == 1 ? 'center' : '' %>" >
+                <% @line_items.each_with_index do |line_item, index| %>
+                  <table border="0" width="300"  cellpadding="0" cellspacing="0" align="<%= if @line_items.count == 1 then
+                                                                                              'center'
+                                                                                            else
+                                                                                              index%2 == 0 ? 'left' : 'right'
+                                                                                            end %>" style=" border: 1px solid #ccc;  margin: 0px 0px 20px 0; display: inline-table;">
+                  <tr>
+                    <td width="50%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.05em; color: #252525; padding:10px;">
+                      <b>S.No:</b>
+                    </td>
+                    <td width="50%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 0.875em; color: #252525; padding:10px; ">
+                      <%= index+1 %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.05em; color: #252525; padding:10px; ">
+                      <b>SYID:</b>
+                    </td>
+                    <td width="50%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 0.875em; color: #252525; padding:10px; ">
+                      <% if line_item.sadhak_profile.present? %>
+                      <%= line_item.sadhak_profile.syid %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.05em; color: #252525; padding:10px; ">
+                      <b>Name:</b>
+                    </td>
+                    <td width="50%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 0.875em; color: #252525; padding:10px; ">
+                      <%= line_item.sadhak_profile.full_name.titleize %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.05em; color: #252525; padding:10px; ">
+                      <b>Seating Category:</b>
+                    </td>
+                    <td width="50%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 0.875em; color: #252525; padding:10px; ">
+                      <%= line_item.event_seating_category_association.seating_category.category_name.titleize %>
+                    </td>
+                    <% end %>
+                  </tr>
+                  <tr>
+                    <td width="50%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.05em; color: #252525; padding:10px; ">
+                      <b>Status:</b>
+                    </td>
+                    <td width="50%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 0.875em; color: #252525; padding:10px; ">
+                      <%= EventOrder.template_status_mapper[line_item.status] %>
+                    </td>
+                  </tr>
+                </table>
+                <% end %>
+              </td>
+          </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>

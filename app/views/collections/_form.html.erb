@@ -1,0 +1,153 @@
+
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Forum Admin</h2>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+        		<%= render "admin/forum_admin_left_panel"%>
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                    <!-- assets -->
+                    <div class="row">
+                        <div class="headtittle text-center">
+                            <h2>Collection</h2>
+                        </div>
+                        <div class="col-sm-12 mg-t20 mg-b30">
+                            <div class="row">
+                                <%= form_for @collection, html: { id: "collection_form" } do |f|%>
+                                <div class="col-sm-6">
+                                    <div class="outbox">
+                                        <label class="asterick">Name</label>
+                                        <div class="box bordered-input">
+                                            <div class="dropdown dropdown-field">
+                                            <%= f.text_field :collection_name, class: "form-control noBorder field", required: true, placeholder: "Name"%>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="outbox">
+                                        <label class="asterick">Description</label>
+                                        <div class="box bordered-input border-textarea">
+                                            <div class="dropdown dropdown-field">
+                                            <%= f.text_area :collection_description, class: "form-control noBorder field", required: true, placeholder: "Description"%>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="outbox announcementWrapper">
+                                        <label class="asterisk">Announcement</label>
+                                            <div class="pannel-btn text-right mg-b20">
+                                                <button class="btn btn-info addMoreAnnouncementButton" type = "button">ADD MORE</button>
+                                            </div>
+                                            <% if f.object.announcement_text.present? %>
+                                                <% f.object.announcement_text.each do |text|%>
+                                                    <div class="box bordered-input">
+                                                        <div class="dropdown dropdown-field">
+                                                            <input type="text" name="announcement_text[]" class = "form-control noBorder field" value = "<%= text %>">
+                                                        </div>
+                                                    </div>
+                                                <% end %>
+                                            <% else %>
+                                                <div class="box bordered-input mg-b10">
+                                                    <div class="dropdown dropdown-field">
+                                                        <input type="text" name="announcement_text[]" class = "form-control noBorder field">
+                                                        <span class="glyphicon glyphicon-remove form-control-feedback removeAnnouncementButton" aria-hidden="true"></span>
+                                                    </div>
+                                                </div>
+                                            <% end %>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="pannel-btn text-right">
+                                        <%= link_to "NEW COLLECTION", collections_path, class: "btn btn-info" if @collection.persisted?%>
+                                        <button class="btn btn-info"><%= @collection.persisted? && 'UPDATE' || 'CREATE'%></button>
+                                    </div>
+                                </div>
+                                <%end%>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <!-- Searching -->
+                            <%= form_tag collections_path, method: :get do%>
+                                <a href="#transactions" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+                                <div class="refineCntrl collapse in" aria-expanded="true" id="transactions" role="tablist">
+                                    <div class="refinesub-group">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="outbox">
+                                                    <label>Collection Name</label>
+                                                    <div class="box bordered-input">
+                                                         <div class="dropdown dropdown-field">
+                                                            <%= text_field_tag :collection_name, params[:collection_name], class: "form-control noBorder field", placeholder:"Search collection name"%>
+                                                         </div>
+                                                      </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="pannel-btn text-right">
+                                                    <button class="btn btn-danger mg-r10" type="button" onclick='Turbolinks.visit("<%= collections_url%>")'>CLEAR</button>
+                                                    <button class="btn btn-info">SEARCH</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <%end%>
+                        </div>
+                        <% if @collections.present? %>
+                            <div class="col-sm-12 mg-t60">
+                                <div class="Boxdrop dropdown mg-x-b15">
+                                    <%= render 'application/per_page' %>
+                                </div>
+                                <div class="tableCntrl">
+                                    <div class="table-responsive tableScrollbar">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Forum Name</th>
+                                                    <th class="text-center"></th>
+                                                    <th class="text-center">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% (@collections || []).each do |collection|%>
+                                                    <tr>
+                                                        <td class="primarybold">
+                                                            <%= link_to collection.collection_name, collection_digital_assets_path(collection.id), class: "secondary-color"%>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <%= link_to "CREATE ASSETS", collection_digital_assets_path(collection.id), class: "btn btn-info"%>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <%= link_to edit_collection_path(collection.id), class: " primary-color" do %>
+                                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                            <%end%>
+                                                            <%= link_to collection_path(collection.id), class: " primary-color", method: :delete, data: { confirm: "Are you sure?" } do %>
+                                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                            <%end%>
+                                                        </td>
+                                                    </tr>
+                                                <%end%>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="table-pagination">
+                                      <div class="show-pgnation">
+                                        <p class="primarybold"><%= custom_page_entries_info(@collections) %></p>
+                                      </div>
+                                      <%= paginate @collections %>
+                                    </div>
+                                </div>
+                            </div>
+                        <%else%>
+                           <%= render partial: 'application/no_records', locals: {message: 'No Collection Found.'} %> 
+                        <%end%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

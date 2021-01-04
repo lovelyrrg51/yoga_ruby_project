@@ -1,0 +1,13 @@
+ Namah Shivay <%= @user.name %>
+<br />
+You have successfully placed an order [ #<%= @order.id %> ] with us. Below are the details regarding your order.
+<br /><br />
+<strong>Items Purchased:</strong>
+<ul>
+  <% @order.line_items.each do |line_item| %>
+  <li><%= line_item.digital_asset.asset_name %></li>
+  <% end %>
+</ul>
+<table>
+  <tr><th>Total Amount</th><td><%= @order.total_amount %> <%= @order.currency %></td></tr>
+</table>

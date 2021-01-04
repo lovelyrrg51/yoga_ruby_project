@@ -1,0 +1,47 @@
+<%= form_for @global_preference, html:{class: "table-screen-next", id: "global_preference_form"} do |f| %>
+  <div class="prelative mg-b30">
+    <div class="overlapping "></div>
+    <div class="row mg-t30">
+
+      <% if @global_preference.text_field? %>
+        <div class="col-sm-12">
+            <div class="box bordered-input">
+                <label class="asterisk"><%= @global_preference.alias_name%></label>
+                <div class="dropdown dropdown-field">
+                    <%= f.text_field :val, class: 'form-control noBorder field', required: true %>
+                </div>
+            </div>
+        </div>
+      <% end %>
+
+      <% if @global_preference.text_area? %>
+        <div class="col-sm-12">
+              <div class="box bordered-input border-textarea">
+                  <label class="asterisk"><%= @global_preference.alias_name%></label>
+                  <div class="dropdown dropdown-field">
+                      <%= f.text_area(:val, class: 'form-control noBorder field', required: true)%>
+                  </div>
+              </div>
+          </div>
+      <% end %>
+
+      <% if @global_preference.tagsinput? %>
+        <div class="col-sm-12">
+          <div class="box-outer prelative">
+              <label class="asterisk"><%= @global_preference.alias_name%></label>
+               <div class="box bordered-input box-height">
+                 <%= f.text_field :val, class: 'form-control noBorder field', data: { role: 'tagsinput' }, required: true %>
+              </div>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="col-sm-12">
+          <div class="pannel-btn text-right">
+              <button type="reset" class="btn btn-danger mg-r10" >CLEAR</button>
+              <%= f.submit params[:action] == "edit" ? "UPDATE" : 'CREATE', {class: 'btn btn-info'} %>
+          </div>
+      </div>
+    </div>
+  </div>
+<% end %>

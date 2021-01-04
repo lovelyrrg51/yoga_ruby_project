@@ -1,0 +1,130 @@
+/* Desktop Main Menu Color */
+
+.wsmainfull {
+	border-bottom: 1px solid #868585;
+  background-color: #FFF;
+  transition:all 0.6s ease 0s;-webkit-transition:all 0.6s ease 0s;-ms-transition:all 0.6s ease 0s;-moz-transition:all 0.6s ease 0s;-o-transition:all 0.6s ease 0s;
+}
+
+.wsactive .wsmenu>.wsmenu-list {
+  background: #BC0D0F;
+}
+
+/* Mobile Header Color */
+
+.wsmobileheader {
+  background-color: #fff;
+}
+
+.wsmenu>.wsmenu-list>li>a {
+  color: #BC0D0F;
+  text-transform: uppercase;
+  /*border-right: 1px solid rgba(0, 0, 0, 0.10);*/
+}
+.wsmenu>.menuscroll>li>a {
+	color: #484848;
+}
+.wsmenu>.wsmenu-list>li>a:focus
+{
+	color: #FFF !important;
+}
+.wsmenu>.wsmenu-list>li>a .wsarrow:after {
+  border-top-color: #fff;
+}
+.wsmenu>.menuscroll>li>a .wsarrow:after {
+  border-top-color: #484848;
+}
+.wsmenu>.wsmenu-list>li>a:hover .wsarrow:after {
+  border-top-color: #fff;
+  /*transition:all 0.6s ease 0s;-webkit-transition:all 0.6s ease 0s;-ms-transition:all 0.6s ease 0s;-moz-transition:all 0.6s ease 0s;-o-transition:all 0.6s ease 0s;*/
+}
+.wsmenu>.menuscroll>li>a:hover .wsarrow:after {
+  border-top-color: #484848;
+  /*transition:all 0.6s ease 0s;-webkit-transition:all 0.6s ease 0s;-ms-transition:all 0.6s ease 0s;-moz-transition:all 0.6s ease 0s;-o-transition:all 0.6s ease 0s;*/
+}
+
+.wsmenu>.wsmenu-list>li>a.active .wsarrow:after {
+  border-top-color: #fff;
+}
+.wsmenu>.menuscroll>li>a.active .wsarrow:after {
+  border-top-color: #484848;
+}
+
+.wsmenu>.wsmenu-list>li:hover>a .wsarrow:after {
+  border-top-color: #fff;
+  /*transition:all 0.6s ease 0s;-webkit-transition:all 0.6s ease 0s;-ms-transition:all 0.6s ease 0s;-moz-transition:all 0.6s ease 0s;-o-transition:all 0.6s ease 0s;*/
+}
+.wsmenu>.menuscroll>li:hover>a .wsarrow:after {
+  border-top-color: #FFFFFF;
+  /*transition:all 0.6s ease 0s;-webkit-transition:all 0.6s ease 0s;-ms-transition:all 0.6s ease 0s;-moz-transition:all 0.6s ease 0s;-o-transition:all 0.6s ease 0s;*/
+}
+
+.wsmenu>.wsmenu-list>li>a>.fa {
+  color: #fff;
+}
+
+.wsmenu>.wsmenu-list>li>a.active .fa {
+  color: #fff;
+}
+
+.wsmenu>.wsmenu-list>li:hover>a>.fa {
+  color: #fff;
+  /*transition:all 0.6s ease 0s;-webkit-transition:all 0.6s ease 0s;-ms-transition:all 0.6s ease 0s;-moz-transition:all 0.6s ease 0s;-o-transition:all 0.6s ease 0s;*/
+}
+
+.wsmenu>.wsmenu-list>li>a:hover .fa {
+  color: #fff;
+  /*transition:all 0.6s ease 0s;-webkit-transition:all 0.6s ease 0s;-ms-transition:all 0.6s ease 0s;-moz-transition:all 0.6s ease 0s;-o-transition:all 0.6s ease 0s;*/
+}
+
+.wsmenu>.wsmenu-list>li>.wsmegamenu .menu_form input[type="submit"] {
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ff5183), to(#ff754b));
+  background: -webkit-linear-gradient(left, #ff5183, #ff754b);
+  background: -moz-linear-gradient(left, #ff5183, #ff754b);
+  background: -o-linear-gradient(left, #ff5183, #ff754b);
+  background: -ms-linear-gradient(left, #ff5183, #ff754b);
+  background: linear-gradient(left, #ff5183, #ff754b);
+  background-color: #ff5183;
+  color: #fff;
+}
+
+.wsmenu>.wsmenu-list>li>.wsmegamenu .menu_form input[type="button"] {
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ff5183), to(#ff754b));
+  background: -webkit-linear-gradient(left, #ff5183, #ff754b);
+  background: -moz-linear-gradient(left, #ff5183, #ff754b);
+  background: -o-linear-gradient(left, #ff5183, #ff754b);
+  background: -ms-linear-gradient(left, #ff5183, #ff754b);
+  background: linear-gradient(left, #ff5183, #ff754b);
+  background-color: #ff5183;
+  color: #fff;
+}
+
+.wsmenu>.wsmenu-list>li>a.active {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #fff;
+  /*transition:all 0.6s ease 0s;-webkit-transition:all 0.6s ease 0s;-ms-transition:all 0.6s ease 0s;-moz-transition:all 0.6s ease 0s;-o-transition:all 0.6s ease 0s;*/
+}
+
+.wsmenu>.wsmenu-list>li:hover>a {
+  background: #BC0D0F; /* Old browsers */
+  color: #fff;
+}
+
+.wsmenu>.wsmenu-list>li>ul.sub-menu>li:hover>a {
+  background: #333; /* Old browsers */
+  color: #fff;
+}
+
+.wsmenu>.wsmenu-list>li>ul.sub-menu>li>ul.sub-menu>li:hover>a {
+  background: #333; /* Old browsers */
+  color: #fff;
+}
+
+.wsmenu>.wsmenu-list>li>ul.sub-menu>li>ul.sub-menu>li>ul.sub-menu>li:hover a {
+  background: #333; /* Old browsers */
+  color: #fff;
+}
+
+.wsactive .wsmenu > .wsmenu-list>li:hover>a {
+	background: #333 !important;
+}

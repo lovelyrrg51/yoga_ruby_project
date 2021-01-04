@@ -1,0 +1,145 @@
+<div class="headingtittle-h2 text-center">
+    <h2>New Profile</h2>
+</div>
+<div class="boxsection-md boxshadow">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="headtittle text-center">
+          <h2>Basic Information</h2>
+      </div>
+    </div>
+  </div>
+  <%= form_for @sadhak_profile, html: { id: 'new_sadhak_profile_basic_info' } do |f| %>
+    <div class="row mg-t30">
+        <div class="col-sm-6">
+          <div class="box bordered-input">
+            <label class="asterisk">First Name</label>
+            <span class="infodetails">( As mentioned in your photo ID proof )</span>
+            <div class="dropdown dropdown-field">
+              <%= f.text_field :first_name, class: "form-control noBorder field", required: 'required', placeholder: "First name"%> 
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="box bordered-input">
+            <label>Last Name</label>
+            <span class="infodetails">( As mentioned in your photo ID proof )</span>
+            <div class="dropdown dropdown-field">
+              <%= f.text_field :last_name, class: "form-control noBorder field", placeholder: "Last name" %>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="box bordered-input">
+            <label class="asterisk">Gender</label>
+            <div class="gender">
+              <ul class="clearfix list-unstyled">
+                <% %w( male female ).each_with_index do |gender, index| %>
+                  <li>
+                    <div class="Custradio">
+                      <%= f.radio_button :gender, gender, class: "radiotype", required: 'required', checked: f.object.gender == gender || (!f.object.gender.present? && index.zero?) %>
+                      <%= label_tag "gender#{gender}", gender.humanize %>
+                    </div>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <% uniq_token = SecureRandom.uuid %>
+            <div class="box bordered-input clearfix">
+                <label class="asterisk">Date of Birth</label>
+                <!-- <span class="infodetails">( Eligibility <%= SADHAK_MIN_AGE %> years and above )</span> -->
+                <div class="input-group dropdown-field  calenderdate date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker"  data-maxStartDate="<%= DateTime.current.change(hour: 23, minutes: 59, sec: 59)%>" data-minStartDate="<%= Date.today - SADHAK_MAX_AGE.years %>" data-defaultDate='<%= DateTime.current.years_ago(SADHAK_MIN_AGE) %>'>
+                  <%= f.text_field :date_of_birth, class: 'form-control noBorder field', placeholder: Date.current.strftime('%b %d, %Y'), required: 'required', readonly: true%>
+                    <span class="input-group-addon">
+                        <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="shivyog-sepeator"></div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="headtittle">
+          <h2>Address</h2>
+        </div>
+      </div>
+      <%= f.fields_for :address do |ff|%>
+      <!-- Commented Search as per discussion -->
+<!--         <div class="col-sm-12">
+          <div class="box bordered-input">
+            <label>Search Address</label>
+            <div class="dropdown dropdown-field">
+              <div class="input-group box-input-group">
+                  <span class="input-group-addon"><i class="icon-google-maps"></i></span>
+                  <%#= text_field_tag :autocomplete_search, "", class: 'form-control noBorder field', "data-google-address-autocomplete": 'autocomplete', placeholder: "Search address" %>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <div class="col-sm-6">
+          <div class="box bordered-input">
+            <label class="asterisk">Address Line 1</label>
+            <div class="dropdown dropdown-field">
+              <%= ff.text_field :first_line, class: 'form-control noBorder field', required: 'required', placeholder: "First line address"%>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="box bordered-input">
+            <label>Address Line 2</label>
+            <div class="dropdown dropdown-field">
+              <%= ff.text_field :second_line, class: 'form-control noBorder field', placeholder: "Second line address"%>
+            </div>
+          </div>
+        </div>
+        <%= render 'country_state_city_select', f: ff %>
+        <div class="col-sm-6">
+          <div class="box bordered-input">
+            <label class="asterisk">Postal Code</label>
+            <div class="dropdown dropdown-field">
+              <%= ff.text_field :postal_code, class: "form-control noBorder field", required: 'required', placeholder: "Postal code"%>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="headtittle">
+          <h2>Contact</h2>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="box bordered-input">
+          <label class="asterisk">Mobile Number</label>
+          <div class="dropdown dropdown-field numbercode clearfix">
+            <div class="input-group">
+              <span class="input-group-addon code telephone_prefix_code" id="basic-addon2">+<%= f.object.try(:address).try(:db_country).try(:telephone_prefix) || 91 %></span>
+              <%= f.text_field :mobile, class: 'form-control noBorder field code-input', required: 'required', placeholder: "Mobile Number", "aria-describedby": "basic-addon2"%>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="box bordered-input">
+          <label class="asterisk">Email</label>
+          <div class="dropdown dropdown-field">
+            <%= f.email_field :email, class: 'form-control noBorder field', autocomplete: "off", required: 'required', placeholder: "Email"  %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="pannel-btn mg-t30 text-right">
+          <%= button_tag "CLEAR", :type => 'reset', class: 'btn btn-danger mg-r10 resetForm' %>
+          <%= f.submit  "CREATE", class: ' btn btn-info' %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

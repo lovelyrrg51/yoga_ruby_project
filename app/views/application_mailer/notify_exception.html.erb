@@ -1,0 +1,19 @@
+<tr>
+  <td class="divider" colspan="2" bgcolor="#555555" height="2"></td>
+</tr>
+<tr class="episode">
+  <td>
+    <% if @options[:e].present? %>
+      <h3>Error Message: <%= @options[:e].message %></h3>
+      <h3>Backtrace</h3>
+      <h4><%= @options[:e].backtrace.join("\n") %></h4>
+    <% elsif @options[:text].present? %>
+        <h5>Error Message: <%= @options[:text] %></h5>
+    <% else %>
+      <h5>Exception missing. Nothing to print.</h5>
+    <% end %>
+  </td>
+</tr>
+<tr>
+  <td class="divider" colspan="2" bgcolor="#555555" height="2"></td>
+</tr>

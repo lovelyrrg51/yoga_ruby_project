@@ -1,0 +1,64 @@
+<%= content_for(:title, "Join or Create a Forum") %>
+
+<section id="act-now-banner">
+</section>
+
+<div class="clearfix"></div>
+
+<section id="benefits_of_joining">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="heading_subtitle">Act Now</div>
+        <div class="dashed_divider"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="sy_forums_box">
+          <div class="sy_forums_icon"><i class="fa fa-user-plus" aria-hidden="true"></i></div>
+          <div class="sy_forums_title">Join a Forum</div>
+          <div class="sy_forums_text">
+            If you want to Join a Shiv Yog Forum Please click on the below button. After clicking on on the button It will open a popup where you can see a registration form. Please fill up that form and we will take care of the rest.
+          </div>
+          <div class="sy_forums_btn">
+            <div class="shivyog-btn">
+              <%= link_to "Join a Forum", v2_forums_path, class: "cta_button_small bg-red waves-effect"%>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="sy_forums_box">
+          <div class="sy_forums_icon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></div>
+          <div class="sy_forums_title">Create a Forum</div>
+          <div class="sy_forums_text">
+            If you want to create a Shiv Yog Forum Please click on the below button. After clicking on on the button It will open a popup where you can see a registration form. Please fill up that form and we will take care of the rest.
+          </div>
+          <div class="sy_forums_btn">
+            <div class="shivyog-btn display-inline-block cta_button_small bg-red waves-effect" data-toggle="modal" data-target="#create_a_forum_form">Create a Forum</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="sy_forums_box">
+          <div class="sy_forums_icon"><i class="fa fa-volume-up" aria-hidden="true"></i></div>
+          <div class="sy_forums_title">Share Your Experience</div>
+          <div class="sy_forums_text">
+            If you want to share your experience Please click on the below button. After clicking on on the button It will open a popup where you can see a registration form. Please fill up that form and we will take care of the rest.
+          </div>
+          <div class="sy_forums_btn">
+            <div class="shivyog-btn display-inline-block cta_button_small bg-red waves-effect" data-toggle="modal" data-target="#share_your_experience_form">Share your Experience</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="clearfix"></div>
+
+<%= render "v2/shared/newsletter" %>
+<%= render 'create_forum_form', forum_request: @forum_request %>
+<%= render 'share_your_experience_form' %>

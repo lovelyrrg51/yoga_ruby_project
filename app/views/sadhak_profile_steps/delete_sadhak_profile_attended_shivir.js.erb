@@ -1,0 +1,18 @@
+<% if @message.present? %>
+
+  toastr.error('<%= @message %>.');
+
+<% else %>
+  
+  var appearance = $("#sadhak_profile_steps_sadhak_profile_attended_shivir_fields_tbody").find('tr[id="<%= @sadhak_profile_attended_shivir_id %>"]');
+
+  if(appearance.length){
+    appearance.remove();
+    toastr.success('Deleted successfully.');
+    if(!$("#sadhak_profile_steps_sadhak_profile_attended_shivir_fields_tbody").find('tr').length) $('#sadhak_profile_steps_self_reported_save_cont_button').attr("disabled", "disabled");
+  }
+  else{
+    toastr.error('No Row Data Found');
+  }
+
+<% end %>

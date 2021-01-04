@@ -1,0 +1,62 @@
+<% event = @options[:event] %>
+<% event_order = @options[:event_order] %>
+<% prerequisites_event_types_name = (event.try(:event_types) || []).collect{|event_type| event_type.name }.to_sentence %>
+<tr>
+  <td style="padding: 20px 30px; background: #f8f8f8;" colspan="2">
+      <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+      <% if event_order.approve? %>
+          <tr>
+              <td colspan="2">
+                <p style="text-align: left; display: block; color: #666; font-weight: 700; font-size: 22px; margin: 30px 0 20px;">Namah Shivay,</p>
+                <p style="margin: 0 0 20px; color: #333; font-size: 16px; font-weight: 400;">Your application has been <b>approved</b> by Ashram submitted for the Event - <b><%= "#{event.event_name_with_location.to_s}." %></b><br></p>
+                <p style="margin: 0 0 20px; color: #333; font-size: 16px; font-weight: 400;">Registration Reference No: <b> <%= event_order.reg_ref_number %><b><br><br></p>
+              </td>
+          </tr>
+          <% if event.try(:is_ashram_residential_shivir?) %>
+            <tr>
+                <td colspan="2">
+                  REPORTING DAY: <strong><%= (event.event_start_date.to_date).strftime('%A, %d %B %Y') %></strong><br>
+                  REPORTING TIME: 1pm (Latest by 3pm as <%= (event.event_start_date.to_date).strftime('%A') %> evening 5pm onwards we have the oath ceremony) <br>
+                  SHIVIR BEGINS FROM <strong><%= (event.event_start_date.to_date + 1.day).strftime('%A') %> TO <%= (event.event_end_date.to_date).strftime('%A') %> (6 am to 7 pm). WE ALSO WANT TO INFORM THAT DUE TO FOG IN WINTERS CAN WE START THE SESSION AT 7am.</strong><br>
+                  DEPARTURE : <strong>On <%= event.event_end_date.to_date.strftime('%A, %d %B %Y') %> after 10 am.</strong><br><br>
+                  <br><br>
+                </td>
+            </tr>
+          <% end %>
+          <tr>
+              <td style="text-align: center;">
+                  <a href="<%= root_url %>" style="background: #990000; padding: 8px 20px; color: #fff; text-decoration: none; font-weight: 500; border-radius: 4px; display: inline-block; text-align: center;">Click to visit our website</a>
+              </td>
+              <% if event.paid? && event_order.approve? %>
+                <td style="text-align: center;">
+                    <a href=<%= "#{event_event_order_url(event, event_order)}" %> style="background: #990000; padding: 8px 20px; color: #fff; text-decoration: none; font-weight: 500; border-radius: 4px; display: inline-block; text-align: center;">Click to make payment</a>
+                </td>
+              <% end %>
+          </tr>
+      <% else %>
+          <tr>
+              <td>
+                <p style="text-align: left; display: block; color: #666; font-weight: 700; font-size: 22px; margin: 30px 0 20px;">Namah Shivay,</p>
+                <p style="margin: 0 0 20px; color: #333; font-size: 16px; font-weight: 400;"><b>HAR HAAL MEIN KHUSHI</b><br></p>
+                <% if prerequisites_event_types_name.present? %>
+                  <p style="margin: 0 0 20px; color: #333; font-size: 16px; font-weight: 400;"><b><%= event.try(:event_name).to_s %></b> has to wait, <b><%= prerequisites_event_types_name %></b> has to be perfected first.<br><br></p>
+                <% end %>
+                <p style="margin: 0 0 20px; color: #333; font-size: 16px; font-weight: 400;">Your application for <b><%= event.try(:event_name).to_s %></b> is not accepted, you may try next time.</p>
+              </td>
+          </tr>
+          <tr>
+              <td style="text-align: center;">
+                  <a href="<%= root_url %>" style="background: #990000; padding: 8px 20px; color: #fff; text-decoration: none; font-weight: 500; border-radius: 4px; display: inline-block; text-align: center;">Click to visit our website</a>
+              </td>
+          </tr>
+      <% end %>
+          <tr>
+              <td colspan="2">
+                <p style="font-size: 16px; font-weight: 600; margin: 20px 0 0; color: #666; text-align: right;">Thank you</p>
+                <p style="font-size: 14px;font-weight: 600;margin: 1px 0 30px;color: #666;text-align: right;">Shivyog Team</p>
+              </td>
+          </tr>
+      </table>
+  </td>
+</tr>
+

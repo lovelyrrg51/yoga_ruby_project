@@ -1,0 +1,24 @@
+<%= render partial: 'hdfc_payment', locals: {event_order: @event_order, amount: amount, gateway: gateway, event_order_id: event_order_id, upgrade: upgrade, parent_event_order_id: parent_event_order_id, before_event_order_line_items: before_event_order_line_items, sadhak_details_hash: sadhak_details_hash, type: "ccavenue_payment"} %>
+
+<script type="text/javascript">
+  var amount = $('.net-amount').text();
+  $('#ccavenue-payment-form').validate();
+  $('#ccavenue-payment-form').submit(function(event){
+    event.preventDefault();
+    swal({
+      title: "Are you sure you want to proceed with upgrade/downgrade ?",
+      text: "Please check again your net amount payable is: "+amount,
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "No, Let me check once again.",
+      confirmButtonColor: "#DD6B55",
+      showLoaderOnConfirm: false,
+      confirmButtonText: "Yes, I am sure !",
+      closeOnConfirm: true
+      }, function () {
+        $('#ccavenue-payment-form').find('.pay-now-btn').prop('disabled', true);
+        $('#ccavenue-payment-form').find('.pay-now-btn').text('PROCESSING');
+        $('#ccavenue-payment-form').get(0).submit();
+    });
+  });
+</script>

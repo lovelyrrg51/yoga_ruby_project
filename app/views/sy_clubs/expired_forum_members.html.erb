@@ -1,0 +1,223 @@
+<% uniq_token = SecureRandom.uuid %>
+<% uniq_token1 = SecureRandom.uuid %>
+<% content_for(:title, 'Forum Admin | Members') %>
+<div class="headingtittle-h2 text-center">
+    <h2>Expired Forum Members</h2>
+</div>
+
+<div class="boxsection-lg boxsection-xs boxshadow prelative">
+  <div class="row">
+      <div class="col-sm-12 mg-t30">
+          <a href="#transactions" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+          <div class="refineCntrl collapse" aria-expanded="true" id="transactions" role="tablist">
+            <div class="refinesub-group">
+              <%= form_tag expired_forum_members_sy_clubs_path, method: 'GET' do %>
+                      <div class="row">
+                          <div class="col-sm-4">
+                              <div class="outbox">
+                                  <label>SYID</label>
+                                  <div class="box bordered-input">
+                                      <div class="dropdown dropdown-field">
+                                        <%= text_field_tag :syid, params[:syid], class: "form-control noBorder field", placeholder:"SYID" %>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="sepeator"></div>
+                      <div class="row mg-t30">
+                          <div class="col-sm-4">
+                              <div class="outbox">
+                                  <label>Country</label>
+                                  <div class="box bordered-input dropdown">
+                                      <div class="dropdown-field selectTwo-dropdown">
+                                      <%=  select_tag :country_id, options_for_select(DbCountry.pluck(:name, :id)||[], params[:country_id]), include_blank: " ----- Select ----- ", class: "basic-single", id: "country_#{uniq_token}", onChange: "countrySelectChange('#{uniq_token}')"%>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-sm-4">
+                              <div class="outbox">
+                                  <label>State</label>
+                                  <div class="box bordered-input dropdown">
+                                      <div class="dropdown-field selectTwo-dropdown">
+                                          <%=  select_tag :state_id, options_for_select(@states.try(:pluck, :name, :id)||[], params[:state_id]), include_blank: " ----- Select ----- ", class: "basic-single", "data-changable-id": "#{uniq_token}", onChange: "stateSelectChange('#{uniq_token}')", id: "state_#{uniq_token}" %>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-sm-4">
+                              <div class="outbox">
+                                  <label>City</label>
+                                  <div class="box bordered-input dropdown">
+                                      <div class="dropdown-field selectTwo-dropdown">
+                                          <%=  select_tag :city_id, options_for_select(@cities.try(:pluck, :name, :id)||[], params[:city_id]), include_blank: " ----- Select ----- ", class: "basic-single", id: "city_#{uniq_token}"%>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="sepeator"></div>
+                      <div class="row mg-t30">
+                          <div class="col-sm-6">
+                              <div class="outbox">
+                                  <label>Search Expired Registrations By Date</label>
+                                  <div class="box outerbox outerheight light-bg">
+                                      <div class="rangercode">
+                                          <div class="dropdown-field numbercode">
+                                              <div class="input-group date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" data-maxStartDate="<%= Date.current.end_of_day() %>" data-minStartDate="<%= Date.today - SADHAK_MAX_AGE.years %>" >
+                                              <%= text_field_tag :expired_from, params[:expired_from], class: "form-control code-input", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true %>
+                                              <span class="input-group-addon">
+                                                  <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                              </span>
+                                              </div>
+                                          </div>
+                                          <div class="dropdown-field">
+                                              <label class="middletab mg-t10">To</label>
+                                          </div>
+                                          <div class="dropdown-field numbercode">
+                                              <div class="input-group date" id="<%= uniq_token %>_end" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker"
+                                              data-maxStartDate="<%= Date.current.end_of_day() %>">
+                                                  <%= text_field_tag :expired_to, params[:expired_to], class: "form-control code-input", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true %>
+                                              <span class="input-group-addon">
+                                                  <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                              </span>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-sm-12">
+                              <div class="pannel-btn text-right">
+                                  <%= link_to 'CLEAR', search_sadhak_admin_index_path, class: "btn btn-danger mg-r10"%>
+                                  <%= button_tag "SEARCH", class: "btn btn-info" %>
+                              </div>
+                          </div>
+                      </div>
+              <%end%>
+            </div>
+          </div>
+        </div>
+
+      <% if @expired_regs.present? %>
+          <div class="col-sm-12 mg-t60">
+              <div class="Boxdrop dropdown mg-x-b15">
+                  <%= render 'application/per_page' %>
+              </div>
+              <div class="pannel-btn">
+                  <ul>
+                    <li><button class="btn btn-info" onClick="$('#email_list').modal('show')">EMAIL LIST</button></li>
+                    <li>
+                        <%= link_to 'EXPORT TO EXCEL', generate_expired_members_file_sy_clubs_path(@filtering_params.permit!), class: "btn btn-info", target: '_blank' %>
+                    </li>
+                  </ul>
+              </div>
+              <div class="tableCntrl">
+                  <div class="table-responsive tableScrollbar">
+                      <table class="table">
+                          <thead>
+                              <tr>
+                                  <th>Name / SYID</th>
+                                  <th>Forum Id</th>
+                                  <th>Forum Name</th>
+                                  <th>Expiration Date</th>
+                                  <th class="text-center">Status</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <% @expired_regs.each do |expired_reg| %>
+                                <% if expired_reg.try(:sy_club_member).present? %>
+                                  <tr>
+                                      <td>
+                                          <div class="textgroup">
+                                              <p class="primarybold"><%= expired_reg.try(:sadhak_profile).try(:full_name) %></p>
+                                              <span><%= expired_reg.try(:sadhak_profile).try(:syid) %></span>
+                                          </div>
+                                      </td>
+                                      <td>
+                                          <div class="textgroup">
+                                              <p class="primarybold"><%= expired_reg.try(:sy_club_member).try(:sy_club_id) %></p>
+                                          </div>
+                                      </td>
+                                      <td>
+                                          <div class="textgroup">
+                                              <p class="primarybold"><%= expired_reg.try(:sy_club_member).try(:sy_club).try(:name).try(:titleize) %></p>
+                                          </div>
+                                      </td>
+                                      <td>
+                                          <div class="textgroup">
+                                              <p class="primarybold"><%= expired_reg.try(:expiration_date) %></p>
+                                          </div>
+                                      </td>
+                                      <td class="text-center"><%= expired_reg.status.try(:titleize) %></td>
+                                  </tr>
+                                <% end %>
+                              <% end %>
+                          </tbody>
+                      </table>
+                  </div>
+                  <div class="table-pagination">
+                      <div class="show-pgnation">
+                      <p class="primarybold"><%= custom_page_entries_info(@expired_regs) %></p>
+                      </div>
+                      <%= paginate @expired_regs %>
+                  </div>
+              </div>
+          </div>
+      <% else %>
+          <div>
+          <%= render partial: 'application/no_records', locals: {message: 'No Expired Member Found.'}  %>
+          </div>
+      <% end %>
+  </div>
+</div>
+
+<div id="forum_status_note_modal" class="modal fade Custommodal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="headtittle">Confirm Note</h2>
+            <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag("close.png") %></button>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="email_list" class="modal fade Custommodal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png", alt: "close"%></button>
+                <h2 class="headtittle">Send Report</h2>
+            </div>
+            <%= form_tag generate_expired_members_file_sy_clubs_path(@filtering_params.permit!), { id: 'send_expired_members_to_email_list' } do %>
+            <div class="modal-body mCustomScrollbar">
+                    <div class="row">
+                        <div class="col-sm-12">
+                          <div class="outbox">
+                           <label class="asterisk">Recipients</label>
+                              <div class="box bordered-input prelative">
+                                  <div class="dropdown box-taginput">
+                                    <%= text_field_tag :recipients, "", class: 'form-control noBorder field box-field tagsinput', 'data-role': 'tagsinput', required: true, style: "display:none;", placeholder: "Recipients" %>
+                                  </div>
+                                  <div class="merge-error"></div>
+                              </div>
+                          </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <div class="pannel-btn pull-right">
+                        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+                    <button type="button" class="btn btn-danger mg-r5" data-dismiss="modal">CANCEL</button>
+                    <%= submit_tag  "SEND", class: ' btn btn-info' %>
+                </div>
+            </div>
+            <%end%>
+        </div>
+    </div>
+</div>

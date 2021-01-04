@@ -1,0 +1,71 @@
+<div id="shivirdetails">
+  <div class="row">
+      <div class="col-sm-12 text-center">
+          <div class="headtittle">
+              <h2>Shivir Details <span class="sub-tittle">Category(Proposed)</span></h2>
+          </div>
+          <%= render 'shivir_status'%>
+      </div>
+  </div>
+	<div class="detailshivir category">
+	<%= form_for @event, html: { id: "event_category_proposed_form" } do |f| %>
+	    <div class="row">
+	        <div class="col-sm-12">
+                <div class="CustomCheckbox">
+                    <%= f.check_box :pay_in_usd  %>
+                    <label>Make payment in USD</label>
+                </div>
+                <div class="headtittle mg-t20 mg-b20">
+	                <span class="subheading">Please add your proposed categories and their pricing</span>
+	            </div>
+	            <div class="tableCntrl <%= 'hidden' unless f.object.event_seating_category_associations.present?%>">
+	                <div class="table-responsive tableScrollbar">
+	                    <table class="table">
+	                        <thead>
+	                            <tr>
+	                                <th>Category</th>
+	                                <th>Amount(<%= @event.currency_code%>)</th>
+	                                <th>Seating Capacity</th>
+	                                <th>Action</th>
+	                            </tr>
+	                        </thead>
+							<tbody id="tableappend" >
+								<%= f.fields_for :event_seating_category_associations do |sc|%>
+									<%= render 'events/event_seating_category_association_fields', f: sc, event_registrations_on_seating_category: @event_registrations_on_seating_category %>
+								<% end %>
+							</tbody>
+	                    </table>
+	                </div>
+	            </div>
+
+	            <div class="pannel-btn mg-b30">
+            		<%= link_to_add_association  "ADD TYPE", f, :event_seating_category_associations, { "data-association-insertion-node":'#tableappend', :class => 'btn btn-info addtype-btn',"data-association-insertion-method":'append' }  %>
+	            </div>
+	            <div class="pannel-btn text-right <%= 'hidden' unless  f.object.event_seating_category_associations.present? %>" id="ProposedCategoryAction">
+                   	<button class="btn btn-danger mg-r10 turbolinkReload" type="reset">CLEAR</button>
+            		<%= f.submit 'SAVE', class: 'btn btn-info', id: 'save-proposed-category'%>
+	            </div>
+        	</div>
+	    </div>
+    	<div class="row <%= 'hidden' if f.object.event_seating_category_associations.present? %>" id="NoProposedCategoryAvailable">
+			<%= render partial: 'application/no_records', locals: { message: "No Proposed Category Available." }  %>
+      	</div>
+  	<% end %>
+	</div>
+</div>
+
+<script type="text/javascript">
+    $('#tableappend').on('cocoon:after-insert cocoon:after-remove', function(e, insertedItem) {
+    		$(this).parents('.tableCntrl').removeClass("hidden");
+        if ($('form#event_category_proposed_form').find('tr.nested-fields').length == 0){
+            $("#ProposedCategoryAction").addClass('hidden');
+            $("#NoProposedCategoryAvailable").removeClass('hidden');
+        } else {
+            $("#ProposedCategoryAction").removeClass('hidden');
+            $("#NoProposedCategoryAvailable").addClass('hidden');
+        }
+    });
+    $("#event_pay_in_usd").on("click", function (){
+	  $(this).parents	('form').submit();
+	});
+</script>

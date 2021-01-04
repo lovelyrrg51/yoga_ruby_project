@@ -1,0 +1,18 @@
+$('#action_modal')
+    .modal('show')
+    .html("<%=  j render 'new_message_form' %>");
+$(".simple-single").select2({
+    minimumResultsForSearch: Infinity
+});
+
+$('form#new_message').validate();
+$("form[data-submit-type='"+ DATA_SENDER_TYPE[0] +"']").on('submit', function(){
+	var checked_checkbox = $('tbody input[type=checkbox]:checked');
+	if (checked_checkbox.length == 0 ){
+		toastr.error("Select atleast one sadhak profile.");
+		return false;
+	} else {
+		$('input#sadhak_profile_ids').val(checked_checkbox.map(function(){return $(this).attr('data-id')}).get());
+	}
+	
+});

@@ -1,0 +1,115 @@
+<section class="forum-member-registration-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md 12">
+        <div class="banner_text">
+          <div class="main_banner_heading">
+            Forum Member Registration
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="clearfix"></div>
+
+<section class="">
+  <div class="container">
+    <div class="heading_subtitle"><h2><%= @sy_club.name %></h2></div>
+    <div class="dashed_divider m-b-30"></div>
+
+    <% unless @event_order.try(:failure?) || @event_order.try(:pending?) %>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="complete-alert bg-green text-align-center">
+            <i class="material-icons vertical-align-middle">check_circle</i>&nbsp;
+            Congratulations, you have successfully registered for the Forum <%= @sy_club.name.try(:titleize) %>.
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <%= render "detail", back_to_forum_button: true  %>
+
+    <div class="card">
+      <div class="body">
+        <div class="row clearfix">
+          <div class="col-sm-12">
+            <div class="header p-10-0"><h2>Registration Request Summary</h2></div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped table-hover">
+                <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Amount</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>Forum</td>
+                  <td><%= @sy_club.name.try(:titleize) %></td>
+                </tr>
+
+                <% if @event_order.try(:failure?) || @event_order.try(:pending?) %>
+                  <tr>
+                    <td>Status</td>
+                    <td><span class="label label-danger"><%= @event_order.status.try(:titleize) %></span></td>
+                  </tr>
+                <% else %>
+                  <tr>
+                    <td>Status</td>
+                    <td><span class="label label-success"><%= @event_order.status.try(:titleize) %></span>
+                  <tr>
+                <% end %>
+
+                <tr>
+                  <td>Amount</td>
+                  <td><%= "#{@event.currency_code} #{@event_order.tax_details['total_payable_amount']}" %></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="header p-10-0"><h2>Members</h2></div>
+
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped table-hover">
+                <thead>
+                <tr>
+                  <th>SRL. No.</th>
+                  <th>Name/SYID</th>
+                  <th>Membership Expires on</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @event_order.event_order_line_items.includes(:sadhak_profile).each_with_index do |event_order_line_item, index| %>
+                  <tr>
+                    <td><%= index + 1 %>.</td>
+                    <td><strong><%= event_order_line_item.full_name %>
+                      <br/><span class="red-text small"><%= event_order_line_item.syid %></span></strong></td>
+                    <td><%= event_order_line_item.event_registration.try(:expiration_date) %></td>
+                  </tr>
+                <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row clearfix">
+          <div class="col-sm-12 text-align-center">
+            <div class="">
+              Please print and keep your details with you &nbsp;<div class="shivyog-btn modal_download_pdf_btn">
+              <a href="javascript: void(0)" onclick="window.print();return false;" class="btn cta_button_small bg-red waves-effect"><i class="fa fa-print"></i>&nbsp;Print</a>
+            </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="clearfix"></div>

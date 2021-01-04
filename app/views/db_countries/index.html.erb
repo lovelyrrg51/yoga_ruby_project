@@ -1,0 +1,90 @@
+<% content_for(:title, 'Country') %>
+
+<div class="adminCntrl">
+	<div class="headingtittle-h2 text-center">
+	<h2>Admin Panel</h2>
+	</div>
+	<div class="row">
+		<div class="overflow-row">
+			<%= render 'admin/admin_left_panel' %>
+			<div class="rightCntrl">
+				<div class="boxsection-lg boxsection-xs boxshadow prelative">
+				  <div class="rightContent">
+				    <div id="country_type">
+				        <div class="row">
+				            <div class="col-sm-12 mg-b30">
+				                 <div class="headtittle text-center">
+				                    <h2>Countries</h2>
+				                </div>
+				            </div>
+				            <div class="col-sm-12">
+				                <%= render "db_countries/form" %>
+				                <a href="#Registercenters" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+				                <div class="refineCntrl collapse in" aria-expanded="true" id="Registercenters" role="tablist">
+				                  <form action="<%= db_countries_path %>" class="table-screen-next">
+				                    <div class="refinesub-group">
+				                        <div class="row">
+				                            <div class="col-sm-12">
+				                                <div class="outbox">
+				                                    <label>Search By Name</label>
+				                                    <div class="box bordered-input">
+				                                       <div class="dropdown dropdown-field">
+				                                          <input type="text" class="form-control noBorder field" placeholder="Search name" name="country_name", value="<%= params[:country_name] %>">  
+				                                       </div>
+				                                    </div>
+				                                </div>
+				                            </div>
+				                            <div class="col-sm-12">
+				                                <div class="pannel-btn text-right">
+				                                    <%= link_to "CLEAR", db_countries_path, class: 'btn btn-danger mg-r10' %>
+				                                    <button class="btn btn-info">SEARCH</button>
+				                                </div>
+				                            </div>
+				                        </div>
+				                    </div>
+				                  </form>
+				                </div>
+				            </div>
+				            <% if @db_countries.present? %>
+				              <div class="col-sm-12">
+				                  <div class="tableCntrl">
+				                      <div class="table-responsive tableScrollbar">
+				                          <table class="table">
+				                              <thead>
+				                                  <tr>
+				                                      <th>Name</th>
+				                                      <th class="text-center">Action</th>
+				                                  </tr>
+				                              </thead>
+				                              <tbody>
+				                                <% @db_countries.each do |db_country|%>
+				                                  <tr>
+				                                      <td><%= db_country.name %></td>
+				                                      <td class="text-center">
+				                                          <%= link_to "", edit_db_country_path(db_country), class: "mg-r10 primary-color fa fa-pencil" %>
+				                                          <%= link_to "", db_country_path(db_country), method: :delete,data: {confirm: "Are you sure?"}, class: " primary-color fa fa-trash-o"%>
+				                                      </td>
+				                                  </tr>
+				                                <% end %>
+				                              </tbody>
+				                          </table>
+				                      </div>
+				                      <div class="table-pagination">
+				                          <div class="show-pgnation">
+				                              <p class="primarybold"><%= custom_page_entries_info(@db_countries) %></p>
+				                          </div>
+				                          <%= paginate @db_countries %>
+				                      </div>
+				                  </div>
+				              </div>
+				            <% else %>
+				              <%= render partial: 'application/no_records', locals: {message: 'No Country Found.'} %>
+				            <% end %>
+				        </div>
+				    </div>
+				  </div>
+				</div>
+			</div>
+		</div>
+	</div>    
+</div>

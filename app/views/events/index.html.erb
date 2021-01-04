@@ -1,0 +1,201 @@
+<div class="headingtittle-h2 text-center">
+    <h2>Organize Events</h2>
+</div>
+<% uniq_token = SecureRandom.uuid %>
+<div class="boxsection-lg boxsection-xs boxshadow">
+     <div class="row">
+        <div class="col-sm-12 mg-b30">
+            <a href="#applicationRefine" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+            <div class="refineCntrl collapse filter-panel" aria-expanded="true" id="applicationRefine" role="tabpanel">
+                <div class="refinesub-group clearfix">
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label>Country</label>
+                            <div class="box bordered-input dropdown">
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%=  select_tag :country_id, options_for_select(DbCountry.pluck(:name, :id)||[], params[:country_id]), include_blank: " ----- Select ----- ", class: "basic-single", id: "country_#{uniq_token}", onChange: "countrySelectChange('#{uniq_token}')"%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" style="display: none;">
+                        <div class="outbox">
+                            <label>State</label>
+                            <div class="box bordered-input dropdown">
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%=  select_tag :state_id, options_for_select(@states.try(:pluck, :name, :id)||[], params[:state_id]), include_blank: " ----- Select ----- ", class: "basic-single", "data-changable-id": "#{uniq_token}", onChange: "stateSelectChange('#{uniq_token}')", id: "state_#{uniq_token}" %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" style="display: none;">
+                        <div class="outbox">
+                            <label>City</label>
+                            <div class="box bordered-input dropdown">
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%=  select_tag :city_id, options_for_select(@cities.try(:pluck, :name, :id)||[], params[:city_id]), include_blank: " ----- Select ----- ", class: "basic-single", id: "city_#{uniq_token}", "data-visible": false%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label>Date</label>
+                            <div class="box outerbox outerheight light-bg">
+                                <div class="rangercode">
+                                    <div class="dropdown-field numbercode">
+                                        <div class="input-group date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" data-maxStartDate="<%= Date.current.end_of_day() + 1.years %>" data-minStartDate="<%= Date.today - SADHAK_MAX_AGE.years %>" >
+                                            <%= text_field_tag :event_start_date, params[:event_start_date], class: "form-control code-input", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true %>
+                                            <span class="input-group-addon">
+                                                <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-field">
+                                        <label class="middletab mg-t10">To</label>
+                                    </div>
+                                    <div class="dropdown-field numbercode">
+                                        <div class="input-group date" id="<%= uniq_token %>_end" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker">
+                                            <%= text_field_tag :event_end_date, params[:event_end_date], class: "form-control code-input", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true %>
+                                            <span class="input-group-addon">
+                                                <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label>Type of Event</label>
+                            <div class="box bordered-input dropdown">
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%=  select_tag :event_type_id, options_for_select(EventType.pluck(:name,:id)||[], params[:event_type_id]), include_blank: " ----- Select ----- ", class: "basic-single"%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label>Event Status</label>
+                            <div class="box bordered-input dropdown">
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%=  select_tag :event_status, options_for_select(Event.statuses.map{|k,v| [k.titleize, v]}||[], params[:event_status]), include_blank: " ----- Select ----- ", class: "basic-single"%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                       <div class="outbox">
+                            <label>Event Id Range</label>
+                            <div class="box outerbox outerheight light-bg">
+                                <div class="rangercode">
+                                    <div class="dropdown-field numbercode">
+                                        <%= number_field_tag :event_id_start_range, params[:event_id_start_range], class: "form-control code-input", min: 0%>
+                                    </div>
+                                    <div class="dropdown-field">
+                                        <label class="middletab mg-t10">To</label>
+                                    </div>
+                                    <div class="dropdown-field numbercode">
+                                        <%= number_field_tag :event_id_end_range, params[:event_id_end_range], class: "form-control code-input", min: 0%>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="pannel-btn text-right">
+                            <%= link_to 'CLEAR', events_path, class: "btn btn-danger mg-r10" %>
+                            <button class="btn btn-info" id='event-data-table-filter'>FILTER</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="detailshead">
+        <!-- <p>Create Yours New Events</p> -->
+        <%= link_to "CREATE NEW EVENT", new_event_path, class: "btn btn-info mg-b10 mg-r10"%>
+        <% if policy(:event).replicate? %>
+          <button class="btn btn-info mg-b10" onClick="$('#replicate_event_modal').modal('show')">CLONE AN EVENT</button>
+        <% end %>
+    </div>
+    <div class="tableCntrl tabledataCntrl prelative" style="display: none;">
+        <div class="searboxCntrl">
+        <div class="input-group">
+            <%= text_field_tag :event_search, nil, placeholder: 'Search...', class: 'form-control', "aria-describedby": "basic-addon2" %>
+            <span class="input-group-addon" id="basic-addon2"><button class="searchicon" id="search_btn"><i class="icon-search" aria-hidden="true"></i></button></span>
+        </div>
+        </div>
+        <table class="table datatable" id="tabledata" data-url="<%= datatables_events_path(format: :json) %>" data-config='{"order":[[1,"asc"]]}'>
+            <thead>
+                <tr>
+                    <th>Graced By</th>
+                    <th>Event Name</th>
+                    <th>Event ID</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal for Replicate Events -->
+<div id="replicate_event_modal" class="modal fade Custommodal" role="dialog">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="btn btn-info btnclose" data-dismiss="modal">
+                  <%= image_tag "close.png", alt: "close"%>
+              </button>
+              <h2 class="headtittle">Clone an Event</h2>
+          </div>
+          <%= form_for :event, url: replicate_events_path, method: :get, html: { id: "clone_event_form" } do |f| %>
+            <div class="modal-body mCustomScrollbar">
+                <div class="row mg-t30">
+                    <div class="col-sm-12">
+                        <div class="outbox">
+                            <label>Event</label>
+                            <div class="box bordered-input dropdown">
+                                <div class="dropdown-field selectTwo-dropdown">
+                                <%=  select_tag "event[event_id]", options_for_select(@replicate_events_list.pluck(:event_name, :id)), include_blank: " ----- Select ----- ", class: "basic-single", required: true %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="outbox">
+                            <label>Number of Clones</label>
+                                <div class="box bordered-input">
+                                <div class="dropdown dropdown-field">
+                                    <%= f.text_field :replicas, class: 'form-control noBorder field only_integers', required: true, placeholder: " Number of Clones" %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="pannel-btn text-right">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+                    <%= submit_tag "SUBMIT", class:"btn btn-info" %>
+                </div>
+            </div>
+          <% end %>
+      </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#search_btn').on('click', function() {
+        $('#tabledata').DataTable().search($('#event_search').val().trim()).draw();
+    });
+  
+    $('.dataTables_filter').hide();
+  });
+</script>

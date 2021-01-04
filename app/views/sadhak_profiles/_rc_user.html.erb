@@ -1,0 +1,8 @@
+<% if sadhak_profile.present? %>
+  <tr>
+      <td class="primarybold primary-color"><%= sadhak_profile.try(:syid) %></td>
+      <td class="primarybold"><%= sadhak_profile.try(:first_name) %></td>
+      <td class="text-center"><a href="javascript:void(0)" class="primary-color" onClick="remove_event_rcmember();"><i class="fa fa-times" aria-hidden="true"></i></a></td>
+      <%= text_field_tag 'registration_center[user_ids][]', sadhak_profile.try(:user_id), {type: 'hidden'} %>
+  </tr>
+<% end %>

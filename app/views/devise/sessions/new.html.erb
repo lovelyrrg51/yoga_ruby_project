@@ -1,0 +1,52 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div id="wrapper">
+      <div id="login" class="animate form">
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:role => 'form', class: "form-horizontal login-form"}) do |f| %>
+          <div class="msg">LOGIN TO ACCESS THE PORTAL</div>
+          <div class="input-group display-table">
+            <span class="input-group-addon">
+              <i class="material-icons">person</i>
+            </span>
+            <div class="form-line">
+              <%= f.text_field :username, autofocus: true, class: 'form-control', placeholder: 'SYID/Email/Phone', required: true %>
+            </div>
+          </div>
+          <div class="input-group display-table">
+            <span class="input-group-addon">
+              <i class="material-icons">lock</i>
+            </span>
+            <div class="form-line">
+              <%= f.password_field :password, autocomplete: "off", class: 'form-control', placeholder: 'Password', required: true %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-5">
+              <input type="checkbox" name="rememberme" id="rememberme" class="filled-in chk-col-red">
+              <label for="rememberme">Remember Me</label>
+            </div>
+            <div class="col-sm-7">
+              <%= f.submit "Sign In", class: 'cta_button_small signin_btn bg-red waves-effect btn-block' %>
+            </div>
+          </div>
+          <div class="row m-t-15">
+            <div class="col-sm-6 change_link">
+              <%= link_to "Register Now!", new_user_registration_path , class: "to_register" %>
+            </div>
+            <div class="col-sm-6 align-right change_link">
+              <%= link_to "Forgot Password?", forgot_password_users_path , class: "to_register" %>
+            </div>
+          </div>
+        <% end %>
+        <div class="row m-t-15">
+          <div class="col-sm-12">
+            <%= link_to user_google_oauth2_omniauth_authorize_path,
+              class:"btn-block signin_with_google waves-effect" do %>
+              <span class="google_icon"></span>&nbsp;&nbsp;Sign in with Google
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

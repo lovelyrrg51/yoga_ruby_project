@@ -1,0 +1,95 @@
+<div id="eventOrderEditConfirmationmodal" class="modal fade Custommodal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="headtittle">Registration Summary <span>(Before)</span></h2>
+                <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png" %></button>
+            </div>
+            <%= form_for :event_order, url: process_event_order_details_event_event_order_path(@event, @event_order) do |f| %>
+            <div class="modal-body mCustomScrollbar">
+                <div class="row">
+                        <div class="col-sm-12">
+                            <div class="tableCntrl">
+                                <div class="table-responsive tableScrollbar">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>S.No.</th>
+                                                <th>SYID</th>
+                                                <th>Name</th>
+                                                <th>Seating Category</th>
+                                                <th>Discount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% (@before_sadhak_details || []).each_with_index do |detail, index| %>
+                                                <tr>
+                                                    <td><%= index + 1 %></td>
+                                                    <td><%= detail[:syid] %></td>
+                                                    <td><%= detail[:full_name] %></td>
+                                                    <td>
+                                                        <div class="textgroup">
+                                                            <p><%= detail[:category_name] %></p>
+                                                            <span><%= detail[:price] %></span>
+                                                        </div>
+                                                    </td>
+                                                    <td><%= detail[:discount] %></td>
+                                                </tr>
+                                            <% end %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="headtittle">
+                                <h2>Registration Summary <span>(After)</span></h2>
+                            </div>
+                            <div class="tableCntrl">
+                                <div class="table-responsive tableScrollbar">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>S.No.</th>
+                                                <th>SYID</th>
+                                                <th>Name</th>
+                                                <th>Seating Category</th>
+                                                <th>Discount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% (@after_sadhak_details || []).each_with_index do |detail, index| %>
+                                                <tr>
+                                                    <td><%= index + 1 %></td>
+                                                    <td><%= detail[:syid] %></td>
+                                                    <td><%= detail[:full_name] %></td>
+                                                    <td>
+                                                        <div class="textgroup">
+                                                            <p><%= detail[:seating_category] %></p>
+                                                            <span><%= detail[:price] %></span>
+                                                        </div>
+                                                    </td>
+                                                    <td><%= detail[:discount] %></td>
+                                                    <%= hidden_field_tag "event_order[event_order_line_items_attributes][#{index}][event_order_line_item_id]", detail[:event_order_line_item_id].to_i %>
+                                                    <%= hidden_field_tag "event_order[event_order_line_items_attributes][#{index}][sadhak_profile_id]", detail[:sadhak_profile_id].to_i %>
+                                                    <%= hidden_field_tag "event_order[event_order_line_items_attributes][#{index}][event_seating_category_association_id]", detail[:event_seating_category_association_id].to_i %>
+                                                </tr>
+                                            <% end %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <%= f.hidden_field :action, value: @action %>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="pannel-btn text-right">
+                    <button class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+                    <button class="btn btn-info" type="submit" data-disabled_with="PROCEEDING...">INITIATE <%= @payment_params[:pay] ? "PAYMENT" : "REFUND" %></button>
+                </div>
+            </div>
+            <% end %>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,188 @@
+<% isNonProfessionaldetailProfession, uniq_token1, uniq_token2 = NON_PROFESSIONAL_PROFESSIONS.include?(@sadhak_profile.professional_detail.try(:profession).try(:name)), SecureRandom.uuid, SecureRandom.uuid %>
+<div class="panel">
+    <div class="panel-heading" role="tab" id="headingEight">
+        <h4 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#sp_accordion_id" href="#collapseDoctors" aria-expanded="false" aria-controls="collapseDoctors">
+                <i class="more-less glyphicon glyphicon-plus"></i>
+                <%if @sadhak_profile.doctors_profile.try(:is_complete?)%>
+                <i class="success-btn">
+                 <%= image_tag "check-mark.png" %>
+                </i>
+                <% else %>
+                <i class="error-btn"><%= image_tag "warning.png" %></i>
+                <% end %>
+                <span>Doctors Profile</span>
+            </a>
+        </h4>
+    </div>
+    <div id="collapseDoctors" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEight">
+        <div class="panel-body">
+            <%= form_for @sadhak_profile, html: { id: 'sadhak_profile_doctors_profile_form' } do |f| %>
+                <%= f.hidden_field :sp_accordion_id, value: 'collapseDoctors', id: 'sadhak_profile_doctors_profile_accodion_id'  %>
+                <%= f.fields_for :doctors_profile do |ff|%>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="headtittle"><h2>Education</h2></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input">
+                               <label class="asterisk">Medical School</label>
+                               <div class="dropdown dropdown-field">
+                                    <%= ff.text_field :medical_school, class: "form-control noBorder field", required: true, placeholder: "Medical school" %>
+                               </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input dropdown">
+                                <label class="asterisk">Country</label>
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%= ff.select :education_country_id, options_for_select(@country, ff.object.try(:education_country_id)),{ include_blank: " ----- Select -----" }, { class: "form-control basic-single", required: true } %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input">
+                               <label class="asterisk">Year of Graduation</label>
+                               <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :year_of_graduation, class: "form-control noBorder field", 'data-rule-digits': true, required: true, placeholder: "Year of graduation"%>
+                               </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input dropdown">
+                                <label class="asterisk">Medical Specialization</label>
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%= ff.select :area_of_speciality, options_for_select(MedicalPractitionerSpecialityArea.pluck(:name).collect{|v| [v.gsub(/\n/,''), v.gsub(/\n/,'')]}, ff.object.try(:area_of_speciality).to_s.gsub(/\n/,'')),{ include_blank: " ----- Select -----" }, { class: "form-control basic-single", required: true } %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input">
+                               <label class="asterisk">Sub-Speciality</label>
+                               <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :sub_speciality, class: "form-control noBorder field", required: true, placeholder: "Sub-Speciality"%>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="headtittle"><h2>Licence</h2></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input dropdown">
+                                <label class="asterisk">Licence Status</label>
+                                <div class="dropdown-field selectTwo-dropdown">
+                                   <%= ff.select :license_status, options_for_select(DoctorsProfile.license_statuses.collect{|k,v| [k.humanize,k]},  ff.object.try(:license_status)),{ include_blank: " ----- Select -----" }, { class: "form-control basic-single", required: true } %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input dropdown">
+                                <label class="asterisk">Country</label>
+                                <div class="dropdown-field selectTwo-dropdown">
+                                     <%= ff.select :license_country_id, options_for_select(@country, ff.object.try(:license_country_id)), { include_blank: " ----- Select -----" }, { "data-changable-id": "#{uniq_token1}", id: "country_#{uniq_token1}", onChange: "countrySelectChange('#{uniq_token1}')", class: "form-control country-select basic-single", required: true }%>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input dropdown">
+                                <label class="asterisk">State</label>
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%= ff.select :license_state_id, options_for_select(ff.object.license_country.try(:states).try(:pluck, :name, :id) || [], ff.object.try(:license_state_id)), { include_blank: " ----- Select -----" }, { "data-changable-id": "#{uniq_token1}", id: "state_#{uniq_token1}", class: "form-control state-select basic-single", required: true } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="headtittle"><h2>Practice</h2></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input dropdown">
+                                <label class="asterisk">Primary Work Setting</label>
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%= ff.select :primary_work_setting, options_for_select( DoctorsProfile::PRIMARY_WORK_SETTINGS.map{|v| [v, v]}, ff.object.try(:primary_work_setting)), { include_blank: " ----- Select -----" }, { class: "form-control basic-single", required: true } %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input">
+                               <label class="asterisk">Place of Practice</label>
+                               <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :practice_place, class: "form-control noBorder field", required: true, placeholder: "Place of practice" %>
+                               </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input dropdown">
+                                <label class="asterisk">Country of Practice</label>
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%= ff.select :practice_country_id, options_for_select(@country, ff.object.try(:practice_country_id)), { include_blank: " ----- Select -----" }, { "data-changable-id": "#{uniq_token2}", id: "country_#{uniq_token2}", onChange: "countrySelectChange('#{uniq_token2}')", class: "form-control country-select basic-single", required: true }%>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input dropdown">
+                                <label class="asterisk">State of Practice</label>
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%= ff.select :practice_state_id, options_for_select(ff.object.practice_country.try(:states).try(:pluck, :name, :id) || [], ff.object.try(:practice_state_id)), { include_blank: " ----- Select -----" }, { "data-changable-id": "#{uniq_token2}", id: "state_#{uniq_token2}", class: "form-control state-select basic-single", required: true } %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input dropdown">
+                                <label class="asterisk">No. of Years In Practice</label>
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%= ff.select :practice_years, options_for_select((1..50).inject({}){|h,i| h.store i,i; h}, ff.object.try(:practice_years)), { include_blank: " ----- Select -----" }, { class: "form-control state-select basic-single", required: true } %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input dropdown">
+                                <label class="asterisk">Clinical Research</label>
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%= ff.select :clinical_research, options_for_select( { "Yes": true, "No": false }, ff.object.try(:clinical_research)), {}, { class: "form-control state-select simple-single", required: true} %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input">
+                               <label class="asterisk">Hospital Affiliations</label>
+                               <div class="dropdown dropdown-field">
+                                    <%= ff.text_field :hospital_affiliations, class: "form-control noBorder field", required: true, placeholder: "Hospital affiliations"%>
+                               </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input">
+                               <label class="asterisk">Professional Publications</label>
+                               <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :professional_publications, class: "form-control noBorder field", required: true, placeholder: "Professional publications"%>
+                               </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input">
+                               <label class="asterisk">Honors and Awards</label>
+                               <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :honors_and_awards, class: "form-control noBorder field", required: true, placeholder: "Honors and awards"%>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="pannel-btn">
+                        <%= button_tag 'CLEAR', class: 'btn btn-danger mg-r10 turbolinkReload', type: 'button' %>
+                        <%= f.submit 'SAVE', class: 'btn btn-info' %>
+                    </div>
+                </div>
+            </div>
+            <% end %>
+        </div>
+    </div>
+</div>

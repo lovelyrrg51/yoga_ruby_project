@@ -1,0 +1,26 @@
+<tr class="<%= 'tablerow-bg' if registration_center_counter.zero? %>">
+    <td class="primarybold">
+        <a href="javascript:void(0)" data-toggle="collapse" data-target="#registration-center-collapse-<%= registration_center.id %>" class="tertiary-color tablelink" aria-expanded="true"><%= registration_center.try(:name) %></a>
+    </td>
+    <td class="text-center"><a href="<%= edit_event_registration_center_path(@event, registration_center) %>" class="primary-color">Modify</a></td>
+</tr>
+<tr>
+    <td colspan="2" class="Collapsetable">
+        <div class="tableCollapse collapse <%= 'in' if registration_center_counter.zero? %>" aria-expanded="true" id="registration-center-collapse-<%= registration_center.id %>">
+            <table class="table">
+                <thead>
+                    <th>SYID</th>
+                    <th>Name</th>
+                </thead>
+                <tbody>
+                  <% (registration_center.try(:sadhak_profiles) || []).each do |sadhak_profile| %>
+                    <tr>
+                        <td class="primarybold primary-color"><%= sadhak_profile.try(:syid) %></td>
+                        <td class="primarybold"><%= sadhak_profile.try(:first_name) %></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+            </table>
+        </div>
+    </td>
+</tr>

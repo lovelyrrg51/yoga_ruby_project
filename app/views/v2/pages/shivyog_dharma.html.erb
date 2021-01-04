@@ -1,0 +1,38 @@
+<%= content_for(:title, "ShivYog Dharma") %>
+
+<section id="shivyog-dharma-banner">
+</section>
+
+<div class="clear"></div>
+
+<section id="what_is_shivyog">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="heading_subtitle">Shiv Yog Dharma Series of Talks by Dr. Avdhoot Shivanand</div>
+        <div class="dashed_divider"></div>
+        <div class="heading_title">Watch on Shiv Yog Dharma TV Channel</div>
+        <p>Dharma means the eternal law of the Universe, the truth of which was revealed to the ancient Indian Sages in their deep meditative states, which they later taught the world through various mediums much before world discovered religion. ShivYog teaches the same pre-religion wisdom that spring from the source of the one Supreme consciousness. The fundamentals of these teachings on which ShivYog is founded upon is the ShivYog Dharma.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="clear"></div>
+
+<section id="shivyog_paragraph">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+      <div class="dashed_divider"></div>
+        <div class="heading_title m-b-30">In this video series Dr. Avdhoot Shivanand educates us about the principles and history of Shiv Yog Dharma.</div>
+        <%= shivyog_video_tag youtube_id: "YfyHi_Fc6nw",
+          image: "v2/Babaji-Meditating-in-Forest.jpg",
+          border: false
+        %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%= render "v2/shared/newsletter" %>

@@ -1,0 +1,7 @@
+<% flash.each do |key, value| %>
+  <% key = 'danger' if key == 'alert' %>
+  <div class='<%= "alert alert-#{key} alert-dismissible fade in" %>'>
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <%= value %>
+  </div>
+<% end %>

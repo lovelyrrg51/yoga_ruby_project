@@ -1,0 +1,2 @@
+module PhotoIdTypesHelper
+end

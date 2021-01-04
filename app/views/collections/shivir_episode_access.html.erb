@@ -1,0 +1,39 @@
+<% content_for(:title, 'Admin | Farmer Episode Access Panel') %>
+
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Farmer Episodes Access Panel</h2>
+    </div>
+    <div class="boxsection-lg boxsection-xs boxshadow">
+        <div class="row">
+          <% (@live_episode_collections || []).each do |collection|%>
+            <%= form_for(collection, url: update_sadhak_asset_access_collection_path(collection), :html => {:class => "farmer-episode-access-form"}) do |f|%>
+            <div class="col-sm-12 mg-b20">
+                <a href="#<%= collection.id%>" class="refinemenu primary-color subheading primarybold" data-toggle="collapse"
+                    aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> <%= collection.collection_name%></a>
+                <div class="refineCntrl collapse in" aria-expanded="true" id="<%= collection.id%>" role="tablist">
+                    <div class="refinesub-group">
+                        <%=f.hidden_field :id%>
+                        <div class="farmer-episode-access-form-<%= collection.id%>">
+                        <%= f.fields_for :sadhak_asset_access_associations do |ff|%>
+                            <%= render 'sadhak_asset_access_association_fields', f: ff%>
+                        <%end%>
+                      </div>
+                      <div class="mg-t30">
+                        <div class="pannel-btn">
+                          <%= link_to_add_association 'ADD MORE ACCESSES', f, :sadhak_asset_access_associations, 'data-association-insertion-node': ".farmer-episode-access-form-#{collection.id}", 'data-association-insertion-method': 'append', class: 'btn btn-info mg-r10'%>
+                        </div>
+                      </div>
+                    </div>
+                  <div class="col-sm-12 mg-t30">
+                      <div class="pannel-btn text-right">
+                        <%= f.submit 'SAVE', class: "btn btn-info mg-r10"%>
+                      </div>
+                  </div>
+                </div>
+            </div>
+            <%end%>
+          <%end%>
+        </div>
+    </div>
+</div>

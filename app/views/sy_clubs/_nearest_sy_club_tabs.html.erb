@@ -1,0 +1,18 @@
+<table class="table">
+  <thead>
+      <tr>
+          <th>Forum Name</th>
+          <th>Forum Address</th>
+          <th class="text-center">Action</th>
+      </tr>
+  </thead>
+  <tbody id="nearest-store">
+	  <% (@sy_clubs || []).each do |sy_club| %>
+			<tr>
+			  <td class="primarybold"><%= sy_club.name %></td>
+			  <td><%= sy_club.address.try(:full_address) %></td>
+			  <td class="text-center"><a href=<%= polymorphic_url(sy_club) %> class="primary-color">View</a></td>
+			</tr>
+		<% end %>
+  </tbody>
+</table>

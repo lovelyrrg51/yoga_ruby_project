@@ -1,0 +1,9 @@
+
+<% if @message.present? %>
+	toastr.error("<%= @message%>");
+	Turbolinks.visit("<%= new_sadhak_profile_path%>")
+<% else %>
+	$('form').trigger('reset');
+  <% cookies[RESEND_TIMER_KEY] = { value: RESEND_TIMER, expires: 30.seconds.from_now } %>
+	toastr.success("<%= @success %>");
+<% end %>

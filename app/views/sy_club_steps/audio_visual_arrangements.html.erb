@@ -1,0 +1,145 @@
+<% content_for(:title, 'Forum | Audio Visual Arrangements') %>
+<div class="CompleteprofileCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Forum</h2>
+        <span class="subheading">ShivYog Forum <strong class="texttransform"><%= @sy_club.name.try(:titleize) %></strong></span>
+    </div>
+    <div class="boxsection-lg boxsection-xs boxshadow prelative">
+        <div class="progressCntrl text-right">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:<%= @sy_club.completed.rnd %>%">
+                </div>
+            </div>
+            <span><%= @sy_club.completed.rnd %>%</span>
+        </div>
+        <div class="tab-content">
+          <%= form_for @sy_club, url: wizard_path, html: { id: "sy_club_form" } do |f| %>
+            <%= f.fields_for :sy_club_digital_arrangement_detail do |ff| %>
+              <div class="tab-pane" role="tabpanel" id="AudioVisualArrangements">
+                  <div class="row">
+                      <div class="col-sm-12">
+                          <div class="headtittle text-center">
+                              <h2>Audio / Visual Arrangements</h2>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row mg-t30">
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>Size of LCD</label>
+                              <span class="infodetails">( minimum is 42" )</span>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :lcd_size, class: "form-control noBorder field only_integers", placeholder: "LCD size" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>Model of the LCD</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :lcd_model, class: "form-control noBorder field", placeholder: "LCD model" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>No of Speakers</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :speakers_count, class: "form-control noBorder field only_integers", placeholder: "Speakers" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>Model of the Speakers</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :speaker_model, class: "form-control noBorder field", placeholder: "Speaker model" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>Model of DVD Player</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :dvd_player_model, class: "form-control noBorder field", placeholder: "DVD player model" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>Generator</label>
+                              <span class="infodetails">( It should not create any disturbance )</span>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :generator_company, class: "form-control noBorder field", placeholder: "Generator" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>Inverter</label>
+                              <span class="infodetails">( It should be enough if power goes off )</span>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :inverter_company, class: "form-control noBorder field", placeholder: "Inverter" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>Do you have Laptop ?</label>
+                              <div class="gender">
+                                  <ul class="clearfix list-unstyled">
+                                      <li>
+                                          <label class="radio-box radiobg">
+                                              <%= ff.radio_button :is_laptop_available, true %>
+                                              <span class="radiocheck">Yes</span>
+                                          </label>
+                                      </li>
+                                      <li>
+                                          <label class="radio-box radiobg">
+                                              <%= ff.radio_button :is_laptop_available, false %>
+                                              <span class="radiocheck">No</span>
+                                          </label>
+                                      </li>
+                                  </ul>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>Internet service provider</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :internet_provider, class: "form-control noBorder field", placeholder: "Internet provider" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>What is the Data plan</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :internet_data_plan, class: "form-control noBorder field", placeholder: "Data plan" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>What is the speed ?</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :internet_speed, class: "form-control noBorder field", placeholder: "Internet speed" %>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row mg-t30">
+                      <div class="col-sm-12">
+                          <div class="pannel-btn clearfix">
+                              <%= link_to 'PREVIOUS', previous_wizard_path(), class: "btn btn-info pull-left prev-step" %>
+                              <button class="btn btn-info pull-right next-step">SAVE & CONTUNUE</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+    </div>
+</div>

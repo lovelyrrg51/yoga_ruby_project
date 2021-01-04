@@ -1,0 +1,158 @@
+ <!-- / content Container \ -->
+
+<div class="eventCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Event Registration</h2>
+        <span class="subheading primary-color primarybold">Event ID: <%= @event.id %></span>
+        <span class="subheading"><%= @event.event_name_with_location %></span>
+    </div>
+    <div class="boxsection-lg boxsection-xs boxshadow prelative">
+        <%= render 'events/event_registration_header' %>
+        <div class="registrationflowCntrl">
+            <div class="offerCntrl hidden">
+                <p>This event has special discounts for Fourm Members that will be visible when you reach the payment page</p>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="tableCntrl tableheight mCustomScrollbar">
+                        <div class="table-responsive ">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Category Names</th>
+                                        <% if @event.show_shivir_price? %><th>Amount (<%= @event.currency_code %>) <% if @event.country_id == 113 %> <span class="label label-danger primary-bg badge-custom">Non Refundable</span> <% end %> </th><%end%>
+                                        <% if @event.show_seats_availability? %><th>Seats Available</th><%end%>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% @event.event_seating_category_associations.order(:price).each_with_index do |seating_category, i|%>
+                                      <tr>
+                                          <td><%= i + 1 %></td>
+                                          <td><%= seating_category.category_name %></td>
+                                          <% if @event.show_shivir_price? %><td><%= @event.currency_code %> <%= number_with_precision(seating_category.price.to_f, precision: 2) %></td><%end%>
+                                          <% if @event.show_seats_availability? %><td data-seating-category-id = "<%= seating_category.id %>" ><span class="catogeryinc"><%= seating_category.seats_available %></span></td><%end%>
+                                      </tr>
+                                    <% end %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% if @is_registrations_allowed %>
+              <div class="eventmemberCntrl">
+                  <% if signed_in? && current_user.super_admin?  && @bulk_upload_enabled %>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="eventoption text-center">
+                                <p class="tagtittle">
+                                <div class="eventaction">
+                                      <button class="btn btn-info bulkupload-btn">Bulk Upload</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  <% end %>
+                  <div class="eventreg-one">
+                      <div class="row">
+                          <div class="col-sm-12">
+                              <%= render partial: "events/search_forgot_syid", locals: { syid_search_action: event_register_syid_search_event_sadhak_profiles_path(@event), forgot_syid_action: event_register_forgot_syid_event_sadhak_profiles_path(@event) } %>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="eventaddmember hidden">
+                <div class="row">
+                  <div class="col-sm-12">
+                      <div class="headtittle">
+                          <h2>Members</h2>
+                      </div>
+                  </div>
+                  <%= form_for :event_order, url: event_event_orders_path(@event), method: :post, html: { id: 'event_register_event_order_create_form' } do |ff| %>
+                    <div class="col-sm-12">
+                        <div class="tableCntrl tableheight mCustomScrollbar">
+                            <div class="table-responsive ">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Full Name</th>
+                                            <th>Email</th>
+                                            <th>City</th>
+                                            <th>Category</th>
+                                            <th>Amount (<%= @event.currency_code %>)</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="pannel-btn text-right">
+                            <button class="btn btn-info addmorememb-btn" type="button">ADD MORE MEMBER</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="outbox mg-t20">
+                            <label>Email address for receiving registration confirmation</span></label>
+                            <div class="box bordered-input">
+                                <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :guest_email, value: get_current_user_email, class: 'form-control noBorder field', placeholder: 'Email', required: true, disabled: get_current_user_email.present? %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% if @event.is_ashram_residential_shivir? %>
+                        <div class="col-md-6 col-sm-12">
+                            <div class="outbox mg-t20">
+                                <label>Please enter your full name <span class="infolist">(Full name will be treated as digital signature)</span></label>
+                                <div class="box bordered-input">
+                                <div class="dropdown dropdown-field">
+                                    <%= text_field_tag "event_order[signature]", "", class: 'form-control noBorder field', placeholder: 'Full name', required: true %>  
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                    <div class="col-sm-12">
+                        <ul class="list-unstyled">
+                            <% if @event.is_ashram_residential_shivir? %>
+                                <% ASHRAM_RESIDENTIAL_SHIVIR_T_AND_C.each do |t_and_c| %>
+                                    <li>
+                                        <div class="CustomCheckbox mg-b10">
+                                            <input type="checkbox" name="event_order[accepted_terms_and_conditions][]" value="<%= t_and_c %>" >
+                                            <label><%= "#{t_and_c}." %></label>
+                                        </div>
+                                    </li>
+                                <% end %>
+                            <% else %> 
+                                <li>
+                                    <div class="CustomCheckbox mg-b10 event_register_ack_div">
+                                        <input type="checkbox" id="event_register_ack_checkbox">
+                                        <label>I acknowledge that I have read all of the provisions above and fully understand the terms and conditions expressed and agree to be bound by such <%= link_to "Terms and conditions", @event.sy_event_company.present? ? sy_event_company_terms_and_conditions_path(sy_event_company_id: @event.sy_event_company_id) : event_register_terms_and_conditions_path , target: :_blank, class: "primary-color anchorlink" %>.</label>
+                                    </div>
+                                    <span class="labelerror event_register_ack_checkbox_error_span"></span>
+                                </li>
+                            <% end %>
+                        </ul>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="pannel-btn text-left mg-t30">
+                            <%= ff.submit 'PROCEED', class: 'btn btn-info proceed-btn', data: { disable_with: 'PROCEEDING' } %>
+                        </div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            <% else %>
+              <div class="offerCntrl text-center">
+                <p>Online Registrations are closed at the moment.</p>
+              </div>
+            <% end %>
+        </div>
+    </div>
+</div>
+<div id="questionnaire_form" class="modal fade Custommodal" role="dialog">
+</div>

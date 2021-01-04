@@ -1,0 +1,5 @@
+<% if @error.present? %>
+  toastr.error("<%= @error %>");
+<% else %>
+  toastr.success("<%= @success %>");
+<% end %>

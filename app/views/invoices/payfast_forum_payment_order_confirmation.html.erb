@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+  <title>Request Sent</title>
+</head>
+<body>
+<div style="width:920px; margin:0 auto;">
+  <div style="background:#990000; padding:20px 20px;">
+    <img src="https://dmhtmt59mq15j.cloudfront.net/assets/images/logo.png" alt="" width="148px" height="49px">
+  </div>
+  <div style="font-size:28px; color:#000; font-family: Arial, Helvetica, sans-serif; margin-top:10px;">
+    <img src="/assets/clander.png" width="63px"; height="63px;" align="center"><span style="margin:0px 15px 0px 15px;">Forum: <%=data.sy_club.name %></span>
+  </div>
+
+  <% if data.try(:event).try(:pay_in_usd) %>
+      <% currency = 'USD' %>
+  <% else %>
+      <% currency = data.try(:event).try(:address).try(:country_currency_code).present? ? data.event.address.country_currency_code : '' %>
+  <% end %>
+  <% order_tax_detail = (data.order_tax_detail || {}) %>
+  <% is_success = (status == 'success') %>
+
+  <div style="border:1px solid #ececec; margin-top:15px; padding:10px 10px; border-radius:10px; font-size:15px;">
+    <div style="font-family: Arial, Helvetica, sans-serif; line-height:27px; text-align:left">
+      <div style="margin-top:20px; line-height:32px;">
+        <% if is_success %>
+            Congratulations, you have succesfully registered for <%= data.try(:event).try(:event_name).try(:humanize) %> and submitted your application for the forum.
+            <div style="font-size:24px; padding:25px 0px 10px; border-bottom:1px solid #ececec;">
+              Request Summary:
+            </div>
+        <% else %>
+            <h2> Payment Failure- Please try again with accurate payment details </h2> Failure Errors: <%= message %>
+        <% end %>
+        <div style="text-align:center; margin-top:10px;">
+          <% if is_success %>
+              <div>
+                <span style="font-weight:bold">Forum:</span> <%= data.sy_club.name%>
+              </div>
+              <div>
+                <span style="font-weight:bold">Status:</span> <%= status %>
+              </div>
+              <div>
+                <span style="font-weight:bold">Amount:</span> <%= currency %> <%= '%.2f' % data.total_amount.to_f.round(2) %>
+              </div>
+              <% if data.event.discount_plan_id.present? %>
+                  <div>
+                    <span style="font-weight:bold">Discount:</span> <%= currency %> <%= '%.2f' % data.total_discount.to_f.round(2) %>
+                  </div>
+              <% end %>
+              <% (order_tax_detail.tax_breakup || []).each do |tax| %>
+                  <div>
+                    <span style="font-weight:bold"><%= tax.tax_name %>:</span> <%= currency %> <%= '%.2f' % tax.amount %>
+                  </div>
+              <% end %>
+              <% if order_tax_detail.total_convenience_charges.to_f > 0 %>
+                  <div>
+                    <span style="font-weight:bold">Transaction Charges:</span> <%= currency %> <%= '%.2f' % order_tax_detail.total_convenience_charges.to_f.round(2) %>
+                  </div>
+              <% end %>
+              <div>
+                <span style="font-weight:bold">Net Amount paid:</span> <%= currency %> <%= '%.2f' % (data.total_amount - data.total_discount + order_tax_detail.total_tax_paid.to_f + order_tax_detail.total_convenience_charges.to_f).round(2) %>
+              </div>
+          <% end %>
+        </div>
+        <% if is_success %>
+            <div style="font-size:24px; padding:25px 0px 10px;">
+              Members:
+            </div>
+            <table width="100%" cellpadding="10px;" cellspacing="0px;" style="border-collapse: collapse; border:1px solid #e5e5e5;">
+              <tr style="background:#ececec">
+                <td>
+                  S.No.
+                </td>
+                <td>
+                  SYID
+                </td>
+                <td>
+                  Name
+                </td>
+                <td>
+                  Membership Expires On
+                </td>
+              </tr>
+              <% data.event_order_line_items(true).each_with_index do |item, index| %>
+                  <tr style="border-bottom:1pt solid #e5e5e5;">
+                    <td>
+                      <%= index+1 %>
+                    </td>
+                    <td>
+                      SY<%= item.sadhak_profile_id %>
+                    </td>
+                    <td>
+                      <%= item.sadhak_profile.full_name %>
+                    </td>
+                    <td>
+                      <%= item.expiration_date %>
+                    </td>
+                  </tr>
+              <% end %>
+            </table>
+            <div style="text-align:center; margin-top:30px;">
+              Please print and keep your details with you
+              <div>
+                <a href="#" style="color:#000; text-decoration:none" onclick="window.print()">Print</a>
+              </div>
+            </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+  function print_page() {
+    window.print();
+  }
+</script>

@@ -1,0 +1,5 @@
+<%= content_tag :li, class: current_page.last? ? 'next disabled' : 'next' do %>
+  <%= link_to current_page.last? ? 'javascript:void(0)' : url, :rel => 'next', :remote => remote do %>
+    <i class="fa fa-angle-right" aria-hidden="true"></i>
+  <% end %>
+<% end %>

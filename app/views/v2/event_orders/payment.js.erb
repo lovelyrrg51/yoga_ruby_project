@@ -1,0 +1,15 @@
+<% if flash.present?  %>
+  $("#upgrade_summary_before_after").modal('hide');
+  $('.flash-message').html("<%= escape_javascript(render partial: 'layouts/v2/flash_messages') %>");
+  <% flash.clear %>
+<% else %>
+  $("#transfer_event").hide(500);
+  $("#upgrade_summary_before_after").modal('hide');
+  $('.modal-backdrop').remove();
+  $("#registration_action_proceed_btn").removeAttr("data-toggle");
+  $("#registration_action_proceed_btn").removeAttr("data-target");
+  $("#registration_action_proceed_btn").attr("data-toggle","modal");
+  $("#registration_action_proceed_btn").attr("data-target","#upgrade_registration_refund_details");
+  $("#payment_mode_details_div").html("<%= escape_javascript(render partial: 'payment', locals: { before_sadhak_details: @before_sadhak_details, after_sadhak_details: @after_sadhak_details, event: @event, payment_params: @payment_params, tax_details: @tax_details, is_registrations_allowed: @is_registrations_allowed, event_order: @event_order, amount: (@tax_details[:total_tax_applied] + @payment_params[:net_result]).rnd, upgrade: @upgrade, parent_event_order_id: @parent_event_order_id, before_event_order_line_items: @before_event_order_line_items, sadhak_details_hash: @sadhak_details_hash}) %>");
+  $("#upgrade_registration_refund_details").modal('show');
+<% end %>

@@ -1,0 +1,20 @@
+<%if @error.present? %>
+	$(this).find("input[type=text]").val('');
+    $('#add_or_remove_member_from_other_forum').html("");
+toastr.error("<%= @error%>");
+<%else%>
+	if($('td#other_forum_attendance_'+"<%=@sadhak_profile.id%>").length > 0){
+
+	}else {
+		$('td#other_forum_attendance_'+"<%=@sadhak_profile.id%>").parent('tr').remove();
+		var newTr = $("<tr class='nested-fields'></tr>").html("<%= j render 'member_from_other_forum', locals: {sadhak_profile: @sadhak_profile} %>");
+		$('#member_from_other_forum table tbody').append(newTr);
+
+	}
+	$('#add_member_from_other_forum').modal('hide');
+	toastr.success("Sadhak profile is added");
+<%end%>
+$('#add_member_from_other_forum').on('hidden.bs.modal', function (e) {
+  	$(this).find("input[type=text]").val('');
+    $('#add_or_remove_member_from_other_forum').html("");
+})

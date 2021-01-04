@@ -1,0 +1,77 @@
+<div class="stripe_form">
+  <%= form_for :payment_details, url: pay_v2_event_order_path(event_order), method: :post, html: { id: "cash-gateway-payment-form" } do |f|  %>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <div class="form-line">
+            <input type="text" name="date" id="date" value="<%= Date.today.to_s %>" class="form-control" placeholder="Date of Payment" disabled="disabled">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group">
+          <div class="form-group form-float">
+            <div class="form-line">
+              <input type="text" name="amount" id="amount" class="form-control" placeholder="Amount" value="<%= "#{currency} #{(amount + gateway_charges(gateway, amount).rnd)}" %>" disabled="disabled">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group">
+        <div class="form-group form-float">
+          <div class="form-line">
+            <textarea class="form-control" id="InputAdditionalComments" name="payment_details[additional_details]" rows="3" placeholder="Additional Comments"></textarea>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group">
+        <div class="form-group form-float pg_cash_payment_ack_div">
+          <input name="payment_details[is_terms_accepted]" class="acknowledge_checkbox" id="acknowledge_checkbox" type="checkbox">
+          <label for="acknowledge_checkbox">I acknowledge that I have read all of the provisions above and fully understand the terms and conditions expressed and agree to be bound by such <%= link_to "Terms and conditions", cash_payment_terms_and_conditions_path , target: :_blank %>.</label>
+          </div>
+          <span class="labelerror pg_cash_payment_ack_checkbox_error_span"></span>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn cta_button_small bg-red waves-effect pay-now-btn">PAY NOW</button>
+    <%= render partial: "hidden_field_data", locals: { amount: amount, gateway: gateway, event_order_id: event_order_id, upgrade: upgrade, parent_event_order_id: parent_event_order_id, before_event_order_line_items: before_event_order_line_items, sadhak_details_hash: sadhak_details_hash, payment_method: "cash" }  %>
+  <% end %>
+</div>
+<script type="text/javascript">
+  (function(){
+    var amount = $('.net-amount').text();
+    $('#cash-gateway-payment-form').submit(function(event){
+      if(!$('input#acknowledge_checkbox').prop('checked'))
+      {
+        $('input#acknowledge_checkbox').parents('div.pg_cash_payment_ack_div').siblings('span.pg_cash_payment_ack_checkbox_error_span').text('This field is required.').css('color', '#F44336');
+        return false;
+      }else{
+        event.preventDefault();
+        swal({
+        title: "Are you sure you want to proceed with upgrade/downgrade ?",
+        text: "Please check again your net amount payable is: "+amount,
+        type: "warning",
+        showCancelButton: true,
+        cancelButtonText: "No, Let me check once again.",
+        confirmButtonColor: "#DD6B55",
+        showLoaderOnConfirm: false,
+        confirmButtonText: "Yes, I am sure !",
+        closeOnConfirm: true
+        }, function () {
+          $('#cash-gateway-payment-form').find('.pay-now-btn').prop('disabled', true);
+          $('#cash-gateway-payment-form').find('.pay-now-btn').text('PROCESSING');
+          $('#cash-gateway-payment-form').get(0).submit();
+        });
+      }
+    });
+  }());
+</script>

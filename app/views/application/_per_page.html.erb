@@ -1,0 +1,58 @@
+<!-- https://roratmindfiresolutions.wordpress.com/2013/09/11/dynamically-setting-per-page-records-with-kaminari-gem-in-rails/ -->
+<button class="btn boxdrop-btn" data-toggle="dropdown">
+    <span><%= params[:per_page] || DEFAULT_RECORDS_PER_PAGE %> per page</span>
+    <span class="btnarrow"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+</button>
+<div class="dropdown-menu dropdownCntrl">
+  <% per_page_form_token = SecureRandom.uuid %>  
+  <form action="" method="get" class="form-per-page" id="per_page_form_<%= per_page_form_token %>">
+    <ul class="list-unstyled mCustomScrollbar listheight">
+      <% PER_PAGE_OPTIONS.each_with_index do |per_page, i| %>
+        <li class="<%= per_page == (params[:per_page].present? ? params[:per_page].to_i : DEFAULT_RECORDS_PER_PAGE) ? 'active' : '' %>"><a href="javascript:void(0)" onclick="change_per_page(<%= per_page %>)"><%= per_page %></a></li>
+      <% end %>
+    </ul>
+  </form>
+</div>
+
+<script type="text/javascript">
+
+  function change_per_page(per_page) {
+
+    var src = $(window.event.srcElement);
+
+    if (src.hasClass('active')) return;
+
+    src.closest('div.dropdown-menu.dropdownCntrl').siblings('button.btn.boxdrop-btn').find('span:first').html(per_page.toString() + ' per page');
+
+    src.parents('ul.list-unstyled').find('li').removeClass('active');
+
+    src.parent().addClass('active');
+
+    var form = $("#per_page_form_<%= per_page_form_token %>");
+
+    var query_params = $.extend({}, window.query_params);
+
+    if (query_params.hasOwnProperty('per_page')) {
+      delete query_params['per_page'];
+    }
+
+    if (query_params.hasOwnProperty('page')) {
+      delete query_params['page'];
+    }
+
+    form.find('input[type="hidden"]').remove();
+
+    query_params = $.extend(query_params, {per_page: per_page});
+
+    form.append($.map(Object.keys(query_params), function (k, i) {
+      return $('<input>', {
+          type: 'hidden',
+          name: k,
+          value: query_params[k]
+      })
+    }));
+
+    form.submit();
+  }
+
+</script>

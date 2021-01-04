@@ -1,0 +1,11 @@
+<div class="Boxdrop dropdown" id="update_event_status">
+    <button class="btn boxdrop-btn" data-toggle="dropdown">
+        <span id="status-text"><%= @event.status.titleize %></span>
+        <span class="btnarrow"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+    </button>
+    <div class="dropdown-menu dropdownCntrl">
+        <ul class="list-unstyled">
+        	<%= render "event_statuses"%>
+        </ul>
+    </div>
+</div>

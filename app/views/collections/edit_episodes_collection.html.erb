@@ -1,0 +1,35 @@
+<%= render "episodes_collections_form"%>
+<script type="text/javascript">   
+$(document).on("turbolinks:load", function() {
+    if ($('.nested-fields').length == 1){
+        $('.remove_fields').remove();
+    }
+    $("#episodesList").sortable({
+        containment: "parent",
+        cursor: "move",
+        scrollSpeed: 40,
+        update: function(event, ui) {
+            var count = 1 ;
+            assetsOrder = $("#episodesList").sortable("toArray").map(function(currentValue, index, arr){
+                if (currentValue.includes("asset_")) {
+                    var order = {};
+                    order[currentValue.split("_")[1]] = count;
+                    count++;
+                    return order;
+                }
+            }).filter(Boolean);
+
+            updateSectionOrder(assetsOrder);
+        }
+    });
+    $("#episodesList").disableSelection();
+});
+var updateSectionOrder = function(data) {
+    console.log(data);
+    $.ajax({
+        url: "/admin/collections/<%= @collection.id%>/update_assets_order",
+        dataType: 'Script',
+        data: { 'assets_order': data, noLoading: false }
+    });
+}
+</script>

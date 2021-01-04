@@ -1,0 +1,96 @@
+<% content_for(:title, 'Admin | Registration Centers') %>
+<section id="contentCntr" class="sub2">
+  <section id="centerCntr">
+    <div class="eventsArea transparent_bg head data No_paddingTop organise_eventContainer">
+      <div class="topbar eventorganize_topbar ">
+        <div class="container">
+          <h2><i class="fa fa-calendar"></i><span>Admin</span>
+          </h2>
+        </div>
+      </div>
+      <div class="container tabPanel_Conatiner">
+        <div class="row">
+          <%= render partial: 'admin/admin_left_panel' %>
+          <div class="col-sm-8">
+            <div class="right tabPanel_right top-margin-0 reg_block">
+              <div class="heading">
+                <h2 class="col-sm-7 col-xs-6"><%= render_breadcrumbs %></h2>
+                <%= button_tag "Create New", type: "button", class: "btn btn-danger btn-orange", id: "registration_center_create_new_button"%>
+              </div>
+              <div class="clearfix"></div>
+              <%= render "registration_centers/form"%>
+              <form action="<%= registration_centers_path %>" class="table-screen-next">
+                <table class="table cat_table mb-0" id="registration_center_form_table">
+                  <tbody>
+                    <tr>
+                      <td class="col-sm-4">
+                        <input type="text" class="form-control inputbox mt-4" placeholder="Search name" name="registration_center_name", value="<%= params[:registration_center_name]%>">
+                      </td>
+                      <td class="btn_add col-sm-1">
+                        <button class="btn btn-primary">Search</button>
+                      </td>
+                      <td class="btn_add">
+                        <%= link_to "Clear", new_registration_center_path, class: 'btn btn-primary' %>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </form>
+              <% if @registration_centers.present? %>
+                <div class="panel-group" id="accordion">
+                  <div class="panel panel-default saved">
+                    <div id="collapseOne" class="panel-collapse collapse cat_block in">
+                      <div class="panel-body">
+                        <div class="table-responsive">
+                          <table class="table tablebg tablesaw" data-tablesaw-mode="columntoggle">
+                            <thead>
+                              <tr>
+                                <td>Name</td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <% @registration_centers.each do |registration_center|%>
+                                <tr class="">
+                                  <td class="col-sm-10"><%= registration_center.name %></td>
+                                  <td class="col-sm-1"><%= link_to "", edit_registration_center_path(registration_center),class: "fa fa-pencil-square-o" %></td>
+                                  <td class="col-sm-1"><%= link_to "", registration_center_path(registration_center), method: :delete,data: {confirm: "Are you sure?"},   class: "fa fa-trash" %></td>
+                                </tr>
+                              <% end %>
+                            </tbody>
+                          </table>
+                          <div class="text-center pagination-format">
+                            <%= paginate @registration_centers %>
+                          </div>
+                          <div class="pagination-format pagination-info">
+                            <%= page_entries_info @registration_centers%>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% else %>
+                <%= render partial: 'application/no_records', locals: {message: 'No Registration Center Found.'} %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
+<script type="text/javascript">
+  $(document).ready(function(){
+  
+    $("#registration_center_form_table").hide();
+  
+    $("#registration_center_create_new_button").on("click", function(){
+
+      $("#registration_center_form_table").toggle();
+
+    });
+  
+  });
+</script>

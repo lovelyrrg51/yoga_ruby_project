@@ -1,0 +1,235 @@
+<%= content_for(:title, @post.title) %>
+
+<section id="read-banner">
+</section>
+
+<div class="clearfix"></div>
+<section class="single-blog-post">
+  <div class="container">
+    <div class="row">
+      <% if @post.present? %>
+        <%@post.fragments.each do |fr| %>
+          <div class="col-sm-8 mb-4">
+            <div class="blog_content m-l-0">
+                <div class="blog_title">
+                  <strong><%= @post.title %></strong>
+                </div>
+            </div>
+            <div class="blog_attributes">
+              <div class="row">
+                <div class="col-sm-8">
+                  <div class="blog_specifications">
+                    <i class="fa fa-user" aria-hidden="true"></i>&nbsp;<a href="#">ShivYogi</a> <span class="separator">&nbsp;/&nbsp;</span>
+                    <i class="fa fa-tag" aria-hidden="true"></i>&nbsp;Uncategorized <span class="separator">&nbsp;/&nbsp;</span>
+                    <i class="fa fa-comment" aria-hidden="true"></i>&nbsp;<%= pluralize(@post.comments.count,"comment") %>
+                  </div>
+                </div>
+
+                <div class="col-sm-4">
+                  <div class="blog_share">
+                    <strong>Share to</strong>:
+                    <a href="#" onclick="return SocialShareButton.share(this);" data-site="facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                    <span class="separator">&nbsp;/&nbsp;</span>
+                    <a href="#" onclick="return SocialShareButton.share(this);" data-site="twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="blog_post_img mb-4">
+              <%= fr.content[/img.*?src="(.*?)"/i,1].nil? ? (image_tag  "v2/what-is-shiv-yog-version.jpg", class: 'img-fluid img-shadow') : (image_tag fr.content[/img.*?src="(.*?)"/i,1], class: 'img-fluid img-shadow') %>
+            </div>
+            <div class="blog_post_detail">
+              <div class="blog_publish_date">
+                <span class="blog_date"><%= @post.published_at.strftime('%d') %></span> <br>
+                <span class="blog_month"><%= @post.published_at.strftime('%b') %></span> <br>
+                <span class="blog_year"><%= @post.published_at.year %></span>
+              </div>
+              <div class="blog_content">
+                <div class="blog_para">
+                  <%= fr.content.html_safe %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+      <div class="col-sm-4">
+        <div class="sidebar">
+          <div class="sidebar_title heading_title_small">
+            Recent Posts
+          </div>
+          <% @recent_posts.each do |recent| %>
+            <% recent.fragments.each do |fr| %>
+              <div class="recent_blog">
+                <div class="row">
+                  <div class="col-sm-4">
+                    <div class="recent_blog_img">
+                      <%= fr.content[/img.*?src="(.*?)"/i,1].nil? ? (image_tag  "v2/read-img1.jpg", class: 'img-fluid img-shadow') : (image_tag fr.content[/img.*?src="(.*?)"/i,1], class: 'img-fluid img-shadow')%>
+                    </div>
+                  </div>
+                  <div class="col-sm-8">
+                    <div class="recent_blog_specifications">
+                      <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;<%= recent.created_at.strftime("%B, %d, %Y") %>     <span class="separator">&nbsp;/&nbsp;</span>
+                      <i class="fa fa-user" aria-hidden="true"></i>&nbsp;<a href="#">ShivYogi</a>
+                    </div>
+                    <div class="recent_post_title">Tips on starting your Shiv Yog journey</div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+
+          <div class="sidebar_title heading_title_small">
+            Tags
+          </div>
+
+          <div class="sidebar_tags">
+            <span class="tag">Yoga</span>
+            <span class="tag">Meditation</span>
+            <span class="tag">ShivYog</span>
+            <span class="tag">Cosmic Healing</span>
+            <span class="tag">Vidya</span>
+
+            <span class="tag">Yoga</span>
+            <span class="tag">Meditation</span>
+            <span class="tag">ShivYog</span>
+            <span class="tag">Cosmic Healing</span>
+            <span class="tag">Vidya</span>
+          </div>
+
+          <div class="sidebar_title heading_title_small m-b-30">
+            Archives
+          </div>
+
+          <div class="inline" id="blog_post_archives_calendar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="older_newer_posts">
+          <div class="older_post">
+            <% unless @previous_post.nil? %>
+            <%= link_to v2_blog_path(@previous_post.id) do %>
+              <i class="fa fa-long-arrow-left" aria-hidden="true"></i>&nbsp;&nbsp;
+              <%= @previous_post.fragments.last.content[/img.*?src="(.*?)"/i,1].nil? ? (image_tag  "v2/read-img1.jpg", class: 'img-fluid img-shadow', width: '100px;') : (image_tag @previous_post.fragments.last.content[/img.*?src="(.*?)"/i,1], class: 'img-fluid img-shadow', width: '100px;') %>&nbsp;&nbsp;
+              <%= @previous_post.title %>
+            <% end %>
+            <% end %>
+          </div>
+          <div class="newer_post">
+            <% unless @next_post.nil? %>
+            <%= link_to v2_blog_path(@next_post.id) do %>
+            <%= @next_post.fragments.last.content[/img.*?src="(.*?)"/i,1].nil? ? (image_tag  "v2/read-img1.jpg", class: 'img-fluid img-shadow', width: '100px;') : (image_tag @next_post.fragments.last.content[/img.*?src="(.*?)"/i,1], class: 'img-fluid img-shadow', width: '100px;') %>
+              &nbsp;&nbsp;<%= @next_post.title %>&nbsp;&nbsp;
+              <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+            <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="blog_post_comments">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="card">
+					<div class="body">
+            <% if @post.comments.empty? %>
+              <div class="blog_comment_box">
+                <p>No comments yet! Be the first to comment.
+              </div>
+            <% else %>
+              <% @post.comments.each do |comment| %>
+                <div class="blog_comment_box">
+                  <div class="row">
+                    <div class="col-sm-2">
+                      <div class="text-align-center">
+                        <div class="comments-img-wrapper">
+                          <%= image_tag "v2/renate_img.png", class: "img-fluid comments-img" %>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div class="col-sm-10">
+                      <div class="commentor_name"><strong><%= comment.name %></strong></div>
+                      <div class="commentor_designation"><small>Guest</small></div>
+                      <div class="comment_date"><%= comment.created_at.strftime('%b %d, %Y') %></div>
+                      <div class="comment_description"><%= simple_format comment.comment %></div>
+                      <div class="comment_reply_btn"><a href="Javascript: void(0);"><i class="fa fa-mail-reply" aria-hidden="true"></i> Reply</a></div>
+
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="clearfix"></div>
+<section class="blog_post_comments">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="header">
+          <h2 class="text-align-center"><em><strong>Leave a comment</strong></em></h2>
+        </div>
+
+        <div class="card">
+          <div class="body">
+            <!-- <form class="form-horizontal"> -->
+            <%= form_for @comment, url: v2_blogs_path, class: 'form-horizontal' do |f| %>
+              <div class="row p-0-20">
+                <div class="col-sm-12 clearfix">
+                  <div class="md-form">
+                    <%#= hidden_field :post_id, @post.id %>
+                    <%= hidden_field_tag :id, @post.id  if @post.present? %>
+                    <%= f.label :name %>
+                    <%= f.text_field :name, class: 'form-control', required: true %>
+                    <!-- <input type="text" name="name" id="name" class="form-control"> -->
+                    <!-- <label for="name">Name</label> -->
+                  </div>
+                </div>
+
+                <div class="col-sm-12 clearfix">
+                  <div class="md-form">
+                    <%= f.label :email %>
+                    <%= f.email_field :email, class: 'form-control', required: true %>
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="md-form">
+                    <%= f.label :comment %>
+                    <%= f.text_area :comment, class: 'form-control md-textarea', rows: '3', required: true %>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="form-group">
+                <div class="col-sm-12 text-align-center">
+                  <div class="shivyog-btn">
+                    <%= f.submit 'SUBMIT', class: 'cta_button_small bg-red waves-effect' %>
+                  </div>
+                </div>
+              </div>
+              <% end %>
+            <!-- </form> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%= render "v2/shared/newsletter" %>

@@ -1,0 +1,120 @@
+<tr>
+  <td style="padding: 20px 30px; background: #f8f8f8;" colspan="2">
+    <% (@options[:event_details] || []).each do |graced_by, events| %>
+      <table cellpadding="8" cellspacing="0" border="0" width="1000px;" style="border-collapse:collapse; margin:0 auto; background:#fff; border:1px solid #b1b1b1; margin-bottom:10px;">
+        <tbody>
+          <tr>
+            <td><!-- baba ji Level 1 start -->
+
+              <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top:15px;">
+                <tr>
+                  <td style="line-height:23px;font-size:25px;color:#ff7806" width="100%"><strong>Graced by -  <%= graced_by %></strong></td>
+                </tr>
+              </table>
+
+              <% common_event_ids = events.collect{|e| e.id }  %>
+              <% event_addresses = @options[:address_details].select{|a| common_event_ids.include?(a.addressable_id)} %>
+              <% ( event_addresses || []).group_by(&:db_country).sort_by { |_country| _country[0].name }.each do |db_country, addresses| %>
+                <% next if addresses.size == 0 %>
+                <!-- baba ji Level 2 start -->
+                <table cellpadding="8" cellspacing="0" border="1" width="100%" style="border-collapse: collapse; border:1px solid #b1b1b1; text-align:left">
+
+                  <tr style="background:#a70000;">
+                    <td style="color:#fff; font-size:20px; text-align:left" colspan="14"><strong>Country:</strong>  <%= db_country.name.present? ? db_country.name : 'NA' %>  </td>
+                  </tr>
+
+                  <% state_addresses = addresses.group_by(&:db_state).sort_by { |_state| _state[0].name } %>
+                  <% state_addresses.each do |state, st_adds| %>
+                    <% event_ids = st_adds.collect{|a| a.addressable_id } %>
+                    <% user_events = events.select{|e| event_ids.include?(e.id)} %>
+                    <% if user_events.present? and user_events.count > 0 %>
+                      <tr style="background:#ececec;">
+                        <td style="color:#000; padding:10px; font-size:18px; text-align:left" colspan="14"><strong>State:</strong>  <%= state.name.present? ? state.name : 'NA' %> </td>
+                      </tr>
+
+                      <tr>
+                        <td  width="120px" rowspan="2"><strong>Event Name<strong> </td>
+                        <td  width="120px" rowspan="2"><strong>Event Date<strong></td>
+                        <td  width="120px" rowspan="2"><strong>Total Capacity<strong></td>
+                        <td  width="120px" rowspan="2"><strong>Catagery Name<strong></td>
+                        <td  width="120px" rowspan="2"><strong>Total Seats<strong></td>
+                        <td  width="120px" rowspan="2"><strong>Seats Occupied<strong></td>
+                        <td  width="120px" rowspan="2"><strong>Extra Seats<strong></td>
+                        <td  width="120px" rowspan="2"><strong>Transferred In Seats<strong></td>
+                        <td colspan="2"  width="200px"><div align="center"><strong>Cash Details</strong></div></td>  
+                        <td  width="100px" colspan="2"><div align="center"><strong>DD Details</strong></div></td>  
+                        <td  width="100px" colspan="2"><div align="center"><strong>Online Details</strong></div></td>  
+                      </tr>
+                      <tr>
+                        <td width="120px"><strong>Payment Received<strong> </td>
+                        <td width="120px"><strong>Registration Count<strong></td>
+                        <td width="120px"><strong>Payment Received<strong></td>
+                        <td width="120px"><strong>Registration Count<strong></td>
+                        <td width="100px"><strong>Payment Received<strong></td>
+                        <td width="100px"><strong>Registration Count<strong></td>
+                      </tr>
+                      <% user_events.sort_by{|e| e[:event_start_date]}.each_with_index do |e, index| %>
+                        <% total_event_orders = e.event_orders %>
+                        <% total_event_registrations = e.event_registrations.where(status: EventRegistration.valid_registration_statuses) %>
+                        <% seating_category_details = [] %>
+                        <% e.event_seating_category_associations.each do |sc| %>
+                          <% cash_order_ids = total_event_orders.where(payment_method: "Cash Payment").pluck(:id) if total_event_orders.present?%> 
+                          <% dd_order_ids = total_event_orders.where(payment_method: "Demand draft").pluck(:id) if total_event_orders.present?%> 
+                          <% online_order_ids = total_event_orders.where.not(payment_method: ["Cash Payment", "Demand draft", nil]).pluck(:id) if total_event_orders.present?%>
+                          <% transfer_order_ids = total_event_orders.where(payment_method: [nil]).pluck(:id) if total_event_orders.present? %>
+                          <% seating_category_details.push({total_seats: sc.try(:seating_capacity),
+                          seats_occupied: e.event_registrations.where(event_seating_category_association_id: sc.id, status: EventRegistration.valid_registration_statuses).count,
+                          extra_seats: e.event_registrations.where(event_seating_category_association_id: sc.id, is_extra_seat: true, status: EventRegistration.valid_registration_statuses).count,
+                          category_name: sc.try(:seating_category).try(:category_name) , 
+                          category_association_id: sc.id, 
+                          cash_payment: total_event_registrations.where(event_seating_category_association_id: sc.id, event_order_id: cash_order_ids).collect{|reg| reg.try(:event_order_line_item).try(:price).to_f}.sum , 
+                          dd_payment: total_event_registrations.where(event_seating_category_association_id: sc.id, event_order_id: dd_order_ids).collect{|reg| reg.try(:event_order_line_item).try(:price).to_f}.sum, 
+                          online_payment: total_event_registrations.where(event_seating_category_association_id: sc.id, event_order_id: online_order_ids).collect{|reg| reg.try(:event_order_line_item).try(:price).to_f}.sum,
+                          cash_discount: total_event_registrations.where(event_seating_category_association_id: sc.id, event_order_id: cash_order_ids).collect{|reg| reg.try(:event_order_line_item).try(:discount).to_f}.sum , 
+                          dd_discount: total_event_registrations.where(event_seating_category_association_id: sc.id, event_order_id: dd_order_ids).collect{|reg| reg.try(:event_order_line_item).try(:discount).to_f}.sum, 
+                          online_discount: total_event_registrations.where( event_seating_category_association_id: sc.id, event_order_id: online_order_ids).collect{|reg| reg.try(:event_order_line_item).try(:discount).to_f}.sum,
+                          cash_tax: total_event_registrations.where(event_seating_category_association_id: sc.id, event_order_id: cash_order_ids).collect{|reg| (reg.try(:event_order_line_item).try(:total_tax_detail) || {})['total_tax_paid'].to_f + (reg.try(:event_order_line_item).try(:total_tax_detail) || {})['total_convenience_charges'].to_f}.sum ,
+                          dd_tax: total_event_registrations.where(event_seating_category_association_id: sc.id, event_order_id: dd_order_ids).collect{|reg| (reg.try(:event_order_line_item).try(:total_tax_detail) || {})['total_tax_paid'].to_f + (reg.try(:event_order_line_item).try(:total_tax_detail) || {})['total_convenience_charges'].to_f}.sum ,
+                          online_tax: total_event_registrations.where(event_seating_category_association_id: sc.id, event_order_id: online_order_ids).collect{|reg| (reg.try(:event_order_line_item).try(:total_tax_detail) || {})['total_tax_paid'].to_f + (reg.try(:event_order_line_item).try(:total_tax_detail) || {})['total_convenience_charges'].to_f}.sum,
+                          cash_registrations: total_event_registrations.where(event_seating_category_association_id: sc.id, event_order_id:cash_order_ids).count,
+                          dd_registrations: total_event_registrations.where(event_seating_category_association_id: sc.id, event_order_id: dd_order_ids).count ,
+                          online_registrations: total_event_registrations.where(event_seating_category_association_id: sc.id, event_order_id: online_order_ids).count, 
+                          transferred_in_registrations: total_event_registrations.where(event_seating_category_association_id: sc.id, event_order_id: transfer_order_ids).count }) %>
+
+                        <% end %>
+                        <% seating_category_details.sort_by { |_d| _d[:category_name] }.each_with_index do |sc_detail, index| %>
+                          <tr>
+                            <% if index == 0 %>
+                              <td rowspan= <%=seating_category_details.size.to_s%> ><%= e.event_name %>
+                              </td>
+                              <td rowspan=<%=seating_category_details.size.to_s%> ><%= e.event_start_date.to_s %> to <%= e.event_end_date.to_s %></td>
+                              <td rowspan=<%=seating_category_details.size.to_s%>><%= e.event_seating_category_associations.collect{|s| s.seating_capacity}.sum rescue "NA"%></td>
+                            <% end %>
+                            <td><%= sc_detail.category_name %></td>
+                            <td><%= sc_detail.total_seats %></td>
+                            <td><%= sc_detail.seats_occupied %></td>
+                            <td><%= sc_detail.extra_seats %></td>
+                            <td><%= sc_detail.transferred_in_registrations %></td>
+                            <td><%= ((sc_detail.cash_payment -  sc_detail.cash_discount) + sc_detail.cash_tax).round(2) %></td>
+                            <td><%= sc_detail.cash_registrations %></td>
+                            <td><%= ((sc_detail.dd_payment - sc_detail.dd_discount) + sc_detail.dd_tax).round(2)%></td>
+                            <td><%= sc_detail.dd_registrations %></td>
+                            <td><%= ((sc_detail.online_payment - sc_detail.online_discount) + sc_detail.online_tax).round(2)%></td>
+                            <td><%= sc_detail.online_registrations %></td>
+                          </tr>
+                        <% end %>
+                      <% end %>
+                      <!-- <tr style="background:#ececec;">
+                      <td style="color:#000; padding:10px; font-size:18px; text-align:left" colspan="12"><strong>State:</strong> abc </td> -->
+                  
+                    <% end %>
+                  <% end %>
+              <% end %>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    <% end %>
+  </td>
+</tr>

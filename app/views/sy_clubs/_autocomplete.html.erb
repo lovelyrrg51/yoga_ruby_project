@@ -1,0 +1,7 @@
+<div class="searchlist">
+    <a href="<%= register_sy_club_path %>" target='_blank'>
+        <span class="city"><%= sy_club.try(:address).try(:city_name) || sy_club.try(:address).try(:other_city) %></span>
+        <p><%= sy_club.name %></p>
+        <span><%= sy_club.try(:address).try(:full_address) %></span>
+    </a>
+</div>

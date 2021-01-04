@@ -1,0 +1,136 @@
+<tr>
+  <td style="padding: 20px 30px; background: #f8f8f8;" colspan="2">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EAE8E8" style="font-family:Verdana, Geneva, Helvetica, Arial, sans-serif;">
+    <tr>
+      <td>
+        <% event_order = @options[:event_order] %>
+        <% if event_order.present? %>
+          <table width="80%" border="0" cellspacing="0" cellpadding="0" style="padding:10px 0; margin:0 auto;">
+            <tr>
+              <td style="padding: 20px 0; text-align: center; font-size: 1em; font-weight: bold; color:#900; line-height: 24px;">Registration(s) successful on event <%= event_order.event.event_name %> with transaction id <%= event_order.transaction_id %>. Below are the details regarding your registration(s).</td>
+            </tr>
+            <tr>
+              <td style="text-align: center; font-size:1.2em; font-weight: bold; color:#900; padding-bottom: 10px;">Status</td>
+            </tr>
+            <tr>
+              <td align="center">
+                <table border="0" width="100%"cellpadding="0" cellspacing="0" style=" border: 1px solid #ccc;">
+                  <tr>
+                    <td width="70%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size:1.2em; color: #252525; padding:10px;">
+                      <%= event_order.event.entity_type == 'product' ? 'Product' : 'Event' %>:
+                    </td>
+                    <td width="30%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.0em; color: #252525; padding:10px; ">
+                      <%=event_order.event.event_name_with_location%>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="70%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px;">
+                      <%= (event_order.event.entity_type == 'product' and event_order.event.event_end_date.present?) ? 'Product Expiry Date' : 'Event Date' %>:
+                    </td>
+                    <td width="30%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.0em; color: #252525; padding:10px; ">
+                      <%= event_order.event.event_date %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="70%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px; ">
+                      Registration Reference Number:
+                    </td>
+                    <td width="30%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.0em; color: #252525; padding:10px; ">
+                      <%= event_order.reg_ref_number %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="70%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px; ">
+                      Order Status:
+                    </td>
+                    <td width="30%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.0em; color: #252525; padding:10px; ">
+                      <%= event_order.status.try(:humanize) %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="70%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px; ">
+                      <b>Total Paid Amount:</b>
+                    </td>
+                    <td width="30%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.0em; color: #252525; padding:10px; ">
+                      <% currency = event_order.event.try(:pay_in_usd) ? 'USD' : event_order.event.try(:address).try(:country_currency_code) %>
+                      <b><%= currency %> 0.00</b>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="text-align: center; font-size:1.2em; font-weight: bold; color:#900; padding: 20px;">Registered User(s)</td>
+            </tr>
+            <tr>
+              <td align= "<%= event_order.event_order_line_items.count == 1 ? 'center' : '' %>" >
+                <% event_order.event_order_line_items.each_with_index do |line_item, index| %>
+                <table border="0" width="300"  cellpadding="0" cellspacing="0" align="<%= if event_order.event_order_line_items.count == 1 then
+                                                                                            'center'
+                                                                                          else
+                                                                                            index%2 == 0 ? 'left' : 'right'
+                                                                                          end %>" style=" border: 1px solid #ccc;  margin: 0px 0px 20px 0; display: inline-table;">
+                  <tr>
+                    <td width="50%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px;">
+                      S.No.:
+                    </td>
+                    <td width="50%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.0em; color: #252525; padding:10px; ">
+                      <%= index+1 %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px; ">
+                      Registration No:
+                    </td>
+                    <td width="50%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.0em; color: #252525; padding:10px; ">
+                      <%= line_item.event_registration.serial_number + 100%>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px; ">
+                      SYID:
+                    </td>
+                    <td width="50%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.0em; color: #252525; padding:10px; ">
+                      <% if line_item.sadhak_profile.present? %>
+                      <%= line_item.sadhak_profile.syid %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px; ">
+                      Name:
+                    </td>
+                    <td width="50%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.0em; color: #252525; padding:10px; ">
+                      <%= line_item.sadhak_profile.full_name.titleize %>
+                    </td>
+                    <% end %>
+                  </tr>
+                  <% if line_item.event_seating_category_association.present? %>
+                    <tr>
+                      <td width="50%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px; ">
+                        <%= event_order.event.entity_type.nil? ? 'Seating Category' : 'Category' %>:
+                      </td>
+                      <td width="50%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.0em; color: #252525; padding:10px; ">
+                        <%= line_item.event_seating_category_association.seating_category.category_name.titleize %>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="50%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px; ">
+                        Status:
+                      </td>
+                      <td width="50%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.0em; color: #252525; padding:10px; ">
+                        <%= EventOrder.template_status_mapper[line_item.status] %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </table>
+                <% end %>
+              </td>
+            </tr>
+          </table>
+        <% end %>
+      </td>
+    </tr>
+    </table>
+  </td>
+</tr>
+  

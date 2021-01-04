@@ -1,0 +1,120 @@
+<div class="eventregoption">
+    <div class="outbox">
+        <label class="tagtittle">Does the person being registered have a SYID ?</label>
+        <div class="gender">
+            <ul class="clearfix list-unstyled">
+                <li>
+                    <div class="Custradio">
+                        <input type="radio" name="event" id="eventyes" class="radiotype" checked="">
+                        <label for="eventyes">Yes</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="Custradio">
+                    <input type="radio" name="event" id="eventno" class="radiotype" onClick="( function(){ window.open(' <%= new_sadhak_profile_path %> ', '_blank'); }() )">
+                    <label for="eventno">No</label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row mg-t30 prelative registeredshivyog">
+    <%= form_for :sadhak_profiles, url: syid_search_action, method: :get, remote: true, html: {id: 'event_register_syid_search_form'} do |f| %>
+        <div class="overlapping"></div>
+        <div class="col-sm-6">
+            <div class="outbox">
+                <div class="box bordered-input">
+                    <div class="dropdown dropdown-field">
+                        <%= f.text_field :syid, class: 'form-control noBorder field', placeholder: 'ShivYog ID (SYID)', required: true %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="outbox">
+                <div class="box bordered-input dropdown">
+                    <div class="dropdown-field selectTwo-dropdown">
+                    <%= select_tag 'search_medium',
+                    options_from_collection_for_select([{id: 'first_name', option_text: 'Search by First Name'}, {id: 'date_of_birth', option_text: 'Search by Date of Birth'}, {id: 'mobile', option_text: 'Search by Mobile Number'}], 'id', 'option_text', 'first_name'),
+                    { class: 'basic-single', id: 'event_register_syid_search_event_select_options' } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="outbox">
+                <div class="box bordered-input">
+                    <div class="dropdown dropdown-field">
+                        <%= f.text_field :first_name, class: 'form-control noBorder field', placeholder: 'First name', required: true, id: 'event_register_syid_search_value' %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%= f.hidden_field :from_syid, value: "" %>
+        <div class="col-sm-12">
+            <div class="pannel-btn text-right">
+                <%= button_tag 'FORGOT SYID', class: 'btn btn-info mg-r10 forgotsyid-btn', type: 'button' %>
+                <%= f.submit 'ADD', class: 'btn btn-info event-register-syid-search-button', data: { disable_with: 'SEARCHING SYID...' } %>
+            </div>
+        </div>
+    <% end %>
+    </div>
+    <div class="event-registration forgotsyid hidden">
+    <%= form_for :sadhak_profile, url: forgot_syid_action, method: :get, remote: true, html: { id: 'event_register-forgot-syid-form' } do |f| %>
+        <div class="row mg-t30">
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label class="asterisk">First Name</label>
+                    <div class="dropdown dropdown-field">
+                        <input type="text" class="form-control noBorder field" placeholder="First name" name='sadhak_profile[first_name]' required="true">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label>Last Name</label>
+                    <div class="dropdown dropdown-field">
+                        <input type="text" class="form-control noBorder field" placeholder="Last name" name="sadhak_profile[last_name]">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <% uniq_token = SecureRandom.uuid %>
+                <div class="box bordered-input clearfix">
+                    <label class="asterisk">Date of Birth</label>
+                    <div class="input-group dropdown-field  calenderdate date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker"  data-maxStartDate="<%= DateTime.current.change(hour: 23, minutes: 59, sec: 59)%>" data-minStartDate="<%= Date.today - SADHAK_MAX_AGE.years %>" data-defaultDate='<%= DateTime.current.years_ago(SADHAK_MIN_AGE) %>'>
+                        <%= f.text_field :date_of_birth, class: 'form-control noBorder field', placeholder: Date.current.strftime('%b %d, %Y'), required: 'required', readonly: true%>
+                        <span class="input-group-addon">
+                            <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="shivyog-sepeator"></div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="headtittle">
+                    <h2>Address</h2></div>
+            </div>
+            <%= render partial: 'country_state_city_select', locals: { f: f } %>
+        </div>
+        <%= f.hidden_field :from_syid, value: "" %>
+        <div class="row">
+            <div class="col-sm-12">
+                <ul class="panellist-btn text-right">
+                    <li>
+                        <button type="button" class="btn btn-info modal_back_button">BACK</button>
+                    </li>
+                    <li>
+                        <button class="btn btn-danger resetForm" type="reset">CLEAR</button>
+                    </li>
+                    <li>
+                        <%= f.submit "SEARCH", class: "btn btn-info event-register-forgot-syid-button" %>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    <% end %>
+    </div>
+</div>

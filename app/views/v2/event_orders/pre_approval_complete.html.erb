@@ -1,0 +1,116 @@
+<%= content_for(:title, "Event Registration") %>
+
+<section id="registration-status-banner">
+</section>
+
+<div class="clearfix"></div>
+
+<section class="">
+  <div class="container">
+    <div class="heading_subtitle"><h2><%= @event.event_name_with_location %></h2></div>
+    <div class="dashed_divider m-b-30"></div>
+
+    <div class="card">
+      <div class="body">
+        <% if (@payment.present? && @is_payment_successful) || @event.free? %>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="complete-alert bg-green text-align-center">
+                <i class="material-icons vertical-align-middle">check_circle</i>&nbsp;You have successfully submitted your application for Approval for <%= @event.event_name_with_location %>.
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <%= render 'v2/events/detail' %>
+        </div>
+    </div>
+
+    <div class="card">
+      <div class="body">
+        <div class="red-text m-b-20">Please take a note of the registration reference number and Registration
+          Number alloted to you and following points for further action.
+        </div>
+
+        <p><i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;ShivYog Events are not recommended for children under the age of 12. A child may participate only under supervision and complete responsibility of a Parent or Legal Guardian.</p>
+        <p><i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;Teenage Children (between 12 and 18) may attend the event under the supervision and complete responsibility of a registered adult.</p>
+        <p><i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;Children are expected to maintain discipline during the event and if their behavior is deemed to be disruptive or inappropriate by Venue Volunteers or Staff, both the Child and the supervising adult will be requested to vacate the venue.</p>
+        <p><i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;Please note your transaction details for future reference.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="body">
+            <div class="header p-10-0"><h2>Registration Request Summary</h2></div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped table-hover">
+                <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Details</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>Event</td>
+                  <td><%= @event.try(:event_name_with_location) %></td>
+                </tr>
+
+                <tr>
+                  <td>Registration Date</td>
+                  <td><%= @event_order&.created_at&.strftime('%B %d,%Y ') %></td>
+                </tr>
+
+                <tr>
+                  <td>Status</td>
+                  <td><span class="label label-success"><%= @event_order&.status&.titleize %></span>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover">
+                  <thead>
+                  <tr>
+                    <th>Description</th>
+                    <th>Details</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td>Registration Reference Number</td>
+                    <td><%= @event_order&.reg_ref_number %></td>
+                  </tr>
+                  <tr>
+                    <td>Registration Fees</td>
+                    <td><%= number_with_precision(@event_order&.total_amount.to_f, precision: 2) %></td>
+                  </tr>
+                  </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="body">
+            <%= render "registration_summary" %>
+          </div>
+        </div>
+
+
+        <div class="row clearfix">
+          <div class="col-sm-12 text-align-center">
+            <div class="">
+              Please print and keep your details with you
+              <br>
+              <div class="shivyog-btn modal_download_pdf_btn">
+              <a href="javascript: void(0);" onclick='location.href = "<%= polymorphic_url(@event_order, action: :registration_receipt) %>";return false;' class="btn cta_button_small bg-red waves-effect"><i class="fa fa-print"></i>&nbsp;Print</a>
+            </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>

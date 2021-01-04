@@ -1,0 +1,61 @@
+<%= content_for(:title, "Family Profile") %>
+
+<section id="profiles-banner">
+</section>
+
+<div class="clearfix"></div>
+
+<section class="">
+  <div class="container">
+    <div class="row clearfix family_profiles">
+      <div class="col-sm-12">
+        <div class="heading_subtitle"><h2>Family Profiles</h2></div>
+        <div class="dashed_divider m-b-30"></div>
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-hover js-basic-example">
+            <thead>
+              <tr>
+                <th>Profile</th>
+                <th>Name</th>
+                <th>Available Date</th>
+                <th>Created By</th>
+                <th>Verified</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @sadhak_profiles.each do |sadhak_profile| %>
+                <tr>
+                  <td><%= image_tag sadhak_profile.avatar_url(:thumb), class: "img-fluid" %><strong><%= sadhak_profile.syid %><%= " (ME)" if current_user.sadhak_profile == sadhak_profile %></strong></td>
+                  <td><%= sadhak_profile.full_name %></td>
+                  <td><%= sadhak_profile.created_at.strftime('%b %d, %Y') %></td>
+                  <td><%= current_sadhak_profile.full_name %></td>
+                  <td>
+                    <div class="switch">
+                      <label>
+                        <% if sadhak_profile.is_verified? %>
+                          <div class="green-text font-size-20"><i class="fa fa-check" aria-hidden="true"></i></div>
+                        <% else %>
+                          <div class="red-text font-size-20"><i class="fa fa-times" aria-hidden="true"></i></div>
+                        <% end %>
+                      </label>
+                    </div>
+                  </td>
+                  <td>
+                    <!-- <a href="#"><i class="fa red-text fa-edit"></i></a>&nbsp;&nbsp; -->
+                    <%= link_to edit_v2_sadhak_profile_path(sadhak_profile.id) do %>
+                      <i class="fa red-text fa-edit"></i>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%= render "v2/shared/newsletter" %>

@@ -1,0 +1,2 @@
+module EventPaymentGatewayAssociationsHelper
+end

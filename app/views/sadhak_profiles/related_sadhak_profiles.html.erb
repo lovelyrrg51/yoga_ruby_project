@@ -1,0 +1,54 @@
+<div class="profileCntrl">
+    <div class="text-center headingtittle-h2"><h2>Family Profile(s)</h2></div>
+    <div class="boxsection-lg boxsection-xs boxshadow clearfix">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="Boxdrop dropdown">
+                    <%= render 'application/per_page' %> 
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="tableCntrl">
+                    <div class="table-responsive ">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Profile </th>
+                                    <th>Name</th>
+                                    <th>Available date </th>
+                                    <th>Created by</th>
+                                    <th>Status</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% @related_sadhak_profiles.each do |related_sadhak_profile| %>
+                                    <tr>
+                                        <td>
+                                            <div class="profile">
+                                                <div class="profileimg" style='background-image: url("<%= related_sadhak_profile.try(:advance_profile_thumb_url).present? ? related_sadhak_profile.try(:advance_profile_thumb_url) : image_path("profile.png")%>")'>
+                                                </div>
+                                                <span><%= related_sadhak_profile.syid %><%= "(ME)" if current_user.sadhak_profile == related_sadhak_profile %></span>
+                                            </div>
+                                        </td>
+                                        <td><div class="width-300 textwrap"><%= related_sadhak_profile.full_name %></td>
+                                        <td><%= related_sadhak_profile.created_at.strftime('%b %d, %Y') %></td>
+                                        <td><%= @sadhak_profile.full_name %></td>
+                                        <td class="primary-color"><%= related_sadhak_profile.status.try(:titleize) || 'Active' %></td>
+                                        <td class="text-center"><a href=<%= edit_sadhak_profile_path(related_sadhak_profile) %> class="primary-color">View</a></td>
+                                    </tr>
+                                <% end %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="table-pagination clearfix">
+                    <div class="show-pgnation">
+                        <p class="primarybold"><%= custom_page_entries_info(@related_sadhak_profiles) %></p>
+                    </div>
+                    <%= paginate @related_sadhak_profiles %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

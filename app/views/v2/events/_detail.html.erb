@@ -1,0 +1,114 @@
+<div class="row">
+  <div class="col-sm-4">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="forum_specifications">
+          <span class="title"><strong>Graced By</strong>: </span>
+          <span class="babaji_pic">
+            <%= image_tag %w(babaji ishanji).include?(@event.graced_by.to_s.gsub(' ', '').downcase) ? "#{@event.graced_by.to_s.gsub(' ', '').downcase}sm.png" : 'profile.png' %>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-8">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="forum_specifications">
+          <span class="title"><strong>Event Name</strong>: </span><%= @event.event_name_with_location %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="forum_specifications">
+          <span class="title"><strong>Email</strong>: </span><%= @event.contact_email %>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="forum_specifications">
+          <span class="title"><strong>Contact Details</strong>: </span>
+          <% @event.contact_details.split(',').map do |e| %>
+            <p><%= e %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="forum_specifications">
+          <span class="title"><strong>Venue</strong>: <%= @event.full_address %> </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="forum_specifications">
+          <span class="title"><strong>Date & Time</strong>: </span>
+          <%= format_date(@event.event_start_date) %> <span>To</span> <%= format_date(@event.event_end_date) %>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="forum_specifications">
+          <span class="title"><strong>Accommodation</strong>: </span>
+            <% if @event.attachment.present? %>
+              <%= link_to @event.attachment.try(:s3_url), target: "_blank" do %>
+                <i class="fa fa-file-pdf-o"></i>Download PDF
+              <% end %>
+            <% else %>
+              <span class="red-text">N/A</span>
+            <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="forum_specifications">
+          <span class="title"><strong>Handy information about event</strong>: </span>
+            <% if @event.handy_attachment.present? %>
+              <%= link_to @event.handy_attachment.try(:s3_url), target: "_blank" do %>
+                <i class="fa fa-file-pdf-o"></i>Download PDF
+              <% end %>
+            <% else %>
+              <span class="red-text">N/A</span>
+            <% end %>
+        </div>
+      </div>
+    </div>
+
+    <% if @event.discount_plan.present? %>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="forum_specifications">
+            <span>This event has special discounts for Forum Members that will be visible when you reach the payment
+              page. <%= (@event.description.present? ? raw(@event.description) : "") %></span>
+          </div>
+        </div>
+      </div>
+    <% elsif @event.description.present? %>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="forum_specifications">
+             <span class="title"><strong>Event Description</strong>: </span>
+            <%= raw(@event.description) %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="banner_button">
+      <%= link_to v2_event_path(@event) do%>
+        <div class="cta_button_small">Back to Event</div>
+      <% end %>
+    </div>
+  </div>
+</div>

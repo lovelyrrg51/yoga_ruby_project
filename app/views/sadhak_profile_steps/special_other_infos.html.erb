@@ -1,0 +1,279 @@
+<div class="CompleteprofileCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Profile</h2>
+    </div>
+    <div class="boxsection-md boxshadow prelative">
+        <div class="progressCntrl text-right">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:<%= @sadhak_profile.completed.to_i %>%">
+                </div>
+            </div>
+            <span><%= @sadhak_profile.completed.to_i %>%</span>
+        </div>
+        <div class="tab-content">
+            <%= form_for @sadhak_profile, url: wizard_path, html: { id: 'sadhak_profile_special_event_sadhak_profile_other_info_form' } do |f| %>
+                <%= f.fields_for :special_event_sadhak_profile_other_infos, @special_event_sadhak_profile_other_info do |ff| %>
+                    <div class="tab-pane active" role="tabpanel">
+                        <div class="row">
+                            <div class="col-sm-12 mg-b30">
+                                <div class="headtittle text-center">
+                                    <h2>Other Informations</h2>
+                                </div>
+                                <div class="text-center primarybold offerCntrl offergapping-25">
+                                    <p>Please don't mention N/A in any of the fields otherwise your application will be rejected. </p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="outbox">
+                                    <label class="asterisk">Father's Name</label>
+                                    <div class="box bordered-input">
+                                        <div class="dropdown dropdown-field">
+                                            <%= ff.text_field :father_name, class: "form-control noBorder field", required: true, placeholder: "Father's name" %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="outbox">
+                                    <label class="asterisk">Mother's Name</label>
+                                    <div class="box bordered-input">
+                                        <div class="dropdown dropdown-field">
+                                            <%= ff.text_field :mother_name, class: "form-control noBorder field", required: true, placeholder: "Mother's name" %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="outbox">
+                                    <label class="asterisk">Yearly Renumeration</label>
+                                    <div class="box bordered-input">
+                                        <div class="dropdown dropdown-field">
+                                            <%= ff.text_field :yearly_renumaration, class: "form-control noBorder field only_integers", required: true, placeholder: "Yearly renumeration" %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="outbox">
+                                    <label class="asterisk">Language(s) Known</label>
+                                    <div class="box bordered-input">
+                                        <div class="dropdown box-taginput">
+                                            <%= ff.text_field :languages, required: true, class: 'form-control noBorder field box-field tagsinput', 'data-role': 'tagsinput', placeholder: "Language(s)" %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="outbox">
+                                    <label class="asterisk">How long are you associated with Shivyog ?</label>
+                                    <div class="box bordered-input">
+                                        <div class="dropdown dropdown-field">
+                                            <%= ff.text_field :how_long_associated_with_shivyog, required: true, class: 'form-control noBorder field only_integers',  placeholder: "Duration" %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="outbox">
+                                    <label class="asterisk">References of two sadhaks</label>
+                                    <div class="row">
+                                        <%= ff.fields_for :special_event_sadhak_profile_references do |fff| %>
+                                                <div class="col-sm-6">
+                                                    <div class="box bordered-input">
+                                                        <div class="dropdown dropdown-field">
+                                                            <%= fff.text_field :sadhak_profile_id, required: true, class: 'form-control noBorder field',  placeholder: "SYID" %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        <% end %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="outbox">
+                                    <label class="asterisk">Are you a member of any political party ?</label>
+                                    <div class="gender">
+                                        <ul class="clearfix list-unstyled">
+                                            <li>
+                                                <div class="Custradio">
+                                                    <%= ff.radio_button :are_you_member_of_political_party, true, checked: false, class: "radiotype other_info_radio_button" %>
+                                                    <label for="1">Yes</label>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="Custradio">
+                                                    <%= ff.radio_button :are_you_member_of_political_party, false, checked: true, class: "radiotype other_info_radio_button" %>
+                                                    <label for="2">No</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                   </div>
+                                </div>
+                                <div class="prelative">
+                                    <div class="overlapping overlay-active other_info_overlay_div"></div>
+                                    <div class="box bordered-input border-textarea">
+                                       <div class="dropdown dropdown-field">
+                                          <%= ff.text_area :political_party_name, class: "form-control noBorder field other_info_overlay_tag", placeholder: "Political party name" %>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="outbox">
+                                    <label class="asterisk">Are you on any medication ?</label>
+                                    <div class="gender">
+                                        <ul class="clearfix list-unstyled">
+                                            <li>
+                                                <div class="Custradio">
+                                                    <%= ff.radio_button :are_you_taking_medication, true, checked: false, class: "radiotype other_info_radio_button" %>
+                                                    <label for="1">Yes</label>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="Custradio">
+                                                    <%= ff.radio_button :are_you_taking_medication, false, checked: true, class: "radiotype other_info_radio_button" %>
+                                                    <label for="2">No</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                   </div>
+                                </div>
+                                <div class="prelative">
+                                    <div class="overlapping overlay-active other_info_overlay_div"></div>
+                                    <div class="box bordered-input border-textarea">
+                                       <div class="dropdown dropdown-field">
+                                          <%= ff.text_area :medication_details, class: "form-control noBorder field other_info_overlay_tag", placeholder: "Medication details" %>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="outbox">
+                                    <label class="asterisk">Are you suffering from any physical or Mental ailments ?</label>
+                                    <div class="gender">
+                                        <ul class="clearfix list-unstyled">
+                                            <li>
+                                                <div class="Custradio">
+                                                    <%= ff.radio_button :are_you_suffering_from_physical_or_mental_ailments, true, checked: false, class: "radiotype other_info_radio_button" %>
+                                                    <label for="1">Yes</label>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="Custradio">
+                                                    <%= ff.radio_button :are_you_suffering_from_physical_or_mental_ailments, false, checked: true, class: "radiotype other_info_radio_button" %>
+                                                    <label for="2">No</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                   </div>
+                                </div>
+                                <div class="prelative">
+                                    <div class="overlapping overlay-active other_info_overlay_div"></div>
+                                    <div class="box bordered-input border-textarea">
+                                       <div class="dropdown dropdown-field">
+                                          <%= ff.text_area :ailment_details, class: "form-control noBorder field other_info_overlay_tag", placeholder: "Ailment details" %>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="outbox">
+                                    <label class="asterisk">Are you involved in any litigation cases (civil/ criminal) ?</label>
+                                    <div class="gender">
+                                        <ul class="clearfix list-unstyled">
+                                            <li>
+                                                <div class="Custradio">
+                                                    <%= ff.radio_button :are_you_involved_in_any_litigation_cases, true, checked: false, class: "radiotype other_info_radio_button" %>
+                                                    <label for="1">Yes</label>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="Custradio">
+                                                    <%= ff.radio_button :are_you_involved_in_any_litigation_cases, false, checked: true, class: "radiotype other_info_radio_button" %>
+                                                    <label for="2">No</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                   </div>
+                                </div>
+                                <div class="prelative">
+                                    <div class="overlapping overlay-active other_info_overlay_div"></div>
+                                    <div class="box bordered-input border-textarea">
+                                       <div class="dropdown dropdown-field">
+                                          <%= ff.text_area :case_details, class: "form-control noBorder field other_info_overlay_tag", placeholder: "Case details" %>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="outbox">
+                                    <label class="asterisk">Would you like to participate in the divine mission of shivyog ?</label>
+                                    <div class="gender">
+                                        <ul class="clearfix list-unstyled">
+                                            <li>
+                                                <div class="Custradio">
+                                                    <%= ff.radio_button :would_you_like_to_participate_in_the_devine_mission_of_shivyog, true, checked: false, class: "radiotype other_info_radio_button" %>
+                                                    <label for="1">Yes</label>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="Custradio">
+                                                    <%= ff.radio_button :would_you_like_to_participate_in_the_devine_mission_of_shivyog, false, checked: true, class: "radiotype other_info_radio_button" %>
+                                                    <label for="2">No</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                   </div>
+                                </div>
+                                <div class="prelative">
+                                    <div class="overlapping overlay-active other_info_overlay_div"></div>
+                                    <div class="box bordered-input border-textarea">
+                                       <div class="dropdown dropdown-field">
+                                          <%= ff.text_area :participation_details, class: "form-control noBorder field other_info_overlay_tag", placeholder: "Participation details" %>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="outbox">
+                                    <label class="asterisk">Why you want to attend this shivir ?</label>
+                                    <div class="box bordered-input border-textarea">
+                                       <div class="dropdown dropdown-field">
+                                          <%= ff.text_area :why_you_want_to_attend_this_shivir, class: "form-control noBorder field",  required: true, placeholder: "Describe" %>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="outbox">
+                                    <label class="asterisk">How did you come to know about this shivir?</label>
+                                    <div class="box bordered-input border-textarea">
+                                       <div class="dropdown dropdown-field">
+                                          <%= ff.text_area :how_did_you_came_to_know_about_the_shivir, class: "form-control noBorder field", required: true, placeholder: "Describe" %>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <%= ff.hidden_field :event_id, :value => @event.id %>
+                        <div class="row mg-t30">
+                            <div class="col-sm-12">
+                                <div class="pannel-btn clearfix">
+                                    <%= link_to 'PREVIOUS', previous_wizard_path(previous: true), class: "btn btn-info mg-r5" %>
+                                    <div class="pull-right">
+                                        <button type="button" class="btn btn-info mg-r5 resetForm" >CLEAR</button>
+                                        <button type="submit" class="btn btn-info" >SAVE & CONTINUE</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>
+            <% end %>
+        </div>
+    </div>
+</div>

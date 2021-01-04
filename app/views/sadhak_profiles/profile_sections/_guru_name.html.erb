@@ -1,0 +1,56 @@
+<div class="panel">
+    <div class="panel-heading" role="tab" id="headingEight">
+        <h4 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion4" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                <i class="more-less glyphicon glyphicon-plus"></i>
+                <%if @sadhak_profile.is_name_of_guru_complete?%>
+                <i class="success-btn">
+                 <%= image_tag "check-mark.png" %>
+                </i>
+                <% else %>
+                <i class="error-btn"><%= image_tag "warning.png" %></i>
+                <% end %>
+                <span>Name of Guru</span>
+            </a>
+        </h4>
+    </div>
+    <div id="collapseEight" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEight">
+        <div class="panel-body">
+            <%= form_for @sadhak_profile, html: { id: 'sadhak_profile_name_of_guru_form' } do |f| %>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                        <label class="asterisk">What is the name of your guru?</label>
+                            <div class="box bordered-input">
+                               <div class="dropdown dropdown-field">
+                                  <!-- <input type="text" class="form-control noBorder field" placeholder="Name of your guru"> -->  
+                                  <%= f.text_field :name_of_guru, class: 'form-control noBorder field', placeholder: "Name of your guru", required: true %>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                        <label class="asterisk">Name of the spiritual organization you are associated with ?</label>
+                            <div class="box bordered-input">
+                               <div class="dropdown dropdown-field">
+                                  <!-- <input type="text" class="form-control noBorder field" placeholder="Name of spiritual organization"> -->  
+                                  <%= f.text_field :spiritual_org_name, class: 'form-control noBorder field', placeholder: "Name of spiritual organization", required: true %>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="pannel-btn">
+                            <%= f.hidden_field :sp_accordion_id, value: 'collapseEight', id: 'sadhak_profile_name_of_guru_accodion_id'  %>
+                            <%= f.submit 'CLEAR', class: 'btn btn-danger mg-r10', type: 'reset' %>
+                            <%= f.submit 'SAVE', class: 'btn btn-info' %>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>

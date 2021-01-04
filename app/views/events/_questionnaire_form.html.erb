@@ -1,0 +1,155 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png", alt: "close"%></button>
+            <h2 class="headtittle">Event Questionnaire Form</h2>
+        </div>
+        <%= form_for :questionnaire_form , url: questionnaire_form_event_sadhak_profile_path(@event, @sadhak_profile), method: 'post', html: { remote: true, id: 'event_sadhak_questionnaire_form'} do |f|%>
+        <div class="modal-body mCustomScrollbar">
+          <div class="row">
+              <div class="col-sm-12">
+                  <div class="outbox">
+                      <label class="asterisk">Phone</label>
+                      <div class="box bordered-input">
+                          <div class="dropdown dropdown-field">
+                              <%= text_field_tag "questionnaire_form[phone]", '', class: "form-control noBorder field", placeholder:"Phone", required: true %>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-12">
+                  <div class="outbox">
+                      <label class="asterisk">Email ID</label>
+                      <div class="box bordered-input">
+                          <div class="dropdown dropdown-field">
+                              <%= text_field_tag "questionnaire_form[email_id]", '', class: "form-control noBorder field", placeholder:"Email ID", required: true %>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-12">
+                  <div class="outbox">
+                      <label class="asterisk">Education</label>
+                      <div class="box bordered-input">
+                          <div class="dropdown dropdown-field">
+                          <%= text_field_tag "questionnaire_form[education]", '', class: "form-control noBorder field", placeholder:"Education", required: true %>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-12">
+                  <div class="outbox">
+                      <label class="asterisk">Profession/Skills</label>
+                      <div class="box bordered-input">
+                          <div class="dropdown dropdown-field">
+                          <%= text_field_tag "questionnaire_form[profession_skills]",'', class: "form-control noBorder field", placeholder:"Profession/Skills", required: true %> 
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-6">
+                  <div class="box bordered-input">
+                     <label class="asterisk">Are you Doctor?</label>
+                     <div class="gender">
+                          <ul class="clearfix list-unstyled">
+                            <li>
+                              <div class="Custradio">
+                                <%= radio_button_tag "questionnaire_form[is_doctor]", 'yes', false,{ class: "radiotype", required: 'required'}%>
+                                <%= label_tag "is_doctor", "Yes" %>
+                              </div>
+                            </li>                           <li>
+                              <div class="Custradio">
+                                <%= radio_button_tag "questionnaire_form[is_doctor]", 'no',true,{ class: "radiotype", required: 'required'}%>
+                                <%= label_tag "is_doctor", "No" %>
+                              </div>
+                            </li>
+                          </ul>
+                     </div>
+                  </div>
+              </div>
+              <div class="col-sm-12">
+                  <div class="outbox">
+                    <div class="overlapping overlay-active" id="specialization_overlap">
+                    </div>
+                      <label class="asterisk">If Yes, What is your Specialization? </label>
+                      <div class="box bordered-input">
+                          <div class="dropdown dropdown-field">
+                          <%= text_field_tag "questionnaire_form[specialization]", '', class: "form-control noBorder field", placeholder:"Specialization", disabled: true, required: true %>  
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-12">
+                  <div class="outbox">
+                      <label class="asterisk">Are you practicing any of the following or other alternative medicine modalities:</label>
+                        <div class="box multiplebox">
+                            <div class="dropdown-field multipleboxfield">
+                            <%= select_tag "questionnaire_form[medicine_modalities]", options_for_select(QUESTIONNAIRE_MEDICINE_MODALITIES.map{ |k, v| [k.humanize, k] }, ''), include_blank: " ----- Select ----- ", class: "multiple-select", multiple: true, required: true %>
+                            </div>
+                        </div>
+                    <div class="merge-error" id="medicine_modalities_input_error" style="left: 25px;bottom: 20px;">
+                  </div>
+                  </div>
+              </div>
+              <div class="col-sm-12">
+                  <div class="outbox">
+                      <label class="asterisk">Shivir Attended</label>
+                      <div class="box multiplebox">
+                          <div class="dropdown-field multipleboxfield">
+                          <%= select_tag "questionnaire_form[attended_shivir]", options_for_select(QUESTIONNAIRE_SHIVIR_ATTENDED.map{ |k, v| [k.humanize, k] }, ''), include_blank: " ----- Select ----- ", class: "multiple-select", multiple: true , required: true%>
+                          </div>
+                      </div>
+                    <div class="merge-error" id="attended_shivir_input_error" style="left: 25px;bottom: 20px;">
+                  </div>
+                  </div>
+              </div>
+              <div class="col-sm-12">
+                  <div class="outbox">
+                    <div class="overlapping overlay-active" id="attended_other_shivir_overlap">
+                    </div>
+                      <label class="asterisk">If you attended any other Shivir, Please mention its name</label>
+                      <div class="box bordered-input">
+                          <div class="dropdown dropdown-field">
+                          <%= text_field_tag "questionnaire_form[attended_other_shivir]", '', class: "form-control noBorder field", placeholder:"Attended Shivir name", disabled: true %>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-6">
+                  <div class="box bordered-input">
+                     <label class="asterisk">Are you Interested in becoming Shiv Yog cosmic therapist trainer</label>
+                     <div class="gender">
+                          <ul class="clearfix list-unstyled">
+                            <li>
+                              <div class="Custradio">
+                                <%= radio_button_tag "questionnaire_form[can_be_therapist]", 'Yes', false,{ class: "radiotype", required: 'required'}%>
+                                <%= label_tag "can_be_therapist", "Yes" %>
+                              </div>
+                            </li>                           <li>
+                              <div class="Custradio">
+                                <%= radio_button_tag "questionnaire_form[can_be_therapist]", 'No',true,{ class: "radiotype", required: 'required'}%>
+                                <%= label_tag "can_be_therapist", "No" %>
+                              </div>
+                            </li>
+                          </ul>
+                     </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+            <div class="pannel-btn pull-right">
+                <button type="button" class="btn btn-danger mg-r5" data-dismiss="modal">CANCEL</button>
+                <%= submit_tag  "SEND", class: ' btn btn-info' %>
+            </div>
+        </div>
+        <%end%>
+    </div>
+</div>
+<script type="text/javascript">
+    $('.multiple-select').select2({
+      placeholder: "Click here",
+      multiple: true,
+      allowClear: true
+    });
+</script>

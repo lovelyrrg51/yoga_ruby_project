@@ -1,0 +1,38 @@
+<div class="col-sm-6">
+    <% SyClubUserRole.find_each do |role| %>
+      <% if @sy_club.sy_club_user_roles.include?(role) %>
+        <div class="graceimgdetails">
+          <%#if @feature_on %>
+            <!-- <div class="graceimg" style='background-image: url("<%#= @sy_club.send(role.role_name.try(:downcase).try(:to_sym)).try(:advance_profile_thumb_url).presence || @sy_club.send(role.role_name.try(:downcase).try(:to_sym)).try(:advance_profile_s3_url).presence || image_path("profile.png")%>")'> -->
+            <!-- </div> -->
+          <%#end%>
+           
+            <label><%= ((@sy_club.new_record? || ( @sy_club.sadhak_profiles.count == 2 && @sy_club.sy_club_sadhak_profile_associations.pluck(:sy_club_user_role_id).include?(1))) ? role.try(:role_name).tr("0-9", "").try(:titleize) : role.try(:role_name).try(:titleize)) %></label>
+            <p><%= @sy_club.send(role.role_name.try(:downcase).try(:to_sym)).try(:full_name) %></p>
+        </div>
+      <% end %>
+    <% end %>
+</div>
+<div class="col-sm-6">
+    <div class="gracetrack">
+        <label>VENUE</label>
+        <p><%= @sy_club.full_address %></p>
+    </div>
+    <% if false %>
+      <div class="gracetrack">
+          <label>Contact Details</label>
+        <% if @sy_club.contact_details.present? %>
+          <p><%= "+#{@sy_club.country_telephone_prefix}-#{@sy_club.contact_details}" %></p>
+          <p style="text-transform: none;"><%= "#{@sy_club.email}" %></p>
+        <%else%>
+        <p>Please write a email to <%= @sy_club.try(:address).try(:country_id) == 113 ? 'forum@shivyogindia.com' : 'info@absclp.com'%></p>
+        <% end %>
+      </div>
+    <%end%>
+    <%# if @sy_club.membership_validity %>
+ <!--      <div class="gracetrack">
+          <label>Membership Validity</label>
+          <p><%#= @sy_club.membership_validity %></p>
+      </div> -->
+    <%# end %>
+</div>

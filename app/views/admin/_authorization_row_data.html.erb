@@ -1,0 +1,23 @@
+<tr id="<%= authorization_row_data.id %>">
+    <td>
+        <div class="textgroup">
+            <p class="primarybold"><%= authorization_row_data.try(:sadhak_profile).try(:full_name) %></p>
+            <span><%= authorization_row_data.try(:sadhak_profile).try(:syid) %></span>
+        </div>
+    </td>
+    <td><%= authorization_row_data.try(:email) %></td>
+    <td><%= authorization_row_data.try(:provider) %></td>
+    <% if authorization_row_data.verified_sadhak_profiles.count == 1 %>
+        <td><%= authorization_row_data.verified_sadhak_profiles.try(:last).try(:syid) %></td>
+    <% else %>
+        <td>
+            <div class="box bordered-input dropdown tabledrop">
+                <div class="dropdown-field selectTwo-dropdown">
+                    <%= select_tag 'authorization_row_data_user',options_for_select(authorization_row_data.verified_sadhak_profiles.pluck(:syid, :user_id), authorization_row_data.try(:user_id)),
+                        { class: 'simple-single', id: "#{authorization_row_data.id}_authorization_row_data_select", onchange: ("authorizationRrowDataOptionsChange(this)") }%>
+                </div>
+            </div>
+        </td>
+    <% end %>
+    <td class="text-center"><button class="btn btn-info" id="<%= authorization_row_data.id %>_save_button" onclick="saveAuthorizationRowDataChanges(this)" data-remote="true" disabled>Save</button></td>
+</tr>

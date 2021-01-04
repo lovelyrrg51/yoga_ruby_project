@@ -1,0 +1,112 @@
+<% content_for(:title, 'Sadhaks Episodes') %>
+<div class="">
+    <div class="headingtittle-h2 text-center">
+        <h2>Admin Panel</h2>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+            <%= render 'admin/admin_left_panel' %>
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                    <div class="rightContent">
+                        <div id="mergesyid" class="">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="headtittle text-center">
+                                        <h2>Sadhak's Episodes</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <%= form_tag({}, {:method => :get}) do %>
+                              <div class="row mg-t30">
+                                  <div class="col-sm-6">
+                                      <div class="outbox">
+                                        <label class="asterisk">SYID</label>
+                                          <div class="box bordered-input">
+                                              <div class="dropdown dropdown-field">
+                                                <%= text_field_tag :syid,params[:syid], class: 'form-control noBorder field', placeholder: 'Shivyog ID (SYID)', required: true %>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-12">
+                                      <div class="pannel-btn text-right">
+                                        <%= submit_tag 'SEARCH', {class: 'btn btn-info', disabled_with: 'Searching...'} %>
+                                      </div>
+                                  </div>
+                              </div>
+                            <% end %>
+                            <%if @sadhak_profile.present?%>
+                            <div class="row">
+                              <div class="headingtittle-h2 text-center">
+                                <h2>Accessible Episodes</h2>
+                              </div>
+                            	<%if @accessible_collections.present?%>
+                                <div class="col-sm-12">
+                                    <div class="tableCntrl">
+                                        <div class="table-responsive tableScrollbar">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Collection Name</th>
+                                                        <th>Episode Name</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <% (@accessible_collections || []).each do |collection| %>
+                                                  <%(collection.digital_assets || []).each do |asset|%>
+                                                    <tr>
+                                                        <td><%= collection.collection_name %></td>
+
+                                                        <td><%= asset.asset_name %></td>
+                                                    </tr>
+                                                  <% end %>
+                                                  <%end%>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                              <%else%>
+                              	<%= render partial: 'application/no_records', locals: { message: "No Accessible Episode Forund." } unless @accessible_collections.present?%>
+                              <%end%>
+                            </div>
+                            <div class="row">
+                              <div class="headingtittle-h2 text-center">
+                                <h2>Downloaded Episodes</h2>
+                              </div>
+                              <%if @downloaded_episodes.present?%>
+                                <div class="col-sm-12">
+                                    <div class="tableCntrl">
+                                        <div class="table-responsive tableScrollbar">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Collection Name</th>
+                                                        <th>Episode Name</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <% (@downloaded_episodes || []).each do |episode| %>
+                                                    <tr>
+                                                        <td><%= episode.collection_name %></td>
+                                                        <td><%= episode.asset_name %></td>
+                                                    </tr>
+                                                  <% end %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                              <%else%>
+                                <%= render partial: 'application/no_records', locals: { message: "No Downloaded Episode Found." } unless @downloaded_episodes.present?%>
+                              <%end%>
+                            </div>
+                            <%end%>
+                        </div>                              
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,280 @@
+<div class="modal fade" id="upgrade_registration_refund_details" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="largeModalLabel">Registration Payment Details</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="body">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="header p-10-0"><h2>Registration Summary (Before)</h2></div>
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>S. No.</th>
+                            <th>Name/SYID</th>
+                            <th>Seating Category</th>
+                            <th>Discount</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% (before_sadhak_details || []).each_with_index do |detail, index| %>
+                            <tr>
+                              <td><%= index + 1 %>. </td>
+                              <td><strong><%= detail[:full_name] %> <br /><span class="red-text small"><%= detail[:syid] %></span></strong></td>
+                              <td><strong><%= detail[:category_name] %><br><span class="red-text small"><%= detail[:price] %></span></strong></td>
+                              <td><%= detail[:discount] %></td>
+                            </tr>
+                          <% end %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-12">
+                  <div class="header p-10-0"><h2>Registration Summary (After)</h2></div>
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>S. No.</th>
+                            <th>Name/SYID</th>
+                            <th>Seating Category</th>
+                            <th>Discount</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% (after_sadhak_details || []).each_with_index do |detail, index| %>
+                            <tr>
+                              <td><%= index + 1 %>. </td>
+                              <td><strong><%= detail[:full_name] %> <br /><span class="red-text small"><%= detail[:syid] %></span></strong></td>
+                              <td><strong><%= detail[:seating_category] %> <br /><span class="red-text small"><%= detail[:price] %></span></strong></td>
+                              <td><%= detail[:discount] %></td>
+                            </tr>
+                          <% end %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                  <div class="header p-10-0"><h2>Payment Summary</h2></div>
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>Description</th>
+                            <th>Details</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Registration Fees</td>
+                            <td><%= "#{event.currency_code} #{number_with_precision((payment_params[:total_new_price] - payment_params[:total_old_price]).rnd, precision: 2)}" %></td>
+                          </tr>
+                          <tr>
+                            <td><%= (payment_params[:total_new_discount] - payment_params[:total_old_discount]).rnd.negative? ? 'Payable Discount' : 'Discount' %></td>
+                            <td><%= "#{event.currency_code} #{number_with_precision((payment_params[:total_new_discount] - payment_params[:total_old_discount]).rnd.abs, precision: 2)}" %></td>
+                          </tr>
+                          <tr>
+                            <td>Amount</td>
+                            <td><%= "#{event.currency_code} #{number_with_precision(payment_params[:net_result].rnd, precision: 2)}" %></td>
+                          </tr>
+                          <% (tax_details[:tax_breakup] || []).each do |tax| %>
+                            <tr>
+                              <td><%= tax[:tax_name] %></td>
+                              <td><%= "#{event.currency_code} #{number_with_precision(tax[:amount].rnd, precision: 2)}" %></td>
+                            </tr>
+                          <% end %>
+                          <tr>
+                            <td><strong>Net Amount</strong></td>
+                            <td><span class="red-text net-amount"><strong><%= "#{event.currency_code} #{number_with_precision((tax_details[:total_tax_applied] + payment_params[:net_result]).rnd, precision: 2)}" %></strong></span></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="header p-10-0"><h2>Payment Options</h2></div>
+                    <div class="responsiveTabs">
+                      <ul id="tabs" class="nav nav-tabs payment-option-tabs" role="tablist">
+                        <% event_online_payment_gatways(event).each_with_index do |ga, index| %>
+                          <% if ga.gateway_name == 'stripe' %>
+                            <li class="nav-item waves-effect waves-light">
+                              <a id="tab-stripe" href="#pane-stripe" class="nav-link active" data-toggle="tab" role="tab"><span class="stripe_icon"></span> Stripe</a>
+                            </li>
+                          <% end %>
+                          <% if ga.gateway_name == 'hdfc' %>
+                            <li class="nav-item waves-effect waves-light">
+                              <a id="tab-net-banking" href="#pane-net-banking" class="nav-link" data-toggle="tab" role="tab"><span class="net_banking_icon"></span> Net Banking</a>
+                            </li>
+                          <% end %>
+                          <% if ga.gateway_name == "payfast" %>
+                            <li class="nav-item waves-effect waves-light">
+                              <a id="tab-payfast" href="#pane-payfast" class="nav-link" data-toggle="tab" role="tab"><span class="net_banking_icon"></span> Payfast</a>
+                            </li>
+                          <% end %>
+                          <% if ga.gateway_name == "ccavenue" %>
+                            <li class="nav-item waves-effect waves-light">
+                              <a id="tab-ccavenue" href="#pane-ccavenue" class="nav-link" data-toggle="tab" role="tab"><span class="net_banking_icon"></span> Ccavenue</a>
+                            </li>
+                          <% end %>
+                        <% end %>
+                        <% event_offline_payment_gateways(event).each_with_index do |ga, index| %>
+                          <% if ga.gateway_name == "cash" %>
+                            <li class="nav-item waves-effect waves-light">
+                              <a id="tab-cash_payment" href="#pane-cash_payment" class="nav-link" data-toggle="tab" role="tab"><span class="offline_payment_icon"></span>Cash</a>
+                            </li>
+                          <% end %>
+                          <% if ga.gateway_name == "sydd" %>
+                            <li class="nav-item waves-effect waves-light">
+                              <a id="tab-dd_payment" href="#pane-dd_payment" class="nav-link" data-toggle="tab" role="tab"><span class="offline_payment_icon"></span>Demand Draft</a>
+                            </li>
+                          <% end %>
+                        <% end %>
+                      </ul>
+                      <div id="content" class="tab-content" role="tablist">
+                        <% event_online_payment_gatways(event).each_with_index do |ga, index| %>
+                          <% if ga.gateway_name == 'stripe' %>
+                            <div id="pane-stripe" class="card tab-pane fade show active" role="tabpanel"  aria-labelledby="tab-stripe">
+                              <div class="card-header" role="tab" id="heading-stripe">
+                                <a data-toggle="collapse" href="#collapse-stripe" aria-expanded="true" aria-controls="collapse-stripe">
+                                  <span class="stripe_icon"></span> Stripe
+                                </a>
+                              </div>
+                              <div id="collapse-stripe" class="collapse show" role="tabpanel" data-parent="#content" aria-labelledby="heading-stripe">
+                                <div class="card-body">
+                                  <div class="row">
+                                    <div class="col-sm-12">
+                                      <div class="title"><span class="red-text">Stripe</span></div>
+                                      <div class="credit_card_icons"><%= image_tag "credit_card_icons.png", class: "img-responsive" %></div>
+                                      <%= render partial: "stripe_payment", locals: { gateway: ga[:gateway_association].try(:payment_gateway), event_order_id: EventOrder.find(params[:id]).try(:id), amount: defined?(amount) ? amount.rnd : registration_payment_summary(event_order.event_order_line_items)[:total_payable_amount].rnd, currency: event.currency_code, upgrade: upgrade, parent_event_order_id: parent_event_order_id, before_event_order_line_items: before_event_order_line_items, sadhak_details_hash: sadhak_details_hash, event_order: event_order } %>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          <% end %>
+                          <% if ga.gateway_name == 'hdfc' %>
+                            <div id="pane-net-banking" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-net-banking">
+                              <div class="card-header" role="tab" id="heading-net-banking">
+                                <a class="collapsed" data-toggle="collapse" href="#collapse-net-banking" aria-expanded="false" aria-controls="collapse-net-banking">
+                                <span class="net_banking_icon"></span> HDFC Payment
+                                </a>
+                              </div>
+                              <div id="collapse-net-banking" class="collapse" role="tabpanel" data-parent="#content" aria-labelledby="heading-net-banking">
+                                <div class="card-body">
+                                  <div class="row">
+                                    <div class="col-sm-12">
+                                      <div class="title"><span class="red-text"> HDFC Payment</span></div>
+                                      <%= render partial: 'hdfc_payment', locals: { gateway: ga[:gateway_association].try(:payment_gateway), event_order_id: EventOrder.find(params[:id]).try(:id), amount: defined?(amount) ? amount.rnd : registration_payment_summary(event_order.event_order_line_items)[:total_payable_amount].rnd, currency: event.currency_code, event_order: event_order, upgrade: upgrade, parent_event_order_id: parent_event_order_id, before_event_order_line_items: before_event_order_line_items, sadhak_details_hash: sadhak_details_hash, type: "hdfc_payment" } %>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          <% end %>
+                          <% if ga.gateway_name == "payfast" %>
+                            <div id="pane-payfast" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-net-banking">
+                              <div class="card-header" role="tab" id="heading-payfast">
+                                <a class="collapsed" data-toggle="collapse" href="#collapse-payfast" aria-expanded="false" aria-controls="collapse-payfast">
+                                <span class="net_banking_icon"></span> Payfast
+                                </a>
+                              </div>
+                              <div id="collapse-payfast" class="collapse" role="tabpanel" data-parent="#content" aria-labelledby="heading-payfast">
+                                <div class="card-body">
+                                  <div class="row">
+                                    <div class="col-sm-12">
+                                      <div class="title"><span class="red-text"> Payfast</span></div>
+                                      <%= render partial: 'payfast_payment', locals: { gateway: ga[:gateway_association].try(:payment_gateway), event_order_id: EventOrder.find(params[:id]).try(:id), amount: defined?(amount) ? amount.rnd : registration_payment_summary(event_order.event_order_line_items)[:total_payable_amount].rnd, currency: event.currency_code, event_order: event_order, upgrade: upgrade, parent_event_order_id: parent_event_order_id, before_event_order_line_items: before_event_order_line_items, sadhak_details_hash: sadhak_details_hash } %>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          <% end %>
+                          <% if ga.gateway_name == "ccavenue" %>
+                            <div id="pane-ccavenue" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-net-banking">
+                              <div class="card-header" role="tab" id="heading-ccavenue">
+                                <a class="collapsed" data-toggle="collapse" href="#collapse-ccavenue" aria-expanded="false" aria-controls="collapse-ccavenue">
+                                <span class="net_banking_icon"></span> Ccavenue
+                                </a>
+                              </div>
+                              <div id="collapse-ccavenue" class="collapse" role="tabpanel" data-parent="#content" aria-labelledby="heading-ccavenue">
+                                <div class="card-body">
+                                  <div class="row">
+                                    <div class="col-sm-12">
+                                      <div class="title"><span class="red-text"> Ccavenue</span></div>
+                                      <%= render partial: 'ccavenue_payment', locals: { gateway: ga[:gateway_association].try(:payment_gateway), event_order_id: EventOrder.find(params[:id]).try(:id), amount: defined?(amount) ? amount.rnd : registration_payment_summary(event_order.event_order_line_items)[:total_payable_amount].rnd, currency: event.currency_code, event_order: event_order, upgrade: upgrade, parent_event_order_id: parent_event_order_id, before_event_order_line_items: before_event_order_line_items, sadhak_details_hash: sadhak_details_hash } %>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          <% end %>
+                        <% end %>
+                        <% event_offline_payment_gateways(event).each_with_index do |ga, index| %>
+                          <% if ga.gateway_name == "cash" %>
+                            <div id="pane-cash_payment" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-cash_payment">
+                              <div class="card-header" role="tab" id="heading-cash_payment">
+                                <a class="collapsed" data-toggle="collapse" href="#collapse-cash_payment" aria-expanded="false" aria-controls="collapse-cash_payment">
+                                <span class="offline_payment_icon"></span> Offline Payment
+                                </a>
+                              </div>
+                              <div id="collapse-cash_payment" class="collapse" role="tabpanel" data-parent="#content" aria-labelledby="heading-cash_payment">
+                                <div class="card-body">
+                                  <div class="row">
+                                    <div class="col-sm-12">
+                                      <div class="title"><span class="red-text">Offline Payment</span></div>
+                                        <%= render partial: 'cash_payment', locals: { gateway: ga[:gateway_association].try(:payment_gateway), event_order_id: EventOrder.find(params[:id]).try(:id), amount: defined?(amount) ? amount.rnd : registration_payment_summary(event_order.event_order_line_items)[:total_payable_amount].rnd, currency: event.currency_code, event_order: event_order, upgrade: upgrade, parent_event_order_id: parent_event_order_id, before_event_order_line_items: before_event_order_line_items, sadhak_details_hash: sadhak_details_hash } %>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          <% end %>
+                          <% if ga.gateway_name == "sydd" %>
+                            <div id="pane-dd_payment" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-dd_payment"><!-- Offline Payment Starts -->
+                              <div class="card-header" role="tab" id="heading-dd_payment">
+                                <a class="collapsed" data-toggle="collapse" href="#collapse-dd_payment" aria-expanded="false" aria-controls="collapse-dd_payment">
+                                <span class="offline_payment_icon"></span> Offline Payment
+                                </a>
+                              </div>
+                              <div id="collapse-dd_payment" class="collapse" role="tabpanel" data-parent="#content" aria-labelledby="heading-dd_payment">
+                                <div class="card-body">
+                                  <div class="row">
+                                    <div class="col-sm-12">
+                                      <div class="title"><span class="red-text">Offline Payment</span></div>
+                                        <%= render partial: 'dd_payment', locals: { gateway: ga[:gateway_association].try(:payment_gateway), event_order_id: EventOrder.find(params[:id]).try(:id), amount: defined?(amount) ? amount.rnd : registration_payment_summary(event_order.event_order_line_items)[:total_payable_amount].rnd, currency: event.currency_code, event_order: event_order, upgrade: upgrade, parent_event_order_id: parent_event_order_id, before_event_order_line_items: before_event_order_line_items, sadhak_details_hash: sadhak_details_hash } %>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          <% end %>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="shivyog-btn" data-dismiss="modal"><a href="javascript: void(0);" class="btn cta_button_small bg-red waves-effect">Close</a></div>
+      </div>
+    </div>
+  </div>
+</div>

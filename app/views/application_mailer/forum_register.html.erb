@@ -1,0 +1,74 @@
+<tr>
+  <td style="padding: 20px 30px; background: #f8f8f8;" colspan="2">
+    <% if @options.has_key?(:club) and @options[:club].present? %>
+      <% @club = @options[:club] %>
+    <% end %>
+    <% if @options.has_key?(:sadhak_profiles) and @options[:sadhak_profiles].present? %>
+      <% @sadhak_profiles = @options[:sadhak_profiles] %>
+    <% end %>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EAE8E8" style="font-family:Verdana, Geneva, Helvetica, Arial, sans-serif;">
+      <tr>
+        <td>  
+          <table width="80%" border="0" cellspacing="0" cellpadding="0" style="padding:10px 0; margin:0 auto;">
+            <tr>
+              <% if @club.present? %>
+              <td style="padding: 20px 0; text-align: center; font-size: 1em; font-weight: bold; color:#900; line-height: 24px;">User successfully joined <%= @club.name%> forum. Below are the details regarding your joining. </td>     
+              <% end %>
+            </tr>
+            <tr>
+              <td align="center">
+                <table border="0" width="100%"cellpadding="0" cellspacing="0" style=" border: 1px solid #ccc;">
+                  <tr>
+                    <td width="70%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size:1.2em; color: #252525; padding:10px;">
+                      Forum:
+                    </td>
+                    <td width="30%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.0em; color: #252525; padding:10px; ">
+                      <%= @club.name %>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="text-align: center; font-size:1.2em; font-weight: bold; color:#900; padding: 20px;">Joined user</td>                        
+            </tr>
+            <tr>
+              <td "<%= @sadhak_profiles.count == 1 ? 'center' : '' %>" >
+                <% @sadhak_profiles.each_with_index do |profile, index| %>
+                  <table border="0" width="300"  cellpadding="0" cellspacing="0" align="<%=@sadhak_profiles.count == 1 ? 'center' : index%2 == 0 ? 'left' : 'right' %>"  style=" border: 1px solid #ccc;  margin: 0px 0px 20px 0; display: inline-table;">
+                  <tr>
+                    <td width="50%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px;">
+                      S.No.:
+                    </td>
+                    <td width="50%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.0em; color: #252525; padding:10px; ">
+                      <%= index+1 %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px; ">
+                      SYID:
+                    </td>
+                    <td width="50%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.0em; color: #252525; padding:10px; ">
+                      <% if profile.present? %>
+                      <%= profile.syid %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px; ">
+                      Name:
+                    </td>
+                    <td width="50%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.0em; color: #252525; padding:10px; ">
+                      <%= profile.full_name.titleize %>
+                    </td>
+                    <% end %>
+                  </tr>
+                  </table>
+                <% end %>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>

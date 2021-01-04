@@ -1,0 +1,36 @@
+<div class="mobilemenu visible-xs">
+    <a href="javascript:void(0)" class="iconclose visible-xs thick"></a>
+    <div class="mobilelistmenu">
+        <ul>
+            <%= content_tag :li do %>
+              <% link_to_if(policy(:admin).merge_syid?, 'Admin Panel', { controller: "admin", action: "merge_syid" }) %>
+            <% end if policy(:admin).merge_syid? %>
+            <%= content_tag :li do %>
+              <% link_to_if(policy(:event).index?, 'Forum Panel', { controller: "events", action: "index" }) %>
+            <% end if policy(:event).index? %>
+            <%= content_tag :li do %>
+              <% link_to_if(policy(:event).index?, 'Event Panel', { controller: "events", action: "index" }) %>
+            <% end if policy(:event).index? %>
+
+            <%= content_tag :li, class: "expanded active" do %>
+                <a href="javascript:void(0)">More</a>
+                <div class="expanded-menu">
+                    <ul>
+                        <%= content_tag :li, class: "expanded active" do %>
+                          <%= link_to_if(policy(:sadhak_profile).generate_card?, 'Download Entry Card', { controller: "sadhak_profiles", action: "generate_card" }) %>
+                            <div class="expanded-menu">
+                                <ul>
+                                    <% (sadhak_generate_card_list || []).each do |args| %>
+                                        <%= content_tag :li do %>
+                                            <%= link_to args[:event_name], generate_card_sadhak_profiles_path(sadhak_profile_id: current_sadhak_profile.try(:id), reg_ref_number: args[:reg_ref_number]), target: '_blank' %>
+                                        <% end %>
+                                    <% end %>
+                                </ul>
+                            </div>
+                        <% end if policy(:sadhak_profile).generate_card? && current_sadhak_profile.present? %>
+                    </ul>
+                </div>
+            <% end if current_sadhak_profile.present? && policy(:sadhak_profile).generate_card? %>
+        </ul>
+    </div>
+</div>

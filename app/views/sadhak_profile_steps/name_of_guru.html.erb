@@ -1,0 +1,67 @@
+
+<div class="CompleteprofileCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Profile</h2>
+    </div>
+    <div class="boxsection-md boxshadow prelative">
+        <div class="progressCntrl text-right">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:<%= @sadhak_profile.completed.to_i %>%">
+                </div>
+            </div>
+            <span><%= @sadhak_profile.completed.to_i %>%</span>
+        </div>
+        <div class="tab-content">
+            <%= form_for @sadhak_profile, url: wizard_path, html: { id: 'sadhak_profile_steps_name_of_guru_form' } do |f| %>
+                <div class="tab-pane" role="tabpanel" id="NameofGuru">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="headtittle text-center">
+                                <h2>Name of Guru</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mg-t30">
+                        <div class="col-sm-6">
+                            <div class="prelative">
+                                <div class="overlapping <%= 'overlay-active' if f.object.name_of_guru.present? %>"></div>
+                                <div class="outbox">
+                                    <label class="asterisk">What is the name of your guru?</label>
+                                    <div class="box bordered-input">
+                                       <div class="dropdown dropdown-field">
+                                          <%= text_field_tag f.object.name_of_guru.blank? ? "sadhak_profile[name_of_guru]" : "", f.object.name_of_guru, class: 'form-control noBorder field', placeholder: "Name of your guru", required: true, disabled: f.object.name_of_guru.present? %>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="prelative">
+                                <div class="overlapping <%= 'overlay-active' if f.object.spiritual_org_name.present? %>"></div>
+                                <div class="outbox">
+                                    <label class="asterisk">Name of the spiritual organization you are associated with ?</label>
+                                    <div class="box bordered-input">
+                                       <div class="dropdown dropdown-field">
+                                          <%= text_field_tag f.object.spiritual_org_name.blank? ? "sadhak_profile[spiritual_org_name]" : "", f.object.spiritual_org_name, class: 'form-control noBorder field', placeholder: "Name of spiritual organization", required: true, disabled: f.object.spiritual_org_name.present? %>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mg-t30">
+                        <div class="col-sm-12">
+                            <div class="pannel-btn clearfix">
+                                <%= link_to 'PREVIOUS', previous_wizard_path(previous: true), class: "btn btn-info mg-r5" %>
+                                <div class="pull-right">
+                                    <%= link_to 'SKIP', next_wizard_path, class: "btn btn-info mg-r5" unless @event.full_profile_needed? %>
+                                    <%= f.submit  "SAVE & CONTINUE", class: ' btn btn-info' %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>

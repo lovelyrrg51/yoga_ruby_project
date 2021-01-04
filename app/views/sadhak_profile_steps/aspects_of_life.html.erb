@@ -1,0 +1,74 @@
+
+<div class="CompleteprofileCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Profile</h2>
+    </div>
+    <div class="boxsection-md boxshadow prelative">
+        <div class="progressCntrl text-right">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:<%= @sadhak_profile.completed.to_i %>%">
+                </div>
+            </div>
+            <span><%= @sadhak_profile.completed.to_i %>%</span>
+        </div>
+        <div class="tab-content">
+            <%= form_for :aspect_feedback, url: wizard_path, method: :patch, html: { id: 'sadhak_profile_aspect_feedback_form' } do |f| %>
+                <div class="tab-pane active" role="tabpanel" id="AspectsofLife">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="headtittle text-center">
+                                <h2>Aspects of Life</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mg-t30">
+                        <div class="col-sm-12">
+                            <div class="headtittle"><h2>Please rate various aspects of your life before and after joining ShivYog<sup>TM</sup></h2></div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="tableCntrl">
+                                <div class="table-responsive ">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Before</th>
+                                                <th>After</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% @aspect_feedback.each do |af| %>
+                                                <tr>
+                                                    <td><%= af.aspect_type.humanize %></td>
+
+                                                    <td><input id="<%= af.id %>_before" type="text" class="rating aspect_feedback_click_rating before_after_aspect_feedback" data-size="xs" data-step="1" data-id=<%= af.id %> data-to-do='before', value=<%= af.rating_before/5 %> ></td>
+
+                                                    <td><input id="<%= af.id %>_after" type="text" class="rating aspect_feedback_click_rating before_after_aspect_feedback" data-id=<%= af.id %> data-to-do='after' data-size="xs" data-step="1", value=<%= af.rating_after/5 %> ></td>
+
+                                                    <%= f.hidden_field "[#{af.id}][rating_before]", value: af.rating_before, id: "hidden_#{af.id}_before" %>
+                                                    <%= f.hidden_field "[#{af.id}][rating_after]", value: af.rating_after, id: "hidden_#{af.id}_after" %>
+
+                                                </tr>
+                                            <% end %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mg-t30">
+                        <div class="col-sm-12">
+                            <div class="pannel-btn clearfix">
+                                <%= link_to 'PREVIOUS', previous_wizard_path(previous: true), class: "btn btn-info mg-r5" %>
+                                <div class="pull-right">
+                                    <%= link_to 'SKIP', next_wizard_path, class: "btn btn-info mg-r5" unless @event.full_profile_needed? %>
+                                    <%= f.submit  "SAVE & CONTINUE", class: ' btn btn-info' %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>

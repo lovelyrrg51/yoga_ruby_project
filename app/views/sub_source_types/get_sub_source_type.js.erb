@@ -1,0 +1,9 @@
+var sub_sources_select =  $("#spiritual_journey_sub_source_type_select");
+sub_sources_select.html("<option value=''> ----- Select ----- </option>");
+
+<% (@sub_sources || []).each do |sub_source| %>
+  sub_sources_select.append($('<option/>', { 
+        value: "<%= sub_source.try(:id) %>",
+        text : "<%= sub_source.try(:sub_source_name) %>" 
+    }));
+<% end %>

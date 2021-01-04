@@ -1,0 +1,12 @@
+<% if @sy_clubs.present? %>
+	if ($("#nearestForumsListTable").hasClass('tableScrollbar')) {
+		$("#nearestForumsListTable.tableScrollbar").mCustomScrollbar("destroy");
+	}
+  $('#nearestForumsListTable')
+  .addClass('tableScrollbar')
+  .html("<%= j render 'nearest_sy_club_tabs',  locals: @sy_clubs %>");
+  $("div.nearestForumError").remove();
+<% else %>
+	$('#nearestForumsListTable table').remove();
+  $("div.nearestForumError p").text("Nearest Forums not found.");
+<% end %>

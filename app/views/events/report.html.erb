@@ -1,0 +1,110 @@
+<% content_for(:title, 'Event | Registration Report') %>
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Event</h2>
+        <span class="subheading"><%= @event.event_name_with_location %></span>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+            <%= render partial: 'events/event_organize_left_panel', locals: { event: @event } %>
+                <div class="rightCntrl">
+                    <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                        <div class="rightContent">
+                            <% if @event.valid_event_registrations.exists? %>
+                                <div id="Report" class="">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="headtittle text-center">
+                                                <h2>Report</h2>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 mg-t30">
+                                            <div class="row">
+                                                <% (@event.payment_info + @event.payment_info_by_rc).each do |_payment_info| %>
+                                                    <div class="col-custom">
+                                                        <div class="boxsection-sm boxshadow report">
+                                                            <table class="tablereportCntrl">
+                                                                <caption class="reportcaption">
+                                                                    <%= _payment_info[:name] %>
+                                                                </caption>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>Total Amount</td>
+                                                                        <td class="primarybold primary-color">
+                                                                            <%= number_with_precision(_payment_info[:pending] + _payment_info[:approved].to_f, precision: 2) %>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Pending</td>
+                                                                        <td class="primarybold primary-color">
+                                                                            <%= number_with_precision(_payment_info[:pending].to_f, precision: 2) %>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Received</td>
+                                                                        <td class="primarybold primary-color">
+                                                                            <%= number_with_precision(_payment_info[:approved].to_f, precision: 2) %>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <% end %>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 mg-t30">
+                                            <div id="byCategoriesAndModeOfPaymentChartContainer" class="boxshadow">
+                                                <%= @by_category_and_mode_of_payment_chart.render() %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mg-t50">
+                                        <div class="col-md-4 col-sm-12 mg-b50">
+                                            <div id="byGenderChartContainer" class="boxshadow">
+                                                <%= @by_gender_chart.render() %>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-12 mg-b50">
+                                            <div id="bySeatingCategoriesChartContainer" class="boxshadow">
+                                                <%= @by_category_chart.render() %>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-12 mg-b50">
+                                            <div id="byModeOfPaymentChartContainer" class="boxshadow">
+                                                <%= @by_mode_of_payments_chart.render() %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mg-b30">
+                                        <div class="col-sm-12">
+                                            <div id="bySadhakProfessionChartContainer" class="boxshadow">
+                                                <%= @by_profession_chart.render() %>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div id="bySadhakCountryChartContainer" class="boxshadow">
+                                                <%= @by_country_chart.render() %>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div id="byAgeGroupChartContainer" class="boxshadow">
+                                                <%= @by_age_group_chart.render() %>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div id="byPreviousEventsRegisteredChartContainer" class="boxshadow">
+                                                <%= @by_previous_events_registered_chart.render() %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% else %>
+                                 <%= render partial: 'no_record', locals: { message: "No Event Registration found for this Event." } %>
+                                <% end %>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>

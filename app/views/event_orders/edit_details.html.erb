@@ -1,0 +1,126 @@
+<div class="registrationCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Registration Details</h2>
+        <span class="subheading">Registration Reference Number: <strong class="texttransform"><%= @event_order.reg_ref_number %></strong></span>
+    </div>
+    <%= form_for :event_order, url: process_event_order_confirmation_event_event_order_path(@event, @event_order), remote: true do |f| %>
+        <div class="boxsection-lg boxsection-xs boxshadow registrationeditCntrl">
+            <%= render 'events/event_registration_header' %>
+            <div class="registrationflowCntrl">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="tableCntrl">
+                            <div class="table-responsive tableScrollbar">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Category Names</th>
+                                            <th>Seats Available</th>
+                                            <th>Amount (<%= @event.currency_code %>)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% (@event.event_seating_category_associations.try(:order, 'price') || []).each_with_index do |seating_category, i|%>
+                                      <tr>
+                                          <td><%= i + 1 %></td>
+                                          <td><%= seating_category.category_name %></td>
+                                          <td><%= seating_category.seats_available %></td>
+                                          <td><%= @event.currency_code %> <%= number_with_precision(seating_category.price.to_f, precision: 2) %></td>
+                                      </tr>
+                                    <% end %>
+                                </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="tableCntrl">
+                        <div class="table-responsive tableScrollbar">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Name / SYID</th>
+                                        <th>Shivir</th>
+                                        <th>Seating Category</th>
+                                        <th>Amount (<%= @event.currency_code %>)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% @event_order_line_items.each_with_index do |line_item, index| %>
+                                        <tr data-sadhak = "<%= line_item.sadhak_profile.try(:syid) %>" class="lineItemRow">
+                                            <%= hidden_field_tag "event_order[event_order_line_items_attributes][#{index}][event_order_line_item_id]", line_item.try(:id) %>
+                                            <td class="sadhak_profile_data">
+                                                <div class="textgroup pd-r30 prelative">
+                                                    <p class="primarybold"><%= line_item.sadhak_profile.try(:full_name) %></p>
+                                                    <span><%= line_item.sadhak_profile.try(:syid) %></span>
+                                                    <% unless @event.pre_approval_required? || @is_only_upgrade_possible %>
+                                                        <a href="" class="primary-color edit shadhak-edit-modal-anchor" data-toggle="modal" data-target="#shadhakeditmodal"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                                    <% end %>
+                                                    <%= hidden_field_tag "event_order[event_order_line_items_attributes][#{index}][sadhak_profile_id]", line_item.sadhak_profile.try(:id) %>
+                                                </div>
+                                            </td>
+                                            <td><%= @event.try(:event_name).try(:titleize) %></td>
+                                            <td>
+                                                <div class="outbox" >
+                                                    <div class="box bordered-input dropdown">
+                                                        <div class="dropdown-field selectTwo-dropdown">
+                                                            <% if @is_transfer %>
+                                                                <%= select_tag "event_order[event_order_line_items_attributes][#{index}][event_seating_category_association_id]", options_for_select( @event.event_seating_category_associations.order(:price).collect{ |association| [association.try(:seating_category).try(:category_name), association.id] } ), { prompt: "Select Category", class: 'basic-single event-order-edit-seating-category-select-tag', required: true, data: { seating_categories: @event.event_seating_category_associations.collect{|sc| { id: sc.id.to_s, price: "#{@event.try(:currency_code)} #{sc.price.rnd}" } } } } %>
+                                                            <% elsif @is_only_upgrade_possible %>
+                                                                <%= select_tag "event_order[event_order_line_items_attributes][#{index}][event_seating_category_association_id]", options_for_select( line_item.seating_categories_for_upgration.order(:price).collect{ |association| [association.try(:seating_category).try(:category_name), association.id] }, selected: line_item.event_seating_category_association.id ), { include_blank: false, class: 'basic-single event-order-edit-seating-category-select-tag', data: { seating_categories: @event.event_seating_category_associations.collect{|sc| { id: sc.id.to_s, price: "#{@event.try(:currency_code)} #{sc.price.rnd}" } } } } %>
+                                                            <% else %>
+                                                                <%= select_tag "event_order[event_order_line_items_attributes][#{index}][event_seating_category_association_id]", options_for_select( @event.event_seating_category_associations.order(:price).collect{ |association| [association.try(:seating_category).try(:category_name), association.id] }, selected: line_item.event_seating_category_association.id ), { include_blank: false, class: 'basic-single event-order-edit-seating-category-select-tag', data: { seating_categories: @event.event_seating_category_associations.collect{|sc| { id: sc.id.to_s, price: "#{@event.try(:currency_code)} #{sc.price.rnd}" } } } } %>
+                                                            <% end %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <% if @is_transfer %>
+                                                <td class="category_price" ><%= " - " %></td>
+                                            <% else %>
+                                                <td class="category_price" ><%= "#{@event.try(:currency_code)} #{line_item.try(:event_seating_category_association).try(:price).rnd}" %></td>
+                                            <% end %>
+                                        </tr>
+                                    <% end %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <%= f.hidden_field :action, value: @action %>
+                <div class="col-sm-12">
+                    <ul class="panellist-btn text-right">
+                        <li>
+                            <button class="btn btn-info">SAVE</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    <% end %>
+</div>
+
+<div id="shadhakeditmodal" class="modal fade Custommodal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="headtittle">Add Members to register them for this Event</h2>
+                <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png" %></button>
+            </div>
+            <div class="modal-body rejectlist mCustomScrollbar">
+                <div class="row mg-t30">
+                    <div class="col-sm-12">
+                        <%= render partial: "events/search_forgot_syid", locals: { syid_search_action: edit_registration_syid_search_event_sadhak_profiles_path(@event), forgot_syid_action: edit_registration_forgot_syid_event_sadhak_profiles_path(@event) } %>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+            </div>
+        </div>
+    </div>
+</div>

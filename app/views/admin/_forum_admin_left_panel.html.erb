@@ -1,0 +1,23 @@
+<div class="leftCntrl">
+    <div class="leftmenu-list">
+        <div class="innerlist mCustomScrollbar left-Scrollbar">
+            <ul class="leftnav-list list-unstyled panel-group" id="accordion3">
+
+                <%= content_tag :li, class: ('active' if controller_name.eql?('sy_clubs') && action_name.eql?('forum_admin')) do %>
+                  <%= link_to({ controller: "sy_clubs", action: "forum_admin" }) do %>
+                    <span>Forums</span>
+                  <%end%>
+                <% end if policy(:sy_club).forum_admin? %>                
+                <%= content_tag :li, class: url_contains?('collections') && 'active' || '' do %>
+                  <%= link_to({ controller: "collections", action: "index", collection_type: 'forum' }) do %>
+                    <span>Assets</span>
+                  <%end%>
+                <% end if policy(:collection).index? %>
+            </ul>
+        </div>
+    </div>
+     <a href="javascript:void(0)" class="btn btn-info leftmenu-btn mg-x-t30">
+      <i class="fa fa-angle-double-left" aria-hidden="true"></i> 
+      <span>OPEN MENU</span>
+    </a>
+</div>

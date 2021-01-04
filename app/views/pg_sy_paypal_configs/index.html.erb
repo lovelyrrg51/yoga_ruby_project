@@ -1,0 +1,65 @@
+<% content_for(:title, 'Admin | Paypal Config') %>
+
+<div class="adminCntrl">
+<div class="headingtittle-h2 text-center">
+  <h2>Admin Panel</h2>
+</div>
+<div class="row">
+  <div class="overflow-row">
+      <%= render 'admin/admin_left_panel' %>
+      <div class="rightCntrl">
+          <div class="boxsection-lg boxsection-xs boxshadow prelative">
+              <div class="rightContent">
+                <div id="pg_sy_paypal_configs">
+                    <div class="row">
+                        <div class="col-sm-12 mg-b30">
+                             <div class="headtittle text-center">
+                                <h2>Paypal Configs</h2>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <%= render "pg_sy_paypal_configs/form"%>
+                        </div>
+                        <% if @pg_sy_paypal_configs.present? %>
+                          <div class="col-sm-12">
+                              <div class="tableCntrl">
+                                  <div class="table-responsive tableScrollbar">
+                                      <table class="table">
+                                          <thead>
+                                              <tr>
+                                                  <th>Name</th>
+                                                  <th class="text-center">Action</th>
+                                              </tr>
+                                          </thead>
+                                          <tbody>
+                                            <% @pg_sy_paypal_configs.each do |pg_sy_paypal_config|%>
+                                              <tr>
+                                                  <td><%= pg_sy_paypal_config.alias_name %></td>
+                                                  <td class="text-center">
+                                                      <%= link_to "", edit_pg_sy_paypal_config_path(pg_sy_paypal_config), class: "mg-r10 primary-color fa fa-pencil" %>
+                                                      <%= link_to "", pg_sy_paypal_config_path(pg_sy_paypal_config), method: :delete,data: {confirm: "Are you sure?"}, class: " primary-color fa fa-trash-o"%>
+                                                  </td>
+                                              </tr>
+                                            <% end %>
+                                          </tbody>
+                                      </table>
+                                  </div>
+                                  <div class="table-pagination">
+                                      <div class="show-pgnation">
+                                          <p class="primarybold"><%= custom_page_entries_info(@pg_sy_paypal_configs) %></p>
+                                      </div>
+                                      <%= paginate @pg_sy_paypal_configs %>
+                                  </div>
+                              </div>
+                          </div>
+                        <% else %>
+                          <%= render partial: 'application/no_records', locals: {message: 'No Paypal Config Found.'} %>
+                        <% end %>
+                    </div>
+                </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>    
+</div>

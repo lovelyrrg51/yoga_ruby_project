@@ -1,0 +1,7 @@
+<% if @message.present? || defined?(message) %>
+  toastr.error("<%= @message || message %>");
+<% elsif @success.present? || defined?(success) %>
+  toastr.success("<%= @success || success || 'Information Saved Successfully.' %>")
+<% else %>
+  toastr.info('No message found. Ajax response (ajax.js.erb).')
+<% end %>

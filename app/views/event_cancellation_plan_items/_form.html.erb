@@ -1,0 +1,43 @@
+<%= form_for [@event_cancellation_plan, @event_cancellation_plan_item], html:{class: "table-screen-next", id: "event_cancellation_plan_items_form"} do |f| %>
+  <div class="prelative mg-b30">
+    <div class="overlapping "></div>
+    <div class="row mg-t30">
+        <div class="col-sm-6">
+            <div class="box bordered-input">
+                <label class="asterisk">Before Days</label>
+                <div class="dropdown dropdown-field">
+                    <%= f.number_field :days_before, class: 'form-control noBorder field', required: true, placeholder: "Before days" %>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="box bordered-input">
+                <label class="asterisk">Amount</label>
+                <div class="dropdown dropdown-field">
+                    <%= f.text_field :amount, class: 'form-control noBorder field', required: true, placeholder: "Amount" %>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="box bordered-input dropdown">
+                <label class="asterisk">Amount Type</label>
+                <div class="dropdown-field selectTwo-dropdown">
+                  <%= f.select(:amount_type , options_for_select(amount_type_select_options , selected: f.object.amount_type), {prompt: '----- Select -----'} , {class: 'simple-single', required: true}) %>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="pannel-btn text-right">
+                <button type="reset" class="btn btn-danger mg-r10 resetForm" >CLEAR</button>
+                <%= f.submit params[:action] == "edit" ? "UPDATE" : 'CREATE', {class: 'btn btn-info'} %>
+            </div>
+        </div>
+    </div>
+  </div>
+<% end %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#event_cancellation_plan_items_form").validate();
+  });
+</script>

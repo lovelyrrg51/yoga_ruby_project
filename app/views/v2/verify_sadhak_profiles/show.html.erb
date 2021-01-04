@@ -1,0 +1,26 @@
+<%= content_for(:title, "Verify Sadhak Profile") %>
+<section id="quotes-banner">
+  <div class="light_overlay"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md 12">
+        <div class="banner_text">
+          <div class="main_banner_heading">
+            Verify Sadhak Profile
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="clearfix"></div>
+
+<%= stylesheet_pack_tag "verify_sadhak_profile" %>
+<%= javascript_pack_tag "verify_sadhak_profile", defer: true %>
+
+<section id="vue-verify-sadhak-profile"
+  data-verify-path="<%= verify_v2_sadhak_profile_verify_sadhak_profile_path(params[:sadhak_profile_id], format: :json)%>"
+  data-resend-path="<%= resend_v2_sadhak_profile_verify_sadhak_profile_path(params[:sadhak_profile_id], format: :json)%>"
+  data-back-path="<%= edit_v2_sadhak_profile_path(params[:sadhak_profile_id]) %>"
+>
+</section>

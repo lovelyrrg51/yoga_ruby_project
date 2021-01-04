@@ -1,0 +1,256 @@
+<%= content_for(:title, "Edit Sadhak Profile") %>
+<%= content_for :header do %>
+  <meta name="turbolinks-visit-control" content="reload">
+  <%= javascript_pack_tag "new_sadhak_profile", defer: true %>
+  <%= stylesheet_pack_tag "new_sadhak_profile" %>
+<% end %>
+
+<section id="edit-profile-banner">
+</section>
+
+<div class="clearfix"></div>
+
+<section class="">
+  <div class="container">
+    <div class="heading_subtitle"><h2><%= @sadhak_profile.full_name %> Profile</h2></div>
+    <div class="dashed_divider m-b-30"></div>
+
+    <div class="row clearfix">
+      <div class="col-md-3 col-sm-12">
+        <div class="card profile-card">
+          <div class="profile-header">&nbsp;</div>
+          <div class="profile-body">
+            <div class="image-area">
+              <%= image_tag @sadhak_profile.avatar.url(:thumb), id: "js-sadhak-avatar", width: "110px" %>
+            </div>
+            <div class="content-area">
+                <h3><%= @sadhak_profile.full_name %></h3>
+                <p>Shiv Yog Portal Member</p>
+            </div>
+          </div>
+          <% if @sadhak_profile.user.eql?(current_user) %>
+            <div class="profile-footer">
+              <div class="shivyog-btn">
+                <a href="javascript: void(0);" onclick="$('#js-sadhak-avatar-fileuploader').click(); return false;" class="cta_button_small bg-red waves-effect"><i class="fa fa-upload"></i>
+                <span class="js-upload-text">Upload New Image</span>
+                </a>
+              </div>
+              <input type="file" accept=".png, .jpg, .jpeg" id="js-sadhak-avatar-fileuploader" class="form-control hide" name="avatar" />
+            </div>
+          <% end %>
+        </div>
+        <div class="card card-about-me">
+          <div class="header">
+            <h2>ABOUT ME</h2>
+          </div>
+          <div class="body">
+            <ul>
+              <li>
+                <div class="title">
+                  <i class="material-icons">location_on</i>
+                  Location
+                </div>
+                <div class="content">
+                  <%= @sadhak_profile.full_address %>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-9 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <div>
+              <ul id="tabs" class="nav nav-tabs my-profile-tabs" role="tablist">
+                <li class="nav-item">
+                  <a id="tab-profile_settings" href="#pane-profile_settings" class="nav-link <%= params[:tab] == 'update_password' ? '' : 'active' %>" data-toggle="tab" role="tab">Profile</a>
+                </li>
+                <li class="nav-item">
+                  <a id="tab-forum_subscriptions" href="#pane-forum_subscriptions" class="nav-link" data-toggle="tab" role="tab">Forum Subscriptions</a>
+                </li>
+                <li class="nav-item">
+                  <a id="tab-past_events" href="#pane-past_events" class="nav-link" data-toggle="tab" role="tab">Past Events</a>
+                </li>
+                <% if @sadhak_profile.user.eql?(current_user) %>
+                  <li class="nav-item">
+                    <a id="tab-change_password_settings" href="#pane-change_password_settings" class="nav-link <%= params[:tab] == 'update_password' ? 'active' : '' %>" data-toggle="tab" role="tab">Change Password</a>
+                  </li>
+                <% end %>
+              </ul>
+              <div id="content" class="tab-content" role="tablist">
+                <div id="pane-profile_settings" class="tab-pane fade <%= params[:tab] == 'update_password' ? '' : 'show active' %>" role="tabpanel" aria-labelledby="tab-profile_settings">
+                  <div class="card-header" role="tab" id="heading-profile_settings">
+                    <a data-toggle="collapse" href="#collapse-profile_settings" aria-expanded="true" aria-controls="collapse-profile_settings">
+                     Profile Settings
+                    </a>
+                  </div>
+                  <div id="collapse-profile_settings" class="collapse show" role="tabpanel" data-parent="#content" aria-labelledby="heading-profile_settings">
+                    <div class="header p-20-0"><h2>Profile</h2></div>
+
+                      <% if @sadhak_profile.email.present? && !@sadhak_profile.is_email_verified? %>
+                        <div class="alert-warning px-3 py-2 mb-3">
+                          <p>
+                            Profile email is not verified.
+                            <strong><%= link_to "Verify now!", send_email_verification_v2_sadhak_profile_verify_sadhak_profile_path(@sadhak_profile), method: :patch %></strong>
+                          </p>
+                        </div>
+                      <% end %>
+
+                      <% if @sadhak_profile.mobile.present? && !@sadhak_profile.is_mobile_verified? %>
+                        <div class="alert-warning px-3 py-2 mb-3">
+                          <p>
+                            Profile mobile is not verified.
+                            <strong><%= link_to "Verify now!", send_mobile_verification_v2_sadhak_profile_verify_sadhak_profile_path(@sadhak_profile), method: :patch %></strong>
+                          </p>
+                        </div>
+                      <% end %>
+
+                      <section id="vue-new-sadhak-profile" data-sadhak-profile-id="<%= params[:id] %>">
+                      </section>
+                    </div>
+                  </div>
+                  <div id="pane-forum_subscriptions" class="tab-pane fade" role="tabpanel" aria-labelledby="tab-forum_subscriptions">
+                    <div class="card-header" role="tab" id="heading-forum_subscriptions">
+                      <a data-toggle="collapse" href="#collapse-forum_subscriptions" aria-expanded="false" aria-controls="collapse-forum_subscriptions">
+                       Forum Subscriptions
+                      </a>
+                    </div>
+                    <div id="collapse-forum_subscriptions" class="collapse" role="tabpanel" data-parent="#content" aria-labelledby="heading-forum_subscriptions">
+                      <div class="header p-20-0"><h2>Forum Subscriptions</h2></div>
+                        <div class="table-responsive p-20">
+                          <table class="table table-hover table-bordered table-striped js-basic-example dataTable" id="syClubTableData">
+                            <thead>
+                              <tr>
+                                <th>Forum Name</th>
+                                <th>ID</th>
+                                <th>Country</th>
+                                <th>State</th>
+                                <th>Date</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <% @event_orders.map do |event_order| %>
+                                <tr>
+                                <td><%= link_to(event_order.sy_club.name, v2_user_forum_subscription_path(event_order.sy_club), class: "red-text forum-subscription", remote: true) %></td>
+                                <td><%= event_order.sy_club.id %></td>
+                                <td><%= event_order.sy_club.address.country_name %></td>
+                                <td><%= (event_order.sy_club.address.state_id == OTHER_STATE_ID ? "Other(#{event_order.sy_club.address.other_state})" : event_order.sy_club.address.state_name) %></td>
+                                <td><%= event_order.sy_club.created_at.strftime("%d-%m-%Y") %></td>
+                              <% end %>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="pane-past_events" class="tab-pane fade" role="tabpanel" aria-labelledby="tab-past_events">
+                      <div class="card-header" role="tab" id="heading-past_events">
+                        <a data-toggle="collapse" href="#collapse-past_events" aria-expanded="false" aria-controls="collapse-past_events">
+                        Past Events
+                        </a>
+                      </div>
+                      <div id="collapse-past_events" class="collapse" role="tabpanel" data-parent="#content" aria-labelledby="heading-past_events">
+                        <div class="header p-20-0"><h2>Past Events</h2></div>
+                          <div class="table-responsive p-20">
+                            <!-- <table class="table table-bordered table-striped table-hover js-basic-example dataTable"> -->
+                               <table class="table datatable table-hover table-bordered table-striped past_event_datatable" data-url="<%= v2_user_registered_events_path(format: :json) %>">
+                              <thead>
+                                <tr>
+                                  <th>Event Name</th>
+                                  <th>Country</th>
+                                  <th>State</th>
+                                  <th>Date</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                      <% if @sadhak_profile.user.eql?(current_user) %>
+                        <div id="pane-change_password_settings" class="tab-pane fade <%= params[:tab] == 'update_password' ? 'show active' : '' %>" role="tabpanel" aria-labelledby="tab-change_password_settings">
+                          <div class="card-header" role="tab" id="heading-change_password_settings">
+                            <a data-toggle="collapse" href="#collapse-change_password_settings" aria-expanded="false" aria-controls="collapse-change_password_settings">
+                             Change Password
+                            </a>
+                          </div>
+                          <div id="collapse-change_password_settings" class="collapse" role="tabpanel" data-parent="#content" aria-labelledby="heading-change_password_settings">
+                            <div class="header p-20-0"><h2>Change Password</h2></div>
+                            <%= form_for @user, url: update_password_users_path, html: { id: "update_user_password", method: "put", class: 'form-horizontal p-10-0'}  do |f| %>
+                              <div class="col-sm-12">
+                                <div class="md-form mb-5">
+                                  <%= f.password_field :current_password, autofocus: true, autocomplete: "off", class: "form-control" %>
+                                  <%= f.label :current_password %>
+                                </div>
+                              </div>
+                              <div class="col-sm-12">
+                                <div class="md-form mb-5">
+                                  <%= f.password_field :password, autocomplete: "off", class: "form-control", "data-rule-required": true, "data-rule-minlength": "8" %>
+                                  <%= f.label :password, "New password" %>
+                                </div>
+                              </div>
+                              <div class="col-sm-12">
+                                <div class="md-form">
+                                  <%= f.password_field :password_confirmation, autocomplete: "off",  class: "form-control", "data-rule-equalTo": "#user_new_password", "data-rule-required": true, "data-rule-minlength": "8" %>
+                                  <%= f.label :password_confirmation, "Confirm new password" %>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-sm-12 text-align-center">
+                                  <div class="shivyog-btn">
+                                    <%= f.button :submit, class: 'cta_button_small bg-red waves-effect'  do %>
+                                      <i class="fa fa-paper-plane-o ml-1"></i> Change Password
+                                    <% end %>
+                                  </div>
+                                </div>
+                              </div>
+                            <% end %>
+                          </div>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+<div class="modal fade" id="largeModalEvent" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="largeModalLabel">Event Details</h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <div class="shivyog-btn" data-dismiss="modal"><a href="javascript: void(0);" class="btn cta_button_small bg-red waves-effect">Close</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="forum_detail_modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="largeModalLabel">Forum Details</h4>
+        </div>
+        <div class="modal-body">
+
+        </div>
+        <div class="modal-footer">
+          <div class="shivyog-btn" data-dismiss="modal"><a href="javascript: void(0);" class="btn cta_button_small bg-red waves-effect">Close</a></div>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+<div class="clearfix"></div>
+<%= render "v2/shared/newsletter" %>

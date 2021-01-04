@@ -1,0 +1,34 @@
+<% uniq_token = SecureRandom.uuid %>
+<div class="col-sm-6 div<%= f.object.payment_gateway.id %>">
+    <div class="CustomCheckbox mg-b20">
+        <%= check_box_tag :event_payment_select_check_box, value = "1", f.object.id.present? , data: { event_payment_gateway_checkbox: "#{f.object.payment_gateway.id}", gateway_association_id: f.object.id.present? ? "#{f.object.id}" : "", association_index: f.options[:child_index] }, class: "event_pga_checkbox"%>
+        <label><%= f.object.payment_gateway.try(f.object.payment_gateway.payment_gateway_type.relation_name.to_sym).try(:alias_name) %></label>
+    </div>
+    <div class="box outerbox outerheight outborder prelative">
+        <div class="overlapping overlay-active pga-start-end-date-div" id="<%=f.object.payment_gateway.id%>"></div>
+        <div class="rangercode">
+            <div class="dropdown-field numbercode">
+                <div class="input-group date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" data-minStartDate="<%= Date.current - 10.year%>" data-maxStartDate="<%= Date.current.end_of_day + 10.year%>">
+                     <%= f.text_field :payment_start_date, value: f.object.payment_start_date.try(:strftime, '%b %d, %Y'), class: "form-control code-input", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true, required: f.object.id.present? %>
+                    <span class="input-group-addon">
+                        <button class="" type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                    </span>
+                </div>
+            </div>
+            <div class="dropdown-field">
+                <label class="middletab">To</label>
+            </div>
+            <div class="dropdown-field numbercode">
+                <div class="input-group date" id="<%= uniq_token %>_end" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" data-maxStartDate="<%= Date.current.end_of_day + 10.year%>" data-minStartDate="<%= f.object.payment_start_date %>">
+                    <%= f.text_field :payment_end_date, value: f.object.payment_end_date.try(:strftime, '%b %d, %Y'), class: "form-control code-input", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true, required: f.object.id.present?%>
+                    <span class="input-group-addon">
+                        <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%= f.hidden_field :event_id, value: f.object.event_id %>
+    <%= f.hidden_field :payment_gateway_id, value: f.object.payment_gateway_id %>
+    <%= f.hidden_field :id, value: f.object.id %>
+</div>

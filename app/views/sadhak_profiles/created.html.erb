@@ -1,0 +1,31 @@
+<div class="CompletepflscuccessCntrl boxheight">
+    <div class="display-table">
+        <div class="display-table-cell">
+            <div class="centerblock boxCntrl">
+                <div class="boxsuccess">
+                    <span class="round one">
+                        <span class="round two">
+                            <i class="icon-check"></i>
+                        </span>
+                    </span>
+                </div>
+                <div class="successContent text-center">
+                    <h2>Success !</h2>
+                    <p>You have successfully created an account.</p>
+                    <p>Please find below your login details.</p>
+                    <ul>
+                        <li><span class="primarybold">First Name :</span> <%= @sadhak_profile.first_name%></li>
+                        <li><span class="primarybold">SYID :</span> <%= @sadhak_profile.syid%></li>
+                    </ul>
+                    <%# if @sadhak_profile.age < SADHAK_MIN_AGE %>
+                        <!-- <p class="notice">Since your age is below  <%#= SADHAK_MIN_AGE %> years, you won't get login in the system. However your <span>SYID</span> can be used by parent / guardians to register for events.</p> -->
+                    <%# end %>
+                    <% if current_user.present? && @sadhak_profile.age > SADHAK_MIN_AGE%>
+                        <p class="notice">Please check your registered mobile / email.</p>
+                    <% end %>
+                    <%= link_to "GENERATE PASSWORD", forgot_password_users_path, class: "btn btn-success btn-round"%>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,2 @@
+class PaymentGatewaysController < ApplicationController
+end

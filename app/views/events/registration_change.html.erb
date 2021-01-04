@@ -1,0 +1,148 @@
+<% content_for(:title, 'Event | Registration Change') %>
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Event</h2>
+        <span class="subheading primary-color primarybold">Event ID: <%= @event.id %></span>
+        <span class="subheading"><%= @event.event_name_with_location %></span>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+            <%= render partial: 'events/event_organize_left_panel', locals: {event: @event} %>
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                    <div class="rightContent">
+                        <div id="Transactions" class="">
+                            <div class="row">
+                                <div class="col-sm-12 mg-b30">
+                                      <div class="headtittle text-center">
+                                        <h2>Registration Changes</h2>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <a href="#RegisterInvoices" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+                                    <div class="refineCntrl collapse in" aria-expanded="true" id="RegisterInvoices" role="tablist">
+                                        <div class="refinesub-group">
+                                          <form action="" method="get" id="">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="outbox">
+                                                        <label>Requester Name</label>
+                                                        <div class="box bordered-input">
+                                                            <div class="dropdown dropdown-field">
+                                                              <input type="text" class="form-control noBorder field" placeholder="Requester name" value="<%= params[:requester_name] %>" name="requester_name">  
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="outbox">
+                                                        <label>Reg. Ref. Number</label>
+                                                        <div class="box bordered-input">
+                                                            <div class="dropdown dropdown-field">
+                                                              <input type="text" class="form-control noBorder field" placeholder="Reg. ref. number" value="<%= params[:reg_ref_number] %>" name="reg_ref_number">  
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="outbox">
+                                                        <label>Amount Refunded</label>
+                                                        <div class="box bordered-input">
+                                                            <div class="dropdown dropdown-field">
+                                                              <input type="text" class="form-control noBorder field" placeholder="Amount refunded" value="<%= params[:amount_refunded] %>" name="amount_refunded">  
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="outbox">
+                                                        <label>Status</label>
+                                                        <div class="box bordered-input dropdown">
+                                                            <div class="dropdown-field selectTwo-dropdown">
+                                                                <%= select_tag 'status', options_for_select(PaymentRefund.statuses.collect{|k, v| [k.downcase.tr("_ ", " ").titleize, k]}, params[:status]), {prompt: '--- Select Status ---', class: 'basic-single'} %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div class="pannel-btn text-right">
+                                                        <%= link_to "CLEAR", registration_change_event_path, class: 'btn btn-danger mg-r10' %>
+                                                        <button class="btn btn-info" type="submit" data-disable-with="SEARCHING...!">SEARCH</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% if  @payment_refunds.present? %>
+                                  <div class="col-sm-12 mg-t60">
+                                      <div class="row">
+                                          <div class="col-sm-6">
+                                              <div class="Boxdrop dropdown mg-x-b15">
+                                                  <%= render "per_page" %>
+                                              </div>
+                                          </div>
+                                          <div class="col-sm-6">
+                                              <div class="pannel-btn panel-sm">
+                                                  <%= link_to "CANCELLATION SHEET", registration_changes_report_payment_refunds_path(event_id: @event.id, type: "cancellation", format: 'excel'), class: "btn btn-info" %>
+                                                  <%= link_to "UPGRADE SHEET", registration_changes_report_payment_refunds_path(event_id: @event.id, type: "other", format: 'excel'),  class: "btn btn-info" %>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="tableCntrl">
+                                          <div class="table-responsive tableScrollbar">
+                                              <table class="table">
+                                                  <thead>
+                                                      <tr>
+                                                          <th>Requester Name</th>
+                                                          <th>Reg. Ref. Number</th>
+                                                          <th>Amount Refunded</th>
+                                                          <th class="text-center">More</th>
+                                                          <th class="text-center">Status</th>
+                                                      </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    <% @payment_refunds.each do |payment_refund|%>
+                                                      <tr>
+                                                          <td class="primarybold"><%= payment_refund.try(:requester_user).try(:sadhak_profile).try(:full_name) || "-" %></td>
+                                                          <td><%= payment_refund.try(:event_order).try(:reg_ref_number) || "-" %></td>
+                                                          <td class="primarybold primary-color"><%= number_with_precision(payment_refund.try(:amount_refunded).to_f, precision: 2)  %></td>
+                                                          <td class="text-center">
+                                                              <div class="dropover dropdown">
+                                                                  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                                                                  </button>
+                                                                  <ul class="dropdown-menu">
+                                                                      <li><a href=<%= show_event_reg_change_details_events_path(event_order: payment_refund.try(:event_order), payment_refund_id: payment_refund.id) %> data-remote="true" >Details</a></li>
+                                                                      <% if payment_refund.requested? %>
+                                                                        <li><a href=<%= show_payment_refund_amount_modal_events_path(redirect_url: refund_payment_refund_path(payment_refund), max_refund_amt: number_with_precision(payment_refund.try(:max_refundable_amount).to_f, precision: 2 )) %> data-remote="true" >Refund Amount</a></li>
+                                                                        <li><a href=<%= show_payment_reject_request_modal_events_path(reg_ref_number: payment_refund.try(:event_order).try(:reg_ref_number), redirect_url: payment_refund_path(payment_refund)) %> data-remote="true" >Reject Request</a></li>
+                                                                      <% end %>
+                                                                  </ul>
+                                                              </div>
+                                                          </td>
+                                                          <td class="primary-color text-center"><%= payment_refund.try(:status).try(:titleize) || "-" %></td>
+                                                      </tr>
+                                                    <% end %>
+                                                  </tbody>
+                                              </table>
+                                          </div>
+                                          <div class="table-pagination">
+                                              <div class="show-pgnation">
+                                                  <p class="primarybold"><%= custom_page_entries_info(@payment_refunds) %></p>
+                                              </div>
+                                              <%= paginate @payment_refunds %>
+                                          </div>
+                                      </div>
+                                  </div>
+                                <% else %>
+                                  <%= render partial: 'application/no_records', locals: {message: 'No Registration Changes Requests Found.'} unless @payment_refunds.present? %>
+                                <% end %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

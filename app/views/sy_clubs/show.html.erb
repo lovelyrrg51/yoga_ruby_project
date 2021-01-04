@@ -1,0 +1,19 @@
+<% content_for(:title, 'Forum | Show') %>
+<div class="headingtittle-h2 text-center">
+    <h2>Forums</h2>
+    <span class="subheading primary-color primarybold">Forum ID: <%= @sy_club.id %></span>
+    <span class="subheading">ShivYog Forum <strong class="texttransform"><%= @sy_club.name.try(:titleize) %></strong></span>
+</div>
+<div class="boxsection-lg boxshadow prelative boxsection-xs">
+    <div class="row">
+        <%= render partial: "board_members_venue_details" %>
+        <div class="col-sm-12 mg-t50">
+            <ul class="panellist-btn text-center">
+                <li><%= link_to "JOIN FORUM #{@sy_club.name.try(:upcase)}", register_sy_club_path(@sy_club), class: "btn btn-info lg-btn" %></li>
+                <% if policy(:sy_club).show? || @sy_club.is_board_member?(current_sadhak_profile.try(:id)) %>
+                  <li><%= link_to "ADMIN PANEL", members_sy_club_path(@sy_club), class: "btn btn-info lg-btn" %></li>
+                <% end %>
+            </ul>
+        </div>
+    </div>
+</div>

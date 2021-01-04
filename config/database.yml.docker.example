@@ -1,0 +1,15 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  username: postgres
+  password:
+  host: db
+  pool: 5
+
+development:
+  <<: *default
+  database: shivyog_development
+
+test:
+  <<: *default
+  database: shivyog_test

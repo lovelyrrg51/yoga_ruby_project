@@ -1,0 +1,74 @@
+<%= form_for @ccavenue_config, html:{id: "ccavenue_config_form", class: "table-screen-next"} do |f| %>
+  <div class="prelative mg-b30">
+      <div class="overlapping"></div>
+      <div class="row mg-t30">
+          <div class="col-sm-6">
+              <div class="box bordered-input">
+                  <label>Type</label>
+                  <div class="dropdown dropdown-field">
+                      <input type="text" class="form-control noBorder field" placeholder="Type" value="<%= @payment_gateway_type_name.titleize %>" disabled>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="box bordered-input">
+                  <label>Alias</label>
+                  <div class="dropdown dropdown-field">
+                      <%= f.text_field :alias_name, class: 'form-control noBorder field', required: true, placeholder: 'Alias' %>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="box bordered-input">
+                  <label>Working Key</label>
+                  <div class="dropdown dropdown-field">
+                      <%= f.text_field :working_key, class: 'form-control noBorder field', required: true, placeholder: 'Working key'%>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="box bordered-input">
+                  <label>Access Code</label>
+                  <div class="dropdown dropdown-field">
+                      <%= f.text_field(:access_code, class: 'form-control noBorder field', required: true, placeholder: 'Access code')%>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="box bordered-input">
+                  <label>Merchant Id</label>
+                  <div class="dropdown dropdown-field">
+                      <%= f.text_field(:merchant_id, class: 'form-control noBorder field', required: true, placeholder: 'Merchant id')%>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="box bordered-input dropdown">
+                  <label>Country</label>
+                  <div class="dropdown-field selectTwo-dropdown">
+                      <%= f.select(:country_id , options_for_select(DbCountry.pluck(:name, :id), selected: f.object.country_id), {prompt: 'Select Country'}, {class: 'basic-single', required: true}) %>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="box bordered-input">
+                  <label>Service Tax and Convenience Charges</label>
+                  <div class="dropdown dropdown-field">
+                      <%= f.text_field(:tax_amount, class: 'form-control noBorder field', required: true, placeholder: 'Service tax and convenience charges')%>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-12">
+              <div class="pannel-btn text-right">
+                  <button type="reset" class="btn btn-danger mg-r10 resetForm" >CLEAR</button>
+                  <%= f.submit params[:action] == "edit" ? "UPDATE" : 'CREATE', {class: 'btn btn-info'} %>
+              </div>
+          </div>
+      </div>
+  </div>
+ <% end %>
+ <script type="text/javascript">
+  $(document).ready(function(){
+   $("#ccavenue_config_form").validate(); 
+  });
+ </script>

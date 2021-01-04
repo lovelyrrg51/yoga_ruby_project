@@ -1,0 +1,59 @@
+# This is a sample build configuration for deploying to HEROKU.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Dockerhub as your build environment.
+# image: java:8
+#
+# This script depends on two environment variables to be set in Bitbucket Pipelines
+# 1. $HEROKU_API_KEY - https://devcenter.heroku.com/articles/platform-api-quickstart
+# 2. $HEROKU_APP_NAME - Your app name in Heroku
+image: ruby:2.5.5-stretch
+pipelines:
+  branches:
+    develop:
+      - step:
+          script:
+            - git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_STAGING_APP_NAME.git $BITBUCKET_BRANCH:master
+
+    v2:
+      - step:
+          script:
+            - git push https://heroku:$V2_STAGING_HEROKU_API_KEY@git.heroku.com/$V2_STAGING_HEROKU_APP_NAME.git $BITBUCKET_BRANCH:master
+
+  default:
+    - step:
+        caches:
+          - bundler
+        script:
+          - export DATABASE_URL=postgresql://test_user:test_user_password@localhost/pipelines
+          - apt-get update
+
+          - curl -sL https://deb.nodesource.com/setup_10.x | bash -
+          - apt-get install nodejs -y
+          - nodejs -v
+
+          - curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+          - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+          - apt-get update
+          - apt-get install -y yarn
+          - yarn --version
+
+          - bundle install --path vendor/bundle
+          - cp config/application.yml.example config/application.yml
+          - cp config/database.yml.pipelines config/database.yml
+          - bundle exec rake db:schema:load
+          - bundle exec rake db:migrate
+          - bundle exec rspec
+        services:
+          - postgres
+
+definitions:
+  services:
+    postgres:
+      image: postgres
+      environment:
+        POSTGRES_DB: pipelines
+        POSTGRES_USER: test_user
+        POSTGRES_PASSWORD: test_user_password
+  caches:
+    bundler: vendor/bundle

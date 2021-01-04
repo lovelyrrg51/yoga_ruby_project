@@ -1,0 +1,112 @@
+<%= content_for(:title, "Our Story") %>
+
+<section id="our-story-banner">
+</section>
+
+<div class="clearfix"></div>
+
+<section id="our_story_summary">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="heading_subtitle">Our Story</div>
+                <div class="dashed_divider"></div>
+                <div class="heading_title">Shivyog Story Summary</div>
+                <p>Shiv represents the Supreme Consciousness and Yog represents union. ShivYog thus is the state of being merged with the infinite consciousness. To know more about healing the mind, body & soul and about life transformation solutions visit this website's pages. The founder of ShivYog is  Dr. Avdhoot Shivanand is the Master of Ancient Indian Healing, who is currently sharing the sacred secrets of healing for overall life transformation. The founder of ShivYog is <%= link_to "Dr. Avdhoot Shivanandji", v2_dr_shivanand_path %> is the Master of Ancient Indian Healing.</p>
+                    <div class="text-align-center">
+                        <div class="shivyog-btn display-inline-block">
+                            <%= link_to v2_what_is_shivyog_path do %>
+                              <div class="cta_button_small bg-red waves-effect">Read More</div>
+                            <% end %>
+                        </div>
+                    </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="shivanand_ji_img text-align-center">
+                  <%= image_tag "v2/babaji_our_story.jpg", class: "img-fluid" %>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="clearfix"></div>
+
+<section id="shivyog_impact">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="heading_subtitle">Impact</div>
+                <div class="dashed_divider"></div>
+                <div class="heading_title">Impact of Shivyog</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+              <%= shivyog_video_tag youtube_id: "K2t8wCJfAsY",
+                image: "v2/impact_video_img_01.jpg",
+                border: false,
+                caption: "ShivYog - Science Beyond Science",
+                sub_caption: "A Special Episode From History Channel"
+              %>
+            </div>
+            <div class="col-sm-6">
+              <%= shivyog_video_tag youtube_id: "KNydiTQ_0FQ",
+                image: "v2/impact_video_img_02.jpg",
+                border: false,
+                caption: "ShivYog - Heal Mother Earth",
+                sub_caption: "A Special Episode From History Channel"
+              %>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="clearfix"></div>
+
+<section id="shivyog_lineage">
+    <div class="container">
+        <div class="row m-b-30">
+            <div class="col-sm-12">
+                <div class="heading_subtitle">The Shiv Yog Lineage</div>
+                <div class="dashed_divider"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="babaji_statement"><div class="babaji_statement_text">"You are worthy if you follow the path shown by the Master." ~ Dr. Avdhoot Shivanand</div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="clearfix"></div>
+
+<section id="shivyog_paragraph">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="shivyog_img">
+                  <%= image_tag "v2/shivyog-web.jpg", class: "img-fluid margin-15-auto" %>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <p>Unlock the key to happiness, joy and prosperity through the sacred science of Shiv Yog. Shiv Yogis take their guidance directly from sages, rishis and munis who have dedicated every breath of their body for the ascension of humanity. With their help, men and women everywhere can enjoy the divine taste of bliss resonating from the teachings.</p>
+            </div>
+
+            <div class="col-sm-6">
+                <p>Guru Mandala is a fraternity of such eminent personalities, who in the name of God, heal the wounded and pave their way towards the ultimate goal of human life, self-realization. As a self-realized Master himself, <%= link_to "Dr. Avdhoot Shivanandji", v2_dr_shivanand_path %> is a prime example of leaders who have developed extra sensory perception through persistent spiritual contemplation, rooted in the Guru Mandala.</p>
+            </div>
+        </div>
+
+
+    </div>
+</section>
+
+<div class="clearfix"></div>
+
+<%= render "v2/shared/newsletter" %>

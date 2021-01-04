@@ -1,0 +1,9 @@
+var citySelect =  $("#city_<%= @changable_id %>");
+citySelect.html("<option value=''>----- Select -----</option>");
+
+<% @cities.each do |city| %>
+	citySelect.append($("<option/>", {
+	  value: "<%= city.id %>",
+	  text : "<%= city.name %>"
+	}));
+<% end %>

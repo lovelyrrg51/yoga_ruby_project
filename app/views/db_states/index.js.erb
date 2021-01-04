@@ -1,0 +1,14 @@
+$("span.telephone_prefix_code").addClass('active').html(" + <%= @telephone_prefix %>")
+
+var state_select =  $("#state_<%= @changable_id %>");
+var city_select =  $("#city_<%= @changable_id %>");
+
+state_select.html("<option value=''>  ----- Select -----  </option>");
+city_select.html("<option value=''>  ----- Select -----  </option>");
+
+<% @states.each do |state| %>
+	state_select.append($("<option/>", { 
+	  value: "<%= state.id %>",
+	  text : "<%= state.name %>" 
+	}));
+<% end %>

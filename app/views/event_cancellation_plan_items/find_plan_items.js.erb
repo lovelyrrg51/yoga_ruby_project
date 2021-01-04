@@ -1,0 +1,3 @@
+var appearance = $("<%= escape_javascript(render partial: 'events/shivir_details/event_cancellation_plan_items', locals: { cancellation_plan_items: @event_cancellation_plan_items, is_params_blank: @is_params_blank }) %>");
+
+$("#event_cancellation_plan_items_table").html(appearance);

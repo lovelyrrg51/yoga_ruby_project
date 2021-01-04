@@ -1,0 +1,363 @@
+
+<% uniq_token1, uniq_token2 = SecureRandom.uuid, SecureRandom.uuid %>
+<div class="CompleteprofileCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Profile</h2>
+    </div>
+    <div class="boxsection-md boxshadow prelative">
+        <div class="progressCntrl text-right">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:<%= @sadhak_profile.completed.to_i %>%">
+                </div>
+            </div>
+            <span><%= @sadhak_profile.completed.to_i %>%</span>
+        </div>
+        <div class="tab-content">
+            <div class="active" role="tabpanel" id="Doctorprofile">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="headtittle text-center">
+                            <h2>Doctor Profile</h2>
+                        </div>
+                    </div>
+                </div>
+                <%= form_for @sadhak_profile, url: wizard_path ,html:{ id: 'edit_sadhak_profiles_steps_doctors_profile' } do |f|%>
+                    <%= f.fields_for :doctors_profile do |ff|%>
+                      <div class="row mg-t30">
+                        <div class="col-sm-12">
+                            <div class="headtittle"><h2>Education</h2></div>
+                        </div>
+
+                        <div class="col-sm-6">
+                          <div class="prelative">
+                            <div class="overlapping <%= 'overlay-active' if ff.object.medical_school.present? %>"></div>
+                            <div class="box bordered-input">
+                                <label class="asterisk">Medical School</label>
+                                <div class="dropdown dropdown-field">
+                                    <%= text_field_tag ff.object.medical_school.blank? ? "sadhak_profile[doctors_profile_attributes][medical_school]" : "", ff.object.medical_school, class: "form-control noBorder field", required: 'required', disabled: ff.object.medical_school.present?, placeholder: "Medical school" %> 
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <% unless ff.object.education_country_id.present? %>
+                          <div class="col-sm-6">
+                              <div class="box bordered-input dropdown">
+                                  <label class="asterisk">Country</label>
+                                  <div class="dropdown-field selectTwo-dropdown">
+                                      <%= ff.select :education_country_id, options_for_select(@country, ff.object.try(:education_country_id)),{ include_blank: " ----- Select -----" }, { class: "form-control basic-single", required: true } %>
+                                  </div>
+                              </div>
+                          </div>
+                        <% else %>
+                          <div class="col-sm-6">
+                            <div class="prelative">
+                              <div class="overlapping <%= 'overlay-active' if ff.object.education_country_id.present? %>"></div>
+                              <div class="box bordered-input">
+                                  <label class="asterisk">Country</label>
+                                  <div class="dropdown dropdown-field">
+                                      <input type="text" name="" value="<%= DbCountry.find_by_id(ff.object.try(:education_country_id)).try(:name).try(:titleize) %>" class="form-control noBorder field" disabled="true" placeholder="Country" >
+                                  </div>
+                              </div>
+                            </div>
+                          </div>
+                        <% end %>
+
+                        
+
+                        <div class="col-sm-6">
+                          <div class="prelative">
+                            <div class="overlapping <%= 'overlay-active' if ff.object.year_of_graduation.present? %>"></div>
+                            <div class="box bordered-input">
+                                <label class="asterisk">Year of Graduation</label>
+                                <div class="dropdown dropdown-field">
+                                    <%= text_field_tag ff.object.year_of_graduation.blank? ? "sadhak_profile[doctors_profile_attributes][year_of_graduation]" : "", ff.object.year_of_graduation, class: "form-control noBorder field only_integers", required: 'required', disabled: ff.object.year_of_graduation.present?, placeholder: "Year of graduation" %> 
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <% unless ff.object.area_of_speciality.present? %>
+                          <div class="col-sm-6">
+                              <div class="box bordered-input dropdown">
+                                  <label class="asterisk">MEDICAL SPECIALIZATION</label>
+                                  <div class="dropdown-field selectTwo-dropdown">
+                                      <%= ff.select :area_of_speciality, options_for_select(MedicalPractitionerSpecialityArea.pluck(:name).collect{|v| [v.gsub(/\n/,''), v.gsub(/\n/,'')]}, ff.object.try(:area_of_speciality).to_s.gsub(/\n/,'')),{ include_blank: " ----- Select -----" }, { class: "form-control basic-single", required: true } %>
+                                  </div>
+                              </div>
+                          </div>
+                        <% else %>
+                          <div class="col-sm-6">
+                            <div class="prelative">
+                              <div class="overlapping <%= 'overlay-active' if ff.object.area_of_speciality.present? %>"></div>
+                              <div class="box bordered-input">
+                                  <label class="asterisk">MEDICAL SPECIALIZATION</label>
+                                  <div class="dropdown dropdown-field">
+                                      <input type="text" name="" value="<%= ff.object.area_of_speciality %>" class="form-control noBorder field" disabled="true" placeholder="Medical specialization">
+                                  </div>
+                              </div>
+                            </div>
+                          </div>
+                        <% end %>
+                        <div class="col-sm-6">
+                          <div class="prelative">
+                            <div class="overlapping <%= 'overlay-active' if ff.object.sub_speciality.present? %>"></div>
+                            <div class="box bordered-input">
+                                <label class="asterisk">SUB-SPECIALITY</label>
+                                <div class="dropdown dropdown-field">
+                                    <%= text_field_tag ff.object.sub_speciality.blank? ? "sadhak_profile[doctors_profile_attributes][sub_speciality]" : "", ff.object.sub_speciality, class: "form-control noBorder field", required: 'required', disabled: ff.object.sub_speciality.present?, placeholder: "Sub-Speciality" %> 
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row mg-t30">
+                          <div class="col-sm-12">
+                              <div class="headtittle"><h2>Licence</h2></div>
+                          </div>
+                          <% unless ff.object.license_status.present? %>
+                            <div class="col-sm-6">
+                                <div class="box bordered-input dropdown">
+                                    <label class="asterisk">LICENCE STATUS</label>
+                                    <div class="dropdown-field selectTwo-dropdown">
+                                        <%= ff.select :license_status, options_for_select(DoctorsProfile.license_statuses.collect{|k,v| [k.humanize,k]},  ff.object.try(:license_status)),{ include_blank: " ----- Select -----" }, { class: "form-control basic-single", required: true } %>
+                                    </div>
+                                </div>
+                            </div>
+                          <% else %>
+                            <div class="col-sm-6">
+                              <div class="prelative">
+                                <div class="overlapping <%= 'overlay-active' if ff.object.license_status.present? %>"></div>
+                                <div class="box bordered-input">
+                                    <label class="asterisk">LICENCE STATUS</label>
+                                    <div class="dropdown dropdown-field">
+                                        <input type="text" name="" value="<%= "ff.object.license_status.try(:humanize)" %>" class="form-control noBorder field" disabled="true" placeholder="Licence status">
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                          <% end %>
+                          <% unless ff.object.license_country_id.present? %>
+                            <div class="col-sm-6">
+                                <div class="box bordered-input dropdown">
+                                    <label class="asterisk">Country</label>
+                                    <div class="dropdown-field selectTwo-dropdown">
+                                        <%= ff.select :license_country_id, options_for_select(@country, ff.object.try(:license_country_id)), { include_blank: " ----- Select -----" }, { "data-changable-id": "#{uniq_token1}", id: "country_#{uniq_token1}", onChange: "countrySelectChange('#{uniq_token1}')", class: "form-control country-select basic-single", required: true }%>
+                                    </div>
+                                </div>
+                            </div>
+                          <% else %>
+                            <div class="col-sm-6">
+                              <div class="prelative">
+                                <div class="overlapping <%= 'overlay-active' if ff.object.license_country_id.present? %>"></div>
+                                <div class="box bordered-input">Country</label>
+                                    <div class="dropdown dropdown-field">
+                                        <input type="text" name="" value="<%= DbCountry.find_by_id(ff.object.try(:license_country_id)).try(:name).try(:titleize) %>" class="form-control noBorder field" disabled="true" placeholder="Country">
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                          <% end %>
+                          <% unless ff.object.license_state_id.present? %>
+                            <div class="col-sm-6">
+                                <div class="box bordered-input dropdown">
+                                    <label class="asterisk">State</label>
+                                    <div class="dropdown-field selectTwo-dropdown">
+                                        <%= ff.select :license_state_id, options_for_select(ff.object.license_country.try(:states).try(:pluck, :name, :id) || [], ff.object.try(:license_state_id)), { include_blank: " ----- Select -----" }, { "data-changable-id": "#{uniq_token1}", id: "state_#{uniq_token1}", class: "form-control state-select basic-single", required: true } %>
+                                    </div>
+                                </div>
+                            </div>
+                          <% else %>
+                            <div class="col-sm-6">
+                              <div class="prelative">
+                                <div class="overlapping <%= 'overlay-active' if ff.object.license_state_id.present? %>"></div>
+                                <div class="box bordered-input">
+                                    <label class="asterisk">State</label>
+                                    <div class="dropdown dropdown-field">
+                                        <input type="text" name="" value="<%= DbState.find_by_id(ff.object.license_state_id).try(:name).try(:titleize) %>" class="form-control noBorder field" disabled="true" placeholder="State">
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                          <% end %>
+                      </div>
+                      <hr>
+                      <div class="row mg-t30">
+                          <div class="col-sm-12">
+                              <div class="headtittle"><h2>Practice</h2></div>
+                          </div>
+                          <% unless ff.object.primary_work_setting.present? %>
+                            <div class="col-sm-6">
+                                <div class="box bordered-input dropdown">
+                                    <label class="asterisk">PRIMARY WORK SETTING</label>
+                                    <div class="dropdown-field selectTwo-dropdown">
+                                        <%= ff.select :primary_work_setting, options_for_select( DoctorsProfile::PRIMARY_WORK_SETTINGS.map{|v| [v, v]}, ff.object.try(:primary_work_setting)), { include_blank: " ----- Select -----" }, { class: "form-control basic-single", required: true } %>
+                                    </div>
+                                </div>
+                            </div>
+                          <% else %>
+                            <div class="col-sm-6">
+                              <div class="prelative">
+                                <div class="overlapping <%= 'overlay-active' if ff.object.primary_work_setting.present? %>"></div>
+                                <div class="box bordered-input">
+                                    <label class="asterisk">PRIMARY WORK SETTING</label>
+                                    <div class="dropdown dropdown-field">
+                                        <input type="text" name="" value="<%= ff.object.primary_work_setting %>" class="form-control noBorder field" disabled="true"  placeholder="Primary work setting">
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                          <% end %>
+                          <div class="col-sm-6">
+                            <div class="prelative">
+                              <div class="overlapping <%= 'overlay-active' if ff.object.practice_place.present? %>"></div>
+                              <div class="box bordered-input">
+                                  <label class="asterisk">PLACE OF PRACTICE</label>
+                                  <div class="dropdown dropdown-field">
+                                      <%= text_field_tag ff.object.practice_place.blank? ? "sadhak_profile[doctors_profile_attributes][practice_place]" : "", ff.object.practice_place, class: "form-control noBorder field", required: 'required', disabled: ff.object.practice_place.present?, placeholder: "Place of practice" %> 
+                                  </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <% unless ff.object.practice_country_id.present? %>
+                            <div class="col-sm-6">
+                                <div class="box bordered-input dropdown">
+                                    <label class="asterisk">COUNTRY OF PRACTICE</label>
+                                    <div class="dropdown-field selectTwo-dropdown">
+                                        <%= ff.select :practice_country_id, options_for_select(@country, ff.object.try(:practice_country_id)), { include_blank: " ----- Select -----" }, { "data-changable-id": "#{uniq_token2}", id: "country_#{uniq_token2}", onChange: "countrySelectChange('#{uniq_token2}')", class: "form-control country-select basic-single", required: true }%>
+                                    </div>
+                                </div>
+                            </div>
+                          <% else %>
+                            <div class="col-sm-6">
+                              <div class="prelative">
+                                <div class="overlapping <%= 'overlay-active' if ff.object.practice_country_id.present? %>"></div>
+                                <div class="box bordered-input">
+                                    <label class="asterisk">COUNTRY OF PRACTICE</label>
+                                    <div class="dropdown dropdown-field">
+                                        <input type="text" name="" value="<%= DbCountry.find_by_id(ff.object.try(:practice_country_id)).try(:name).try(:titleize) %>" class="form-control noBorder field" disabled="true" placeholder="Country of practice">
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                          <% end %>
+
+                          <% unless ff.object.practice_state_id.present? %>
+                            <div class="col-sm-6">
+                                <div class="box bordered-input dropdown">
+                                    <label class="asterisk">STATE OF PRACTICE</label>
+                                    <div class="dropdown-field selectTwo-dropdown">
+                                        <%= ff.select :practice_state_id, options_for_select(ff.object.practice_country.try(:states).try(:pluck, :name, :id) || [], ff.object.try(:practice_state_id)), { include_blank: " ----- Select -----" }, { "data-changable-id": "#{uniq_token2}", id: "state_#{uniq_token2}", class: "form-control state-select basic-single", required: true } %>
+                                    </div>
+                                </div>
+                            </div>
+                          <% else %>
+                            <div class="col-sm-6">
+                              <div class="prelative">
+                                <div class="overlapping <%= 'overlay-active' if ff.object.practice_state_id.present? %>"></div>
+                                <div class="box bordered-input">
+                                    <label class="asterisk">STATE OF PRACTICE</label>
+                                    <div class="dropdown dropdown-field">
+                                        <input type="text" name="" value="<%= DbState.find_by_id(ff.object.practice_state_id).try(:name).try(:titleize) %>" class="form-control noBorder field" disabled="true" placeholder="State of practice">
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                          <% end %>
+                          <% unless ff.object.practice_years.present? %>
+                            <div class="col-sm-6">
+                                <div class="box bordered-input dropdown">
+                                    <label class="asterisk">NO. OF YEARS IN PRACTICE</label>
+                                    <div class="dropdown-field selectTwo-dropdown">
+                                        <%= ff.select :practice_years, options_for_select((1..50).inject({}){|h,i| h.store i,i; h}, ff.object.try(:practice_years)), { include_blank: " ----- Select -----" }, { class: "form-control state-select basic-single", required: true } %>
+                                    </div>
+                                </div>
+                            </div>
+                          <% else %>
+                            <div class="col-sm-6">
+                              <div class="prelative">
+                                <div class="overlapping <%= 'overlay-active' if ff.object.practice_years.present? %>"></div>
+                                <div class="box bordered-input">
+                                    <label class="asterisk">NO. OF YEARS IN PRACTICE</label>
+                                    <div class="dropdown dropdown-field">
+                                        <input type="text" name="" value="<%= ff.object.practice_years %>" class="form-control noBorder field" disabled="true" placeholder="No. of years in practice" >
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                          <% end %>
+                          <% unless ff.object.persisted? %>
+                            <div class="col-sm-6">
+                                <div class="box bordered-input dropdown">
+                                    <label class="asterisk">CLINICAL RESEARCH</label>
+                                    <div class="dropdown-field selectTwo-dropdown">
+                                        <%= ff.select :clinical_research, options_for_select( { "Yes": true, "No": false }, ff.object.try(:clinical_research)), {}, { class: "form-control state-select simple-single", required: true} %>
+                                    </div>
+                                </div>
+                            </div>
+                          <% else %>
+                            <div class="col-sm-6">
+                              <div class="prelative">
+                                <div class="overlapping <%= 'overlay-active' if ff.object.clinical_research.is_a?(TrueClass) || ff.object.clinical_research.is_a?(FalseClass) %>"></div>
+                                <div class="box bordered-input">
+                                    <label class="asterisk">CLINICAL RESEARCH</label>
+                                    <div class="dropdown dropdown-field">
+                                        <input type="text" name="" value="<%= ff.object.clinical_research.is_a?(TrueClass) ? "Yes" : "No" %>" class="form-control noBorder field" disabled="true" placeholder="Clinical research">
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                          <% end %>
+                          <div class="col-sm-6">
+                            <div class="prelative">
+                              <div class="overlapping <%= 'overlay-active' if ff.object.hospital_affiliations.present? %>"></div>
+                              <div class="box bordered-input">
+                                  <label class="asterisk">HOSPITAL AFFILIATIONS</label>
+                                  <div class="dropdown dropdown-field">
+                                      <%= text_field_tag ff.object.hospital_affiliations.blank? ? "sadhak_profile[doctors_profile_attributes][hospital_affiliations]" : "", ff.object.hospital_affiliations, class: "form-control noBorder field", required: 'required', disabled: ff.object.hospital_affiliations.present?, placeholder: "Hospital affiliations" %> 
+                                  </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="prelative">
+                              <div class="overlapping <%= 'overlay-active' if ff.object.professional_publications.present? %>"></div>
+                              <div class="box bordered-input">
+                                  <label class="asterisk">PROFESSIONAL PUBLICATIONS</label>
+                                  <div class="dropdown dropdown-field">
+                                      <%= text_field_tag ff.object.professional_publications.blank? ? "sadhak_profile[doctors_profile_attributes][professional_publications]" : "", ff.object.professional_publications, class: "form-control noBorder field", required: 'required', disabled: ff.object.professional_publications.present?, placeholder: "Professional publications" %> 
+                                  </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="prelative">
+                              <div class="overlapping <%= 'overlay-active' if ff.object.honors_and_awards.present? %>"></div>
+                              <div class="box bordered-input">
+                                  <label class="asterisk">Honors and Awards</label>
+                                  <div class="dropdown dropdown-field">
+                                      <%= text_field_tag ff.object.honors_and_awards.blank? ? "sadhak_profile[doctors_profile_attributes][honors_and_awards]" : "", ff.object.honors_and_awards, class: "form-control noBorder field", required: 'required', disabled: ff.object.honors_and_awards.present?, placeholder: "Honors and awards" %> 
+                                  </div>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="row mg-t30">
+                          <div class="col-sm-12">
+                              <div class="pannel-btn clearfix">
+                                  <%= link_to 'PREVIOUS', previous_wizard_path(previous: true), class: "btn btn-info mg-r5" %>
+                                  <div class="pull-right">
+                                      <%= link_to 'SKIP', next_wizard_path, class: "btn btn-info mg-r5" unless @event.full_profile_needed? %>
+                                      <%= f.submit  "SAVE & CONTINUE", class: ' btn btn-info' %>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                    <% end %>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

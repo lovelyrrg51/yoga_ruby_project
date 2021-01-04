@@ -1,0 +1,87 @@
+
+<div class="col-sm-12">
+    <div class="tableCntrl">
+        <div class="table-responsive tableScrollbar">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Episode Name</th>
+                        <th>Published On</th>
+                        <th>Expires At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% @digital_asset.tap do |asset|%>
+                    <tr>
+                        <td><%= asset.asset_name %></td>
+                        <td><%= asset.published_on.strftime("%a %e %b %Y") %></td>
+                        <td><%= asset.expires_at.strftime("%a %e %b %Y") %></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="headingtittle-h2">
+    <span class="subheading">Please select  the Date , Time and Venue on which Forum Episode was played.</span>
+</div>
+    <%= form_for @forum_attendance_detail, url: @forum_attendance_detail.new_record? ? sy_club_digital_asset_forum_attendance_details_path : sy_club_digital_asset_forum_attendance_detail_path, html:{class: "table-screen-next", id: "address_proof_types_form"} do |f| %>
+        <%= f.hidden_field :digital_asset_id, value: @digital_asset.id %>
+        <%= f.hidden_field :sy_club_id, value: @sy_club.id%>
+        <div class="prelative mg-b30">
+            <div class="overlapping "></div>
+            <div class="row mg-t30">
+                <div class="col-sm-6">
+                  <% uniq_token = SecureRandom.uuid %>
+                  <div class="box bordered-input">
+                       <label class="asterisk">Conducted On</label>
+                        <div class="input-group dropdown-field  calenderdate date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker"  data-maxStartDate="<%= DateTime.current.change(hour: 23, minutes: 59, sec: 59)%>" data-defaultDate='<%= DateTime.current.change(hour: 23, minutes: 59, sec: 59) %>'>
+                          <%= f.text_field :conducted_on, class: 'form-control noBorder field',placeholder: Date.current.strftime('%b %d, %Y'), required: 'required', readonly: true, value: f.object.conducted_on.strftime('%b %d, %Y')%>
+                            <span class="input-group-addon">
+                                <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                            </span>
+                        </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box outerbox">
+                        <label>Time</label>
+                        <div class="rangercode mg-t10">
+                            <div class="dropdown-field numbercode">
+                            <%= f.text_field :conducted_on_in_time, class: "form-control timetoggle code-input", value: f.object.conducted_on_in_time, placeholder: "12:00 PM"%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box bordered-input clearfix">
+                         <div class="CustomCheckbox no-padding">
+                                <%= check_box_tag "check", 'yes', f.object.venue.empty?, id: "venue-check" %>
+                                    
+                                    <label>Session conducted on regular venue.</label>
+                                </div>
+                        <div class="dropdown dropdown-field">
+                            <%= f.text_field :venue, class: 'form-control noBorder field', placeholder: "Name", style: "display: #{f.object.venue.empty? ? 'none' : ''}"  %>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="pannel-btn text-right">
+                        <button type="reset" class="btn btn-danger mg-r10" >CLEAR</button>
+                        <%= f.submit params[:action] == "edit" ? "UPDATE" : 'CREATE', {class: 'btn btn-info'} %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% end %>
+<script type="text/javascript">
+    $(document).on('click', '#venue-check', function() {
+        if ($(this).is(':checked')){
+            $('#forum_attendance_detail_venue').val("").hide();
+        }else{
+           $('#forum_attendance_detail_venue').show();  
+        }
+        // $('#forum_attendance_detail_venue').hide('disabled', function(i, v) { return !v; });
+    });
+</script>

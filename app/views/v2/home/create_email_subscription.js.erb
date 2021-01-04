@@ -1,0 +1,7 @@
+$('#email_subscription').find('.error').remove();
+<% if @error.present? %>
+  $('#email_subscription').find('.input-group').after('<span class="text-danger error" id="subscribe_newsletter-error"><%= @error %></span>')
+<% else %>
+  $("#email_subscription_message").html("<%= escape_javascript(render partial: 'email_subscription_message', locals: {message: @message}) %>");
+  $("#email_subscription_modal").modal('show');
+<% end %>

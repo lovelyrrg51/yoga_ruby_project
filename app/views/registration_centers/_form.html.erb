@@ -1,0 +1,79 @@
+<%= form_for [event, registration_center], html:{ id: "registration_center_new_edit_form" } do |f| %>
+  <div class="col-sm-6">
+    <div class="outbox">
+        <label class="asterisk">Please Fill Registration Center Name</label>
+        <div class="box bordered-input">
+           <div class="dropdown dropdown-field">
+              <%= f.text_field :name, class: "form-control noBorder field", required: true, placeholder: 'Registration center name' %>
+           </div>
+        </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+      <div class="outbox">
+          <% uniq_token = SecureRandom.uuid %>
+          <label class="asterisk">Date</label>
+          <div class="box outerbox outerheight">
+              <div class="rangercode">
+                  <div class="dropdown-field numbercode">
+                      <div class="input-group date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" data-minStartDate="<%= Date.today %>" >
+                          <%= f.text_field :start_date, class: "form-control code-input ", placeholder:"#{ Date.today.try(:strftime, '%b %d, %Y') }", readonly: true, value: (Date.parse(f.object.try(:start_date)) rescue nil).try(:strftime, '%b %d, %Y'), required: true %>
+
+                          <span class="input-group-addon">
+                              <button class="" type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                          </span>
+                      </div>
+                  </div>
+                  <div class="dropdown-field">
+                      <label class="middletab mg-t10">To</label>
+                  </div>
+                  <div class="dropdown-field numbercode">
+                      <div class="input-group date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker">
+                          <%= f.text_field :end_date, class: "form-control code-input ", placeholder:"#{ Date.today.try(:strftime, '%b %d, %Y') }", readonly: true, value: (Date.parse(f.object.try(:end_date)) rescue nil).try(:strftime, '%b %d, %Y'), required: true %>
+                          <span class="input-group-addon" id="basic-addon3">
+                              <button type="button" ><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                          </span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-sm-6">
+      <div class="CustomCheckbox">
+          <%= f.check_box :is_cash_allowed %>
+          <label>Is Cash Allowed for this Registration Center</label>
+      </div>
+  </div>
+  <div class="col-sm-12 mg-t30">
+      <div class="pannel-btn text-right">
+          <button class="btn btn-info event-rc-member-add-button" type="button">ADD MEMBERS</button>
+      </div>
+      <%= render 'add_rc_user_form' %>
+      <div class="tableCntrl">
+          <div class="table-responsive tableScrollbar temp-added-event-rcmembers-div <%= "hidden" if registration_center.sadhak_profiles.blank? %>">
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th>SYID</th>
+                          <th>Name</th>
+                          <th class="text-center">Action</th>
+                      </tr>
+                  </thead>
+                  <tbody id="event-registration-center-users-list-table-body">
+                      <% (registration_center.try(:sadhak_profiles) || []).each do |sadhak_profile| %>
+                        <%= render 'sadhak_profiles/rc_user', sadhak_profile: sadhak_profile %>
+                      <% end %>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
+  <%= text_field_tag 'registration_center[event_ids][]', event.id, {type: 'hidden'} %>
+  <div class="col-sm-12">
+      <div class="pannel-btn text-right">
+          <%= link_to "CREATE NEW", new_event_registration_center_path(@event), class: 'btn btn-info mg-r10' if params[:action] == 'edit' %>
+          <%= f.submit "SUBMIT", class: "btn btn-info mg-r10" %>
+      </div>
+  </div>
+<% end %>

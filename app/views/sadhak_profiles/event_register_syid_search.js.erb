@@ -1,0 +1,108 @@
+<% add_sadhak_profile_token = "#{SecureRandom.uuid}-#{SecureRandom.hex(3)}" %>
+<% if @message.present? %>
+
+  toastr.error("<%= @message %>");
+
+<% else %>
+
+    // Removed extra field check 29 Nov 2018
+    // <%# if (@event.full_profile_needed? && !@sadhak_profile.completed?)  || (@event.is_ashram_residential_shivir? && !@has_other_info) || !@sadhak_profile.is_basic_profile_complete? || !@sadhak_profile.advance_profile.present? || !@sadhak_profile.advance_profile.is_complete? || !@sadhak_profile.is_name_of_guru_complete? %>
+
+    <% if (@event.full_profile_needed? && !@sadhak_profile.completed?)  || (@event.is_ashram_residential_shivir? && !@has_other_info) || !@sadhak_profile.is_basic_profile_complete? %>
+
+      <% cookies.encrypted[COMPLETE_PROFILE_REDIRECT_URL.encrypt] = register_event_path(@event) %>
+
+      window.location = "<%= event_sadhak_profile_sadhak_profile_steps_path(@event, @sadhak_profile) %>";
+
+    <%elsif @questionnaire_form_enabled && @blank_questionnaire_form%>
+      $('#questionnaire_form').modal('show').html("<%= j render 'events/questionnaire_form', locals: {sadhak_profile: @sadhak_profile, event: @event}%>");
+      $("form#event_sadhak_questionnaire_form").validate({
+        rules: {
+          "select[name='questionnaire_form[attended_shivir][]']": {required: true},
+          "select[name='questionnaire_form[medicine_modalities][]']": {required: true},
+          "questionnaire_form[email_id]": { required: true, email: true },
+          "questionnaire_form[attended_other_shivir]":{
+            required: function(){
+              return $("select[name='questionnaire_form[attended_shivir][]']").val().indexOf('others') >= 0
+            }
+          },
+          "questionnaire_form[specialization]": {
+            required: function(element){
+              return $("input[name='questionnaire_form[is_doctor]']").val() =="yes";
+            }
+          }
+          
+        },
+        errorPlacement: function(error, element) {
+          if (element.attr("name") == "questionnaire_form[medicine_modalities][]"){
+            error.appendTo("#medicine_modalities_input_error");
+          }else if (element.attr("name") == "questionnaire_form[attended_shivir][]"){
+            error.appendTo("#attended_shivir_input_error");
+          }
+          else{
+            error.insertAfter(element);
+          }
+        },
+        messages: {
+          
+        },
+        submitHandler: function(form) {
+          return true;
+        }
+      });
+    <% else %>
+
+      var appearance = $("<%= escape_javascript(render(:partial => 'events/add_member')) %>"), eventAddMemberTable = $('div.eventaddmember').find('tbody');
+
+        var addedMemberlist = eventAddMemberTable.find('tr').filter(function() {
+          return this.id.match(/SY\d+/);
+        });
+
+        var isAlreadyAdded = _.find(addedMemberlist, function (tr) {
+          return $(tr).attr('id') === "<%= @sadhak_profile.syid %>";
+        });
+
+        if(!isAlreadyAdded) {
+
+          $('div.eventaddmember').removeClass('hidden');
+
+          $('div.eventmemberCntrl').addClass('hidden');
+
+          eventAddMemberTable.append(appearance);
+
+          $('#event_register_syid_search_form').length && $('#event_register_syid_search_form').get(0).reset();
+
+          toastr.success('Profile Added Successfully.');
+
+        } else {
+
+          toastr.error("<%= @sadhak_profile.syid + '-' + @sadhak_profile.full_name %> is already added to the list.");
+
+        }
+
+
+    <% end %>
+
+<% end %>
+$("input[name='questionnaire_form[is_doctor]']").on('change', function(){
+  var selected_option = $("input[name='questionnaire_form[is_doctor]']:checked").val();
+  $("input[name='questionnaire_form[specialization]']").attr("disabled", (selected_option == 'yes') ? false : true);
+  if(selected_option == 'yes'){
+    $("#specialization_overlap").removeClass("overlay-active");
+  }else{
+    $("#specialization_overlap").addClass("overlay-active");
+    $("#questionnaire_form_specialization-error").hide();
+    $("#questionnaire_form_specialization").removeClass("error");
+  }
+});
+$("select[name='questionnaire_form[attended_shivir][]']").on('change', function(){
+  var selected_options = $("select[name='questionnaire_form[attended_shivir][]']").val()
+  $("input[name='questionnaire_form[attended_other_shivir]']").attr("disabled", (selected_options !== null && selected_options.indexOf('others') >= 0) ? false : true);
+  if(selected_options !== null && selected_options.indexOf('others') >= 0){
+    $("#attended_other_shivir_overlap").removeClass("overlay-active");
+  }else{
+    $("#attended_other_shivir_overlap").addClass("overlay-active");
+    $("#questionnaire_form_attended_other_shivir-error").hide();
+    $("#questionnaire_form_attended_other_shivir").removeClass("error");
+  }
+});

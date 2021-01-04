@@ -1,0 +1,107 @@
+<div class="headingtittle-h2 text-center">
+    <h2>Forums</h2>
+    <span class="subheading primary-color primarybold">Forum ID: <%= @sy_club.id %></span>
+    <span class="subheading">ShivYog Forum <strong class="texttransform"><%= @sy_club.name %></strong></span>
+</div>
+<div class="boxsection-lg boxshadow prelative boxsection-xs">
+    <div class="row">
+      <%= render partial: "board_members_venue_details" %>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-12 mg-t20">
+            <div class="paymentflowCntrl">
+                <div class="row">
+                    <div class="col-sm-12 mg-t20">
+                        <div class="headtittle">
+                            <h2>Registration Summary</h2>
+                        </div>
+                        <% if @event_order.event_order_line_items %>
+                          <div class="tableCntrl">
+                              <div class="table-responsive tableScrollbar">
+                                  <table class="table">
+                                      <thead>
+                                          <tr>
+                                              <th>Srl.No.</th>
+                                              <th>Name / SYID</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                        <% @event_order.event_order_line_items.includes(:sadhak_profile, :event_seating_category_association).each_with_index do |event_order_line_item, index| %>
+                                          <tr>
+                                              <td><%= index + 1 %></td>
+                                              <td>
+                                                  <div class="textgroup">
+                                                      <p><%= event_order_line_item.full_name %></p>
+                                                      <span><%= event_order_line_item.syid %></span>
+                                                  </div>
+                                              </td>
+                                          </tr>
+                                        <% end %>
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+                        <% end %>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="headtittle">
+                            <h2>Payment Summary</h2>
+                        </div>
+                        <div class="paymenttable mg-t30">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Description</th>
+                                            <th class="text-right">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="primarybold">Registration Fees</td>
+                                            <td class="text-right primarybold"><%= "#{@currency} #{number_with_precision(registration_payment_summary(@event_order.event_order_line_items)[:total_registration_fee].rnd, precision: 2)}" %></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="primarybold">Discount Amount</td>
+                                            <td class="text-right primarybold"><%= "#{@currency} #{number_with_precision(registration_payment_summary(@event_order.event_order_line_items)[:discount].rnd, precision: 2)}" %></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="primarybold">Amount</td>
+                                            <td class="text-right primarybold"><%= "#{@currency} #{number_with_precision(registration_payment_summary(@event_order.event_order_line_items)[:amount_before_taxes].rnd, precision: 2)}" %></td>
+                                        </tr>
+                                        <% registration_payment_summary(@event_order.event_order_line_items)[:tax_breakup].each do |taxes| %>
+                                          <tr>
+                                              <td class="primarybold"><%= taxes[:tax_name] %></td>
+                                              <td class="text-right primarybold"><%= "#{@currency} #{number_with_precision(taxes[:amount].rnd, precision: 2)}" %></td>
+                                          </tr>
+                                        <% end %>
+                                        <tr>
+                                            <td class="primarybold">Total Tax</td>
+                                            <td class="text-right primarybold"><%= "#{@currency} #{number_with_precision(registration_payment_summary(@event_order.event_order_line_items)[:service_tax].rnd, precision: 2)}" %></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="primaryblackbold">Net Amount</td>
+                                            <td class="text-right primaryblackbold"><%= "#{@currency} #{number_with_precision(registration_payment_summary(@event_order.event_order_line_items)[:total_payable_amount].rnd, precision: 2)}" %></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <% if @sy_club.ready_for_registrations %>
+                      <% if event_online_payment_gatways(@event).size > 0 || event_offline_payment_gateways(@event).size > 0 %>
+                        <%= render partial: "event_orders/payment_gateways" %>
+                      <% end %>
+                    <% else %>
+                      <div class="col-sm-12">
+                          <div class="offerCntrl text-center primarybold">
+                              <p> Registrations are not available, please contact ashram..</p>
+                          </div>
+                      </div>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

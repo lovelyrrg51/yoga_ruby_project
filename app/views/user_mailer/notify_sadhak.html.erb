@@ -1,0 +1,27 @@
+<tr>
+  <td style="padding: 20px 30px; background: #f8f8f8;" colspan="2">
+      <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+          <tbody>
+		          <tr>
+									<td>
+										<p style="text-align: left; display: block; color: #666; font-weight: 700; font-size: 22px; margin: 30px 0 0;">Namah Shivay, <%= @sadhak_profile.full_name %> / <span style="color: #990000;"><%= @sadhak_profile.syid %></span></p>
+
+
+										<p style="margin: 8px 0 20px;color: #9e9e9e;font-size: 16px;font-weight: 400;">Notification message from shivyog admin, please have a look at this.</p>
+										<p style="margin: 0 0 20px; color: #333; font-size: 16px; font-weight: 400;"><%= raw(@message) %></p>
+									</td>
+		          </tr>
+		          <tr>
+		              <td style="text-align: center;">
+		                  <a href='<%="#{Rails.application.config.app_base_url}"%>' style="background: #990000; padding: 8px 20px; color: #fff; text-decoration: none; font-weight: 500; border-radius: 4px; display: inline-block; text-align: center;">Click to visit our website</a>
+		              </td>
+		          </tr>
+		          <tr>
+		              <td>
+		                  <p style="font-size: 16px; font-weight: 600; margin: 20px 0 30px; color: #666; text-align: right;">Thank you</p>
+		              </td>
+		          </tr>
+      		</tbody>
+      </table>
+  </td>
+</tr>

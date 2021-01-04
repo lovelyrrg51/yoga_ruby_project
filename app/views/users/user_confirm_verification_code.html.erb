@@ -1,0 +1,42 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div id="wrapper">
+      <div id="login" class="animate form">
+        <%= form_for(@user, as: :user, url: verify_verification_code_and_reset_password_users_path, html: { method: :put, id: "user_verify_verification_code_and_reset_password" }) do |f| %>
+          <%= f.hidden_field :reset_password_token %>
+          <div class="msg">RESET PASSWORD</div>
+          <div class="input-group display-table">
+              <span class="input-group-addon">
+                <i class="material-icons">phonelink_lock</i>
+              </span>
+            <div class="form-line">
+              <%= f.password_field :verification_code, autofocus: true, autocomplete: "off", class: "form-control", placeholder: "Verification Code", required: true %>
+            </div>
+          </div>
+          <div class="input-group display-table">
+              <span class="input-group-addon">
+                <i class="material-icons">lock</i>
+              </span>
+            <div class="form-line">
+              <%= f.password_field :new_password, autofocus: true, autocomplete: "off", class: "form-control", placeholder: "New Password", "data-rule-required": true, "data-rule-minlength": "8", required: true %>
+            </div>
+          </div>
+          <div class="input-group display-table">
+              <span class="input-group-addon">
+                <i class="material-icons">lock</i>
+              </span>
+            <div class="form-line">
+              <%= f.password_field :confirm_new_password, autocomplete: "off", class: "form-control", placeholder: "Confirm Password", "data-rule-equalTo": "#user_new_password", "data-rule-required": true, "data-rule-minlength": "8", required: true %>
+            </div>
+          </div>
+          <div class="row m-t-15 text-align-center">
+            <div class="col-sm-12 mg-t10">
+              <%= link_to "RESEND #{ '('+cookies[RESEND_TIMER_KEY]+')' if (cookies[RESEND_TIMER_KEY].to_i) > 0 }", resend_user_verification_code_users_path, remote: true, class: "to_register btn bg-red waves-effect #{ 'disabled' if (cookies[RESEND_TIMER_KEY].to_i) > 0 }", id: "resend_verification_code" %>
+              <%= f.submit "Update Password", class: "btn bg-red waves-effect" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

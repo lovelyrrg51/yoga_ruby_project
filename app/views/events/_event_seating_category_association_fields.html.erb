@@ -1,0 +1,48 @@
+<%is_event_seating_category_associations_has_registration = (@event_registrations_on_seating_category.has_key?(f.object.id) && @event_registrations_on_seating_category[f.object.id].to_i > 0)%>
+<tr class="nested-fields">
+    <td class="field">
+        <div class="outbox">
+            <div class="box bordered-input dropdown">
+                <% if is_event_seating_category_associations_has_registration%>
+                    <div class="dropdown-field dropdown">
+                        <%= text_field_tag "", f.object.seating_category.try(:category_name), class: "form-control noBorder field", disabled: true%>
+                    </div>
+                  
+                <%else%>
+                    <div class="dropdown-field selectTwo-dropdown">
+                        <%= f.select :seating_category_id, options_for_select(SeatingCategory.with_out_zero_payment_category.pluck(:category_name,:id), f.object.seating_category_id), { include_blank: "----- Select -----" }, { class: 'basic-single', required: true }  %>
+                    </div>
+                <%end%>
+            </div>
+        </div>
+    </td>
+    <td>
+        <div class="outbox">
+            <div class="box bordered-input tablebox">
+                <div class="dropdown dropdown-field">
+                    <%unless is_event_seating_category_associations_has_registration%>
+                        <%= f.text_field :price, class: "form-control noBorder field", required: true, "data-rule-number": true %>
+                    <%else%>
+                        <%= text_field_tag "", f.object.price, class: "form-control noBorder field", disabled: true, placeholder: "Amount"%>
+                    <%end%>
+                </div>
+            </div>
+        </div>
+    </td>
+    <td>
+        <div class="outbox">
+            <div class="box bordered-input tablebox">
+                <div class="dropdown dropdown-field">
+                    <%= f.text_field :seating_capacity, class: "form-control  noBorder field", required: true, "data-rule-number": true, placeholder: "Seating capacity" %>
+                </div>
+            </div>
+        </div>
+    </td>
+    <td>
+        <% unless is_event_seating_category_associations_has_registration%>
+            <%= link_to_remove_association "Remove", f, { class: "primary-color" }  %>
+        <%else%>
+              <a href="javascript:void(0)" data-toggle="tooltip" class="primary-color" data-placement="left" title="Registration(s) exist against this category. Unable to delete, Only seating capacity can be changed."><i class="fa fa-info-circle"></i></a>
+        <%end%>
+    </td>
+</tr>

@@ -1,0 +1,65 @@
+<% content_for(:title, 'Admin | Sy Club Validity Window') %>
+<section id="contentCntr" class="sub2">
+  <section id="centerCntr">
+    <div class="eventsArea transparent_bg head data No_paddingTop organise_eventContainer">
+      <div class="topbar eventorganize_topbar ">
+        <div class="container">
+          <h2><i class="fa fa-calendar"></i><span>Admin</span>
+          </h2>
+        </div>
+      </div>
+      <div class="container tabPanel_Conatiner">
+        <div class="row">
+          <%= render partial: 'admin/admin_left_panel' %>
+          <div class="col-sm-8">
+            <div class="right tabPanel_right top-margin-0 reg_block">
+              <div class="heading">
+                <h2 class="col-sm-7 col-xs-6"><%= render_breadcrumbs separator: ' / '%></h2>
+                <%= link_to "Create New", new_sy_club_validity_window_path, class: "btn btn-danger btn-orange"%>
+              </div>
+              <div class="clearfix"></div>
+              <% if @sy_club_validity_windows.present? %>
+                <div class="panel-type" id="accordion">
+                  <div class="panel panel-default saved">
+                    <div id="collapseOne" class="panel-collapse collapse cat_block in">
+                      <div class="panel-body">
+                        <div class="table-responsive">
+                          <table class="table tablebg tablesaw" data-tablesaw-mode="columntoggle">
+                            <thead>
+                              <tr>
+                                <td>Forum Registration Start Date</td>
+                                <td>Forum Registration End Date</td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <% @sy_club_validity_windows.each do |sy_club_validity_window|%>
+                              <tr>
+                                <td class="col-sm-5"><%= sy_club_validity_window.club_reg_start_date %>
+                                </td>
+                                <td class="col-sm-5"><%= sy_club_validity_window.club_reg_end_date %>
+                                </td>
+                                <td class="col-sm-1"><%= link_to "", edit_sy_club_validity_window_path(sy_club_validity_window),class: "fa fa-pencil-square-o" %>
+                                </td>
+                                <td class="col-sm-1"><%= link_to "", sy_club_validity_window_path(sy_club_validity_window), method: :delete,data: { confirm: 'Are you sure you want to delete?' }, class: "fa fa-trash" %>
+                                </td>
+                              </tr>
+                              <% end %>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% else %>
+                <%= render partial: 'application/no_records', locals: { message: 'No Club Validity Found.' } %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>

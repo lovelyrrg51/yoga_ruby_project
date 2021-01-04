@@ -1,0 +1,36 @@
+<%= render 'sadhak_profiles/profile_sections/basic_info_with_token_verification', locals: { sadhak_profile: @sadhak_profile } %>
+<script type="text/javascript">
+	$(document).on('turbolinks:load',function(){
+  	resendButton = $("#resend_verification_token");
+  	sec = <%= cookies[RESEND_TIMER_KEY]%>
+  	resendButton.on("click", function(){
+  		sec = <%= RESEND_TIMER %>;
+  		timer = window.setInterval(countDown, 1000);
+  	});
+  	if (sec > 0 ) {
+			timer = window.setInterval(countDown, 1000);
+  	}
+	});
+
+	function countDown() {
+    resendButton.text("RESEND ("+sec+")");
+    if (!$('#resend_verification_token').hasClass('disabled')){
+    	$('#resend_verification_token').addClass('disabled') ;
+    }
+	  if (sec < 10) {
+	    resendButton.text("RESEND (" + '0' + sec +")"); 
+	  } else {
+	    resendButton.innerHTML = sec;
+	  }
+	  if (sec <= 0) {
+	    window.clearInterval(timer);
+	    resendButton.text("RESEND");
+	    if ($('#resend_verification_token').hasClass('disabled')){
+	    	$('#resend_verification_token').removeClass('disabled');
+	    }
+	    return;
+	  }
+	  sec -= 1;
+	  Cookies.set('resend_timer', sec);
+	}
+</script>

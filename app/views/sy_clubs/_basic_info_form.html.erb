@@ -1,0 +1,135 @@
+<%= form_for @sy_club, url: redirection_to, html: { id: "sy_club_form" } do |f| %>
+    <div class="tab-pane active" role="tabpanel" id="Basicinfo">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="headtittle text-center">
+                    <h2>Basic Forum Information</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row mg-t30">
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label class="asterisk">Forum Name</label>
+                    <div class="dropdown dropdown-field">
+                        <%= f.text_field :name, class: "form-control noBorder field", placeholder: "Forum name", required: true %>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label class="asterisk">Maximum Number of Members</label>
+                    <div class="dropdown dropdown-field">
+                        <%= f.text_field :members_count, class: "form-control noBorder field only_integers", placeholder: "Max members", required: true %>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label>Minimum Number of Members</label>
+                    <div class="dropdown dropdown-field">
+                        <%= f.text_field :min_members_count, class: "form-control noBorder field only_integers", placeholder: "Min members" %> 
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="box bordered-input prelative">
+                    <label class="asterisk">Content Type(s)</label>
+                    <div class="dropdown-field innermultiple">
+                      <%= f.select :content_type, options_for_select( SyClub::CONTENT_TYPE.collect{|ct| ["Content in #{ct.titleize}", ct] }, f.object.content_type.try(:split, ",") ), { include_blank: false }, { multiple: true , class: "multiple-select", required: true } %>
+                    </div>
+                    <div class="merge-error sy_club_content_type_select_error">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="headtittle"><h2>Contact</h2></div>
+            </div>
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label class="asterisk">Contact Details</label>
+                    <div class="dropdown dropdown-field clearfix">
+                        <%= f.text_field :contact_details, class: "form-control noBorder field", placeholder: "Contact details", required: true %>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label>Email</label>
+                    <div class="dropdown dropdown-field mCustomScrollbar innerbootstrap-tag">
+                        <%= f.text_field :email, class: "form-control noBorder field", placeholder: "Email", data: { role: "tagsinput" } %>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row mg-t30">
+          <%= f.fields_for :address do |ff| %>
+            <div class="col-sm-12">
+                <div class="headtittle"><h2>Address</h2></div>
+            </div>
+            <!-- Commented Search as per discussion -->
+<!--             <div class="col-sm-12">
+                <div class="box bordered-input">
+                    <label>Search Address</label>
+                    <div class="dropdown dropdown-field"> 
+                        <div class="input-group box-input-group">
+                          <span class="input-group-addon"><i class="icon-google-maps"></i></span>
+                            <%#= text_field_tag :autocomplete_search, "", class: 'form-control noBorder field', "data-google-address-autocomplete": 'autocomplete', placeholder: "Search address"%>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label class="asterisk">Address Line 1</label>
+                    <div class="dropdown dropdown-field"> 
+                        <%= ff.text_field :first_line, class: 'form-control noBorder field', required: 'required', placeholder: "First line address"%>
+                    </div>
+                </div>
+            </div>            
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label>Address Line 2</label>
+                    <div class="dropdown dropdown-field"> 
+                        <%= ff.text_field :second_line, class: 'form-control noBorder field', placeholder: "Second line address"%>
+                    </div>
+                </div>
+            </div>
+            <%= render partial: 'country_state_city_select', locals: { f: ff } %>
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label class="asterisk">Postal Code</label>
+                    <div class="dropdown dropdown-field">
+                        <%= ff.text_field :postal_code, class: "form-control noBorder field", placeholder: "Postal code", required: true %>
+                    </div>
+                </div>
+            </div>
+          <% end %>
+        </div>
+        <hr>
+
+        <div class="row mg-t30">
+            <div class="col-sm-12">
+                <div class="headtittle text-center">
+                    <h2>Board Members</h2>
+                </div>
+            </div>
+        </div>
+        <%= f.fields_for :sy_club_sadhak_profile_associations do |ff| %>
+          <%= render partial: "sy_club_steps/sy_club_board_members_details", locals: { f: ff } %>
+        <% end %>
+        <div class="row mg-t30">
+            <div class="col-sm-12">
+              <div class="pannel-btn mg-t30 text-right">
+                <%= button_tag "CLEAR", type: "button", class: "btn btn-danger mg-r10 sy_club_basic_form_clear"%>
+                <%= f.submit @sy_club.persisted? ? "SAVE & CONTUNUE" : "CREATE", class: "btn btn-info"%>
+              </div>
+            </div>
+        </div>
+    </div>
+<% end %>

@@ -1,0 +1,112 @@
+<%= content_for(:title, @forum.name) %>
+<section class="forum-location-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md 12">
+        <div class="banner_text">
+          <div class="main_banner_heading">
+            <%= @forum.name %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="forum_location_map">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="heading_title">Forum Location</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-7">
+        <div class="pop-up">
+          <div class="pop-map" id="pop-map">
+
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-5">
+        <div class="pop-up">
+          <div class="right-pop">
+            <div class="pop-content">
+                <h5><%= @forum.name %></h5>
+                <h5>Forum ID: <%= @forum.id %></h5>
+                <h6>Venue</h6>
+                <p>Thursday 11:30 AM </p>
+                <p><%= @forum&.address&.street_address %>,
+                <br> <%= @forum&.city_name%>  <%= @forum&.state_name%> <%= @forum&.address&.country_name %>
+                <br> <%= @forum&.address&.postal_code %></p>
+            </div>
+
+            <% SyClubUserRole.find_each do |role| %>
+                <% if @forum.sy_club_user_roles.include?(role) %>
+                    <div class="pop-content pop-cont-sub">
+                        <h6><%= ((@forum.new_record? || ( @forum.sadhak_profiles.count == 2 && @forum.sy_club_sadhak_profile_associations.pluck(:sy_club_user_role_id).include?(1))) ? role&.role_name.tr("0-9", "")&.titleize : role&.role_name&.titleize) %></h6>
+                        <p><%= @forum.send(role.role_name&.downcase&.to_sym)&.full_name %></p>
+                    </div>
+                <% end %>
+            <% end %>
+
+            <div class="text-align-center">
+              <div class="shivyog-btn display-inline-block">
+                <%= link_to register_v2_forum_path(@forum) do%>
+                  <div class="cta_button_small bg-red waves-effect">Join This Forum</div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="clear"></div>
+
+<%= render "v2/shared/newsletter" %>
+
+<script type="text/javascript">
+      //function forum_Map() {
+   // alert('called');
+        var latlng = {lat: <%= @forum&.address&.lat %>, lng: <%= @forum&.address&.lng %>};
+        var map = new google.maps.Map(document.getElementById('pop-map'), {
+          zoom: 6,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+          center: latlng,
+      scrollwheel: true
+        });
+
+        var contentString = '<div class="pop-content">'+
+                              '<h4><%=j @forum.name %></h4>'+
+                              '<h4>Forum ID: <%= @forum.id %></h4>'+
+                              '<h6>Thursday 11:30 AM </h6>'+
+                              '<h5><strong>Venue</strong></h5>'+
+                              '<p><%=j @forum&.address&.street_address %></p>,'+
+                              '<div class="banner_button m-l-20">'+
+                                '<a href="forum_member_registration.htm"><div class="cta_button">Join This Forum</div></a>'+
+                              '</div>'+
+                            '</div>';
+
+        var infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });
+
+        var marker = new google.maps.Marker({
+          position: latlng,
+          map: map,
+      animation: google.maps.Animation.DROP,
+          title: 'Ashburn Quante Square'
+        });
+        marker.addListener('click', function() {
+          infowindow.open(map, marker);
+      if (marker.getAnimation() !== null) {
+        marker.setAnimation(null);
+        } else {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function(){ marker.setAnimation(null); }, 1500);
+        }
+        });
+      //}
+    </script>

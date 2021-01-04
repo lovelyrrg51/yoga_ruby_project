@@ -1,0 +1,2 @@
+module MedicalPractitionerSpecialityAreasHelper
+end

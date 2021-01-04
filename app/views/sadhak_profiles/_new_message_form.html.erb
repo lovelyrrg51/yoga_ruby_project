@@ -1,0 +1,44 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="btn btn-info btnclose" data-dismiss="modal">
+                <%= image_tag "close.png", alt: "close"%>
+            </button>
+            <h2 class="headtittle">Send Message</h2>
+        </div>
+        <%= form_tag send_message_sadhak_profiles_path, id: 'new_message', remote: true, 'data-submit-type': "#{ @data_sender_type}" do %>
+        <div class="modal-body mCustomScrollbar">
+            <div class="row mg-t30">
+                <div class="col-sm-12">
+                    <div class="outbox">
+                        <label>Mode</label>
+                        <div class="box bordered-input dropdown">
+                            <div class="dropdown-field selectTwo-dropdown">
+                                <%= select_tag :medium, options_for_select(MEDIUM_TO_SEND_VERIFICATION_TOKEN.slice(0, 1).map{|k,v| [v.humanize, k]}), class: "simple-single", onchange: 'selectEditor(this)', required: true%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="outbox">
+                        <label>Message</label>
+                            <%= cktext_area_tag :email_content, "", cols: 40, ckeditor: { uiColor: '#AADC6E', toolbar: 'mini' } %>
+                            <div class="box bordered-input border-textarea" id= "sms_box" style='display: none;'>
+                                <div class="dropdown dropdown-field">
+                                    <%= text_area_tag :mob_sms, "", class: "form-control noBorder field", placeholder: "New message"%>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <%= hidden_field_tag "sadhak_profile_ids", params[:sadhak_profile_ids]%>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="pannel-btn text-right">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+                <%= submit_tag "SEND", class:"btn btn-info" %>
+            </div>
+        </div>
+        <% end %>
+    </div>
+</div>

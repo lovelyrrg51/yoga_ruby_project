@@ -1,0 +1,44 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png", alt: "close"%></button>
+            <h2 class="headtittle">Absent Members (<%= @forum_attendances.size%>)</h2>
+        </div>
+        <div class="modal-body mCustomScrollbar">
+        <%if @forum_attendances.present? %>
+           <div class="tableCntrl">
+                <div class="headingtittle-h2 text-center mg-b20">
+                    <h3 class="subheading">Absent Members</h3>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>SYID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+						<% @forum_attendances.each do |at|%>
+							<tr>
+                                <td><%= at.sadhak_profile.full_name %> </td>
+                                <td><%= at.sadhak_profile.syid %></td>
+							</tr>
+						<%end%>
+                    </tbody>
+                </table>
+            </div>
+        <%else%>
+            <div class="headingtittle-h2 text-center mg-b20">
+                <h3 class="subheading"> All Forum Sadhak are marked present. Are you sure? </h3>
+            </div>
+        <%end%>
+        </div>
+        <div class="modal-footer">
+        	<%= button_tag "SUBMIT ATTENDANCE", type:"button", class: "btn btn-info", onclick: 'attendanceFinalSubmit()'%>
+        </div>
+    </div>
+</div>
+
+
+
+

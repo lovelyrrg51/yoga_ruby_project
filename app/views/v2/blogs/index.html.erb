@@ -1,0 +1,24 @@
+<%= content_for(:title, "ShivYog at a glance") %>
+
+<section id="read-banner">
+</section>
+
+<div class="clearfix"></div>
+
+<section class="read-sec">
+  <div class="container">
+    <% @posts.each do |post|%>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="read-inner">
+            <div class="row">
+                <%= render 'v2/blogs/blog_content', post: post %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<%= render "v2/shared/newsletter" %>

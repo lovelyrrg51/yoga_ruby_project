@@ -1,0 +1,29 @@
+<% if @message.present? %>
+  toastr.error("<%= @message %>")
+<% else %>
+
+  $("#clubMembersInfoModal").remove();
+
+  <% if !@details[:can_transfer] && !@details[:can_renew] && !@details[:fresh_registration] %>
+
+      $("body").append("<%= escape_javascript(render(partial: 'sy_clubs/club_member_info_modal', locals: { error: true, message: "Some profile(s) are eligible for transfer/renew and some are new registration(s). cannot process together. Aborting." })) %>");
+
+    <% elsif @details[:can_transfer] && @details[:can_renew] %>
+
+      $("body").append("<%= escape_javascript(render(partial: 'sy_clubs/club_member_transfer_renew_modal')) %>");
+
+    <% else %>
+
+      <% @message = "Proceed for Registrations." if @details[:fresh_registration] %>
+      <% @message = "Proceed for Transfer." if @details[:can_transfer] %>
+      <% @message = "Proceed for Renewal." if @details[:can_renew] %>
+
+      $("body").append("<%= escape_javascript(render(partial: 'sy_clubs/club_member_info_modal', locals: { error: false, message: @message })) %>");
+
+  <% end %>
+
+  $("#clubMembersInfoModal").find('div.mCustomScrollbar').mCustomScrollbar();
+
+  $("#clubMembersInfoModal").modal('show');
+
+<% end %>

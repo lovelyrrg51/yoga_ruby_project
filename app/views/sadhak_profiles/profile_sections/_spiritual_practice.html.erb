@@ -1,0 +1,135 @@
+<div class="panel">
+    <div class="panel-heading" role="tab" id="headingFour">
+        <h4 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion4" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                <i class="more-less glyphicon glyphicon-plus"></i>
+                <% if @sadhak_profile.spiritual_practice.try(:is_complete?) %>
+                <i class="success-btn">
+                 <%= image_tag "check-mark.png" %>
+                </i>
+                <% else %>
+                <i class="error-btn"><%= image_tag "warning.png" %></i>
+                <% end %>
+                <span>Spiritual Practice</span>
+            </a>
+        </h4>
+    </div>
+    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+        <div class="panel-body">
+        <%= form_for @sadhak_profile, html:{ id: "edit_sadhak_profiles_spiritual_practice" }  do |f|%>
+         <%= f.hidden_field :sp_accordion_id, value: 'collapseFour', id: 'sadhak_profiles_spiritual_practice_accodion_id'  %>
+            <%= f.fields_for :spiritual_practice do |ff|%>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="box bordered-input dropdown">
+                        <label class="">Morning Duration (Hours)</label>
+                        <div class="dropdown-field selectTwo-dropdown">
+                            <%= ff.select :morning_sadha_duration_hours, options_for_select( (0..4).to_a, ff.object.morning_sadha_duration_hours), { include_blank: "----- Select -----" }, { class: "basic-single" } %>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box bordered-input dropdown">
+                        <label class="">After Noon Duration (Hours)</label>
+                        <div class="dropdown-field selectTwo-dropdown">
+                            <%= ff.select :afternoon_sadha_duration_hours, options_for_select( (0..4).to_a, ff.object.afternoon_sadha_duration_hours), { include_blank: " ----- Select ----- " }, { class: "basic-single" } %>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box bordered-input dropdown">
+                        <label class="">Evening Duration (Hours)</label>
+                        <div class="dropdown-field selectTwo-dropdown">
+                            <%= ff.select :evening_sadha_duration_hours, options_for_select( (0..4).to_a, ff.object.evening_sadha_duration_hours), { include_blank: " ----- Select ----- " }, { class: "basic-single" } %>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box bordered-input dropdown">
+                        <label class="">Other Duration (Hours)</label>
+                        <div class="dropdown dropdown-field">
+                          <%= ff.text_field :other_sadha_duration_hours, class: "form-control noBorder field", placeholder: "Other duration (hours)"%>
+                       </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box bordered-input dropdown">
+                        <label class="">Sadhna Frequency</label>
+                        <div class="dropdown-field selectTwo-dropdown">
+                        <%= ff.select :sadhana_frequency_days_per_week, options_for_select( SpiritualPractice.sadhana_frequency_days_per_weeks.map{ |k, v| [k.humanize, k] }, ff.object.sadhana_frequency_days_per_week), { include_blank: " ----- Select ----- " }, { class: 'simple-single' } %>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box bordered-input dropdown">
+                        <label class="">Frequency Period</label>
+                        <div class="dropdown-field selectTwo-dropdown">
+                        <%= ff.select :frequency_period, options_for_select(%w(Daily Weekly Monthly), ff.object.frequency_period), { include_blank: " ----- Select ----- " }, { class: "simple-single" }%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="shivyog-sepeator"></div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="headtittle">
+                        <h2>Frequent Sadhna</h2></div>
+                    <ul class="list-unstyled featuredlist">
+                        <% FrequentSadhnaType.all.each do |fstype|%>
+                            <li>
+                                <div class="CustomCheckbox">
+                                    <%= check_box_tag 'sadhak_profile[spiritual_practice_attributes][frequent_sadhna_type_ids][]', fstype.id, ff.object.try(:frequent_sadhna_type_ids).try(:any?){ |id| id == fstype.id} %>
+                                    <label><%= fstype.name %></label>
+                                </div>
+                            </li>
+                        <% end %>
+                    </ul>
+                </div>
+            </div>
+            <div class="shivyog-sepeator"></div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="headtittle">
+                        <h2>Physical Exercise and Subtle Exercises</h2></div>
+                    <ul class="list-unstyled featuredlist">
+                        <% PhysicalExerciseType.all.each do |petype|%>
+                            <li>
+                                <div class="CustomCheckbox">
+                                    <%= check_box_tag 'sadhak_profile[spiritual_practice_attributes][physical_exercise_type_ids][]', petype.id, ff.object.try(:physical_exercise_type_ids).try(:any?){ |id| id == petype.id} %>
+                                    <label><%= petype.name %></label>
+                                </div>
+                            </li>
+                        <% end %>
+                    </ul>
+                </div>
+            </div>
+            <div class="shivyog-sepeator"></div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="headtittle">
+                        <h2>Shiv Yog teaching that I apply in my life</h2></div>
+                    <ul class="list-unstyled featuredlist">
+                        <% ShivyogTeaching.all.each do |s_teaching|%>
+                            <li>
+                                <div class="CustomCheckbox">
+                                    <%= check_box_tag 'sadhak_profile[spiritual_practice_attributes][shivyog_teaching_ids][]', s_teaching.id, ff.object.try(:shivyog_teaching_ids).try(:any?){ |id| id == s_teaching.id} %>
+                                    <label><%= s_teaching.name %></label>
+                                </div>
+                            </li>
+                        <% end %>
+                    </ul>
+                </div>
+            </div>
+            <div class="row mg-t30">
+                <div class="col-sm-12">
+                    <div class="pannel-btn">
+                        <%= button_tag "CLEAR", :type => 'reset', class: 'btn btn-danger mg-r10 resetForm' %>
+                        <%= f.submit  "SAVE", class: ' btn btn-info' %>
+                    </div>
+                </div>
+            </div>
+            <% end %>
+        <% end %>
+        </div>
+    </div>
+</div>

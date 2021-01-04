@@ -1,0 +1,62 @@
+<%= content_for(:title, "Upcoming Events") %>
+<section class="event-banner margin-bottom-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="banner_text">
+          <div class="main_banner_heading">
+            Upcoming Events
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</section>
+
+<%= javascript_pack_tag 'upcoming_events_filter', defer: true %>
+<%= stylesheet_pack_tag 'upcoming_events_filter' %>
+
+<div id="vue-upcoming-events-filter"
+  data-start-date="<%= params.dig(:q, :event_start_date_gteq) %>"
+  data-end-date="<%= params.dig(:q, :event_end_date_lteq) %>"
+  data-country-id="<%= params.dig(:q, :address_country_id_eq) %>"
+  data-state-id="<%= params.dig(:q, :address_state_id_eq) %>"
+  data-city-id="<%= params.dig(:q, :address_city_id_eq) %>"
+  data-graced-by="<%= params.dig(:q, :graced_by_eq) %>"
+>
+</div>
+
+<div class="clearfix"></div>
+<section class="event-results">
+  <div class="container">
+    <div class="result-head">
+      <div class="row">
+        <div class="col-sm-6">
+          <h3>SHOWING FILTERED RESULTS</h3>
+        </div>
+        <div class="col-sm-6">
+        </div>
+      </div>
+    </div>
+    <div id="upcoming-evnets">
+      <div class="row">
+        <% if @events.any? %>
+          <%= render @events %>
+        <% else %>
+          <p class="lead text-danger">No upcoming events found! Please update your filter criteria and try again.</p>
+        <% end %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="num_entries"><%= page_entries_info @events %></div>
+      </div>
+      <div class="col-sm-6 text-align-right">
+        <div class="dataTables_paginate paging_simple_numbers">
+          <%= paginate @events %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,42 @@
+<div class="adminCntrl">
+	<div class="headingtittle-h2 text-center">
+		<h2>Payment Mode</h2>
+	</div>
+	<div class="row">
+		<div class="overflow-row">
+			<%= render 'admin/admin_left_panel' %>
+			<div class="rightCntrl">
+			    <div class="boxsection-lg boxsection-xs boxshadow prelative">
+			        <div class="rightContent">
+			            <div class="row mg-t40 mg-x-t0">
+			              <div class="col-sm-4">
+			                <ul class="nav nav-tabs nav-stacked nav-custpilled mg-x-b30" role="tablist">
+			                  <% @payment_modes.each_with_index do |payment_mode, index| %>
+			                    <li role="presentation" class="<%= 'active' if index.zero? %>" >
+			                      <%= link_to payment_mode_new_edit_url(@payment_gateway, payment_mode), class: "Custradio", data: { toggle: 'tab', remote: 'true' } do %>
+			                        <%= radio_button_tag 'radio', '', index.zero?, class: "radiotype" %>
+			                        <label for="radiomode1"><%= payment_mode.try(:name).try(:titleize) %></label>
+			                        <% if payment_mode.payment_gateways.include?(@payment_gateway) %>
+			                          <a href="<%= ccavenue_config_payment_gateway_mode_association_path(@ccavenue_config, get_payment_gateway_mode_association(@payment_gateway,payment_mode)) %>" class="primary-color delete-btn" data-method="delete" data-confirm="Are you sure?">
+			                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+			                          </a>
+			                        <% end %>
+			                      <% end%>
+			                    </li>
+			                  <% end %>
+			                </ul>
+			              </div>
+			              <div class="col-sm-8">
+			                <div class="tab-content">
+			                    <div role="tabpanel" class="tab-pane active" id="payment_gateway_mode_association_div">
+			                    <%= render partial: 'ccavenue_configs/payment_mode_association', locals: { payment_gateway_mode_association: @payment_gateway_mode_association, payment_mode: @payment_mode, ccavenue_config: @ccavenue_config } if @payment_modes.count.nonzero? %>
+			                    </div>
+			                </div>
+			              </div>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+		</div>
+	</div>
+</div>

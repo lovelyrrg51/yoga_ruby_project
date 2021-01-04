@@ -1,0 +1,54 @@
+FactoryBot.define do
+  factory(:event) do
+    event_name "DSS Shivir"
+    event_start_date "2015-02-28"
+    event_end_date "2015-02-28"
+    creator_user_id 1
+    cannonical_event_id 1
+    daily_start_time nil
+    daily_end_time nil
+    description "Event is about Anusthan "
+    graced_by nil
+    contact_details "9191191819"
+    video_url nil
+    demand_draft_instructions nil
+    status "proposed"
+    event_type_id 19
+    payment_category "free"
+    total_capacity 100
+    contact_email "vineet@metadesignsolutions.co.uk"
+    website "shivyog.com"
+    event_start_time nil
+    event_end_time nil
+    additional_details nil
+    venue_type_id 4
+    is_photo_proof_required false
+    show_seats_availability false
+    event_location nil
+    status_changes_notes nil
+    master_event_id nil
+    is_club_event false
+    pre_approval_required false
+    registrations_recipients "vineet@metadesignsolutions.co.uk"
+    show_shivir_price false
+    full_profile_needed false
+    pay_in_usd false
+    entity_type nil
+    entity_key nil
+    event_cancellation_plan_id nil
+    discount_plan_id nil
+    automatic_refund true
+    sy_event_company_id nil
+    reference_event_id nil
+    has_seva_preference false
+    approver_email nil
+    logistic_email nil
+    end_date_ignored false
+    prerequisite_message nil
+    notification_service true
+    shivir_card_enabled false
+    discount_text ""
+    slug "ce71ac3003ea7aeb374deef2b597b0d84683cbb13d26da6660ef4249177a6d0b"
+    auto_approve false
+  end
+end

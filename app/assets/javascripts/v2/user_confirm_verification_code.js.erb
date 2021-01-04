@@ -1,0 +1,65 @@
+var resendTimer = null;
+
+$(document).on("turbolinks:load", function () {
+  if ($("body").data("class") === "users" && $("body").data("action") === "user_confirm_verification_code") {
+    var timeLeft = parseInt(Cookies.get("<%= RESEND_TIMER_KEY %>"));
+
+    if (timeLeft != null && timeLeft > 0) {
+      disableResendButton();
+      resendTimer = window.setInterval(countDown, 1000);
+    }
+  }
+});
+
+/** this function get called while execute "resend_user_verification_code.js.erb"
+  * on action "resend_user_verification_code" in users controller
+  */
+
+function resend() {
+  disableResendButton();
+  resendTimer = window.setInterval(countDown, 1000);
+}
+
+/** This function is to read a value of time left from cookie every second,
+ *  to update text of "RESEND" button with the time and write the decreased time onto the cookie
+ */
+function countDown() {
+  var secondsLeft = parseInt(Cookies.get("<%= RESEND_TIMER_KEY %>"));
+
+  if (secondsLeft <= 0 || !secondsLeft) {
+    window.clearInterval(resendTimer);
+    enableResendButton();
+    return;
+  }
+
+  updateResendButton(secondsLeft);
+
+  secondsLeft -= 1;
+  Cookies.set("<%= RESEND_TIMER_KEY %>", secondsLeft, {expires: new Date(new Date().getTime() + (secondsLeft + 1) * 1000)});
+}
+
+function enableResendButton() {
+  var resendButton = $("#resend_verification_code");
+  resendButton.text("RESEND");
+  resendButton.unbind('click', false);
+  resendButton.css('cursor', 'pointer');
+  resendButton.removeClass('disabled');
+}
+
+function disableResendButton() {
+  var resendButton = $("#resend_verification_code");
+  resendButton.bind('click', false);
+  resendButton.css('cursor', 'not-allowed');
+  resendButton.addClass('disabled');
+}
+
+function updateResendButton(timeLeft) {
+  var resendButton = $("#resend_verification_code");
+  resendButton.text("RESEND (" + timeLeft + ")");
+
+  if (timeLeft < 10) {
+    resendButton.text("RESEND (" + '0' + timeLeft + ")");
+  } else {
+    resendButton.innerHTML = timeLeft;
+  }
+}

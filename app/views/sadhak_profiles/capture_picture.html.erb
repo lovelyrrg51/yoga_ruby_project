@@ -1,0 +1,80 @@
+<div class="mt-50 mb-10">
+	<%= form_for :img, url: "#{verify_picture_sadhak_profiles_path}", remote: true, html:{id: 'capture_img_to_verify'} do |f| %>
+
+	  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" id="open_camera">CLICK HERE</button>
+
+	 	<div class="modal fade" id="myModal" role="dialog">
+		    <div class="modal-dialog">
+
+		      <!-- Modal content-->
+		      <div class="modal-content">
+		        <div class="modal-header">
+		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		          <h4 class="modal-title">Take a snapshot</h4>
+		        </div>
+		        <div class="modal-body">
+		          <div id="my_camera"></div>
+                  <button class="btn btn-warning" onClick="take_snapshot()">Take Snapshot</button>
+
+		          <div id="results"></div>
+
+		          <button id="cofirmBtn" type="button" style="display: none;" class="btn btn-success" onClick="saveImage()">Confirm</button>
+		        </div>
+		      </div>
+
+		    </div>
+	 	</div>
+
+		  <div class="field">
+		    <%= f.hidden_field :image %>
+		    <div id="finalImg"></div>
+		  </div>
+
+
+	 <div class="actions">
+	  <%#= f.submit :class=>"btn btn-success" %>
+	  </div>
+	<% end %>
+</div>
+<br/><br/>
+<div id="cropped_image">
+
+</div>
+<script type="text/javascript">
+	function attachCamera() {
+		if ($("#my_camera").length) {
+	        Webcam.set({
+	            width: 320,
+	            height: 240,
+	            image_format: 'jpg',
+	            jpeg_quality: 90
+	        });
+
+	        Webcam.attach('#my_camera');
+	    }
+	};
+
+$("#open_camera").click(function(){
+	attachCamera();
+});
+</script>
+<style type="text/css">
+	.actions{
+		display: none;
+	}
+	#capture_img_to_verify{
+		text-align: center;
+	}
+	#my_camera{
+		margin: 0 auto;
+	}
+	img{
+		margin:0 auto;
+	}
+	.btn{
+		margin: 10px;
+	}
+	#cropped_image{
+		text-align: center;
+	}
+</style>

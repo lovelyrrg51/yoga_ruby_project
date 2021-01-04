@@ -1,0 +1,16 @@
+<%= content_for(:title, "Forgot SYID") %>
+<%= content_for :header do %>
+  <meta name="turbolinks-visit-control" content="reload">
+  <%= stylesheet_pack_tag "forgot_syid" %>
+  <%= javascript_pack_tag "forgot_syid", defer: true %>
+<% end %>
+
+<section id="forgot-syid-banner">
+</section>
+
+<div class="clearfix"></div>
+
+<section id="vue-forgot-syid">
+</section>
+
+<%= render "v2/shared/newsletter" %>

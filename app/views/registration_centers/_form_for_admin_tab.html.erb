@@ -1,0 +1,24 @@
+<%= form_for @registration_center,url: @registration_center.persisted? ? update_for_admin_registration_center_path : create_for_admin_registration_centers_path, html:{class: "table-screen-next", id: "registration_center_form"} do |f| %>
+  <div class="prelative mg-b30">
+    <div class="overlapping"></div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box bordered-input mg-t30">
+                <label class="asterisk">Name</label>
+                <div class="dropdown dropdown-field">
+                    <%= f.text_field :name, class: 'form-control noBorder field', required: true, placeholder: "Name" %>
+                </div>
+            </div>
+            <div class="pannel-btn text-right pull-right">
+                <button type="reset" class="btn btn-danger mg-r10" >CLEAR</button>
+                <%= f.submit params[:action] == "edit_for_admin" ? "UPDATE" : 'CREATE', {class: 'btn btn-info'} %>
+            </div>
+        </div>
+    </div>
+  </div>
+<% end %>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#registration_center_form").validate();
+    });
+</script>

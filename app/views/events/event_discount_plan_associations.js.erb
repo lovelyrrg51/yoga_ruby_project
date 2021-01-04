@@ -1,0 +1,10 @@
+
+<% if @discount_plan.present? %>
+	$('#discount_plan').html('<%=j render "events/event_discount_plan_associations_row", locals: { discount_plan: @discount_plan } %>');
+
+	$('.multiple-select').select2({
+	    multiple: true
+	});
+<% else %>
+	$('#discount_plan').html("<div class='warningmessage mg-lr30 mg-t30 text-center'><p> Select one discount plan.</p></div>");
+<% end %>

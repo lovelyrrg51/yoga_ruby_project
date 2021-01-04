@@ -1,0 +1,80 @@
+<% content_for(:title, 'Forum | Show') %>
+<%= link_to "BACK", members_sy_club_path(@sy_club), class: "btn btn-info" %>
+
+<div class="headingtittle-h2 text-center">
+    <h2>Forums Attendance</h2>
+    <span class="subheading primary-color primarybold">Forum ID: <%= @sy_club.id %></span>
+    <span class="subheading">ShivYog Forum <strong class="texttransform"><%= @sy_club.name.try(:titleize) %></strong></span>
+</div>
+<div class="boxsection-lg boxshadow prelative boxsection-xs">
+    <div class="row">
+        <%= render partial: "/sy_clubs/board_members_venue_details" %>
+    </div>
+</div>
+<div class="boxsection-lg boxsection-xs boxshadow adminCntrl">
+                <div class="col-sm-12 adminCntrl " id="member_from_other_forum">
+                <div class="headingtittle-h2 ">
+                    <h2>Episode list</h2>
+                </div>
+            </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="dataTables_wrapper no-footer">
+                <div class="tableCntrl tabledataCntrl prelative" style="display: none;">
+                    <div class="dataTables_length box bordered-input" id="syClubTableData_length" style="opacity: 0"></div>
+                        <div class="searboxCntrl">
+                            <div class="input-group">
+                                <%= text_field_tag :forum_attendance_search, nil, placeholder: 'Search', class: 'form-control', "aria-describedby": "basic-addon2" %>
+                            </div>
+                        </div>
+                    <table class="table datatable-no-ajax" id="ForumAttendanceTableData" class="display" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Sr. No</th>
+                                <th>Episode Name</th>
+                                <th>Published On</th>
+                                <th>Expires At</th>
+                                <th>Attendance Link</th>
+                            </tr>
+                        </thead>
+                        <% can_mark_forum_attendance = policy(:forum_attendance_detail).forum_attendance?%>
+                        <tbody>
+                            <%if @digital_assets.present?%>
+                            <% (@digital_assets || []).reverse.each.with_index(1) do |asset, index| %>
+                                <tr>
+                                    <td><%= index %></td>
+                                    <td><%= asset.asset_name %></td>
+                                    <td><%= asset.published_on %></td>
+                                    <td><%= asset.expires_at %></td>
+                                    <td><%= if can_mark_forum_attendance then (link_to "MARK ATTENDANCE", sy_club_digital_asset_forum_attendance_details_path(@sy_club, asset), class: "btn btn-info") else "-" end %></td>
+                                </tr>
+                                <%end%>
+                            <%else%>
+                                <tr> 
+                                    <td></td>
+                                    <td></td>
+                                    <td><%= "NMS, No live shivir episode on today."%></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#forum_attendance_search').on('keyup', function() {
+            $('#ForumAttendanceTableData').DataTable().search($('#forum_attendance_search').val().trim(), false, true).draw();
+        });
+        $(window).keydown(function(event){
+            if(event.keyCode == 13) {
+              event.preventDefault();
+              return false;
+            }
+        });
+    });
+</script>

@@ -1,0 +1,22 @@
+<div class="searchbg">
+    <div class="input-group dropdown boxshadow-200">
+        <span class="input-group-addon" id="basic-addon1"><i class="icon-close"></i></span>
+        <input type="text" class="form-control dropdown-toggle autocomplete" placeholder="Enter Shivyog Forum | City | State..." aria-describedby="basic-addon1" data-toggle="dropdown" data-source="<%= autocomplete_sy_clubs_path %>" data-render-item="renderAutocompleteItemSyClub" data-autocompleteopen="autocompleteOpenSyClub" data-autocompletesearch="autocompleteClearSyClub" data-autocompleteresponse="autocompleteResponseSyClub">
+
+        <div class="dropdown-menu dropdownCntrl hidden">
+          <div class="notfound text-center hidden">
+            <%= image_tag 'notfounderror.png' %>
+            <h2>Opps No Result !</h2>
+            <p>We cannot find the forum you are searching for.</p>
+          </div>
+          <div class="loader loadercontent hidden">
+            <%= image_tag 'dataloader.gif', class: 'center-block' %>
+            <p>Loading...</p>
+          </div>
+          <div class="mCustomScrollbar js-searchListHeight">
+            <ul class="list-unstyled forum-list hidden">
+            </ul>
+          </div>
+        </div>
+    </div>
+</div>

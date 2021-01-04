@@ -1,0 +1,109 @@
+<html>
+<head>
+	<title>Invoice</title>
+</head>
+<body>
+	<div style="width:600px; margin:0 auto; border:1px solid #606060; padding:10px 10px; font-size: 16px; font-family: Calibri, Verdana, Geneva, sans-serif; text-transform: capitalize; line-height:23px; color:#000px;">
+			<div style="float:left; font-weight:700;">
+				<%= data.company_name %>
+				<div>
+					<%= data.company_address %>
+				</div>
+				<div>
+					<%= data.company_city %>-<%= data.zipcode %>
+				</div>
+			</div> 
+			<div style="float:right; font-weight:700;">
+				<div style="text-align:right">
+					Llpin No. <%= data.llpin_number %>
+				</div>
+				<div style="text-align:right">
+					Service Tax No. <%= data.company_service_tax_no %>
+				</div>
+			</div>
+			<div style="clear:both"></div>
+				<div style="margin-top:30px font-weight:700;">
+					<div style="float:left; font-weight:700;">
+						Invoice No. : <%= data.reg.invoice_number %>   
+					</div> 
+					<div style="float:right; font-weight:700;">
+						Date : <%= data.event_order.created_at.to_date %>   
+					</div>
+				</div>
+			<div style="clear:both"></div>
+			<div style="text-align:center; margin-top:10px; font-weight:bold; font-size:20px; text-decoration: underline;">
+				Invoice  
+			</div>
+				<div style="margin-top:30px;">
+					<div>Received<span style="color:#ff0000">*</span> With Thanks  <strong><%= data.payment_method %></strong>  Payment of RS: <strong><%= data.recieved_amount %> </strong>- From MR./MRS <b><%= data.reg.sadhak_profile.full_name %></b> Towards Partcipation Fee For  <strong> <%= data.reg.event.event_name %>
+						</strong> To Be Held On <strong><%= data.reg.event.event_start_date %></strong> To <strong><%= data.reg.event.event_start_date %></strong>.
+				</div>
+		<div style="clear:both"></div>
+		<table cellpadding="5" cellspacing="0" border="1" width="100%;" style="margin-top:40; border-collapse: collapse;">
+			<tr>
+				<td><strong>Category</strong></td>
+				<td align="center"><%= data.event_order_line_item.category_name %></td>
+			</tr>
+			<tr>
+				<td width="50%"><strong>Category Price</strong></td>
+				<td align="center" width="50%"><%= data.event_order_line_item.category_price.to_f %></td>
+			</tr>
+			<% if data[:discount] > 0  %>
+				<tr>
+					<td width="50%"><strong>Discount</strong></td>
+					<td align="center" width="50%"><%= data[:discount]  %></td>
+				</tr>
+			<% end %>
+			<% data[:taxes].each do |tax| %> 
+				<tr>
+					<td width="50%"><strong><%= tax[:tax_type_name] %> (<%= tax[:percent] %>%)</strong></td>
+					<td align="center" width="50%"><%= tax[:tax_amount] %></td>
+				</tr>
+			<% end %>
+			<% if data.gateway_config.try(:tax_amount).present? %> 
+				<tr>
+					<td width="50%"><strong>Transaction Charges<br></strong></td>
+					<td align="center" width="50%"> <%= data[:convienence_charges] %> </td>
+				</tr>
+			<% end %>
+			<tr>
+				<td width="50%"><strong>Total Rs.</strong></td>
+				<td align="center" width="50%"><%= data[:paid_amount_with_all_charges] + data[:convienence_charges] %></td>
+			</tr>
+			<tr>
+				<td colspan="2"><i>(RS (in words) </i>: <strong><%= (data[:paid_amount_with_all_charges] + data[:convienence_charges]).to_i.to_words %> Only </strong></td>
+			</tr>
+		</table>
+		<div style="clear:both"></div>
+		<% if data.transaction.present? %>
+			<div style="margin:15px 0px 15px;">
+				<strong>Mode Of Payment - <%= data.payment_method %> Payment </strong>
+			</div>
+			<% if data.payment_method == 'Demand draft' %>
+				<div>
+					Demand Draft No: <strong><%= data.transaction.dd_number %></strong><br/>
+					Dated: <strong><%=data.transaction.created_at.to_date%></strong><br/>
+					Amount: <strong><%= data.recieved_amount %></strong><br/>
+					Name of Bank: <strong><%= data.transaction.bank_name %></strong>
+				</div>
+			<%else%>
+				<div>
+					Order Number: <strong><%= data.event_order.reg_ref_number %></strong><br/>
+					Transaction Reference Number: <strong><%= data.event_order.transaction_id %></strong><br/>
+					Transaction Date: <strong><%= data.transaction.created_at.to_date %></strong><br/>
+					Transaction Amount: <strong><%= data.recieved_amount %></strong>
+				</div>
+			<%end%>
+		<% end %>
+		<div style="margin:50px 0px 40px; text-align:right; font-weight:bold;">
+			 <%= data.company_name %>
+			<div style="font-weight:normal;">
+				 (Authorized Signatory)
+			</div>
+	  </div>
+    <div style="font-style: italic; font-size:14px;">
+    	<span style="color:#ff0000">*</span> This acknowledgement is subject to realization of DEMAND DRAFT/ ONLINE PAYMENT.
+    </div>
+	</div>
+</body>
+</html>

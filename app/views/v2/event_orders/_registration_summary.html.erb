@@ -1,0 +1,30 @@
+<div class="header p-10-0"><h2>Registration Summary</h2></div>
+
+<div class="table-responsive">
+  <table class="table table-bordered table-striped table-hover">
+    <thead>
+    <tr>
+      <th>S. No.</th>
+      <th>Registration Number</th>
+      <th>Name/SYID</th>
+      <th>Seating Category</th>
+      <th>Discount <%= "(#{@currency})" if @currency %></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% (@event_order_line_items || []).each_with_index do |item, item_index| %>
+      <tr>
+        <td><%= item_index + 1 %>.</td>
+        <td><%= @event_order.event&.sy_event_company_id.present? ? (item.event_registration&.serial_number.to_i + 100) : item&.registration_number %></td>
+        <td><strong><%= item.sadhak_profile.full_name %>
+          <br/><span class="red-text small"><%= item.sadhak_profile.syid %></span></strong></td>
+        <td>
+          <strong><%= item.event_seating_category_association&.seating_category&.category_name %>
+            <br/><span class="red-text small"><%= "#{@currency} #{item.category_price.rnd}" %></span></strong>
+        </td>
+        <td><%= @currency + ' ' + '%.2f' % discount_per_sadhak(item).to_f %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,47 @@
+<div id="show_payment_refund_amount_modal" class="modal fade Custommodal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="headtittle">Set Refund Amount</h2>
+        <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag("close.png") %></button>
+      </div>
+      <%= form_for :payment_refund, url: @redirect_url, method: :post, html: { id: 'show_payment_refund_amount_modal_form' } do |f| %>
+        <div class="modal-body rejectlist mCustomScrollbar">
+          <div class="row mg-t30">
+            <div class="col-sm-12">
+              <label class="mg-b20 nouppercase">Do you want to change the refundable amount? ( Should be less than or equal to <span class="primary-color"><%= @max_refund_amt %></span> )</label>
+              <div class="prelative">
+                <div class="prelative">
+                  <div class="overlapping overlay-active"></div>
+                  <div class="outbox">
+                      <label>Amount</label>
+                      <div class="box bordered-input">
+                         <div class="dropdown dropdown-field">
+                            <%= f.text_field :amount, placeholder: "Amount", class: "form-control noBorder field"%> 
+                         </div>
+                      </div>
+                  </div>
+                </div>
+                <div class="CustomCheckbox">
+                    <%= f.check_box :default_policy, { checked: true } %>
+                    <label>Continue with default cancellation policy</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="pannel-btn mg-t20 text-right">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+            <%= f.submit "SAVE", class: "btn btn-info", data: { disable_with: 'SAVING...!' } %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  (function(){
+    $('#show_payment_refund_amount_modal_form').validate();
+  }())
+</script>

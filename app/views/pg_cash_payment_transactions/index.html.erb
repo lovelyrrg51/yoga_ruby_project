@@ -1,0 +1,23 @@
+<h1>Listing pg_cash_payment_transactions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pg_cash_payment_transactions.each do |pg_cash_payment_transaction| %>
+      <tr>
+        <td><%= link_to 'Show', pg_cash_payment_transaction %></td>
+        <td><%= link_to 'Edit', edit_pg_cash_payment_transaction_path(pg_cash_payment_transaction) %></td>
+        <td><%= link_to 'Destroy', pg_cash_payment_transaction, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Pg cash payment transaction', new_pg_cash_payment_transaction_path %>

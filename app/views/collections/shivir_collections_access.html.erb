@@ -1,0 +1,35 @@
+<% content_for(:title, 'Admin | Shivir Episode Access Panel') %>
+
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Shivir Episodes Access Panel</h2>
+    </div>
+    <div class="boxsection-lg boxsection-xs boxshadow">
+        <div class="row">
+          <% (@collection_event_type_associations || []).each do |collection_event_type_association|%>
+            <%= form_for(collection_event_type_association, url: collection_event_type_association_path(collection_event_type_association), :html => {:class => "shivir-episode-access-form"}) do |f| %>
+            <div class="col-sm-12 mg-b20">
+                <a href="#<%= collection_event_type_association.id %>" class="refinemenu primary-color subheading primarybold" data-toggle="collapse"
+                    aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> <%= collection_event_type_association.try(:collection_name) %></a>
+                <div class="refineCntrl collapse in" aria-expanded="true" id="<%= collection_event_type_association.id%>" role="tablist">
+                    <div class="refinesub-group">
+                        <div class="row mg-b30 prelative nested-fields">
+                            <div class="col-sm-12">
+                                <div class="box bordered-input box-height">
+                                <%= f.text_field :sadhak_profile_ids, class: 'form-control noBorder field', data: { role: 'tagsinput' }, required: true %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  <div class="col-sm-12 mg-t30">
+                      <div class="pannel-btn text-right">
+                        <%= f.submit 'SAVE', class: "btn btn-info mg-r10"%>
+                      </div>
+                  </div>
+                </div>
+            </div>
+            <%end%>
+          <%end%>
+        </div>
+    </div>
+</div>

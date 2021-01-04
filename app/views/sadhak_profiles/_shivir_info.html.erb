@@ -1,0 +1,70 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="headtittle">Shivir Info</h2>
+                <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png", alt: "close"%></button>
+            </div>
+        <div class="modal-body mCustomScrollbar">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="tableCntrl tableCntrllist">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td data-th="Name / SYID">
+                                            <div class="textgroup">
+                                                <p class="primarybold"><%= @sadhak_profile.full_name %></p>
+                                                <span><%= @sadhak_profile.syid %></span>
+                                            </div>
+                                        </td>
+                                        <td data-th="Total No. of Shivirs Attended">
+                                            <%= @attented_events.count%>
+                                        </td>
+                                        <td data-th="Total No. of Shivirs Organized">
+                                            <%= @organized_event_count%>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tableCntrl">
+                        <div class="table-responsive tableScrollbar">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Event Id</th>
+                                        <th>Event Name</th>
+                                        <th class="text-center">Reference Number</th>
+                                        <th>Event Date</th>
+                                        <th class="text-center">Registered By</th>
+                                        <th class="text-center">Registered On</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <%@attented_events.each do |event_reg|%>
+                                    <tr>
+                                        <td>
+                                            <%= event_reg.event_id %></p>
+                                        </td>
+                                        <td> <%= event_reg.event.try(:event_name)%> </td>
+                                        <td class="primary-color text-center"><%= event_reg.event_order.try(:reg_ref_number)%></td>
+                                        <td class="primarybold"><%= event_reg.event.present? ? event_reg.event.try(:event_start_date).try(:strftime, '%b %d, %Y').to_s + ' - ' + event_reg.event.try(:event_end_date).try(:strftime, '%b %d, %Y').to_s : "" %></td>
+                                        <td class="primary-color text-center"><%= event_reg.event_order.try(:user).try(:sadhak_full_name_with_syid) || 'Guest'%></td>
+                                        <td><%= event_reg.created_at.try(:strftime, '%b %d, %Y')%></td>
+                                    </tr>
+                                <%end%>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+        </div>
+    </div>
+</div>

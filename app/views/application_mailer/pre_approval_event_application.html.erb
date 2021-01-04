@@ -1,0 +1,36 @@
+<tr>
+  <td style="padding: 20px 30px; background: #f8f8f8;" colspan="2">
+    <table class="outertable0" cellpadding="0" cellspacing="0" border="0" width="600px" style="border-collapse:collapse; margin:0 auto; background:#ececec; border:1px solid #ddd; margin-bottom:10px;" class="outertable0">
+          <tbody>
+              <tr>
+                  <td>
+                      <table border="0" cellpadding="3" cellspacing="3" width="100%" align="left" style="margin-top: 10px;border: 1px solid #909090;border-radius: 10px;font-weight: normal;font-size: 15px;padding: 10px;line-height: 27px;width: 95%;margin-left: 15px;margin-bottom: 10px;">
+                        <% if data.present? %>
+                          <tr>
+                            <td>
+                                Event: <b><i><%= data.try(:event).try(:event_name_with_location) %></i></b>
+                            </td>
+                          </tr>
+                        <% end %>
+                        <tr>
+                          <td>
+                              <b>Namah Shivay Ji,</b><br>
+                              <%= message %>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" style="margin-top: 10px;background-color:#000;padding:15px;color:#fff;text-align: center; line-height: 21px;">
+                          <tr>
+                              <td>
+                                  If you need any help, please mail us at : <a href="mailto:<%= from || 'support@absclp.com' %>" style="color: #f00"> <%= from || 'support@absclp.com' %></a>
+                                  <br>&copy;<%=Date.current.year%> Shiv Yog. All Rights Reserved.
+                              </td>
+                          </tr>
+                      </table>
+                  </td>
+              </tr>
+          </tbody>
+    </table>
+  </td>
+<tr>

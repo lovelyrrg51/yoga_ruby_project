@@ -1,0 +1,34 @@
+<% content_for(:title, 'City') %>
+
+<div class="adminCntrl">
+<div class="headingtittle-h2 text-center">
+  <h2>Admin Panel</h2>
+</div>
+<div class="row">
+  <div class="overflow-row">
+      <%= render 'admin/admin_left_panel' %>
+      <div class="rightCntrl">
+          <div class="boxsection-lg boxsection-xs boxshadow prelative">
+              <div class="rightContent">  
+                <div id="registration_centers">
+                    <div class="row">
+                        <div class="col-sm-12 mg-b30">
+                             <div class="headtittle text-center">
+                                <h2>City</h2>
+                                 <span class="subheading"><%= @db_city.try(:country).try(:name) %> / <%= @db_city.try(:state).try(:name) %> / <%= @db_city.persisted? ? @db_city.try(:name) : 'New State' %></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="pannel-btn text-left">
+                                <%= link_to "CREATE NEW", index_for_admin_db_country_db_state_db_cities_path(@db_country,@db_state), class: "btn btn-info" %>
+                            </div>
+                            <%= render "db_cities/form"%>
+                        </div>
+                    </div>
+                </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>    
+</div>

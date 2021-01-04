@@ -1,0 +1,8 @@
+$("#transfer_event").hide(500);
+$("#registration_action_proceed_btn").removeAttr("data-toggle");
+$("#registration_action_proceed_btn").removeAttr("data-target");
+$("#registration_action_proceed_btn").attr("data-toggle","modal");
+$("#registration_action_proceed_btn").attr("data-target","#upgrade_registration");
+$("#payment_mode_details_div").html("<%= escape_javascript(render partial: 'upgrade_registration', locals: {event_order: @event_order, event: @event, event_order_line_items: @event_order_line_items, is_transfer: @is_transfer, action: @action}) %>");
+$("#upgrade_registration").modal('show');
+$('.category_dropdown').selectize();

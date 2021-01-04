@@ -1,0 +1,13 @@
+<% if @event_order.errors.empty? && !@message.present? %>
+
+  var appearance = $("<%= escape_javascript(render(partial: 'event_orders/application_status_table_row', locals: {event_order: @event_order})) %>");
+
+  $('#' + "<%= @event_order.reg_ref_number %>").replaceWith(appearance);
+
+  toastr.success('Information saved successfully.');
+
+<% else %>
+
+  toastr.error("<%= @event_order.errors.full_messages.first || @message %>");
+
+<% end %>

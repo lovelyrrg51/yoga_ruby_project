@@ -1,0 +1,77 @@
+<section id="contentCntr" class="sub2">
+  <!-- / Start center Container \ -->
+  <section id="centerCntr">
+    <!-- / Start profile Area \ -->
+    <div class="eventsArea transparent_bg head data No_paddingTop organise_eventContainer">
+      <div class="topbar eventorganize_topbar ">
+        <div class="container">
+          <h2>Admin Secret Panel</h2>
+        </div>
+      </div>
+      <div class="container tabPanel_Conatiner">
+        <div class="row">
+          <%= render partial: 'admin/admin_left_panel' %>
+          <div class="col-sm-8 tabPanel_right">
+            <div class="right tabPanel_right mt-0 reg_block">
+              <div class="heading">
+                <h2 class="col-sm-7 col-xs-6">Associated Users</h2>
+              </div>
+              <div class="clearfix"></div>
+              <div class="clearfix"></div>
+              <div class="mt-5">
+                <div class="panel-group" id="accordion">
+                  <div class="panel panel-default saved">
+                    <div id="collapseOne" class="panel-collapse collapse cat_block in">
+                      <div class="panel-body">
+                        <% if @authoriztions.present? %>
+                          <div class="table-responsive">
+                            <table class="table tablebg tablesaw" data-tablesaw-mode="columntoggle">
+                              <thead>
+                                <tr>
+                                  <td>Provider</td>
+                                  <td>Email</td>
+                                  <td>Associated User</td>
+                                  <td></td>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <% @authoriztions.each do |auth| %>
+                                  <%= render partial: "form_for_user_associated_with_provider", locals: { authoriztion: auth } %>
+                                <% end %>
+                              </tbody>
+                            </table>
+                            <div class="text-center pagination-format">
+                              <%= paginate @authoriztions %>
+                            </div>
+                            <div class="pagination-format pagination-info">
+                              <%= page_entries_info @authoriztions %>
+                            </div>
+                          </div>
+                        <% else %>
+                          <%= render partial: 'application/no_records' %>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- \ end profile Area / -->
+  </section>
+</section>
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    $('.select_for_users_associated_with_provider').on('change', function () {
+      
+    var id = $(this).data('authoriztion-id')
+    $('#'+id+'-authoriztion-button').prop("disabled", false);
+      
+    });
+
+  });
+</script>>

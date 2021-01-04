@@ -1,0 +1,60 @@
+  <div class="row mg-t30 sy_club_user_role" data-index="<%= f.options[:child_index] %>">
+    <div class="col-sm-12"><div class="headtittle"><h2><%= ((f.object.new_record? || (f.object.sy_club.sadhak_profiles.count == 2 && f.object.sy_club.sy_club_sadhak_profile_associations.pluck(:sy_club_user_role_id).include?(1))) ? f.object.try(:role_name).tr("0-9", "").try(:titleize) : f.object.try(:role_name).try(:titleize))%></h2></div></div>
+    <div class="col-sm-6">
+        <div class="box bordered-input">
+            <label class="asterisk">SYID</label>
+            <div class="dropdown dropdown-field">
+                <%= f.text_field :syid, value: f.object.try(:sadhak_profile).try(:syid), class: "form-control noBorder field syid-first-name-board-member-search", required: true, placeholder: "SYID" %>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="box bordered-input">
+            <label class="asterisk">First Name</label>
+            <div class="dropdown dropdown-field">
+                <%= f.text_field :first_name, value: f.object.try(:sadhak_profile).try(:first_name), class: "form-control noBorder field syid-first-name-board-member-search", required: true, placeholder: "First name" %>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="box bordered-input">
+            <label>Last Name</label>
+            <div class="dropdown dropdown-field">
+                <input type="text" class="form-control noBorder field" id="<%= f.options[:child_index] %>_last_name" disabled="true" value="<%= f.object.try(:sadhak_profile).try(:last_name) %>" placeholder="Last name">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="box bordered-input">
+            <label>Gender</label>
+            <div class="gender">
+                <ul class="clearfix list-unstyled">
+                  <% %w( male female ).each do |gender| %>
+                    <li>
+                        <label class="radio-box radiobg">
+                            <%= radio_button_tag "member_gender[#{f.options[:child_index]}]", "true", f.object.try(:sadhak_profile).try(:gender) == gender, class: "radiotype", disabled: true, id: "#{f.options[:child_index]}_#{gender}" %>
+                            <span class="radiocheck"><%= gender.titleize %></span>
+                        </label>
+                    </li>
+                  <% end %>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="box bordered-input clearfix">
+            <label>Date of Birth</label>
+            <div class="input-group calenderdate date datetoggle" id="datetimepicker1">
+                <input class="form-control noBorder field" type="text" placeholder="<%= Date.today.try(:strftime, "%b %d, %Y") %>" readonly="true" id="<%= f.options[:child_index] %>_date_of_birth" disabled="true" value="<%= f.object.try(:sadhak_profile).try(:date_of_birth).try(:strftime, "%b %d, %Y") %>" placeholder="<%= Date.current.strftime('%b %d, %Y')%>" >
+                <span class="input-group-addon">
+                    <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                </span>
+            </div>
+        </div>
+    </div>
+  </div>
+<hr>
+<%= f.hidden_field :sadhak_profile_id, value: f.object.try(:sadhak_profile).try(:id) %>
+<%= f.hidden_field :status, value: f.object.persisted? ? f.object.status: SyClubSadhakProfileAssociation.statuses.key(1) %>
+<%= f.hidden_field :club_joining_date, value: Date.today %>
+<%= f.hidden_field :sy_club_user_role_id, value: f.object.try(:sy_club_user_role_id) %>

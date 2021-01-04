@@ -1,0 +1,133 @@
+
+<div class="CompleteprofileCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Profile</h2>
+    </div>
+    <div class="boxsection-md boxshadow prelative">
+        <div class="progressCntrl text-right">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:<%= @sadhak_profile.completed.to_i %>%">
+                </div>
+            </div>
+            <span><%= @sadhak_profile.completed.to_i %>%</span>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane active" role="tabpanel" id="OtherAssociation">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="headtittle text-center">
+                            <h2>Other Association</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mg-t30">
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label class="asterisk">Are you associated with any other organization ?</label>
+                            <div class="gender">
+                                <ul class="clearfix list-unstyled">
+                                    <li>
+                                        <div class="Custradio">
+                                            <%= radio_button_tag 'radio_other_spiritual_association', '', false, { class: 'radiotype yes_no_radio_other_spiritual_association_', id: "yes_radio_other_spiritual_association_" } %>
+                                            <label for="organizationYes">Yes</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="Custradio">
+                                            <%= radio_button_tag 'radio_other_spiritual_association', '', true, { class: 'radiotype yes_no_radio_other_spiritual_association_' } %>
+                                            <label for="organizationNo">No</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                           </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mg-t30 prelative">
+                    <%= form_for @other_spiritual_association, url: create_other_spiritual_association_event_sadhak_profile_sadhak_profile_steps_path(@event, @sadhak_profile) , html: { id: 'sadhak_profile_step_other_spiritual_association_form', remote: true } do |f| %>
+                            <div class="overlapping overlay-active" id="sadhak_profile_step_other_spiritual_associations_toggle_div"></div>
+                            <div class="col-sm-6">
+                                <div class="box bordered-input">
+                                   <label class="asterisk">Name of Organization</label>
+                                   <div class="dropdown dropdown-field">
+                                      <%= f.text_field :organization_name, class: 'form-control noBorder field', required: true, placeholder: "Name of organization" %>  
+                                   </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="box bordered-input">
+                                   <label class="asterisk">Associated As</label>
+                                   <div class="dropdown dropdown-field">
+                                      <%= f.text_field :association_description, class: 'form-control noBorder field', required: true, placeholder: "Associated as" %> 
+                                   </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="box bordered-input dropdown">
+                                    <label class="asterisk">Associated Since Year</label>
+                                    <div class="dropdown-field selectTwo-dropdown">
+                                        <%= f.select :associated_since_year, options_for_select(1980.. Date.today.year), { include_blank: ' ----- Select ----- ' }, { class: 'basic-single', required: true } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="box bordered-input dropdown">
+                                    <label class="asterisk">Associated Since Month</label>
+                                    <div class="dropdown-field selectTwo-dropdown">
+                                        <%= f.select :associated_since_month, options_for_select(1..12), { include_blank: ' ----- Select ----- ' }, { class: 'basic-single', required: true } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="box bordered-input">
+                                   <label class="asterisk">Duration of Practice</label>
+                                   <div class="dropdown dropdown-field">
+                                      <%= f.text_field :duration_of_practice, class: 'form-control noBorder field', required: true, placeholder: "Duration of practice" %>
+                                   </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="pannel-btn text-right">
+                                    <button class="btn btn-danger mg-r10 resetForm" type="reset">CLEAR</button>
+                                    <button class="btn btn-info" id="sadhak_profile_step_other_spiritual_association_create_button">CREATE</button>
+                                </div>
+                            </div>
+                    <% end %>
+                    <div class="col-sm-12">
+                        <div class="tableCntrl">
+                            <div class="table-responsive ">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Organization</th>
+                                            <th>Associated As</th>
+                                            <th>Since</th>
+                                            <th>Duration</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sadhak_profile_steps_other_spiritual_associations_fields_tbody">
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <%= form_for :sadhak_profile, url: next_wizard_path, method: :get, html: { id: "sadhak_profile_steps_other_spiritual_associations_save_cont_form" } do |f| %>
+                    <div class="row mg-t30">
+                        <div class="col-sm-12">
+                            <div class="pannel-btn clearfix">
+                                <%= link_to 'PREVIOUS', previous_wizard_path(previous: true), class: "btn btn-info mg-r5" %>
+                                <div class="pull-right">
+                                    <%= link_to 'SKIP', next_wizard_path, class: "btn btn-info mg-r5" unless @event.full_profile_needed? %>
+                                    <%= f.submit  "SAVE & CONTINUE", class: ' btn btn-info', id: "sadhak_profile_steps_other_spiritual_associations_save_cont_button" %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

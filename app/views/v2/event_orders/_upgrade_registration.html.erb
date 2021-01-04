@@ -1,0 +1,166 @@
+<div class="modal fade" id="upgrade_registration" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="largeModalLabel">Registration Details</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="body">
+                <%= form_for :event_order, url: process_event_order_confirmation_v2_event_order_path(event_order), remote: true do |f| %>
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="forum_specifications">
+                            <span class="title"><strong>Graced By</strong>: </span><span class="babaji_pic"><%= image_tag "v2/babaji_pic.jpg" %></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="forum_specifications">
+                            <span class="title"><strong>Event Name</strong>: </span><%= event.event_name %>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="forum_specifications">
+                            <span class="title"><strong>Email</strong>: </span><%= event.contact_email %>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="forum_specifications">
+                            <span class="title"><strong>Contact Details</strong>: </span><%= event.contact_details.present? ? event.contact_details.gsub(","," / ").html_safe : "-" %>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="forum_specifications">
+                            <span class="title"><strong>Venue</strong>: </span><%= event.event_address %>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="forum_specifications">
+                            <span class="title"><strong>Date & Time</strong>: </span><%= format_date(event.event_start_date) %> To <%= format_date(event.event_end_date) %>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="forum_specifications">
+                            <span class="title"><strong>Accommodation</strong>: </span>
+                              <%= link_to @event.attachment.try(:s3_url), target: "_blank" do %>
+                                <i class="fa fa-file-pdf-o"></i>Download PDF
+                              <% end %>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="forum_specifications">
+                            <span class="title"><strong>Handy information about event</strong>: </span>
+                            <%= link_to @event.handy_attachment.try(:s3_url), target: "_blank" do %>
+                              <i class="fa fa-file-pdf-o"></i>Download PDF
+                            <% end %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <hr />
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="header p-10-0"><h2>Categories Available</h2></div>
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover">
+                          <thead>
+                            <tr>
+                              <th>S. No.</th>
+                              <th>Category Names</th>
+                              <th>Seats Available</th>
+                              <th>Amount (<%= event.currency_code %>)</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% (event.event_seating_category_associations.try(:order, 'price') || []).each_with_index do |seating_category, i|%>
+                              <tr>
+                                <td><%= i + 1 %>. </td>
+                                <td><%= seating_category.category_name %></td>
+                                <td><%= seating_category.seats_available %></td>
+                                <td><%= event.currency_code %> <%= number_with_precision(seating_category.price.to_f, precision: 2) %></td>
+                              </tr>
+                            <% end %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <hr />
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="header p-10-0"><h2>Registration Details for Upgrade/Downgrade</h2></div>
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover">
+                          <thead>
+                            <tr>
+                              <th>Name/SYID</th>
+                              <th>Shivir</th>
+                              <th>Seating Category</th>
+                              <th>Discount</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% event_order_line_items.each_with_index do |line_item, index| %>
+                              <tr>
+                                <%= hidden_field_tag "event_order[event_order_line_items_attributes][#{index}][event_order_line_item_id]", line_item.id %>
+                                <td><strong><%= line_item.sadhak_profile&.full_name %> <br /><span class="red-text small"><%= line_item.sadhak_profile&.syid %></span></strong></td>
+                                <%= hidden_field_tag "event_order[event_order_line_items_attributes][#{index}][sadhak_profile_id]", line_item.sadhak_profile&.id %>
+                                <td><%= event&.event_name&.titleize %></td>
+                                <td>
+                                  <div class="form-group">
+                                    <% if is_transfer %>
+                                      <%= select_tag "event_order[event_order_line_items_attributes][#{index}][event_seating_category_association_id]", options_for_select( event.event_seating_category_associations.order(:price).collect{ |association| [association&.seating_category&.category_name, association.id] } ), { prompt: "Select Category", class: 'form-control show-tick shivyog_dropdown category_dropdown', required: true, data: { seating_categories: event.event_seating_category_associations.collect{|sc| { id: sc.id.to_s, price: "#{event&.currency_code} #{sc.price.rnd}" } } } } %>
+                                    <% else %>
+                                      <%= select_tag "event_order[event_order_line_items_attributes][#{index}][event_seating_category_association_id]", options_for_select( event.event_seating_category_associations.order(:price).collect{ |association| [association&.seating_category&.category_name, association.id] }, selected: line_item.event_seating_category_association.id ), { include_blank: false, class: 'form-control show-tick shivyog_dropdown category_dropdown', data: { seating_categories: event.event_seating_category_associations.collect{|sc| { id: sc.id.to_s, price: "#{event&.currency_code} #{sc.price.rnd}" } } } } %>
+                                    <% end %>
+                                  </div>
+                                </td>
+                                <td><%= is_transfer ? "-" : "#{event&.currency_code} #{line_item&.event_seating_category_association&.price.rnd}" %></td>
+                              </tr>
+                            <% end %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <%= f.hidden_field :action, value: action %>
+                  <div class="row">
+                    <div class="col-sm-12 text-align-center">
+                      <div class="shivyog-btn upgrade_save_btn" data-toggle="modal" data-target="#upgrade_summary_before_after" id="upgrade_save_btn">
+                        <button type="submit" class="btn cta_button_small bg-red waves-effect">Save</button>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="shivyog-btn" data-dismiss="modal"><a href="javascript: void(0);" class="btn cta_button_small bg-red waves-effect">Close</a></div>
+      </div>
+    </div>
+  </div>
+</div>

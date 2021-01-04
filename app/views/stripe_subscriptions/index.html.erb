@@ -1,0 +1,23 @@
+<h1>Listing stripe_subscriptions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @stripe_subscriptions.each do |stripe_subscription| %>
+      <tr>
+        <td><%= link_to 'Show', stripe_subscription %></td>
+        <td><%= link_to 'Edit', edit_stripe_subscription_path(stripe_subscription) %></td>
+        <td><%= link_to 'Destroy', stripe_subscription, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Stripe subscription', new_stripe_subscription_path %>

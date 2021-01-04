@@ -1,0 +1,7 @@
+<% Event.statuses.each do |k,v| %>
+  <% if k.eql?( Event.statuses.key(Event.statuses[:cancelled])) %>
+    <li class="<%= 'active' if @event.status.eql? k %>"><%= link_to k.titleize, event_status_update_event_path(event: { status: k }) , method: "get", data: { remote: true, type: "script", confirm: "This will also cancel all the registrations of this Event. Are you sure?" }%></li>
+  <% else %>
+    <li class="<%= 'active' if @event.status.eql? k %>"><%= link_to k.titleize, event_status_update_event_path(event: { status: k }) , method: "get", data: { remote: true, type: "script"}%></li>
+  <% end %>
+<% end %>

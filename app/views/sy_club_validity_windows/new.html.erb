@@ -1,0 +1,28 @@
+<% content_for(:title, 'Admin | Sy Club Validity Window') %>
+<section id="contentCntr" class="sub2">
+  <section id="centerCntr">
+    <div class="eventsArea transparent_bg head data No_paddingTop organise_eventContainer">
+      <div class="topbar eventorganize_topbar ">
+        <div class="container">
+          <h2><i class="fa fa-calendar"></i><span>Admin</span>
+          </h2>
+        </div>
+      </div>
+      <div class="container tabPanel_Conatiner">
+        <div class="row">
+          <%= render partial: 'admin/admin_left_panel' %>
+          <div class="col-sm-8">
+            <div class="right tabPanel_right top-margin-0 reg_block">
+              <div class="heading">
+                <h2 class="col-sm-10 col-xs-6"><%= render_breadcrumbs separator: ' / ' %></h2>
+                <%= link_to "Back", :back, class: "btn btn-danger btn-orange"%>
+              </div>
+              <div class="clearfix"></div>
+              <%= render "sy_club_validity_windows/form" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>

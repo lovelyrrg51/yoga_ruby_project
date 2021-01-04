@@ -1,0 +1,75 @@
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Restore Sadhak Profiles </h2>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxshadow prelative">
+                    <div class="rightContent">
+                        <div class="Searchsadhak">
+                            <div class="row">
+                            <%if @sadhak_profiles.present?%>
+	                              <div class="col-sm-12 mg-t30">
+	                                <div class="col-sm-3 no-padding">
+	                                    <div class="Boxdrop dropdown">
+	                                        <%= render 'application/per_page' %>
+	                                    </div>
+	                                </div>
+	                              </div>
+                                <div class="col-sm-12">
+                                    <div class="tableCntrl">
+                                        <div class="table-responsive tableScrollbar">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name / SYID</th>
+                                                        <th>City</th>
+                                                        <th>Deleted at </th>
+                                                        <th class="text-center">ACTION</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="data_list_container">
+
+                                                <% @sadhak_profiles.each do |sadhak|%>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="profile">
+                                                                <div class="profileimg" style='background-image: url("<%= sadhak.try(:advance_profile_thumb_url) || sadhak.try(:advance_profile_s3_url)|| image_path('profile.png')%>");'>
+                                                                
+                                                                </div>
+                                                                <div class="textgroup">
+                                                                    <p class="primarybold"><%= sadhak.try(:full_name)%></p>
+                                                                    <span><%= sadhak.try(:syid)%></span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td><%= sadhak.try(:city_name) %></td>
+                                                        <td><%= sadhak.try(:deleted_at).strftime("%b %d,  %Y") || '' %></td>
+                                                        <td class="text-center">
+                                                       		<%= button_to "Restore", { action: "restore_sadhak_profile", id: sadhak.id }, method: :post, data: { confirm: "This action will restore all the data related to this sadhak profile. Are you sure?", disable_with: 'Restoring...' }, class: "btn btn-info" %>
+                                                        </td>
+                                                    </tr>
+                                                <%end%>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                      <div class="table-pagination clearfix">
+                                        <div class="show-pgnation">
+                                          <p class="primarybold"><%= custom_page_entries_info(@sadhak_profiles) %></p>
+                                        </div>
+                                        <%= paginate @sadhak_profiles %>
+                                      </div>
+                                    </div>
+                                </div>
+                            <%else%>
+                                <%= render partial: 'application/no_records', locals: { message: "No Deleted sadhak profiles found." }  %>
+                            <%end%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

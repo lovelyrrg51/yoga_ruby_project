@@ -1,0 +1,64 @@
+<% content_for(:title, 'Admin | Discount Plan') %>
+
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Admin Panel</h2>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+            <%= render 'admin/admin_left_panel' %>
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                    
+                    <div class="rightContent">
+                      <div id="discount_plans">
+                          <div class="row">
+                              <div class="col-sm-12 mg-b30">
+                                   <div class="headtittle text-center">
+                                      <h2>Discount Plans</h2>
+                                  </div>
+                              </div>
+                              <div class="col-sm-12">
+                                  <%= render "discount_plans/form"%>
+                              </div>
+                              <% if @discount_plans.present? %>
+                                <div class="col-sm-12">
+                                    <div class="tableCntrl">
+                                        <div class="table-responsive tableScrollbar">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Amount</th>
+                                                        <th>Amount Type</th>
+                                                        <th class="text-center">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <% @discount_plans.each do |discount_plan|%>
+                                                    <tr>
+                                                        <td><%= discount_plan.name %></td>
+                                                        <td><%= discount_plan.discount_amount %></td>
+                                                        <td><%= discount_plan.discount_type %></td>
+                                                        <td class="text-center">
+                                                            <%= link_to "", edit_discount_plan_path(discount_plan), class: "mg-r10 primary-color fa fa-pencil" %>
+                                                            <%= link_to "", discount_plan_path(discount_plan), method: :delete,data: {confirm: "Are you sure?"}, class: " primary-color fa fa-trash-o"%>
+                                                        </td>
+                                                    </tr>
+                                                  <% end %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                              <% else %>
+                                <%= render partial: 'application/no_records', locals: {message: 'No Discount Plan Found.'} %>
+                              <% end %>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>

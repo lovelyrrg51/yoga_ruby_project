@@ -1,0 +1,27 @@
+<% _gateway = defined?(gateway) ? gateway : nil %>
+<div class="table-responsive paymenttable">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th class="text-right">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="primarybold">Registration Charge</td>
+                <td class="text-right primarybold"><%= "#{currency} #{number_with_precision(amount, precision: 2)}" %></td>
+            </tr>
+            <% if _gateway.present? %>
+                <tr>
+                    <td class="primarybold">Additional Charges (<%= _gateway.try(_gateway.try(:payment_gateway_type).try(:relation_name).to_sym).try(:tax_amount).rnd %>%)</td>
+                    <td class="text-right primarybold"><%= "#{currency} #{number_with_precision(gateway_charges(_gateway, amount).rnd, precision: 2)}" %></td>
+                </tr>
+                <tr>
+                    <td class="primaryblackbold">Total Payable Amount <% if is_india_event %> <span class="primary-color">(Non Refundable)</span> <% end %> </td>
+                    <td class="text-right primaryblackbold"><%= "#{currency} #{number_with_precision((amount + gateway_charges(_gateway, amount).rnd), precision: 2)}" %></td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+</div>

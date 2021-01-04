@@ -1,0 +1,29 @@
+<tr>
+  <td style="padding: 20px 30px; background: #f8f8f8;" colspan="2">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EAE8E8" style="font-family:Verdana, Geneva, Helvetica, Arial, sans-serif;">
+      <tr>
+        <td>  
+          <table width="80%" border="0" cellspacing="0" cellpadding="0" style="padding:10px 0; margin:0 auto;">
+            <% if @options.has_key?(:club) and @options[:club].present? %>
+              <tr>
+                <td style="padding: 20px 0; text-align: center; font-size: 1em; font-weight: bold; color:#900; line-height: 24px;">Your member has been expired with <i><%= @options[:club][:name].present? ? @options[:club][:name].titleize : '' %></i> forum.</td>
+              </tr>
+              <% if @options.has_key?(:validity_window) and @options[:validity_window].present? %>
+                <tr>
+                  <td style="padding: 20px 0; text-align: center; font-size: 1em; font-weight: bold; color:black; line-height: 24px;">Membership Start Date: <i><%= @options[:validity_window].membership_start_date %></i> </td>
+                </tr>
+                <tr>
+                  <td style="padding: 20px 0; text-align: center; font-size: 1em; font-weight: bold; color:black; line-height: 24px;">Membership End Date: <i><%= @options[:validity_window].membership_end_date %></i></td>
+                </tr>
+                <tr>
+                  <% url = "http://#{Rails.application.config.app_base_url}/v1/forums/#{@options[:club][:id]}/register}" %>
+                  <td style="padding: 20px 0; text-align: center; font-size: 1em; font-weight: bold; color:black; line-height: 24px;">If you want to renew your membership, please click here: <i><%= link_to "Join #{@options[:club][:name].titleize}", url %></i></td>
+                </tr>
+              <% end %>
+            <% end %>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>

@@ -1,0 +1,111 @@
+    <div class="eventCntrl">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="boxsection boxgapping-30 boxshadow prelative">
+                    <div class="preapprovalemail">
+                        <div class="row">
+                            <% if @error_message.present? %>
+                                <div class="text-center primarybold offerCntrl offergapping-15">
+                                    <p class="error-img"><%= @error_message %></p>
+                                </div>
+                            <% else %>  
+                                <% if @event_order.present? && (@event_order.success? || @event_order.approve?)  %>
+                                    <div class="text-center primarybold successofferCntrl successgapping-15">
+                                        <p class="succes-img"><%= @message %></p>
+                                    </div>
+                                <% end %>
+                                <% if @event_order.present? && @event_order.rejected? %>
+                                    <div class="text-center primarybold offerCntrl offergapping-15">
+                                        <p class="error-img"><%= @message %></p>
+                                    </div>
+                                <% end %>
+                            <% end %>
+                            <% if @event_order.present? %>
+                                <div class="col-sm-12">
+                                    <div class="headtittle mg-t30">
+                                        <h2>Registration Request Summary</h2>
+                                    </div>
+                                    <div class="paymenttable">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Description</th>
+                                                        <th class="">Details</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="primarybold">Event</td>
+                                                        <td class=""><%= @event_order.try(:event).try(:event_name_with_location) %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="primarybold">Registration Date</td>
+                                                        <td class=""><%= @event_order.try(:created_at).try(:strftime, "%B %d, %Y") %></td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td class="primarybold">Registration No.</td>
+                                                    <td class=""><%= @event_order.try(:reg_ref_number)%></td>
+                                                </tr>
+                                                    <tr>
+                                                        <td class="primarybold">Status</td>
+                                                        <td class="primary-color"><%= @event_order.try(:status).try(:titleize) %></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="headtittle">
+                                        <h2>Registration Summary</h2>
+                                    </div>
+                                    <div class="tableCntrl tableheight mCustomScrollbar">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Srl.No.</th>
+                                                        <th>Registration Number</th>
+                                                        <th>Name / SYID</th>
+                                                        <th>Seating Category</th>
+                                                        <th>Discount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% (@event_order.event_order_line_items || []).each_with_index do |item, item_index| %>
+                                                        <tr>
+                                                            <td><%= item_index + 1 %></td>
+                                                            <td><%= item.event_registration.try(:serial_number).to_i + 100%></td>
+                                                            <td>
+                                                                <div class="textgroup">
+                                                                    <p class="primarybold"><%= item.sadhak_profile.syid %></p>
+                                                                    <span><%= item.sadhak_profile.full_name %></span>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="textgroup">
+                                                                    <p><%= item.event_seating_category_association.try(:seating_category).try(:category_name) %></p>
+                                                                    <span><%= "#{item.try(:event).try(:currency_code)} " '%.2f' % item.category_price.to_f %></span>
+                                                                </div>
+                                                            </td>
+                                                            <td><%= item.try(:event).try(:currency_code)+ ' ' + '%.2f' % discount_per_sadhak(item).to_f %></td>
+                                                        </tr>
+                                                    <% end %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                            <div class="col-sm-12">
+                                <div class="pannel-btn pannel-align">
+                                    <%= link_to "CLICK FOR PAYMENT", event_event_order_url(@event_order.try(:event), @event_order), class: "btn btn-info mg-r10" if @event_order && @event_order.try(:event).paid? && @event_order.approve?  %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

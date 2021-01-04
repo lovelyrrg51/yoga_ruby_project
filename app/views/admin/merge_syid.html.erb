@@ -1,0 +1,113 @@
+<% content_for(:title, 'Merge SYID') %>
+<div class="">
+    <div class="headingtittle-h2 text-center">
+        <h2>Admin Panel</h2>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+            <%= render 'admin/admin_left_panel' %>
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                    <div class="rightContent">
+                        <div id="mergesyid" class="">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="headtittle text-center">
+                                        <h2>Merge SYID's</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <%= form_for :admin, url: match_merge_syid_admin_index_path, method: 'post', remote: true, :html => {:id => "merge-syid-form"} do |f| %>
+                              <div class="row mg-t30">
+                                  <div class="col-sm-6">
+                                      <div class="outbox">
+                                        <label class="asterisk">SYID</label>
+                                          <div class="box bordered-input">
+                                              <div class="dropdown dropdown-field">
+                                                <%= f.text_field :primary_sadhak, class: 'form-control noBorder field', placeholder: 'Primary SYID', required: true %>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-6">
+                                      <div class="outbox">
+                                       <label class="asterisk">Merging SYID's</label>
+                                          <div class="box bordered-input prelative">
+                                              <div class="dropdown box-taginput">
+                                                  <%= f.text_field :secondary_sadhak, class: 'form-control noBorder field box-field tagsinput', placeholder: 'Merging SYID(s)', style: {display: 'none'}, data: {role: 'tagsinput'}, required: true %>
+                                              </div>
+                                              <div class="merge-error merge_syid_secondary_sadhak_tag_input_error">
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-12">
+                                      <div class="pannel-btn text-right">
+                                        <%= f.submit 'CLEAR', {class: 'btn btn-danger mg-r10 turbolinkReload', type: 'reset'} %>
+                                        <%= f.submit 'MERGE', {class: 'btn btn-info', disabled_with: 'Merging...'} %>
+                                      </div>
+                                  </div>
+                              </div>
+                            <% end %>
+                            <div class="row">
+                            	<%if @merge_sadhaks.present?%>
+                                <div class="col-sm-12">
+                                    <div class="Boxdrop dropdown mg-t30">
+                                      <%= render 'application/per_page' %>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="tableCntrl">
+                                        <div class="table-responsive tableScrollbar">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Primary SYID</th>
+                                                        <th>Merging SYID</th>
+                                                        <th>Merging Ref. No.</th>
+                                                        <th>Created User</th>
+                                                        <th>Created On</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <% (@merge_sadhaks || []).each do |merge_sadhak| %>
+                                                    <tr>
+                                                        <td>SY<%= merge_sadhak.primary_sadhak_id %></td>
+                                                        <td>SY<%= merge_sadhak.secondary_sadhak_id %></td>
+                                                        <td><%= merge_sadhak.merge_ref_number %></td>
+                                                        <td>
+                                                            <div class="textgroup">
+                                                                <p class="primarybold"><%= merge_sadhak.full_name %></p>
+                                                                <span><%= merge_sadhak.syid %></span>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                              <div class="textpanel">
+                                                                <p class="primarybold"><%= merge_sadhak.created_at.strftime('%b %d, %Y') %></p>
+                                                                <span class="senary-color"><%= merge_sadhak.created_at.strftime('%I:%M:%S %p') %></span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                  <% end %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="table-pagination">
+                                          <div class="show-pgnation">
+                                            <p class="primarybold"><%= custom_page_entries_info(@merge_sadhaks) %></p>
+                                          </div>
+                                          <%= paginate @merge_sadhaks %>
+                                        </div>
+                                    </div>
+                                </div>
+                              <%else%>
+                              	<%= render partial: 'application/no_records', locals: { message: 'No Merged Record Found.' } %>
+                              <%end%>
+                            </div>
+                        </div>                              
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

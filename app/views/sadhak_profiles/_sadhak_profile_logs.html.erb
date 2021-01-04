@@ -1,0 +1,47 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="headtittle">Status Logs</h2>
+            <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png", alt: "close"%></button>
+        </div>
+        <div class="modal-body mCustomScrollbar">
+            <div class="row">
+                <div class="col-sm-12">
+                    <% if @sadhak_profile_logs.present? %>
+                    <div class="tableCntrl">
+                        <div class="table-responsive tableScrollbar">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Previous State</th>
+                                        <th class="text-center">Updated State</th>
+                                        <th>Description</th>
+                                        <th class="text-center">Date</th>
+                                        <th class="text-center">Done By </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% @sadhak_profile_logs.each  do |log|%>
+                                        <tr>
+                                            <td class="primarybold"><%= log.value_before.try(:humanize) %></td>
+                                            <td class="primary-color text-center"><%= log.value_after.try(:humanize) %></td>
+                                            <td class="primary-color text-center"><%= log.description || "-" %></td>
+                                            <td class="primary-color text-center"><%= log.created_at.try(:strftime, '%b %d, %Y') %></td>
+                                            <td class="primary-color text-center"><%= log.try(:creator).try(:sadhak_full_name_with_syid) %></td>
+                                        </tr>
+                                    <% end %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <% else %>
+                        <%= render partial: 'application/no_records', locals: { message: "No Status Logs Found." }  %>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+           <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button> 
+        </div>
+    </div>
+</div>

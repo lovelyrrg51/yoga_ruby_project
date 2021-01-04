@@ -1,0 +1,46 @@
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Event</h2>
+        <span class="subheading"><%= @event.event_name_with_location %></span>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+            <%= render partial: 'events/event_organize_left_panel', locals: { event: @event } %>
+                <div class="rightCntrl">
+                    <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                        <div class="rightContent">
+                            <div id="RegistrationCenterAdmin" class="">
+                                <div class="row">
+                                    <div class="col-sm-12 mg-b30">
+                                        <div class="headtittle text-center">
+                                            <h2>Registrations Center Admin</h2>
+                                        </div>
+                                    </div>
+                                    <%= render 'registration_centers/form', registration_center: @registration_center, event: @event %>
+                                        <div class="col-sm-12  mg-t30">
+                                            <div class="tableCntrl">
+                                                <div class="table-responsive tableScrollbar">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Event Center</th>
+                                                                <th class="text-center">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <%= render partial: "registration_center", collection: @registration_centers %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <%= form_for :rc_user, url: search_for_rc_user_sadhak_profiles_path, remote: true, method: :get, html: { id: "add-event-rcmembers-form" } do %>
+                                            <% end %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>

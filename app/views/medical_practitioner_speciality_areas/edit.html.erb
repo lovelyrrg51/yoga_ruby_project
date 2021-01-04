@@ -1,0 +1,33 @@
+<% content_for(:title, 'Admin | Medical Practitioner Speciality Area') %>
+
+<div class="adminCntrl">
+	<div class="headingtittle-h2 text-center">
+		<h2>Admin Panel</h2>
+	</div>
+	<div class="row">
+		<div class="overflow-row">
+		  <%= render 'admin/admin_left_panel' %>
+		  <div class="rightCntrl">
+		      <div class="boxsection-lg boxsection-xs boxshadow prelative">
+		          <div class="rightContent">
+		            <div id="medical_practitioner_speciality_areas">
+		                <div class="row">
+		                    <div class="col-sm-12 mg-b30">
+		                         <div class="headtittle text-center">
+		                            <h2>Medical Practitioner Speciality Areas</h2>
+		                        </div>
+		                    </div>
+		                    <div class="col-sm-12">
+		                        <div class="pannel-btn text-left">
+		                            <%= link_to "CREATE NEW", medical_practitioner_speciality_areas_path, class: "btn btn-info" %>
+		                        </div>
+		                        <%= render "medical_practitioner_speciality_areas/form"%>
+		                    </div>
+		                </div>
+		            </div>
+		          </div>
+		      </div>
+		  </div>
+		</div>
+	</div>    
+</div>

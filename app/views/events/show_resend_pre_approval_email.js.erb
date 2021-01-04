@@ -1,0 +1,6 @@
+<% if @event_order.present? %>
+
+  $("body").append("<%= escape_javascript(render(partial: 'events/show_resend_pre_approval_email', locals: {event_order: @event_order})) %>");
+  $("#show_resend_pre_approval_email_modal<%= @event_order.id %>").modal('show');
+
+<% end %>

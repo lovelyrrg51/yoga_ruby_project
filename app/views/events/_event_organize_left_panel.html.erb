@@ -1,0 +1,118 @@
+<div class="leftCntrl">
+    <div class="leftmenu-list">
+        <div class="innerlist mCustomScrollbar left-Scrollbar">
+            <ul class="leftnav-list list-unstyled panel-group" id="accordion3">
+              <% if policy(event).shivir_details?%>
+                <li class="panel <%= url_contains?('shivir_details') && 'active' || '' %>">
+                    <a href="#padmin" data-toggle="collapse" aria-expanded="<%= url_contains?('shivir_details') ? 'true' : 'false' %>">Shivir Detail<i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                    <div class="subCntrl-menu collapse <%= url_contains?('shivir_details') ? 'in' : '' %>" id="padmin" aria-expanded="<%= url_contains?('shivir_details') ? 'true' : 'false' %>">
+                        <ul>
+                          <li class="<%= params[:action] == 'shivir_details' ? 'subactive' : '' %>">
+                            <%= link_to shivir_details_event_path(event) do%>
+                              Shivir
+                            <% end %>
+                          </li>
+                          <% if  policy(event).proposed_category? %>
+                            <li class="<%= params[:action] == 'proposed_category' ? 'subactive' : '' %>">
+                              <%= link_to proposed_category_event_path(event) do%>
+                                Category(Proposed)
+                              <% end %>
+                            </li>
+                          <% end %>
+                          <% if policy(event).tax_type? %>
+                            <li class="<%= params[:action] == 'tax_type' ? 'subactive' : '' %>">
+                                <%= link_to tax_type_event_path(event) do %>
+                                  Tax Type
+                                <% end %>
+                            </li>
+                          <% end %>
+                          <li class="<%= params[:action] == 'payment_gateway_options' ? 'subactive' : '' %>">
+                              <%= link_to payment_gateway_options_event_path(event) do%>
+                                Payment Gateway Options
+                              <% end %>
+                          </li>
+                          <% if policy(event).registration_cancelation_policy? %>
+                            <li class="<%= params[:action] == 'registration_cancelation_policy' ? 'subactive' : '' %>">
+                                <%= link_to registration_cancelation_policy_event_path(event) do%>
+                                  Registration Cancellation Policy
+                                <% end %>
+                            </li>
+                          <% end %>
+                          <% if policy(event).registration_discount_plan? %>
+                            <li class="<%= params[:action] == 'registration_discount_plan' ? 'subactive' : '' %>">
+                                <%= link_to registration_discount_plan_event_path(event) do%>
+                                  Registration Discount Plan
+                                <% end %>
+                            </li>
+                          <% end %>
+                          <li class="<%= params[:action] == 'awareness' ? 'subactive' : '' %>">
+                              <%= link_to awareness_event_path(event) do%>
+                                Awareness
+                              <% end %>
+                          </li>
+                          <% if policy(event).additional_details? %>
+                            <li class="<%= params[:action] == 'additional_details' ? 'subactive' : '' %>">
+                                <%= link_to additional_details_event_path(event)  do%>
+                                  Additional Details
+                                <% end %>
+                            </li>
+                          <% end %>
+                        </ul>
+                    </div>
+                </li>
+              <% end %>
+              <% if policy(event).photo_approval_admin? %>
+                <li class="<%= params[:action] == 'photo_approval_admin' ? 'active' : '' %>">
+                  <a href='<%= photo_approval_admin_event_path(event) %>'>Photo Approval Admin</a>
+                </li>
+              <% end %>
+              <% if policy(event).photo_approval? %>
+                <li class="<%= params[:action] == 'photo_approval' ? 'active' : '' %>">
+                  <a href='<%= photo_approval_event_path(event) %>'>Photo Approval Panel</a>
+                </li>
+              <% end %>
+              <% if policy(event).registration_status? %>
+                  <li class="<%= params[:action] == 'registration_status' ? 'active' : '' %>">
+                      <a href='<%= registration_status_event_path(event) %>'>Registration Status</a>
+                  </li>
+              <% end %>
+              <% if policy(event).registration_center_admin? %>
+                  <li class="<%= %w(new edit).include?(params[:action]) && params[:controller] == 'registration_centers' ? 'active' : '' %>">
+                      <a href='<%= new_event_registration_center_path(event) %>'>Registration Center Admin
+                      </a>
+                  </li>
+              <% end %>
+              <% if policy(event).registration_invoices? %>
+                  <li class="<%= params[:action] == 'registration_invoices' ? 'active' : '' %>">
+                      <a href='<%= registration_invoices_event_path(event) %>'>Registration Invoices
+                      </a>
+                  </li>
+              <% end %>
+                <% if policy(event).transaction? %>
+                  <li class="<%= params[:action] == 'transaction' ? 'active' : '' %>">
+                      <a href='<%= transaction_event_path(event) %>'>Transactions</a>
+                  </li>
+              <% end %>
+              <% if policy(event).registration_change? %>
+                <li class="<%= params[:action] == 'registration_change' ? 'active' : '' %>">
+                  <a href='<%= registration_change_event_path(event) %>'>Registration Changes</a>
+                </li>
+              <% end %>
+              <% if policy(event).report? && false %>
+                  <li class="<%= params[:action] == 'report' ? 'active' : '' %>">
+                      <a href='<%= report_event_path(event) %>'>Report</a>
+                  </li>
+              <% end %>
+              <% if policy(event).application_status? %>
+                  <li class="<%= params[:action] == 'application_status' ? 'active' : '' %>">
+                      <a href='<%= application_status_event_path(event) %>'>Application Status</a>
+                  </li>
+              <% end %>
+            </ul>
+        </div>
+    </div>
+    <a href="javascript:void(0)" class="btn btn-info leftmenu-btn mg-x-t30">
+      <i class="fa fa-angle-double-left" aria-hidden="true"></i> 
+      <span>OPEN MENU</span>
+    </a>
+</div>

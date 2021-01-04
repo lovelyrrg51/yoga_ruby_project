@@ -1,0 +1,107 @@
+<% content_for(:title, 'Forum | Register') %>
+<div class="headingtittle-h2 text-center">
+    <h2>Forums</h2>
+    <span class="subheading primary-color primarybold">Forum ID: <%= @sy_club.id %></span>
+    <span class="subheading">ShivYog Forum <strong class="texttransform"><%= @sy_club.name.try(:titleize) %></strong></span>
+</div>
+<div class="boxsection-lg boxshadow prelative boxsection-xs">
+    <div class="row">
+        <%= render partial: "board_members_venue_details" %>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-12 mg-t20">
+          <% if @sy_club.ready_for_registrations %>
+            <div class="offerCntrl text-center primarybold">
+                <p>Annual contribution towards digital content for continuous learning program (per year) <strong class="primary-color"><%= "#{@clp_event.currency_code} #{@clp_event.event_seating_category_associations.try(:first).try(:price).rnd}" %> <%= @clp_event.try(:address).try(:country_id) == 113 ? '+ taxes extra. (Non Refundable)' : ''%></strong></p>
+            </div>
+            <div class="registrationflowCntrl mg-t20">
+                <div class="eventmemberCntrl">
+                    <!-- <div class="row"> -->
+                       <!--  <div class="col-sm-12">
+                            <div class="eventoption text-center">
+                                <p class="tagtittle">Please click the button below to register a member</p>
+                                <div class="eventaction"> -->
+                                  <!-- <button class="btn btn-info addmember-btn">Add Member</button> -->
+                                  <%# if @is_admin && false %>
+                                    <!-- <button class="btn btn-info bulkupload-btn">Bulk Upload</button> -->
+                                  <%# end %>
+                                  <!-- <button class="btn btn-info event_register_cancel hidden">Cancel</button> -->
+                            <!--   </div>
+                            </div>
+                        </div> -->
+                    <!-- </div> -->
+                    <div class="eventreg-one mg-t30">
+                        <div class="row">
+                            <%= render partial: "events/search_forgot_syid", locals: { syid_search_action: sy_club_register_syid_search_sy_club_path(@sy_club), forgot_syid_action: sy_club_register_forgot_syid_sy_club_path(@sy_club) } %>
+                        </div>
+                    </div>
+                </div>
+                <div class="eventaddmember hidden">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="headtittle">
+                                <h2>Members</h2>
+                            </div>
+                        </div>
+                        <%= form_for :event_order, url: verify_members_sy_club_path(@sy_club), method: :post, html: { remote: true, id: "sy_forum_register_form" } do |f| %>
+                          <div class="col-sm-12">
+                              <div class="tableCntrl">
+                                  <div class="table-responsive tableScrollbar">
+                                      <table class="table">
+                                          <thead>
+                                              <tr>
+                                                  <th>SYID</th>
+                                                  <th>Full Name</th>
+                                                  <th>Email</th>
+                                                  <th>City</th>
+                                                  <th class="text-center">Action</th>
+                                              </tr>
+                                          </thead>
+                                          <tbody>
+                                          </tbody>
+                                      </table>
+                                  </div>
+                              </div>
+                              <div class="pannel-btn text-right mg-b30">
+                                  <button class="btn btn-info addmorememb-btn" type="button">ADD MORE MEMBER</button>
+                              </div>
+                          </div>
+                          <div class="col-md-6 col-sm-12">
+                            <div class="outbox mg-t20">
+                                <label>Email address for receiving registration confirmation</span></label>
+                                <div class="box bordered-input">
+                                    <div class="dropdown dropdown-field">
+                                    <%= f.text_field :guest_email, value: get_current_user_email, class: 'form-control noBorder field', placeholder: 'Email', required: true, disabled: get_current_user_email.present? %>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-12">
+                              <ul class="list-unstyled">
+                                <li>
+                                    <div class="CustomCheckbox mg-b10 event_register_ack_div">
+                                        <input type="checkbox" id="forum_register_ack_checkbox">
+                                        <label>I acknowledge that I have read all of the provisions above and fully understand the terms and conditions expressed and agree to be bound by such <%= link_to "Terms and conditions", forum_terms_and_conditions_path , target: :_blank, class: "primary-color anchorlink" %>.</label>
+                                    </div>
+                                    <span class="labelerror forum_register_ack_checkbox_error_span"></span>
+                                </li>
+                              </ul>
+                          </div>
+                          <div class="col-sm-12">
+                              <div class="pannel-btn text-right mg-t30">
+                                  <button class="btn btn-info proceed-btn">PROCEED</button>
+                              </div>
+                          </div>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+          <% else %>
+            <div class="offerCntrl text-center">
+              <p> Registrations are not available, please contact ashram..</p>
+            </div>
+          <% end %>
+        </div>
+    </div>
+</div>

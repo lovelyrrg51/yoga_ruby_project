@@ -1,0 +1,18 @@
+<% if @message.present? %>
+
+  toastr.error('<%= @message %>.');
+
+<% else %>
+  
+  var appearance = $("#sadhak_profile_steps_other_spiritual_associations_fields_tbody").find('tr[id="<%= @other_spiritual_association_id %>"]');
+
+  if(appearance.length){
+    appearance.remove();
+    toastr.success('Deleted successfully.');
+    if(!$("#sadhak_profile_steps_other_spiritual_associations_fields_tbody").find('tr').length) $('#sadhak_profile_steps_other_spiritual_associations_save_cont_button').attr("disabled", true);
+  }
+  else{
+    toastr.error('No Row Data Found');
+  }
+
+<% end %>

@@ -1,0 +1,17 @@
+<%= form_for(@stripe_subscription) do |f| %>
+  <% if @stripe_subscription.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@stripe_subscription.errors.count, "error") %> prohibited this stripe_subscription from being saved:</h2>
+
+      <ul>
+      <% @stripe_subscription.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

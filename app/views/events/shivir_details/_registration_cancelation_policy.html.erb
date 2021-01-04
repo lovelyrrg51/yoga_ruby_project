@@ -1,0 +1,33 @@
+<div id="shivirdetails">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <div class="headtittle">
+                <h2>Shivir Details <span class="sub-tittle">Registration Cancellation Policy</span></h2>
+            </div>
+            <%= render 'shivir_status'%>
+        </div>
+    </div>
+		<div class="detailshivir registerCanclePolicy">
+		<%= form_for @event do |f| %>
+		    <div class="row">
+		        <div class="col-sm-4">
+              <div class="outbox outerSelect">
+                  <div class="box bordered-input dropdown">
+                      <div class="dropdown-field selectTwo-dropdown">
+                      <%=f.select :event_cancellation_plan_id, options_for_select(EventCancellationPlan.pluck(:name, :id), f.object.try(:event_cancellation_plan_id)), { include_blank: "Select Cancellation Plan" } ,{ class: "simple-single", onchange: "onChangeCancelationPlan(this)" } %>
+                      </div>
+                  </div>
+              </div>
+		        </div>
+		        <div class="col-sm-12" id="event_cancellation_plan_items_table">
+							<%= render partial: 'events/shivir_details/event_cancellation_plan_items', locals: { cancellation_plan_items: @event_cancellation_plan_items } if @event_cancellation_plan.present? %>
+							<%  unless @event_cancellation_plan.present? %>
+								<%= render partial: 'application/no_records', locals: {message: 'Select One Registration Cancellation Policy.'} %>
+							<% end %>
+		        </div>
+		    </div>
+	    <% end %>
+	    <%= form_tag find_plan_items_event_cancellation_plan_items_path, method: :get, remote: true, id: "event_cancellation_plan_item_find_plan_items"  do |f| %>
+        <% end %>
+		</div>
+</div>

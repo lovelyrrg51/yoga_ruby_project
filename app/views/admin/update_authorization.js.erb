@@ -1,0 +1,15 @@
+<% if @message.present? %>
+
+  toastr.error("<%= @message %>");
+
+<% else %>
+
+  var appearance = $("<%= escape_javascript(render(partial: 'admin/authorization_row_data', locals: { authorization_row_data: @authorization })) %>");
+
+  $('tr#' + '<%= @authorization.id %>').replaceWith(appearance);
+
+  toastr.success('Information saved successfully.');
+
+<% end %>
+
+

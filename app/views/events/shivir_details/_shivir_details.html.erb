@@ -1,0 +1,588 @@
+<% uniq_token = SecureRandom.uuid %>
+<div id="shivirdetails" class="">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <div class="headtittle">
+                <h2>Shivir Details <span class="sub-tittle">Shivir</span></h2>
+            </div>
+            <%= render 'shivir_status' if @event.persisted?%>
+        </div>
+    </div>
+    <% unless @event.is_clp_event? || @event.closed?%>
+        <div class="row">
+            <div class="col-sm-12">
+                <%= link_to "REGISTER", register_event_path(@event), class: "btn btn-info" %>
+            </div>
+        </div>
+    <%end if @event.persisted? %>
+    <div class="detailshivir shivir prelative">
+    <div class="shivir-details-overlapping-div overlapping <%= 'overlay-active' if @event.cancelled? %>"></div>
+    <%= form_for @event, html:{ id: "edit_event" } do |f| %>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="detailshead">
+                    <h2>Shivir Information</h2>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label class="asterisk">Shivir Name</label>
+                    <div class="dropdown dropdown-field">
+                		<%= f.text_field :event_name, class: "form-control noBorder field", placeholder: "Shivir name"%>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 prelative">
+            <div class="overlapping sy_event_company_overlay_div <%= 'overlay-active' if f.object.try(:event_type_name) == ASHRAM_RESIDENTIAL_SHIVIR %>"></div>
+                <div class="box bordered-input">
+                    <label>Company</label>
+                    <div class="dropdown-field selectTwo-dropdown">
+              			<%= f.select :sy_event_company_id, options_for_select(SyEventCompany.pluck(:name,:id),f.object.try(:sy_event_company_id)), { include_blank: "----- Select -----"}, { class: "basic-single" }%>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label class="asterisk">Event meta type</label>
+                    <div class="gender">
+                        <ul class="clearfix list-unstyled">
+                        <% CannonicalEvent.pluck(:event_meta_type, :id).each do |event_meta_type, id| %>
+                            <li>
+                                <div class="Custradio">
+                                    <%= f.radio_button :cannonical_event_id, id, class: "radiotype", data: {:remote => true, :url => event_types_events_path }%>
+                                    <label for="<%= event_meta_type.titleize %>"><%= event_meta_type.try(:titleize) %></label>
+                                </div>
+                            </li>
+                        <% end %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="box bordered-input prelative">
+                    <label class="asterisk">Type</label>
+                    <div class="dropdown-field selectTwo-dropdown">
+                		<%= f.select :event_type_id, options_for_select(EventType.pluck(:name,:id),f.object.try(:event_type_id)), { include_blank: "------Select-----" }, { class: "basic-single", onChange: "onEventTypeChange(this)" }%>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="box bordered-input prelative">
+                    <label class="asterisk">Graced By</label>
+                    <div class="dropdown-field selectTwo-dropdown">
+                		<%= f.select :graced_by, options_for_select(options_for_select_graced_by, f.object.graced_by), { include_blank: "------Select-----" }, { class: "basic-single" }%>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 prelative">
+            <div class="overlapping payment_category_overlay_div <%= 'overlay-active' if f.object.try(:event_type_name) == ASHRAM_RESIDENTIAL_SHIVIR %>"></div>
+                <div class="box bordered-input">
+                    <label class="asterisk">Paid / Free</label>
+                    <div class="gender">
+                        <ul class="clearfix list-unstyled">
+                        <% options_for_select_payment_category.each do |key, value|%>
+                            <li>
+                                <div class="Custradio">
+                            		<%= f.radio_button :payment_category, value, class: "radiotype" %>
+                                    <label for="Paid"><%= key %></label>
+                                </div>
+                            </li>
+                        <% end %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label class="asterisk">Show Seating Capacity</label>
+                    <div class="gender">
+                        <ul class="clearfix list-unstyled">
+                            <li>
+                                <div class="Custradio">
+                            		<%= f.radio_button :show_seats_availability, true, class: "radiotype" %>
+                                    <label for="capacityYes">Yes</label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="Custradio">
+                            		<%= f.radio_button :show_seats_availability, false, class: "radiotype" %>
+                                    <label for="capacityNo">No</label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label>Show Shivir Pricing</label>
+                    <div class="gender">
+                        <ul class="clearfix list-unstyled">
+                            <li>
+                                <div class="Custradio">
+                            		<%= f.radio_button :show_shivir_price, true, class: "radiotype" %>
+                                    <label for="pricingYes">Yes</label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="Custradio">
+                                	<%= f.radio_button :show_shivir_price, false, class: "radiotype" %>
+                                    <label for="pricingNo">No</label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label class="asterisk">Display Location</label>
+                    <div class="dropdown dropdown-field">
+                        <%= f.text_field :event_location, class: "form-control noBorder field", placeholder: "Shivir location"%>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="shivyog-sepeator"></div>
+        <div class="row mg-t40">
+            <div class="col-sm-12">
+                <div class="CustomCheckbox mg-b20">
+                    <input type="checkbox" name="check" id="date_to_be_decided">
+                    <label>To be decided</label>
+                </div>
+                <div class="CustomCheckbox mg-b20">
+                    <%= f.check_box :next_financial_year  %>
+                    <label>Next Financial Year</label>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="prelative">
+                    <div class="overlapping" id="event_date_requirement"></div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="box outerbox prelative">
+                                <label class="asterisk">Date</label>
+                                <div class="rangercode mg-t10">
+                                    <div class="dropdown-field numbercode">
+                                        <div  class="input-group" class="input-group date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" data-minStartDate="<%= Date.current.beginning_of_day - (f.object.persisted? ? 10.years : 0.years) %>" data-maxStartDate="<%= Date.current.beginning_of_day + 2.years %>">
+                                            <%= f.text_field :event_start_date, class: "form-control code-input ", placeholder: Date.current.strftime('%b %d, %Y'), readonly: "true", value: f.object.try(:event_start_date).try(:strftime, ("%b %d, %Y"))%>
+                                            <span class="input-group-addon">
+                                                <button class="" type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-field">
+                                        <label class="middletab">To</label>
+                                    </div>
+                                    <div class="dropdown-field numbercode">
+                                        <div  class="input-group" class="input-group date" id="<%= uniq_token %>_end" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" data-minStartDate="<%= Date.current.beginning_of_day - (f.object.persisted? ? 10.years : 0.years) %>" data-maxStartDate="<%= Date.current.beginning_of_day + 2.years %>">
+                                            <%= f.text_field :event_end_date , class: "form-control code-input ", placeholder: Date.current.strftime('%b %d, %Y'), readonly: "true", value: f.object.try(:event_end_date).try(:strftime, ("%b %d, %Y")) %>
+                                            <span class="input-group-addon">
+                                                <button class="" type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box outerbox">
+                                <label>Time</label>
+                                <div class="rangercode mg-t10">
+                                    <div class="dropdown-field numbercode">
+                                    <%= f.text_field :event_start_time, class: "form-control timetoggle code-input", value: f.object.try(:event_start_time), placeholder: "8:00 PM"%>
+                                    </div>
+                                    <div class="dropdown-field">
+                                        <label class="middletab">To</label>
+                                    </div>
+                                    <div class="dropdown-field numbercode">
+                                        <%= f.text_field :event_end_time, class: "form-control timetoggle code-input", value: f.object.try(:event_end_time), placeholder: "10:45 PM"%>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="box mg-b30">
+                    <div class="CustomCheckbox">
+                   			<%= f.check_box :end_date_ignored  %>
+                        <label>Ignore Event End Date</label>
+                    </div>
+                    <div class="alertCntrl mg-t10 active <%= 'hidden' unless f.object.end_date_ignored? %> " id="end_date_ignored_alert">
+                        <p>Will not effect event registrations for which current event is pre-requisite.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="shivyog-sepeator"></div>
+        <div class="row mg-t30">
+            <div class="col-sm-12">
+                <div class="detailshead">
+                    <h2>Contact</h2>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-6">
+                       <div class="outbox">
+                            <label class="asterisk">Contact Number</label>
+                            <div class="box bordered-input prelative">
+                                <div class="dropdown box-taginput">
+                                    <%= f.text_field :contact_details, "data-role": "tagsinput", class: "form-control noBorder field box-field tagsinput", placeholder: "Contact number"%>
+                                </div>
+                                <div class="merge-error event_contact_details_error">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label class="">Contact Email</label>
+                            <div class="box bordered-input prelative">
+                                <div class="dropdown box-taginput">
+                                    <%= f.email_field :contact_email, "data-role": "tagsinput", class: "form-control noBorder field box-field tagsinput", placeholder: "Contact email" %>
+                                </div>
+                                <div class="merge-error event_contact_email_error">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                            <label>Website</label>
+                            <div class="dropdown dropdown-field">
+                        		<%= f.text_field :website, class: "form-control noBorder field", placeholder: "Website"%>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                            <label>Video Url</label>
+                            <div class="dropdown dropdown-field">
+                        	 	<%= f.text_field :video_url, class: "form-control noBorder field", placeholder: "Video url"%>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <ul class="list-unstyled checklist mg-b20">
+                            <li>
+                                <div class="CustomCheckbox">
+                                		<%= f.check_box :is_photo_proof_required  %>
+                                    <label>Is Photo Id Proof and Profile Pic Necessary</label>
+                                </div>
+                            </li>
+                            <li class="prelative">
+                            <div class="overlapping full_profile_needed_overlay_div <%= 'overlay-active' if f.object.try(:event_type_name) == ASHRAM_RESIDENTIAL_SHIVIR %>"></div>
+                                <div class="CustomCheckbox">
+                                		<%= f.check_box :full_profile_needed %>
+                                    <label>Is full profile needed ?</label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="CustomCheckbox">
+                                   	<%= f.check_box :has_seva_preference %>
+                                    <label>Is Sadhak Seva needed</label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="CustomCheckbox">
+                                    <%= f.check_box :shivir_card_enabled %>
+                                    <label>Enable Entry Card</label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="CustomCheckbox">
+                                    <%= f.check_box :notification_service%>
+                                    <label>SMS / Email Notification</label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="box bordered-input box-upload">
+                            <div class="clearfix">
+                                <label>Accommodation</label>
+                                <span class="infodetails">( Please upload only .jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .pdf, .csv files Max size 5MB )</span>
+                            </div>
+                        <%= f.fields_for :attachments do |attachment|%>
+                            <div class="clickable">
+                                <%= attachment.file_field :content, onChange: "readURL(this)", 'data-extension': 'imageAndFile', 'data-required': true%>
+	                            <div class="Custinput"><a class="btn btn-danger" href="">CHOOSE FILE</a> <span><%= filename(attachment.object.try(:content)) || "No file choosen" %></span>
+	                            </div>
+                            </div>
+                            <% if attachment.object.content?%>
+                                <div class="uploadedimage">
+                                    <%= link_to attachment.object.try(:s3_url) || "javascript:void(0);", target: '_blank' do%>
+                                        <%= image_tag preview_or_default_image_for_file(attachment.object.content), class: "mCS_img_loaded", alt: "profile image" %>
+                                    <%end%>
+                                    <a href="javascript:void(0)" class="closeImg" onclick="removeAttachedFile(this)"><i class="icon-close"></i></a>
+                                </div>
+                                <%= attachment.hidden_field :remove_content, id: "remove-attachment-#{rand.to_s[2..7]}"%>
+                            <% end %>
+                        <% end %>
+                        </div>
+                        <div class="box bordered-input box-upload">
+                            <div class="clearfix">
+                                <label>Handy Information about Event</label>
+                                <span class="infodetails">( Please upload only .jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .pdf, .csv files Max size 5MB )</span>
+                            </div>
+							<%= f.fields_for :handy_attachments do |handy_attachment|%>
+								<div class="clickable">
+									<%= handy_attachment.file_field :content, onChange: "readURL(this)", 'data-extension': 'imageAndFile', 'data-required': true %>
+										<div class="Custinput"><a class="btn btn-danger" href="">CHOOSE FILE</a> 
+											<span><%= filename(handy_attachment.object.try(:content)) || "No file choosen" %></span>
+										</div>
+								</div>
+                                <% if handy_attachment.object.content?%>
+                                    <div class="uploadedimage">
+                                        <%= link_to handy_attachment.object.try(:s3_url) || "javascript:void(0);", target: '_blank' do%>
+                                            <%= image_tag preview_or_default_image_for_file(handy_attachment.object.content), class: "mCS_img_loaded", alt: "profile image" %>
+                                        <%end%>
+                                        <a href="javascript:void(0)" class="closeImg"><i class="icon-close" onclick="removeAttachedFile(this)"></i></a>
+                                    </div>
+                                    <%= handy_attachment.hidden_field :remove_content, id: "remove-attachment-#{rand.to_s[2..7]}" %>
+                                <% end %>
+							<% end %>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box mg-b30 prelative">
+                        <div class="overlapping pre_approval_required_overlay_div <%= 'overlay-active' if f.object.try(:event_type_name) == ASHRAM_RESIDENTIAL_SHIVIR %>"></div>
+
+                        <ul class="list-unstyled checklist">
+                        	<li>
+                        		<div class="CustomCheckbox">
+                                <%= f.check_box :pre_approval_required %>
+                                <label>Pre-Approval Event</label>
+                            </div>
+                        	</li>
+                        	<li>
+                        		<div class="CustomCheckbox">
+                                <%= f.check_box :auto_approve%>
+                                <label>Allow Auto Approval</label>
+                            </div>
+                        	</li>
+                        </ul>
+                        </div>
+                        <div class="prelative">
+                            <div class="overlapping <%= 'overlay-active' unless f.object.try(:pre_approval_required)%>" id="pre_approval_event_requirement"></div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="outbox">
+                                        <label class="">Approver Email</label>
+                                        <div class="box bordered-input prelative">
+                                            <div class="dropdown box-taginput">
+                                                <%= f.text_field :approver_email, class: "form-control noBorder field box-field tagsinput", 'data-role': "tagsinput", placeholder: "Approver email", value:  f.object.try(:pre_approval_required) ? f.object.try(:approver_email) : '' %>
+                                            </div>
+                                            <div class="merge-error event_approver_email_error">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="outbox">
+                                        <label class="">Logistic Email</label>
+                                        <div class="box bordered-input prelative">
+                                            <div class="dropdown box-taginput">
+                                                <%= f.text_field :logistic_email, class: "form-control noBorder field box-field tagsinput", 'data-role': "tagsinput", placeholder: "Logistic email", value: f.object.try(:pre_approval_required) ? f.object.try(:logistic_email) : '' %>
+                                            </div>
+                                            <div class="merge-error event_logistic_email_error">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box mg-b30">
+                            <div class="CustomCheckbox">
+                                <%= f.check_box :automatic_refund  %>
+                                <label>Allow automatic refund</label>
+                            </div>
+                        </div>
+                    </div>
+                    <%if f.object.is_in_india? %>
+                    <div class="col-sm-12">
+                        <div class="box mg-b30 prelative">
+                        <ul class="list-unstyled checklist">
+                            <li>
+                                <div class="CustomCheckbox">
+                                    <%= check_box_tag :min_age_criteria_checkbox, 1, f.object.min_age_criteria.to_i == 0 ? false : true%>
+                                <label>Is Minimum Age Criteria</label>
+                            </div>
+                            </li>
+                        </ul>
+                        </div>
+                        <div class="prelative">
+                            <div class="overlapping <%= 'overlay-active' if f.object.try(:min_age_criteria).to_i == 0%>" id="min_age_criteria"></div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="outbox">
+                                        <label class="">Minimum Age</label>
+                                        <div class="box bordered-input prelative">
+                                            <div class="dropdown box-taginput">
+                                                <%= f.text_field :min_age_criteria, class: "form-control noBorder field box-field", placeholder: "Minimum Age", value:  f.object.try(:min_age_criteria) %>
+                                            </div>
+                                            <div class="merge-error  min_age_criteria_error">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%end unless f.object.new_record?%>
+                </div>
+            </div>
+        </div>
+        <div class="shivyog-sepeator"></div>
+        <div class="row mg-t30">
+            <div class="col-sm-12">
+                <div class="detailshead">
+                    <h2>Eligibility Criteria</h2>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label>Event Type</label>
+                            <div class="box multiplebox">
+                                <div class="dropdown-field multipleboxfield">
+                            		<%= f.select :event_type_ids, options_for_select(EventType.pluck(:name,:id),f.object.try(:event_type_ids)), {}, { class: "multiple-select", multiple: true }%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label>Event</label>
+                            <div class="box multiplebox">
+                                <div class="dropdown-field multipleboxfield">
+                            		<%= f.select :prerequisite_event_ids, options_for_select(Event.pluck(:event_name,:id),f.object.try(:prerequisite_event_ids)), {}, { class: "multiple-select", multiple: true }%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label class="asterisk">Email Recipients</label>
+                            <div class="box bordered-input prelative">
+                                <div class="dropdown box-taginput">
+                                    <%= f.text_field :registrations_recipients, class: "form-control noBorder field box-field tagsinput", 'data-role': "tagsinput", placeholder: "Email recipients"%>
+                                </div>
+                                <div class="merge-error event_registrations_recipients_error">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label>Criteria message</label>
+                            <div class="box bordered-input border-textarea">
+                                <div class="dropdown dropdown-field">
+                            		<%= f.text_area :prerequisite_message, class: "form-control  noBorder field", placeholder: "Criteria message"%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="outbox">
+                            <label>Discount Message</label>
+                                <div class="dropdown dropdown-field">
+                                    <%= cktext_area_tag "event[description]", f.object.description, cols: 40, ckeditor: { uiColor: '#AADC6E', toolbar: 'mini' } ,placeholder: "Discount message" %>	
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="shivyog-sepeator"></div>
+        <div class="row mg-t30">
+            <div class="col-sm-12">
+                <div class="detailshead">
+                    <h2>Address</h2>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="box bordered-input dropdown">
+                            <label class="asterisk">Venue Type</label>
+                            <div class="dropdown-field selectTwo-dropdown">
+                        		<%= f.select :venue_type_id, options_for_select(VenueType.pluck(:name, :id), f.object.try(:venue_type_id)), { include_blank: "-----Select-----" }, { class: "basic-single" } %>
+                            </div>
+                        </div>
+                    </div>
+                    <%= f.fields_for :address do |addr| %>
+                    <!-- Commented Search as per discussion -->
+<!--                     <div class="col-sm-12">
+                        <div class="box bordered-input">
+                            <label>Search Address</label>
+                            <div class="dropdown dropdown-field">
+                                <div class="input-group box-input-group">
+                                  <span class="input-group-addon"><i class="icon-google-maps"></i></span>
+                                    <%#= text_field_tag :autocomplete_search, "", class: 'form-control noBorder field', "data-google-address-autocomplete": 'autocomplete', placeholder: "Search address"%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  -->                   
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                            <label class="asterisk">Address Line 1</label>
+                            <div class="dropdown dropdown-field">
+                                <%= addr.text_field :first_line, value: addr.object.first_line, class: "form-control noBorder field", placeholder: "First line address"%>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                            <label>Address Line 2</label>
+                            <div class="dropdown dropdown-field">
+                                <%= addr.text_field :second_line, value: addr.object.second_line, class: "form-control noBorder field", placeholder: "Second line address"%>
+                            </div>
+                        </div>
+                    </div>
+                    <%= render 'application/country_state_city_select',f: addr %>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                            <label class="asterisk">Postal Code</label>
+                            <div class="dropdown dropdown-field">
+                        		<%= addr.text_field :postal_code, class: "form-control  noBorder field", placeholder: "Postal code"%>
+                            </div>
+                        </div>
+                    </div>
+                    <% end %>
+                </div>
+            </div>
+            <% if @event.persisted? && @event.paid? && event_online_payment_gatways(@event).blank? %>
+              <div class="col-sm-12 mg-t20 mg-b20">
+                  <div class="offerCntrl primarybold text-center">
+                      <p>Online Payment Gateways are not Attached/Active for this Event. <%= link_to "Click Here", payment_gateway_options_event_path(@event), target: "_blank" %></p>
+                  </div>
+              </div>
+            <% end %>
+            <div class="col-sm-12">
+                <div class="pannel-btn text-right">
+                    <%= f.button  type: :reset, class: "btn btn-danger mg-r10" do %>
+                        CLEAR
+                    <% end %>
+                    <%= f.button type: :submit , class: "btn btn-info" do %>
+                        SAVE
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    <%end%>
+    </div>
+</div>

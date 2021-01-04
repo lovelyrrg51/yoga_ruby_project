@@ -1,0 +1,282 @@
+<section class="event-detail-banner margin-bottom-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md 12">
+        <div class="banner_text">
+          <div class="main_banner_heading">
+            <%= @event.event_name %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="clearfix"></div>
+
+<section id="find_event">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6 event_detail_left_section">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="event_detail_box">
+              <div class="event_detail_babaji_pic text-align-center white-text"></div>
+              <div class="event_detail_content">
+                <div class="event_detail_title"><%= @event.event_name %></div>
+                <div class="event_detail_description">
+                  <strong>Event ID</strong>: <%= @event.id %>
+                </div>
+              </div>
+            </div>
+            <div class="graced white-text text-align-right">
+              <h6>Event Graced By: <%= @event.graced_by %></h6>
+            </div>
+            <div class="event-dates">
+              <div class="start-date">
+                <div class="cal-img"><%= image_tag "v2/calender-big.png" %></div>
+                <div class="day-details">
+                  <h3><%= @event.event_start_date.strftime("%A") %></h3>
+                  <div class="date-details">
+                    <div class="ev-date"><%= @event&.event_start_date&.try(:strftime, "%d") %></div>
+                    <div class="evn-month"><%= @event&.event_start_date&.try(:strftime, "%B") %>
+                      <br><%= @event&.event_start_date&.try(:strftime, "%Y") %></div>
+                  </div>
+                </div>
+              </div>
+              <div class="to white-text">
+                <h2>TO</h2></div>
+              <div class="end-date">
+                <div class="cal-img"><%= image_tag "v2/calender-big.png" %></div>
+                <div class="day-details">
+                  <h3><%= @event&.event_end_date&.try(:strftime, "%A") %></h3>
+                  <div class="date-details">
+                    <div class="ev-date"><%= @event&.event_end_date&.try(:strftime, "%d") %></div>
+                    <div class="evn-month"><%= @event&.event_end_date&.try(:strftime, "%B") %>
+                      <br><%= @event&.event_end_date&.try(:strftime, "%Y") %></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="full-evn-details">
+              <div class="ev-time">
+                <div class="time-img"><%= image_tag "v2/clock.png" %></div>
+                <div class="ev-time-details">
+                  <h2>Time</h2>
+                  <p><%= @event.event_start_time.present? ? @event.event_start_time.to_datetime.strftime("%l") + " " + @event.event_start_time.to_datetime.strftime("%P") + " onwards" : "-" %> </p>
+                </div>
+              </div>
+              <div class="ev-time">
+                <div class="time-img"><%= image_tag "v2/phone-ic.png" %></div>
+                <div class="ev-time-details">
+                  <h2>Contact Numbers</h2>
+                  <p><%= @event.contact_details.present? ? @event.contact_details.gsub(",","<br>").html_safe : "N/A" %></p>
+                </div>
+              </div>
+              <div class="ev-time">
+                <div class="time-img"><%= image_tag "v2/email_icon.png" %></div>
+                <div class="ev-time-details">
+                  <h2>Contact Emails</h2>
+                  <p><%= @event.contact_email.present? ? @event.contact_email.gsub(",","<br>").html_safe : "N/A" %></p>
+                </div>
+              </div>
+              <div class="ev-time">
+                <div class="time-img"><%= image_tag "v2/venue-ic.png" %></div>
+                <div class="ev-time-details">
+                  <h2>Venue</h2>
+                  <p><%= @event.event_address %></p>
+                </div>
+              </div>
+              <div class="ev-time">
+                <div class="time-img"><%= image_tag "v2/accommodation_ic.png" %></div>
+                <div class="ev-time-details">
+                  <h2>Accommodation</h2>
+                  <p><span class="accommodation_pdf">
+                    <% if @event.attachment.present? %>
+                      <%= link_to @event.attachment.try(:s3_url) || "javascript:void(0);", target: '_blank' do%>
+                        <%= image_tag preview_or_default_image_for_file(@event&.attachment&.content), class: "mCS_img_loaded", alt: "Accomodation", title: @event&.attachment&.name  %>
+                      <%end%>
+                    <% else %>
+                      N/A
+                    <% end %>
+                    </span></p>
+                </div>
+              </div>
+              <div class="ev-time">
+                <div class="time-img"><%= image_tag "v2/info-ic.png" %></div>
+                <div class="ev-time-details">
+                  <h2>Handy Information about Event</h2>
+                  <p><span class="accommodation_pdf">
+                    <% if @event.handy_attachment.present? %>
+                      <%= link_to @event.handy_attachment.try(:s3_url) || "javascript:void(0);", target: '_blank' do%>
+                        <%= image_tag preview_or_default_image_for_file(@event&.attachment&.content), class: "mCS_img_loaded", alt: "Accomodation", title: @event&.attachment&.name  %>
+                      <%end%>
+                    <% else %>
+                      N/A
+                    <% end %>
+                  </span></p>
+                </div>
+              </div>
+              <div class="ev-time">
+                <div class="time-img"><%= image_tag "v2/info-ic.png" %></div>
+                <div class="ev-time-details">
+                  <h2>Note</h2>
+                  <p><em><%= @event.prerequisite_message.present? ? @event.prerequisite_message : "-" %></em></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 event_detail_right_section">
+        <div class="reg-title">
+          <div class="header">
+            <div class="heading_title">Event Location</div>
+          </div>
+        </div>
+        <div class="inner-cont">
+          <div class="reg-map-event-details" id="reg-map">
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Category Names</th>
+                        <% if @event.show_seats_availability? %>
+                          <th scope="col">Seats Available</th>
+                        <% end %>
+                        <% if @event.show_shivir_price? %>
+                          <th scope="col">Amount (<%= @event.currency_code %>) <span class="bg-red padding-5 font-size-12">Non-Refundable</span></th>
+                        <% end %>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% @event.event_seating_category_associations.each_with_index do |event_seating_category, index| %>
+                        <tr>
+                          <td><%= index + 1 %></td>
+                          <td><%= event_seating_category&.seating_category&.category_name %></td>
+                          <% if @event.show_seats_availability? %>
+                            <td><%= event_seating_category.seats_available %></td>
+                          <% end %>
+                          <% if @event.show_shivir_price? %>
+                            <td> <%= event_seating_category.event.currency_code.present? ? (event_seating_category.event.currency_code + " " + event_seating_category&.price.to_s) : (event_seating_category&.price) %></td>
+                          <% end %>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<% if !is_event_running?(@event) %>
+  <section id="our_story_summary">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 text-center">
+          <div class="alert-warning p-3" role="alert">
+            <strong>Online Registration for this event is closed at the moment.</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<% elsif current_user %>
+  <section id="event_register" data-behavior="vue">
+    <div class="container">
+      <div class="row clearfix">
+        <div class="col-sm-12">
+          <event-register :event-id="<%= @event.id.to_json %>"
+                          :seating-category-list="<%= @seat_data.to_json %>"
+                          :currency="<%= @event.currency_code.to_json %>"
+                          :current-user-email="<%= get_current_user_email.to_json %>"
+                          :free="<%= @event.free?.to_json %>"
+                          :pre-approval-required="<%= @event.pre_approval_required?.to_json %>"
+                          :is-ashram-residential-shivir="<%= @event.is_ashram_residential_shivir?.to_json %>"
+                          :full-profile-needed="<%= @event.full_profile_needed?.to_json %>"
+          ></event-register>
+        </div>
+      </div>
+    </div>
+  </section>
+<% else %>
+  <section id="our_story_summary">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="unlock_all_courses">
+            <div class="timer"><i class="material-icons">timer</i></div>
+            <div class="unlock_text">Register for this event</div>
+            <p class="text-center text-muted">Please login to register for this event.</p>
+            <div class="shivyog-btn">
+              <%= link_to new_user_session_path, class: "cta_button_small bg-red waves-effect" do %>
+                <i class="fa fa-sign-in"></i>&nbsp;Login Now
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<% end %>
+
+<script>
+ var latitude, longitude;
+ if ('<%= @event&.address&.lat == "" %>' || '<%= @event&.address&.lng  == "" %>' ){
+  var geocoder = new google.maps.Geocoder();
+  var address = '<%= @event.event_address %>'
+  geocoder.geocode( { 'address': address}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      latitude = parseFloat(results[0].geometry.location.lat());
+      longitude = parseFloat(results[0].geometry.location.lng());
+    }
+    event_Map();
+  });
+ }else{
+    latitude = <%= @event&.address&.lat %>
+    longitude = <%= @event&.address&.lng %>
+    event_Map();
+ }
+  function event_Map() {
+    var latlng = {lat: latitude, lng: longitude};
+    var map = new google.maps.Map(document.getElementById('reg-map'), {
+      zoom: 6,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      center: latlng,
+      scrollwheel: true
+    });
+
+    var contentString = '<div class="pop-content">'+
+                        '<p><strong><%= @event.event_name %></strong></p>'+
+                        '<p>Event ID: <%= @event.id %></p>'+
+                        '</div>';
+
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+
+    var marker = new google.maps.Marker({
+      position: latlng,
+      map: map,
+      animation: google.maps.Animation.DROP,
+      title: '<%= @event.event_name %>'
+    });
+
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+      if (marker.getAnimation() !== null) {
+        marker.setAnimation(null);
+      } else {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function(){ marker.setAnimation(null); }, 1500);
+      }
+    });
+  }
+</script>

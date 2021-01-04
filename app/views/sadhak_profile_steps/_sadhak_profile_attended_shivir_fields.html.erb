@@ -1,0 +1,6 @@
+<tr id="<%= @sadhak_profile_attended_shivir.try(:id) %>">
+    <td><%= @sadhak_profile_attended_shivir.try(:shivir_name) %></td>
+    <td><%= @sadhak_profile_attended_shivir.try(:shivir_name) %></td>
+    <td><%= @sadhak_profile_attended_shivir.try(:month) %> - <%= @sadhak_profile_attended_shivir.try(:year) %></td>
+    <td class="text-center"><a href="<%= delete_sadhak_profile_attended_shivir_sadhak_profile_steps_path(sadhak_profile_attended_shivir_id: @sadhak_profile_attended_shivir.try(:id)) %>" class="action" data-remote="true"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
+</tr>

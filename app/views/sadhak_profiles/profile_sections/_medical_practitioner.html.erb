@@ -1,0 +1,168 @@
+<div class="panel">
+    <div class="panel-heading" role="tab" id="headingTwelve">
+        <h4 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion4" href="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">
+                <i class="more-less glyphicon glyphicon-plus"></i>
+                <% if @sadhak_profile.medical_practitioners_profile.try(:is_complete?) %>
+                <i class="success-btn">
+                 <%= image_tag "check-mark.png" %>
+                </i>
+                <% else %>
+                <i class="error-btn"><%= image_tag "warning.png" %></i>
+                <% end %>
+                <span>Medical Practitioner</span>
+            </a>
+        </h4>
+    </div>
+    <div id="collapseTwelve" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwelve">
+        <div class="panel-body">
+        <%= form_for @sadhak_profile, html: { id: 'sadhak_profile_medical_practitioners_profile_form' } do |f| %>
+            <%= f.fields_for :medical_practitioners_profile do |ff|%>
+                <div class="row">
+                    <div class="col-sm-6">
+	                    <div class="outbox">
+	                       	<label class="asterisk">Do you practice Integrative health care?</label>
+	                        <div class="box bordered-input">
+	                           <div class="gender">
+	                                <ul class="clearfix list-unstyled">
+	                                    <li>
+	                                        <div class="Custradio">
+	                                            <%= ff.radio_button :practiced_integrative_health_care, 'true', class: "radiotype" %>
+	                                            <label for="integrativeYes">Yes</label>
+	                                        </div>
+	                                    </li>
+	                                    <li>
+	                                        <div class="Custradio">
+	                                            <%= ff.radio_button :practiced_integrative_health_care, 'false', class: "radiotype" %>
+	                                            <label for="integrativeNo">No</label>
+	                                        </div>
+	                                    </li>
+	                                </ul>
+	                           </div>
+	                        </div> 
+	                    </div>
+                    </div>
+                    <div class="col-sm-6">
+	                    <div class="outbox">
+	                        <label class="asterisk">Work Environment</label>
+	                        <div class="box bordered-input dropdown">
+	                            <div class="dropdown-field selectTwo-dropdown">
+	                                <%= ff.select :work_enviroment, options_for_select(medical_practitioners_profile_work_enviroment_list, ff.object.work_enviroment), { include_blank: ' ----- Select ----- '}, { class: 'basic-single', required: true } %>
+	                            </div>
+	                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                    <div class="outbox">
+                        <label>Please enter your Medical specialization</label>
+                        <div class="box bordered-input dropdown">
+                            <div class="dropdown-field selectTwo-dropdown">
+                                <%= ff.select :medical_practitioner_speciality_area_id, options_for_select(MedicalPractitionerSpecialityArea.pluck(:name, :id), ff.object.medical_practitioner_speciality_area_id), { include_blank: ' ----- Select ----- '}, { class: 'basic-single', required: true } %>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                    	<div class="outbox">
+                           <label>Please describe your Medical specialization, if not listed</label>
+                        <div class="box bordered-input">
+                           <div class="dropdown dropdown-field">
+                              <%= ff.text_field :other_speciality, class: 'form-control noBorder field', required: true, placeholder: "Describe your medical specialization"%>
+                           </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                    <div class="outbox">
+                           <label class="asterisk">Medical / Healthcare Provider / Extender degree</label>
+                        <div class="box bordered-input">
+                           <div class="dropdown dropdown-field">
+                              <%= ff.text_field :medical_degree, class: 'form-control noBorder field', required: true, placeholder: "Medical degree"%>
+                           </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                    <div class="outbox">
+                            <label class="asterisk">Please select your current professional role</label>
+                        <div class="box bordered-input dropdown">
+                            <div class="dropdown-field selectTwo-dropdown">
+                                <%= ff.select :current_professional_role, options_for_select(medical_practitioners_profile_current_professional_role_list, ff.object.current_professional_role), { include_blank: ' ----- Select ----- '}, { class: 'basic-single', required: true } %>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                    <div class="outbox">
+                           <label>Please describe your professional role, if not listed</label>
+                        <div class="box bordered-input">
+                           <div class="dropdown dropdown-field">
+                              <%= ff.text_field :other_role, class: 'form-control noBorder field', required: true, placeholder: "Describe your professional role"%>
+                           </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                    <div class="outbox">
+                           <label class="asterisk">Would you be interested in taking part in a panel discussion ?</label>
+                        <div class="box bordered-input gender-field">
+                           <div class="gender">
+                                <ul class="clearfix list-unstyled">
+                                    <li>
+                                        <div class="Custradio">
+                                            <%= ff.radio_button :interested_in_panel_discussion, 'true', class: "radiotype" %>
+                                            <label for="panelYes">Yes</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="Custradio">
+                                            <%= ff.radio_button :interested_in_panel_discussion, 'false', class: "radiotype" %>
+                                            <label for="panelNo">No</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                           </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                    <div class="outbox">
+                           <label class="asterisk">Would you be interested in volunteering at the conference?</label>
+                        <div class="box bordered-input gender-field">
+                           <div class="gender">
+                                <ul class="clearfix list-unstyled">
+                                    <li>
+                                        <div class="Custradio">
+                                            <%= ff.radio_button :interested_in_volunteering, 'true', class: "radiotype" %>
+                                            <label for="volunteeringYes">Yes</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="Custradio">
+                                            <%= ff.radio_button :interested_in_volunteering, 'false', class: "radiotype" %>
+                                            <label for="volunteeringNo">No</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                           </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <%= ff.hidden_field :sadhak_profile_id, value: @sadhak_profile.id%>
+            <% end %>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="pannel-btn">
+                        <%= f.hidden_field :sp_accordion_id, value: 'collapseTwelve', id: 'medical_practitioners_profile_accodion_id'  %>
+                        <%= button_tag 'CLEAR', class: 'btn btn-danger mg-r10 resetForm', type: 'reset' %>
+                        <%= f.submit 'SAVE', class: 'btn btn-info' %>
+                    </div>
+                </div>
+            </div>
+        <% end %>    
+        </div>
+    </div>
+</div>

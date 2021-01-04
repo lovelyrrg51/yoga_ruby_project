@@ -1,0 +1,148 @@
+<% uniq_token = SecureRandom.uuid %>
+<div class="headingtittle-h2 text-center">
+    <h2>Upcoming Events</h2>
+</div>
+<div class="boxsection-lg boxsection-xs boxshadow">
+    <div class="boxContentCntrl alleventsCntrl ">
+        <div class="row">
+          <div class="col-sm-12 mg-b30">
+            <a href="#applicationRefine" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+            <div class="refineCntrl collapse filter-panel" aria-expanded="true" id="applicationRefine" role="tabpanel">
+              <form action = "#">
+                <%= hidden_field_tag :action_page, "upcoming_events" %>
+                <div class="refinesub-group clearfix">
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label>Country</label>
+                            <div class="box bordered-input dropdown">
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%=  select_tag :country_id, options_for_select(DbCountry.pluck(:name, :id)||[], params[:country_id]), include_blank: " ----- Select ----- ", class: "basic-single", id: "country_#{uniq_token}", onChange: "countrySelectChange('#{uniq_token}')"%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" style="display: none;">
+                        <div class="outbox">
+                            <label>State</label>
+                            <div class="box bordered-input dropdown">
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%=  select_tag :state_id, options_for_select(@states.try(:pluck, :name, :id)||[], params[:state_id]), include_blank: " ----- Select ----- ", class: "basic-single", "data-changable-id": "#{uniq_token}", onChange: "stateSelectChange('#{uniq_token}')", id: "state_#{uniq_token}" %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" style="display: none;">
+                        <div class="outbox">
+                            <label>City</label>
+                            <div class="box bordered-input dropdown">
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%=  select_tag :city_id, options_for_select(@cities.try(:pluck, :name, :id)||[], params[:city_id]), include_blank: " ----- Select ----- ", class: "basic-single", id: "city_#{uniq_token}", "data-visible": false%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label>Graced By</label>
+                            <div class="box bordered-input dropdown">
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%=  select_tag :graced_by, options_for_select([["All", ""], ["Baba ji", "Baba ji"], ["Subtle presence of Babaji", "Subtle presence of Babaji"]]||[], params[:graced_by]), class: "basic-single", id: "city_#{uniq_token}", "data-visible": false%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label>Date</label>
+                            <div class="box outerbox outerheight light-bg">
+                                <div class="rangercode">
+                                    <div class="dropdown-field numbercode">
+                                        <div class="input-group date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" data-maxStartDate="<%= Date.current.end_of_day() + 1.years %>" data-minStartDate="<%=  Date.current.next_day.beginning_of_day %>" >
+                                            <%= text_field_tag :event_start_date, params[:event_start_date], class: "form-control code-input", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true %>
+                                            <span class="input-group-addon">
+                                                <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-field">
+                                        <label class="middletab mg-t10">To</label>
+                                    </div>
+                                    <div class="dropdown-field numbercode">
+                                        <div class="input-group date" id="<%= uniq_token %>_end" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker">
+                                            <%= text_field_tag :event_end_date, params[:event_end_date], class: "form-control code-input", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true %>
+                                            <span class="input-group-addon">
+                                                <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="pannel-btn text-right">
+                            <%= link_to 'CLEAR', upcoming_events_events_path, class: "btn btn-danger mg-r10" %>
+                            <button class="btn btn-info" type = "submit">FILTER</button>
+                        </div>
+                    </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        <% if !@upcoming_events.present? %>
+                <%= render partial: 'application/no_records', locals: {message: 'No Upcoming Events Available.'} %>
+          <%end%>
+        </div>
+        <% if @upcoming_events.present? %>
+        <div class="tableCntrl tabledataCntrl prelative" style="display: none;">
+            <div class="searboxCntrl">
+            <div class="input-group">
+                <%= text_field_tag :event_search, nil, placeholder: 'Search...', class: 'form-control', "aria-describedby": "basic-addon2" %>
+                <span class="input-group-addon" id="basic-addon2"><button class="searchicon" id="search_btn"><i class="icon-search" aria-hidden="true"></i></button></span>
+            </div>
+            </div>
+            <table class="table datatable" id="tabledata" data-url="<%= datatables_events_path(format: :json) %>" data-config='{"order":[[1,"asc"]]}'>
+                <thead>
+                    <tr>
+                        <th>Graced By</th>
+                        <th>Event Name</th>
+                        <th>Event ID</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Contacts</th>
+                        <th>Venue</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <%end%>
+    </div>
+</div>
+
+<div id="popover-content" class="hide">
+    <label>For qualified healthcare professionals / extenders / students only</label>
+    <ul>
+        <li>Doctors</li>
+        <li>Therapists</li>
+        <li>Dentists</li>
+        <li>Nurses</li>
+        <li>Nurse Practitioners</li>
+        <li>Physician Assistants</li>
+        <li>Healthcare Researchers</li>
+        <li>Medical Students</li>
+        <li>Hospice Care Providers</li>
+    </ul>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#search_btn').on('click', function() {
+        $('#tabledata').DataTable().search($('#event_search').val().trim()).draw();
+    });
+  
+    $('.dataTables_filter').hide();
+  });
+</script>

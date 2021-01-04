@@ -1,0 +1,66 @@
+<div id="cameraModal" class="modal fade Custommodal" role="dialog">
+	<%= form_for :cam, url: "#{verify_picture_sadhak_profiles_path}", remote: true, html:{id: 'capture_img_to_verify'} do |f| %>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="collapse in" id="camera-snap">
+                <button type="button" class="btn btn-info btnclose" data-dismiss="modal">
+                    <%= image_tag "close.png"%>
+                </button>
+                <div class="modal-body cameralist modal-gapping modal-camera">
+                    <div class="camera-snapshot">
+                    <!-- dummy image to set camera's div height and width -->
+                        <%= image_tag "baba.jpg"%>
+                        <div class="loader">
+                            <div class="display-table">
+                                <div class="display-table-cell">
+                                    <%= image_tag "loader.gif"%>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="camera-error hidden">
+                            <div class="display-table">
+                                <div class="display-table-cell">
+                                    <%= image_tag "camera.png"%>
+                                    <p>cannot connect to the camera</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="snapshort" href="javascript:void(0)" data-toggle="collapse" data-target="#camera-snap, #profile-selected" onclick="take_snapshot()" disabled="true">
+                        <%= image_tag "shutter.png"%>
+                    </button>
+                </div>
+            </div>
+            <div class="collapse" id="profile-selected">
+                <div class="modal-header">
+                    <button type="button" class="btn btn-info btnclose" data-dismiss="modal">
+                        <%= image_tag "close.png"%>
+                    </button>
+                    <h2 class="headtittle">Select profile image </h2>
+                </div>
+                <div class="modal-body cameralist">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="selected-snapshot">
+                               
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                        	<div id="cropped_image"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="pannel-btn text-right">
+                        <button type="button" class="btn btn-danger mg-r10" data-toggle="collapse" data-target="#profile-selected, #camera-snap" onclick="$('#cropped_image').html('');" type="button">BACK</button>
+                        <button class="btn btn-info" type="button" onclick="setImage()" id='snapshotSubmit' disabled='true' >SUBMIT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%= f.hidden_field :captured_snapshot %>
+  <%end%>
+</div>

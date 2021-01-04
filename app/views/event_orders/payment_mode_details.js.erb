@@ -1,0 +1,19 @@
+<% if @message.present? %>
+
+  toastr.error("<%= @message %>");
+
+<% else %>
+
+  var appearance = $("<%= escape_javascript(render partial: 'order_payment_informations/payment_details', locals: { mode_association: @payment_mode_association, currency: @currency, amount: @amount, is_india_event: @event.country_id == 113 }) %>"), encElementName = "<%= ENCRYPT_PAYMENT_DETAILS_KEY.encrypt %>", encElement = $('[name="' + encElementName + '"]');
+
+  <% new_element_data = { amount: (@amount + @payment_mode_association.total_payable_amount(@amount)[:total_transaction_charges].rnd), event_order_id: @event_order.try(:id), config_id: @payment_gateway.try(@payment_gateway.try(:payment_gateway_type).try(:relation_name)).try(:id).to_s, method: @payment_gateway.try(:payment_gateway_type).try(:name).to_s, payment_date: Date.today.to_s, payment_gateway_mode_association_id: @payment_mode_association.try(:id), upgrade: @upgrade, parent_event_order_id: @parent_event_order_id }.to_json.encrypt %>
+
+  $('[name="payment_details[payment_gateway_mode_association_id]"]').val("<%= @payment_mode_association.try(:id) %>");
+
+  $('[name="payment_details[amount]"]').val("<%= (@amount + @payment_mode_association.total_payable_amount(@amount)[:total_transaction_charges].rnd) %>");
+
+  encElement.val("<%= new_element_data %>");
+
+  $("#payment_mode_details_div").html(appearance);
+
+<% end %>

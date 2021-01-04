@@ -1,0 +1,186 @@
+<%= content_for(:title, "Events Calendar") %>
+
+<section id="events-calendar-banner">
+</section>
+
+<section id="our_story_summary">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="heading_title text-align-center">Events Calendar</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="clearfix"></div>
+
+<section class="events_calendar">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="custom-calendar-wrap">
+          <div id="custom-inner" class="custom-inner">
+            <div class="custom-header clearfix">
+              <nav>
+                <span id="custom-prev" class="custom-prev"></span>
+                <span id="custom-next" class="custom-next"></span>
+              </nav>
+              <div id="custom-month" class="custom-month"></div>
+              <div id="custom-year" class="custom-year"></div>
+            </div>
+            <div id="calendar" class="fc-calendar-container"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="clearfix"></div>
+
+<%= render "v2/shared/newsletter" %>
+
+<script type="text/javascript">
+document.addEventListener('turbolinks:load', function () {
+  events = <%= raw @events.to_json %>;
+  ShivYogEvents = {}
+  monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  for(event_index in events) {
+    event = events[event_index];
+    date  = formatDate(event.event_start_date)
+    ShivYogEvents[date] = `<span class="title">${event.event_name}</span><span class="date"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;${eventDateTime(event)}</span><span class="graced_by">Graced by: ${event.graced_by}</span><span class="venue"><i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp;${venue(event.event_address)}</span><span class="description"> <a href="${eventUrl(event)}">Click here to know more...</a> </span>`
+  };
+
+  function formatDate(startDate) {
+    date   = new Date(startDate);
+    day    = date.getDate();
+    month  = date.getMonth();
+    year   = date.getFullYear();
+    day    = day > 10 ? day : `0${day}`;
+    month  = month > 10 ? month : `0${month}`;
+    return `${month}-${day}-${year}`
+  };
+
+  function eventDateTime(event) {
+    startDate = new Date(event.event_start_date);
+    endDate   = new Date(event.event_end_date);
+    startTime = new Date(event.event_start_time);
+    endTime   = new Date(event.event_end_time);
+
+    startMonth = monthNames[startDate.getMonth()];
+    endMonth   = monthNames[endDate.getMonth()];
+    startTime  = formatAMPM(startTime);
+    endTime    = formatAMPM(endTime);
+    return `${startMonth} ${startDate.getDate()} - ${startTime} to ${endMonth} ${endDate.getDate()} - ${endTime}`
+  }
+
+  function venue(venue) {
+    if(typeof(venue) == 'undefined') { return ''; }
+    return venue;
+  }
+
+  function formatAMPM(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    if(isNaN(minutes)) {
+     minutes = '00'
+    }
+    else {
+      minutes = minutes < 10 ? `0${minutes}` : minutes;
+    }
+    var strTime = `${hours}:${minutes} ${ampm}`;
+    return strTime;
+  }
+
+  function eventUrl(event) {
+    return `/events/${event.id}`
+  }
+
+  $(function ()
+  {
+
+    var transEndEventNames = {
+        'WebkitTransition': 'webkitTransitionEnd',
+        'MozTransition': 'transitionend',
+        'OTransition': 'oTransitionEnd',
+        'msTransition': 'MSTransitionEnd',
+        'transition': 'transitionend'
+      },
+      transEndEventName = transEndEventNames[Modernizr.prefixed('transition')],
+      $wrapper = $('#custom-inner'),
+      $calendar = $('#calendar'),
+      cal = $calendar.calendario(
+      {
+        onDayClick: function ($el, $contentEl, dateProperties)
+        {
+          if ($contentEl.length > 0)
+          {
+            showEvents($contentEl, dateProperties);
+          }
+
+        },
+        caldata: ShivYogEvents,
+        displayWeekAbbr: true
+      }),
+      $month = $('#custom-month').html(cal.getMonthName()),
+      $year = $('#custom-year').html(cal.getYear());
+
+    $('#custom-next').on('click', function ()
+    {
+      cal.gotoNextMonth(updateMonthYear);
+    });
+    $('#custom-prev').on('click', function ()
+    {
+      cal.gotoPreviousMonth(updateMonthYear);
+    });
+
+    function updateMonthYear()
+    {
+      $month.html(cal.getMonthName());
+      $year.html(cal.getYear());
+    }
+
+    // just an example..
+    function showEvents($contentEl, dateProperties)
+    {
+
+      hideEvents();
+
+      var $events = $('<div id="custom-content-reveal" class="custom-content-reveal"><h4>Events for ' + dateProperties.monthname + ' ' + dateProperties.day + ', ' + dateProperties.year + '</h4></div>'),
+        $close = $('<span class="custom-content-close"></span>').on('click', hideEvents);
+
+      $events.append($contentEl.html(), $close).insertAfter($wrapper);
+
+      setTimeout(function ()
+      {
+        $events.css('top', '0%');
+      }, 25);
+
+    }
+
+    function hideEvents()
+    {
+
+      var $events = $('#custom-content-reveal');
+      if ($events.length > 0)
+      {
+
+        $events.css('top', '100%');
+        Modernizr.csstransitions ? $events.on(transEndEventName, function ()
+        {
+          $(this).remove();
+        }) : $events.remove();
+
+      }
+
+    }
+
+  });
+})
+</script>

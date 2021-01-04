@@ -1,0 +1,101 @@
+<div class="adminCntrl">
+    <div class="row">
+        <div class="overflow-row">
+            <div class="rightCntrl">
+            <div class="boxsection-lg boxsection-xs boxshadow mg-l2 mg-r2">
+                <%= form_for @collection, url: (@collection.persisted? ? collection_update_episodes_collection_path : create_episodes_collection_collections_path), html: { id: "episode_collection_form" } do |f|%>
+                <div class="row">
+                    <div class="headtittle text-center">
+                        <h2>Episode Collection</h2>
+                    </div>
+                    <div class="col-sm-12 mg-t20">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="outbox">
+                                    <label class="asterisk">Name</label>
+                                    <div class="box bordered-input">
+                                            <div class="dropdown dropdown-field">
+                                                <%= f.hidden_field :collection_type, value: @collection.collection_type %>
+                                                <%= f.text_field :collection_name, class: "form-control noBorder field", required: true, placeholder: "Name"%>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="outbox">
+                                    <label class="">Description</label>
+                                    <div class="box bordered-input border-textarea">
+                                        <div class="dropdown dropdown-field">
+                                            <%= f.text_area :collection_description, class: "form-control noBorder field", placeholder: "Description"%>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="outbox announcementWrapper">
+                                    <label class="asterisk">Announcement</label>
+                                        <div class="pannel-btn text-right mg-b20">
+                                            <button class="btn btn-info addMoreAnnouncementButton" type = "button">ADD MORE</button>
+                                        </div>
+                                        <% if f.object.announcement_text.present? %>
+                                            <% f.object.announcement_text.each do |text|%>
+                                                <div class="box bordered-input">
+                                                    <div class="dropdown dropdown-field">
+                                                        <input type="text" name="announcement_text[]" class = "form-control noBorder field" value = "<%= text %>">
+                                                    </div>
+                                                </div>
+                                            <% end %>
+                                        <% else %>
+                                            <div class="box bordered-input">
+                                                <div class="dropdown dropdown-field">
+                                                    <input type="text" name="announcement_text[]" class = "form-control noBorder field">
+                                                </div>
+                                            </div>
+                                        <% end %>
+                                </div>
+                            </div>
+                            <% if @event_types %>
+                                <%= f.fields_for :collection_event_type_association do |ff|%>
+                                    <div class="col-sm-6">
+                                        <div class="outbox">
+                                            <label class="asterisk">Event Type</label>
+                                            <div class="box bordered-input dropdown">
+                                                <div class="dropdown-field selectTwo-dropdown">
+                                                    <%= ff.select :event_type_id, options_for_select(@event_types.pluck(:name, :id), ff.object.try(:event_type_id)),{ include_blank: " ----- Select -----" }, { class: "simple-single", required: 'required' } %> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% end %>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 episodes-form" id="episodesList">
+                        <%= f.fields_for :episodes do |ff|%>
+                            <%= render 'episode_fields', f: ff%>
+                        <%end%>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="col-sm-12 mg-t30">
+                            <div class="pannel-btn text-left">
+                                <%= link_to_add_association 'ADD MORE ASSETS', f, :episodes, 'data-association-insertion-node': '.episodes-form', 'data-association-insertion-method': 'append', class: 'btn btn-info'%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mg-t20">
+                    <div class="col-sm-12">
+                        <div class="pannel-btn text-right">
+                            <%= link_to "NEW COLLECTION", (@collection.shivir? ? shivir_collections_new_collections_path : new_episodes_collection_collections_path), class: "btn btn-info" if @collection.persisted?%>
+                            <%= link_to 'REMOVE COLLECTION', collection_destroy_episodes_collection_path(@collection), class: 'btn btn-info', method: :delete, data: { confirm: "Are you sure?"} if @collection.persisted?%>
+                            <button class="btn btn-info", id='save_episode_collection'><%= @collection.persisted? && 'UPDATE COLLECTION' || 'CREATE COLLECTION'%></button>
+                        </div>
+                    </div>
+                </div>
+                <%end%>
+            </div>
+        </div>
+    </div>
+</div>

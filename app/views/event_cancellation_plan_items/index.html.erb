@@ -1,0 +1,71 @@
+<% content_for(:title, 'Admin | Event Cancellation Plan') %>
+
+<div class="adminCntrl">
+  <div class="headingtittle-h2 text-center">
+  <h2>Admin Panel</h2>
+  </div>
+  <div class="row">
+    <div class="overflow-row">
+    <%= render 'admin/admin_left_panel' %>
+      <div class="rightCntrl">
+          <div class="boxsection-lg boxsection-xs boxshadow prelative">
+       
+              <div class="rightContent">
+                <div id="event_cancellation_plan_items">
+                    <div class="row">
+                        <div class="col-sm-12 mg-b30">
+                             <div class="headtittle text-center">
+                                <h2>Event Cancellation Plan Items</h2>
+                                <span class="subheading"><%= @event_cancellation_plan.try(:name) %></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <%= render "event_cancellation_plan_items/form"%>
+                        </div>
+                        <% if @event_cancellation_plan_items.present? %>
+                          <div class="col-sm-12">
+                              <div class="tableCntrl">
+                                  <div class="table-responsive tableScrollbar">
+                                      <table class="table">
+                                          <thead>
+                                              <tr>
+                                                  <th>Before days</th>
+                                                  <th>Amount</th>
+                                                  <th>Amount Type</th>
+                                                  <th class="text-center">Action</th>
+                                              </tr>
+                                          </thead>
+                                          <tbody>
+                                            <% @event_cancellation_plan_items.each do |event_cancellation_plan_item|%>
+                                              <tr>
+                                                  <td><%= event_cancellation_plan_item.days_before %></td>
+                                                  <td><%= event_cancellation_plan_item.amount %></td>
+                                                  <td><%= event_cancellation_plan_item.amount_type %></td>
+                                                  <td class="text-center">
+                                                      <%= link_to "", edit_event_cancellation_plan_event_cancellation_plan_item_path(@event_cancellation_plan , event_cancellation_plan_item), class: "mg-r10 primary-color fa fa-pencil" %>
+                                                      <%= link_to "", event_cancellation_plan_event_cancellation_plan_item_path(@event_cancellation_plan , event_cancellation_plan_item), method: :delete,data: {confirm: "Are you sure?"}, class: " primary-color fa fa-trash-o"%>
+                                                  </td>
+                                              </tr>
+                                            <% end %>
+                                          </tbody>
+                                      </table>
+                                  </div>
+                                  <div class="table-pagination">
+                                      <div class="show-pgnation">
+                                          <p class="primarybold"><%= custom_page_entries_info(@event_cancellation_plan_items) %></p>
+                                      </div>
+                                      <%= paginate @event_cancellation_plan_items %>
+                                  </div>
+                              </div>
+                          </div>
+                        <% else %>
+                          <%= render partial: 'application/no_records', locals: {message: 'No Event Cancellation Plan Found.'} %>
+                        <% end %>
+                    </div>
+                </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>    
+</div>

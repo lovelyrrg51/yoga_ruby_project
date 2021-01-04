@@ -1,0 +1,429 @@
+/*Our Teachers*/
+
+.teacher_box
+{
+	text-align: center;
+	margin: 30px auto 0px auto;
+	position: relative;
+
+	-webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+.teacher_box .teacher_img
+{
+	margin: 20px auto;
+	position: relative;
+	display: inline-block;
+}
+.teacher_box .teacher_name
+{
+	font-weight: bold;
+	margin: 5px auto;
+}
+.teacher_box .teacher_designation
+{
+	font-style: italic;
+}
+.teacher_box .teacher_para
+{
+	padding: 0px 10px;
+}
+.teacher_box .teacher_social_media ul
+{
+	list-style: none;
+	padding: 0;
+	display: inline-flex;
+}
+.teacher_box .teacher_social_media ul li
+{
+	margin: 10px 20px 0px 20px;
+}
+.teacher_box:hover
+{
+	box-shadow: 0px 5px 45px 0px rgba(0, 0, 0, 0.2);
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+.teacher_box .teacher_social_media:after
+{
+	background: #f0f0f0 none repeat scroll 0 0;
+    bottom: 0;
+    content: "";
+    height: 1px;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    width: 61px;
+
+}
+
+.teacher_box:hover .teacher_social_media:after
+{
+	background: #F6484E none repeat scroll 0 0;
+    -moz-transition: all 0.3s ease 0s;
+    -ms-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+    width: 100%;
+}
+
+.container .hover_active{
+  zoom: 1;
+  filter: alpha(opacity=100);
+  opacity: 1;
+  -webkit-transition: opacity .5s ease-in-out;
+  -moz-transition: opacity .5s ease-in-out;
+  -ms-transition: opacity .5s ease-in-out;
+  -o-transition: opacity .5s ease-in-out;
+  transition: opacity .5s ease-in-out;
+}
+/*Fade all the DIV when user hovers on any div*/
+.container:hover .hover_active{
+  zoom: 1;
+  filter: alpha(opacity=20);
+  opacity: 0.2;
+  -webkit-transition: opacity .5s ease-in-out;
+  -moz-transition: opacity .5s ease-in-out;
+  -ms-transition: opacity .5s ease-in-out;
+  -o-transition: opacity .5s ease-in-out;
+  transition: opacity .5s ease-in-out;
+}
+
+/*Fade out the particular DIV when user hover on that DIV*/
+.container .hover_active:hover{
+  /*Opacity*/
+  zoom: 1;
+  filter: alpha(opacity=100);
+  opacity: 1;
+}
+
+.teacher_read_more {
+    width: 100%;
+    height: 100%;
+	top: 0;
+    padding-top: 0px;
+    transform: scale(1);
+	opacity: 0;
+    -webkit-transform: scale(1);
+    -o-transform: scale(1);
+    background: none repeat scroll 0 0 rgba(255,255,255,0);
+    position: absolute;
+    transition: all 0.6s ease-in-out;
+	-moz-transition: all 0.6s ease-in-out;
+	-webkit-transition: all 0.6s ease-in-out;
+	-o-transition: all 0.6s ease-in-out;
+}
+
+.teacher_box:hover .teacher_read_more {
+	opacity: 1;
+	transform: scale(1);
+    -webkit-transform: scale(1);
+    -o-transform: scale(1);
+	padding-top: 120px;
+    transition: all 0.6s ease-in-out;
+    -moz-transition: all 0.6s ease-in-out;
+    -webkit-transition: all 0.6s ease-in-out;
+    -o-transition: all 0.6s ease-in-out;
+}
+/*Our Teachers*/
+
+
+
+
+/*Teacher Detail Page*/
+.m-10-auto
+{
+	margin: 10px auto !important;
+}
+.m-0-auto
+{
+	margin: 0px auto;
+}
+.teacher_detail_box
+{
+	text-align: center;
+	margin: 30px auto 0px auto;
+	position: relative;
+
+	-webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+.teacher_detail_box .teacher_img
+{
+	margin: 20px auto;
+	position: relative;
+	/*display: inline-block;*/
+}
+.teacher_detail_box .teacher_name
+{
+	font-weight: bold;
+	margin: 5px auto;
+}
+.teacher_detail_box .teacher_designation
+{
+	font-style: italic;
+}
+.teacher_detail_box .teacher_para
+{
+	padding: 0px 10px;
+}
+.teacher_detail_box .teacher_contact
+{
+	margin: 5px auto;
+}
+.teacher_detail_box .teacher_detail_social_media ul
+{
+	list-style: none;
+	padding: 10px;
+	display: inline-flex;
+	background: #FFF;
+}
+.teacher_detail_box .teacher_detail_social_media ul li
+{
+	margin: 0px 20px 0px 20px;
+}
+.teacher_detail_box .teacher_detail_social_media ul li i
+{
+	font-size: 16px !important;
+}
+.teacher_detail_social_media {
+    width: 100%;
+    height: 100%;
+	top: 0;
+    padding-top: 0px;
+    transform: scale(1);
+	opacity: 0;
+    -webkit-transform: scale(1);
+    -o-transform: scale(1);
+    background: none repeat scroll 0 0 rgba(0,0,0,0.4);
+    position: absolute;
+    transition: all 0.6s ease-in-out;
+	-moz-transition: all 0.6s ease-in-out;
+	-webkit-transition: all 0.6s ease-in-out;
+	-o-transition: all 0.6s ease-in-out;
+}
+
+.teacher_detail_box:hover .teacher_detail_social_media {
+	opacity: 1;
+	transform: scale(1);
+    -webkit-transform: scale(1);
+    -o-transform: scale(1);
+	padding-top: 80%;
+    transition: all 0.6s ease-in-out;
+    -moz-transition: all 0.6s ease-in-out;
+    -webkit-transition: all 0.6s ease-in-out;
+    -o-transition: all 0.6s ease-in-out;
+}
+
+#our_teacher_courses_video
+{
+	padding: 100px 0px;
+}
+.video_of_the_month_txt:before
+{
+	/*border: 2px solid #FFF;
+    /*padding: 180px;*/
+    /*position: absolute;
+    width: 40%;
+	height: 50%;
+    top: 0;
+    /* display: contents; */
+    /*right: 0;
+    /* left: 200px; */
+	/*position: absolute;
+    content: "";
+    background-color: transparent;
+    border: 2px solid #fff;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: -160px;
+    z-index: 0;*/
+
+	content: '';
+    position: absolute;
+    width: calc(100% + 15em);
+    border: 1px solid #f17a72;
+	background: transparent;
+	top: calc(0% - 4em);
+	left: -160px;
+    height: calc(100% + 7em);
+    transform: translateY(0em);
+    -webkit-transform: translateY(0em);
+    /*outline: 2px solid rgba(127,127,127,0.3);*/
+}
+.position-relative
+{
+	position: relative;
+}
+.course_details
+{
+	display: flex;
+	margin: 20px auto;
+}
+#course_detail_section .course_details
+{
+	display: inline-flex;
+	/*margin: 0px auto;	*/
+}
+.author_name, .course_duration, .course_level
+{
+	margin: 0px 20px 20px 0px;
+}
+.course_about_author
+{
+	box-shadow: 0px 5px 45px 0px rgba(0, 0, 0, 0.2);
+}
+.teacher_pic
+{
+	margin: 10px auto;
+}
+.teacher_pic img
+{
+	height: 100px;
+	width: 100px;
+	border-radius: 50%;
+}
+.course_box
+{
+	text-align: center;
+	margin: 30px auto 10px auto;
+	border-bottom: 1px solid #e4e1e1;
+	padding-bottom: 20px;
+    position: relative;
+}
+.course_box .course_details
+{
+	display: inline-flex;
+    margin: 0px auto;
+}
+.course_box .course_duration, .course_box .course_level
+{
+	margin: 0px 20px 0px 0px;
+}
+.course_box .course_rating img
+{
+	vertical-align: baseline;
+}
+.course_box .timer
+{
+	display: inline-flex;
+}
+.course_box .timer div
+{
+	display: inline-block;
+	padding: 10px;
+}
+.course_box .timer div span
+{
+	display: block;
+}
+.course_box .days {
+  color: #2aa913;
+}
+.course_box .hours {
+  color: #36d00f;
+}
+.course_box .minutes {
+  color: #26f52c;
+}
+.course_box .seconds {
+  color: #66f964;
+}
+.unlock_all_courses
+{
+	text-align: center;
+}
+.unlock_all_courses .timer{
+	font-size: 20px;
+	margin: 10px auto;
+}
+.unlock_all_courses .unlock_text
+{
+	font-size: 20px;
+	font-weight: bold;
+	margin: 10px auto;
+}
+.unlock_all_courses .unlock_subtext
+{
+	color: #CCC;
+	margin: 10px auto;
+}
+span.trailer_duration
+{
+	color: #CCC;
+}
+#course_toc ul.ul_toc
+{
+	display: block;
+    margin: 5px auto;
+    padding: 0 !important;
+	list-style: none;
+}
+#course_toc ul.ul_toc li
+{
+	/*display: flex;*/
+	margin: 10px auto;
+    border-bottom: 1px solid #f9f2f2;
+    padding-bottom: 5px;
+}
+#course_toc ul.ul_toc li span.toc_right
+{
+	float: right;
+	color: #CCC !important;
+}
+#course_toc  .heading_subtitle
+{
+	margin: 0px auto 10px auto !important;
+}
+
+#course_expiry_div {
+    color: #f95349;
+    display: inline-block;
+    font-weight: 100;
+    text-align: center;
+    font-size: 30px;
+	margin: 20px auto;
+}
+
+#course_expiry_div > div {
+    padding: 10px;
+    border-radius: 3px;
+    background: linear-gradient(to left, #ff6a40 0%, #f6484e 100%);
+    display: inline-block;
+}
+
+#course_expiry_div div > span {
+    padding: 15px;
+    border-radius: 3px;
+    background: #fff;
+    display: inline-block;
+}
+.grey-text
+{
+	color: #CCC;
+}
+@media only screen and (max-width:400px) {
+    #course_expiry_div > div {
+        width: 49%;
+        margin-top: 5px;
+    }
+}
+.smalltext {
+    padding-top: 5px;
+    font-size: 16px;
+    color: #fff;
+}
+
+/*Teacher Detail Page*/

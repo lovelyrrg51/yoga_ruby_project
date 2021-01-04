@@ -1,0 +1,42 @@
+<%= form_for @payment_mode, html:{ id: "payment_mode_form" } do |f| %>
+  <div class="prelative mg-b30">
+      <div class="overlapping"></div>
+      <div class="row mg-t30">
+          <div class="col-sm-6">
+              <div class="box bordered-input">
+                  <label>Name</label>
+                  <div class="dropdown dropdown-field">
+                      <%= f.text_field(:name, class: 'form-control noBorder field', required: true, placeholder: 'Name')%>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="box bordered-input">
+                  <label>Shortcode</label>
+                  <div class="dropdown dropdown-field">
+                      <%= f.text_field(:shortcode, class: 'form-control noBorder field', required: true, placeholder: 'Shortcode')%>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="box bordered-input dropdown">
+                  <label>Group Name</label>
+                  <div class="dropdown-field selectTwo-dropdown">
+                      <%= f.select(:group_name , options_for_select(PaymentMode.group_names.collect{|k,v| [k.titleize,k] }, selected: f.object.group_name), { include_blank: " ----- Select -----" }, { class: 'basic-single', required: true }) %>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-12">
+              <div class="pannel-btn text-right">
+                  <button type="reset" class="btn btn-danger mg-r10 resetForm" >CLEAR</button>
+                  <%= f.submit params[:action] == "edit" ? "UPDATE" : 'CREATE', {class: 'btn btn-info'} %>
+              </div>
+          </div>
+      </div>
+  </div>
+ <% end %>
+ <script type="text/javascript">
+ $(document).ready(function(){
+   $("#payment_mode_form").validate();
+  });
+</script>

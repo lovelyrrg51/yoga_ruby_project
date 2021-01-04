@@ -1,0 +1,34 @@
+<% content_for(:title, 'Admin | Event Cancellation Plan') %>
+
+<div class="adminCntrl">
+  <div class="headingtittle-h2 text-center">
+      <h2>Admin Panel</h2>
+  </div>
+  <div class="row">
+      <div class="overflow-row">
+          <%= render 'admin/admin_left_panel' %>
+          <div class="rightCntrl">
+              <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                  
+                  <div class="rightContent">
+                    <div id="event_cancellation_plan_items">
+                        <div class="row">
+                            <div class="col-sm-12 mg-b30">
+                                 <div class="headtittle text-center">
+                                    <h2>Event Cancellation Plan Items</h2>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="pannel-btn text-left">
+                                    <%= link_to "CREATE NEW", event_cancellation_plan_event_cancellation_plan_items_path(@event_cancellation_plan), class: "btn btn-info" %>
+                                </div>
+                                <%= render "event_cancellation_plan_items/form"%>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>    
+</div>

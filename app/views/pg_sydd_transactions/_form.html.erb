@@ -1,0 +1,17 @@
+<%= form_for(@pg_sydd_transaction) do |f| %>
+  <% if @pg_sydd_transaction.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@pg_sydd_transaction.errors.count, "error") %> prohibited this pg_sydd_transaction from being saved:</h2>
+
+      <ul>
+      <% @pg_sydd_transaction.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

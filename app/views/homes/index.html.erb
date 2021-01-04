@@ -1,0 +1,233 @@
+<div class="homeCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2><%= (signed_in? && current_user.super_admin?) && 'Dashboard' || 'Home'%></h2>
+    </div>
+    <div class="boxsection-lg boxsection-xs boxshadow">
+      <% if signed_in? && current_user.super_admin? %>
+        <div class="d-flex row mg-t20">
+            <div class="col-custom col-md-custom mg-b20">
+                <div class="eventcount">
+                    <div class="display-table"> 
+                        <div class="iconsymbol display-table-cell">
+                            <i class="icon-monthlypay" aria-hidden="true"></i>
+                        </div>
+                        <div class="detailssymbol display-table-cell">
+                            <span>Monthly Payment</span>
+                            <p><%= number_with_precision(@total_monthly_revenue, :precision => 0, :delimiter => ',') %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-custom col-md-custom mg-b20">
+                <div class="eventcount">
+                    <div class="display-table">
+                        <div class="iconsymbol display-table-cell">
+                            <i class="icon-dailypay" aria-hidden="true"></i>
+                        </div>
+                        <div class="detailssymbol display-table-cell">
+                            <span>Daily Payment</span>
+                            <p><%= number_with_precision(@total_daily_revenue, :precision => 0, :delimiter => ',') %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-custom col-md-custom mg-b20">
+                <div class="eventcount">
+                    <div class="display-table">
+                        <div class="iconsymbol display-table-cell">
+                            <i class="icon-createuser" aria-hidden="true"></i>
+                        </div>
+                        <div class="detailssymbol display-table-cell">
+                            <span>New Sadhak Profiles</span>
+                            <p><%= number_with_precision(@total_new_sadhak_registrations, :precision => 0, :delimiter => ',') %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-custom col-md-custom mg-b20">
+                <div class="eventcount">
+                    <div class="display-table">
+                        <div class="iconsymbol display-table-cell">
+                            <i class="icon-monthlyevent" aria-hidden="true"></i>
+                        </div>
+                        <div class="detailssymbol display-table-cell">
+                            <span>Monthly Events</span>
+                            <p><%= number_with_precision(@total_event_started_in_current_month, :precision => 0, :delimiter => ',') %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% if @monthly_revenue.present? || @registered_sadhaks_by_gender.present? || @monthly_events_registration.present? %>
+          <div class="row mg-t30 mg-b30">
+              <% if @monthly_revenue.present? %>
+                <div class="col-sm-12 mg-b50 <%= @registered_sadhaks_by_gender.present? || @monthly_events_registration.present? ? 'col-md-6' : 'col-md-12' %>">
+                    <div id="monthlyRevenueChartContainer" class="boxshadow-100"><%= @monthly_revenue.render() %></div>
+                </div>
+              <% end %>
+              <% if @registered_sadhaks_by_gender.present? %>
+                <div class="col-sm-12 mg-b50 <%= @monthly_revenue.present? || @monthly_events_registration.present? ? 'col-md-6' : 'col-md-12' %>">
+                    <div id="registeredSadhakByGenderChartContainer" class="boxshadow-100"><%= @registered_sadhaks_by_gender.render() %></div>
+                </div>
+              <% end %>
+              <% if @monthly_events_registration.present? %>
+                <div class="col-sm-12 mg-b50 <%= @monthly_revenue.present? && @registered_sadhaks_by_gender.present? ? 'col-md-12' : 'col-md-6'%>">
+                    <div id="ongoingEventRegistrationsChartContainer" class="boxshadow-100"><%= @monthly_events_registration.render() %></div>
+                </div>
+              <% end %>
+          </div>
+        <% end %>
+      <% end %>
+        <div class="row d-flex mg-x-b20 mg-x-t20" id="babaDesc">
+            <div class="d-w2 w-100">
+                <div class="boxsection-sm boxshadow mg-0 h-100">
+                    <div class="profileCntrl clearfix">
+                        <div class="profileimg"><%= image_tag "babaji.png", class: "img-circle", alt: "baba ji"%></div>
+                        <div class="shivyogcontent">
+                            <h2>Baba Ji</h2>
+                            <p>Experience divine life transformation in presence of the Master.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!--             <div class="d-w2">
+                <div class="boxsection-sm boxshadow mg-0 h-100">
+                    <div class="profileCntrl clearfix">
+                        <div class="profileimg"><%#= image_tag "ishanji.png", class: "img-circle", alt: "baba ji"%></div>
+                        <div class="shivyogcontent">
+                            <h2>Ishan Ji</h2>
+                            <p>Experience spirituality through joy, laughter and youthful zeal.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+        <div class="row">
+            <% if (@babaji_upcoming_events + @ishanji_upcoming_events).present? %>
+                <div class="col-sm-12 mg-t20">
+                    <div class="boxsection-sm boxshadow">
+                        <div class="headtittle"><h2>Upcoming Events</h2></div>
+                        <div class="tableCntrl events_table">
+                            <div class="table-responsive Scrollbarhv tableheight">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Shivirs Conducted</th>
+                                            <th>Event Name</th>
+                                            <th>Event Start Date</th>
+                                            <th>Event End Date </th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% (@babaji_upcoming_events + @ishanji_upcoming_events).shuffle.each do |event| %>
+                                          <tr class="<%= 'tableoverlay' unless is_event_running?(event) %>">
+                                              <td>
+                                                  <div class="profile">
+                                                    <div class="profileimg"><%= image_tag %w(babaji ishanji).include?(event.graced_by.to_s.gsub(' ', '').downcase)? "#{event.graced_by.to_s.gsub(' ', '').downcase}sm.png" : 'profile.png', alt: 'NA' %></div>
+                                                    <span><%= event.graced_by %></span>
+                                                  </div>
+                                              </td>
+                                              <td><%= event.event_name %></td>
+                                              <td><%= event.event_start_date.try(:strftime, '%b %d %Y') %></td>
+                                              <td><%= event.event_end_date.try(:strftime, '%b %d %Y') %></td>
+                                              <td class="primary-color text-center"><a href="<%= register_event_path(event) %>" class="btn btn-info">REGISTER</a></td>
+                                          </tr>
+                                        <% end %>
+                                    </tbody>   
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
+            <% if (@babaji_ongoing_events + @ishanji_ongoing_events).present? %>
+              <div class="col-sm-12 mg-t20" id="ongoingEvents">
+                  <div class="boxsection-sm boxshadow">
+                      <div class="headtittle"><h2>Ongoing Events</h2></div>
+                      <div class="tableCntrl events_table">
+                          <div class="table-responsive Scrollbarhv tableheight">
+                              <table class="table">
+                                  <thead>
+                                      <tr>
+                                          <th>Shivirs Conducted</th>
+                                          <th>Event Name</th>
+                                          <th>Event Start Date</th>
+                                          <th>Event End Date </th>
+                                          <th class="text-center">Action</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <% (@babaji_ongoing_events + @ishanji_ongoing_events).shuffle.each do |event| %>
+                                        <tr class="<%= 'tableoverlay' unless is_event_running?(event) %>">
+                                            <td>
+                                                <div class="profile">
+                                                  <div class="profileimg"><%= image_tag %w(babaji ishanji).include?(event.graced_by.to_s.gsub(' ', '').downcase)? "#{event.graced_by.to_s.gsub(' ', '').downcase}sm.png" : 'profile.png', alt: 'NA' %></div>
+                                                  <span><%= event.graced_by %></span>
+                                                </div>
+                                            </td>
+                                            <td><%= event.event_name %></td>
+                                            <td><%= event.event_start_date.try(:strftime, '%b %d %Y') %></td>
+                                            <td><%= event.event_end_date.try(:strftime, '%b %d %Y') %></td>
+                                            <td class="primary-color text-center"><a href="<%= register_event_path(event) %>" class="btn btn-info">REGISTER</a></td>
+                                        </tr>
+                                      <% end %>
+                                  </tbody>   
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            <% end %>
+            <div class="col-sm-12 mg-t20" id="nearest-forum-container">
+                <div class="boxsection-sm boxshadow">
+                    <div class="octagonal-color headtittle"><h2>ShivYog International Forums</h2></div>
+                    <div class="pannel-btn mg-t20">
+                        <button class="btn btn-info btn-iconsearch searchforum"><i class="icon-search" aria-hidden="true"></i> Search Forum</button>
+                    </div>
+                    <div class="tableCntrl">
+                      <h2 class="octagonal-color tablehead-tittle">List of Nearest ShivYog Forum</h2>
+                      	<% unless @nearest_shivyog_forums.present?%>
+	                        <div class="offerCntrl text-center primarybold offergapping-15 nearestForumError">
+	                          <p>Nearest Forums not found.</p>
+	                        </div>
+                        <%end%>
+                        <div class="table-responsive <%= 'tableScrollbar' if @nearest_shivyog_forums.present?%>" id="nearestForumsListTable">
+	                    		<%= content_tag :table, class: "table" do%>
+                            <thead>
+                                <tr>
+                                    <th>Forum Name</th>
+                                    <th>Forum Address</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="nearest-store">
+                              <% (@nearest_shivyog_forums || []).each do |sy_club| %>
+                                <tr>
+                                    <td class="primarybold"><%= sy_club.name %></td>
+                                    <td><%= sy_club.address.try(:full_address) %></td>
+                                    <td class="text-center"><a href="javascript:void(0)" class="primary-color">View</a></td>
+                                </tr>
+                              <% end %>
+                            </tbody>   
+	                    		<%end if @nearest_shivyog_forums.present?%>
+                    		</div>
+                    </div>
+                    <div class="pannel-btn mg-t30 text-center">
+                        <%= link_to "START NEW SHIVYOG FORUM", new_sy_club_path, class: "btn btn-info shivyog-btn mg-r10" if policy(:sy_club).show? %>
+                        <%= link_to "ALL NEW SHIVYOG FORUM", sy_clubs_path, class: "btn btn-info shivyog-btn" %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+  $(document).on("turbolinks:load", function(){
+  	if ($('#nearest-forum-container').length > 0){
+  		setTimeout(onScrollFetchNearestForum, 300);
+  	}
+  });
+</script>
+

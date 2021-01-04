@@ -1,0 +1,64 @@
+<% content_for(:title, 'Admin | Payment Gateway Type') %>
+
+<div class="adminCntrl">
+<div class="headingtittle-h2 text-center">
+<h2>Admin Panel</h2>
+</div>
+<div class="row">
+<div class="overflow-row">
+  <%= render 'admin/admin_left_panel' %>
+  <div class="rightCntrl">
+      <div class="boxsection-lg boxsection-xs boxshadow prelative">
+          <div class="rightContent">
+            <div id="payment_gateway_types">
+                <div class="row">
+                    <div class="col-sm-12 mg-b30">
+                         <div class="headtittle text-center">
+                            <h2>Payment Gateway Types</h2>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+
+                    </div>
+                    <% if @payment_gateway_types.present? %>
+                      <div class="col-sm-12">
+                          <div class="tableCntrl">
+                              <div class="table-responsive tableScrollbar">
+                                  <table class="table">
+                                      <thead>
+                                          <tr>
+                                              <th>Name</th>
+                                              <th class="text-center">Action</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                        <% @payment_gateway_types.each do |payment_gateway_type|%>
+                                          <tr>
+                                              <td><%= payment_gateway_type.try(:name).try(:titleize) %></td>
+                                              <td class="text-center">
+                                                  <%= link_to "", "/v1//admin/#{payment_gateway_type.relation_name}s", class: "mg-r10 primary-color fa fa-pencil" %>
+                                              </td>
+                                          </tr>
+                                        <% end %>
+                                      </tbody>
+                                  </table>
+                              </div>
+                              <div class="table-pagination">
+                                  <div class="show-pgnation">
+                                      <p class="primarybold"><%= custom_page_entries_info(@payment_gateway_types) %></p>
+                                  </div>
+                                  <%= paginate @payment_gateway_types %>
+                              </div>
+                          </div>
+                      </div>
+                    <% else %>
+                      <%= render partial: 'application/no_records', locals: {message: 'No Payment Gateway Type Found.'} %>
+                    <% end %>
+                </div>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+</div>

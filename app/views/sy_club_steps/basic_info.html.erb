@@ -1,0 +1,21 @@
+
+<% content_for(:title, 'Forum | Basic Info') %>
+<div class="CompleteprofileCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Forum</h2>
+        <span class="subheading">ShivYog Forum <strong class="texttransform"><%= @sy_club.name.try(:titleize) %></strong></span>
+    </div>
+    <div class="boxsection-lg boxsection-xs boxshadow prelative">
+        <div class="progressCntrl text-right">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:<%= @sy_club.completed.rnd %>%">
+                </div>
+            </div>
+            <span><%= @sy_club.completed.rnd %>%</span>
+        </div>
+        <%= hidden_field_tag :id, @sy_club.try(:slug)%>
+        <div class="tab-content">
+          <%= render partial: "sy_clubs/basic_info_form", locals: { redirection_to: wizard_path } %>
+        </div>
+    </div>
+</div>

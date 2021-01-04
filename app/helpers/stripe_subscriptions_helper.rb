@@ -1,0 +1,2 @@
+module StripeSubscriptionsHelper
+end

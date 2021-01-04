@@ -1,0 +1,2 @@
+module PgSyRazorpayConfigsHelper
+end

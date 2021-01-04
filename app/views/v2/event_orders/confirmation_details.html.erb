@@ -1,0 +1,165 @@
+<section id="quotes-banner">
+  <div class="light_overlay"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md 12">
+        <div class="banner_text">
+          <div class="main_banner_heading">
+            Print Confirmation
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="clearfix"></div>
+
+<div class="clearfix"></div>
+<section class="">
+  <div class="container">
+    <div class="card">
+      <div class="body">
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title"><strong>Graced By</strong>: </span><span class="babaji_pic">
+                    <%= image_tag "v2/babaji_pic.jpg" %>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title"><strong>Event Name</strong>: </span><%= @event.event_name %>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title"><strong>Email</strong>: </span><%= @event.contact_email %>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title"><strong>Contact Details</strong>: </span><%= @event.contact_details.present? ? @event.contact_details.gsub(","," / ").html_safe : "-" %>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title"><strong>Venue</strong>: </span><%= @event.event_address %>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title"><strong>Date & Time</strong>: </span><%= format_date(@event.event_start_date) %> To <%= format_date(@event.event_end_date) %>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title"><strong>Accommodation</strong>: </span>
+                    <%= link_to @event.attachment.try(:s3_url), target: "_blank" do %>
+                    <i class="fa fa-file-pdf-o"></i>Download PDF
+                  <% end %>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title"><strong>Handy information about event</strong>: </span>
+                    <%= link_to @event.handy_attachment.try(:s3_url), target: "_blank" do %>
+                    <i class="fa fa-file-pdf-o"></i>Download PDF
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row clearfix">
+          <div class="col-sm-12">
+          <div class="header p-10-0"><h2>Registration Summary</h2></div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>Description</th>
+                    <th>Details</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Event</td>
+                    <td><%= @event&.event_name_with_location %></td>
+                  </tr>
+                  <tr>
+                    <td>Registration Date</td>
+                    <td><%= @event_order&.created_at.try(:strftime, ('%B %d,%Y ')) %></td>
+                  </tr>
+                  <tr>
+                    <td>Registration Reference Number</td>
+                    <td><%= @event_order&.reg_ref_number %></td>
+                  </tr>
+                  <tr>
+                    <td>Status</td>
+                    <td><span class="label label-<%= get_status_color(@event_order&.status) %>"><%= @event_order&.status&.titleize %></span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="header p-10-0"><h2>Registration Summary</h2></div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>S. No.</th>
+                    <th>Registration Number</th>
+                    <th>Name/SYID</th>
+                    <th>Seating Category</th>
+                    <th>Discount <%= "(#{@currency})" if @currency %></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% (@event_order_line_items).each_with_index do |item, item_index| %>
+                    <tr>
+                      <td><%= item_index + 1 %>. </td>
+                      <td><%= @event_order.event&.sy_event_company_id.present? ? (item.event_registration&.serial_number.to_i + 100) : item&.registration_number %></td>
+                      <td><strong><%= item.full_name %> <br /><span class="red-text small"><%= item.syid %></span></strong></td>
+                      <td><strong><%= item.category_name %> <br /><span class="red-text small"><%= "#{@currency} #{item.category_price.rnd}" %></span></strong></td>
+                      <td><%= @currency.present? ? @currency + ' ' + '%.2f' % discount_per_sadhak(item).to_f : '%.2f' % discount_per_sadhak(item).to_f %></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row clearfix">
+          <div class="col-sm-12 text-align-center">
+            <div class="">
+              Please download and keep your details with you &nbsp;
+              <div class="shivyog-btn modal_download_pdf_btn">
+                <%= link_to polymorphic_url([:v2, @event_order], action: :registration_receipt) , class: 'btn cta_button_small bg-red waves-effect', target: '_blank' do %>
+                  <i class="fa fa-download"></i>&nbsp;Download
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

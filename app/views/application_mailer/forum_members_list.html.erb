@@ -1,0 +1,28 @@
+<tr>
+  <td style="padding: 20px 30px; background: #f8f8f8;" colspan="2">
+    <% club = @options[:club] %>
+    <% url = "#{Rails.application.config.app_base_url}/v1/forums/#{club.try(:id)}/register" %>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EAE8E8" style="font-family:Verdana, Geneva, Helvetica, Arial, sans-serif;">
+      <tr>
+        <td>  
+          <table width="80%" border="0" cellspacing="0" cellpadding="0" style="padding:10px 0; margin:0 auto;">
+            <tr>
+              <td style="padding: 20px 0; text-align: center; font-size: 1em; font-weight: bold; color:#900; line-height: 24px;">This email contains list of members registered to <i><%= club.try(:name) %></i> forum.</td>
+            </tr>
+            <tr>
+              <td style="padding: 20px 0; text-align: center; font-size: 1em; font-weight: bold; color:#900; line-height: 24px;">Your Forum number is <%= club.try(:id) %></td>
+            </tr>
+            <% if @options.has_key?(:total_members_count) and @options[:total_members_count].present?  %>
+              <tr>
+                <td style="padding: 20px 0; text-align: center; font-size: 1em; font-weight: bold; color:#900; line-height: 24px;">Total Members Count: <%= @options[:total_members_count] %> </td>     
+              </tr>
+              <tr>
+                <td style="padding: 20px 0; text-align: center; font-size: 1em; font-weight: bold; color:#900; line-height: 24px;">To join this forum, Please click here: <i><%= link_to "#{club.try(:name)}", url%></i></td>
+              </tr>
+            <% end %>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>

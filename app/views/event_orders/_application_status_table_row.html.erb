@@ -1,0 +1,28 @@
+<tr class="<%='tableoverlay' unless event_order.approve? || event_order.rejected? || event_order.pending? %>" id='<%= event_order.reg_ref_number %>'> 
+    <td class="status_change">
+        <div class="CustomCheckbox">
+             <% if event_order.pending? %>
+                 <%= check_box_tag "status_change_event_order_ids[]", event_order.id, false, class: 'status_change_checkbox'%>
+             <%else%>
+                <%= check_box_tag "status_change_event_order_ids[]", event_order.id, false, { disabled: true } %>
+             <% end %>
+            <label></label>
+        </div>
+    </td>
+    <td><%= event_order.reg_ref_number %></td>
+    <td><%= event_order.transaction_id %></td>
+    <td>
+        <% unless event_order.approve? || event_order.rejected? || event_order.pending? %>
+            <span class="primary-color"><%= event_order.status.titleize %></span>     
+        <% else %>
+            <div class="box bordered-input dropdown tabledrop">
+                <div class="dropdown-field selectTwo-dropdown">
+                <%= select_tag 'status', options_for_select(event_order_updatable_statuses(event_order), EventOrder.statuses[event_order.status]), { onchange: ("checkForStatusChange(this)"), id:event_order.id.to_s, prompt: '----- Select -----', class: 'simple-single', "data-selected-status": EventOrder.statuses[event_order.status] } %>
+                </div>
+            </div>
+        <% end %>
+    </td>
+    <td class="text-center">
+        <button class="btn btn-info" id='<%= event_order.id.to_s()+"_btn"%>' disabled="true" data-eventorderid='<%= event_order.try(:slug).to_s%>'  onclick="saveChanges(this)">Save</button>
+    </td>
+</tr>

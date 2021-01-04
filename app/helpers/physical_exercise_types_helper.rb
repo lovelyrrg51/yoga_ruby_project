@@ -1,0 +1,2 @@
+module PhysicalExerciseTypesHelper
+end

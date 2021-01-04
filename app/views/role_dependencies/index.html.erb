@@ -1,0 +1,140 @@
+<!-- / Start content Container \ -->
+<section id="contentCntr" class="sub2">
+
+    <!-- / Start center Container \ -->
+    <section id="centerCntr">
+
+        <!-- / Start profile Area \ -->
+        <div class="eventsArea transparent_bg head No_paddingTop organise_eventContainer">
+            <div class="topbar eventorganize_topbar ">
+                <div class="container">
+                    <h2><i class="fa fa-calendar"></i><span>Event: </span><%= @event.event_name %>
+                      <% if @event.free? %>
+                        <%= image_tag ('icon-free-shivir.png') %>
+                      <% end %>
+                    </h2>
+                </div>
+            </div>
+            <div class="container tabPanel_Conatiner">
+                <div class="row">
+                    <%= render partial: 'events/event_organize_left_panel', locals: {event: @event} %>
+                    <div class="col-sm-8">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-3">
+                                <div class="gotoRegister">
+                                    <a href='<%= photo_approval_event_path(@event) %>' class="btn btn-primary marginTop0">Go To Photo Approval</a>
+                                </div>
+                            </div>
+                            <% if false %>
+                                <div class="col-md-8 col-sm-9">
+                                    <div class="status_container">
+                                      <%= form_for @event do |f| %>
+                                        <%= f.label :status, 'Status' %>
+                                        <span>
+                                          <%= f.select 'status', Event.statuses.collect{|k, v| [k.titleize, k]}, {selected: @event.status}, {class: 'form-control'} %>
+                                        </span>
+                                        <%= f.submit 'save', {class: 'btn btn-orange'}%>
+                                      <% end %>
+                                    </div>
+                                </div>
+                            <% end %>
+                        </div>
+                        <div class="right tabPanel_right shivirdetail_content teamdetail_content registration_center registration_centerAdmin">
+                            <div class="heading">
+                                <h2 class="">
+                                Photo Approval Admin
+                                </h2>
+                            </div>
+                            <div class="add_centerBlock">
+                                <div class="form-horizontal">
+                                    <div class="col-sm-12">
+                                        <div class="table_reg_admin">
+                                          <%= render 'form', role_dependency: @role_dependency, event: @event %>
+                                        </div>
+                                        <div id="no-more-tables" class="table_reg_admin table_reg_adminMember custom_Hscroll mCustomScrollbar">
+                                            <table class="table cat_table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="cat_heading">
+                                                            <span class="td_heading">SYID</span>
+                                                        </th>
+                                                        <th class="cat_heading">
+                                                            <span class="td_heading">Name</span>
+                                                        </th>
+                                                        <th class="cat_heading">
+                                                            <span class="td_heading">From Date</span>
+                                                        </th>
+                                                        <th class="cat_heading">
+                                                            <span class="td_heading">To Date</span>
+                                                        </th>
+                                                        <!-- <th class="cat_heading">
+                                                          <span class="td_heading"></span>
+                                                        </th> -->
+                                                        <th class="cat_heading">
+                                                          <span class="td_heading">Options</span>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <% @role_dependencies.each do |role_dependency| %>
+                                                    <tr>
+                                                        <td data-title="SYID"><%= role_dependency.sadhak_profile.syid %></td>
+                                                        <td data-title="Name"><%= role_dependency.sadhak_profile.full_name %></td>
+                                                        <td data-title="FromDate"><%= role_dependency.start_date.try(:strftime, '%b %d, %Y') %></td>
+                                                        <td data-title="ToDate"><%= role_dependency.end_date.try(:strftime, '%b %d, %Y') %></td>
+                                                        <!-- <td class="icon_remove" data-title="Action">
+                                                            <i class="fa fa-pencil pull-right" data-toggle="modal" data-target='#edit_role_dependency_modal_<%= role_dependency.id %>'></i>
+                                                        </td> -->
+                                                        <td class="icon_remove" data-title="Action">
+                                                            <%= link_to event_role_dependency_path(@event, role_dependency), {method: :delete, data: { confirm: 'Are you sure?' }} do %>
+                                                                <i class="fa fa-times pull-right"></i>
+                                                            <% end %>
+                                                        </td>
+                                                    </tr>
+                                                  <% end %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- \ end profile Area / -->
+
+    </section>
+    <!-- \ end center Container / -->
+
+</section>
+<!-- \ end content Container / -->
+<% @role_dependencies.each do |role_dependency| %>
+    <div class="modal fade modal-vertical-centered" id='edit_role_dependency_modal_<%= role_dependency.id %>' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="headtittle modal-title text-colorRed modalHeading">Edit Photo Approval Admin Detail</h4>
+                </div>
+                <div class="modal-body mCustomScrollbar">
+                    <div class="add_centerBlock">
+                        <div class="form-horizontal">
+                            <div class="table_reg_admin">
+                                <%= render 'form', role_dependency: role_dependency, event: @event %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+<% end %>
+<!-- /.modal -->
+

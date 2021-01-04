@@ -1,0 +1,134 @@
+<div class="eventCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Event Registration</h2>
+        <span class="subheading"><%= @event.event_name_with_location %></span>
+    </div>
+    <div class="boxsection-lg boxsection-xs boxshadow prelative">
+    <%= render 'events/event_registration_header' %>
+        <div class="paymentflowCntrl">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="headtittle">
+                        <h2>Registration Summary</h2>
+                    </div>
+                </div>
+                <%= form_for :event_order, url: edit_line_items_event_event_order_path(@event_order.event, @event_order) do |f| %>
+                <div class="col-sm-12 mg-b20">
+                    <div class="tableCntrl">
+                        <div class="table-responsive tableScrollbar">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <% if @event.pre_approval_required %>
+                                            <th class="width-50">
+                                                <div class="CustomCheckbox nobg-Checkbox">
+                                                    <input type="checkbox" name="check" class="select_all_line_item_edit_checkbox">
+                                                    <label></label>
+                                                </div>
+                                            </th>
+                                        <% end %>
+                                        <th>Srl.No.</th>
+                                        <th>SYID</th>
+                                        <th>Name</th>
+                                        <th>Seating Category</th>
+                                        <th>Discount</th>
+                                        <% if @event.pre_approval_required %>
+                                            <th class="text-center">Action</th>
+                                        <% end %>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  <% @event_order.event_order_line_items.each_with_index do |item, item_index| %>
+                                    <tr>
+                                        <% if @event.pre_approval_required %>
+                                            <td>
+                                                <div class="CustomCheckbox nobg-Checkbox">
+                                                    <input type="checkbox" name="event_order[event_order_line_item_ids][]" class="line_item_edit_checkbox" value="<%= item.try(:id) %>">
+                                                    <label></label>
+                                                </div>
+                                            </td>
+                                        <% end %>
+                                        <td data-title="Serial No."><%= item_index+1 %>.</td>
+                                        <td data-title="SYID" class=""><%= item.sadhak_profile.syid %></td>
+                                        <td data-title="Name" class=""><%= item.sadhak_profile.full_name %></td>
+                                        <td data-title="Seating Category">
+                                            <div class="textgroup">
+                                                <p><%= item.event_seating_category_association.try(:seating_category).try(:category_name) %></p>
+                                                <span><%= "#{@currency} #{number_with_precision(item.category_price.rnd, precision: 2)}" %></span>
+                                            </div>
+                                        </td>
+                                        <td><%= "#{@currency} #{number_with_precision(discount_per_sadhak(item).rnd, precision: 2)}" %></td>
+                                        <% if @event.pre_approval_required %>
+                                            <td class="text-center">
+                                                <%= link_to "", event_order_event_order_line_item_path(@event_order, item), method: :delete,data: {confirm: "Are you sure?"}, class: " primary-color fa fa-trash-o"%>
+                                            </td>
+                                        <% end %>
+                                    </tr>
+                                  <% end %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <% if @event.pre_approval_required %>
+                        <div class="pannel-btn text-right mg-t30 hidden edit_pre_approval_items_button">
+                            <button type="submit" class="btn btn-info">EDIT</button>
+                        </div>
+                    <% end %>
+                </div>
+                <% end %>
+                <div class="col-sm-12">
+                    <div class="headtittle">
+                        <h2>Payment Summary</h2>
+                    </div>
+                    <div class="paymenttable mg-t30">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th class="text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="primarybold">Registration Fees</td>
+                                        <td class="text-right primarybold"><%= "#{@currency} #{number_with_precision(registration_payment_summary(@event_order.event_order_line_items)[:total_registration_fee].rnd, precision: 2)}" %></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="primarybold">Discount Amount</td>
+                                        <td class="text-right primarybold"><%= "#{@currency} #{number_with_precision(registration_payment_summary(@event_order.event_order_line_items)[:discount].rnd, precision: 2)}" %></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="primarybold">Amount</td>
+                                        <td class="text-right primarybold"><%= "#{@currency} #{number_with_precision(registration_payment_summary(@event_order.event_order_line_items)[:amount_before_taxes].rnd, precision: 2)}" %></td>
+                                    </tr>
+                                    <% registration_payment_summary(@event_order.event_order_line_items)[:tax_breakup].each do |taxes| %>
+                                      <tr>
+                                          <td class="primarybold"><%= taxes[:tax_name] %></td>
+                                          <td class="text-right primarybold"><%= "#{@currency} #{number_with_precision(taxes[:amount].rnd, precision: 2)}" %></td>
+                                      </tr>
+                                    <% end %>
+                                    <tr>
+                                        <td class="primarybold">Total Tax</td>
+                                        <td class="text-right primarybold"><%= "#{@currency} #{number_with_precision(registration_payment_summary(@event_order.event_order_line_items)[:service_tax].rnd, precision: 2)}" %></td>
+                                    </tr>
+                                     <tr>
+                                        <td class="primaryblackbold">Net Amount</td>
+                                        <td class="text-right primaryblackbold"><%= "#{@currency} #{number_with_precision(registration_payment_summary(@event_order.event_order_line_items)[:total_payable_amount].rnd, precision: 2)}" %></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <% unless @is_registrations_allowed %>
+                    <%= render partial: 'application/no_records', locals: {message: 'Online Registrations are closed at the moment'} %>
+                <% else %>
+                  <% if event_online_payment_gatways(@event).size > 0 || event_offline_payment_gateways(@event).size > 0 %>
+                    <%= render partial: "event_orders/payment_gateways" %>
+                  <% end %>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

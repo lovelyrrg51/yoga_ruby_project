@@ -1,0 +1,196 @@
+
+<div class="CompleteprofileCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Profile</h2>
+    </div>
+    <div class="boxsection-md boxshadow prelative">
+        <div class="progressCntrl text-right">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:<%= @sadhak_profile.completed.to_i %>%">
+                </div>
+            </div>
+            <span><%= @sadhak_profile.completed.to_i %>%</span>
+        </div>
+        <div class="tab-content">
+            <%= form_for @sadhak_profile, url: wizard_path, html: { id: 'sadhak_profile_step_basic_info' } do |f| %>
+                <div class="tab-pane active" role="tabpanel" id="Basicinfo">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="headtittle text-center">
+                                <h2>Basic Information</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mg-t30">
+                        <div class="col-sm-6">
+                          <div class="prelative">
+                            <div class="overlapping <%= 'overlay-active' if f.object.first_name.present? %>"></div>
+                            <div class="box bordered-input">
+                               <label class="asterisk">First Name</label>
+                               <span class="infodetails">( As mentioned in your photo ID proof )</span>
+                               <div class="dropdown dropdown-field">
+                                  <%= text_field_tag f.object.first_name.blank? ? "sadhak_profile[first_name]" : "", f.object.first_name, class: "form-control noBorder field", required: 'required', placeholder: 'First name', disabled: f.object.first_name.present? %>
+                               </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="prelative">
+                            <div class="overlapping <%= 'overlay-active' if f.object.last_name.present? %>"></div>
+                            <div class="box bordered-input">
+                               <label>Last Name</label>
+                               <span class="infodetails">( As mentioned in your photo ID proof )</span>
+                               <div class="dropdown dropdown-field">
+                                  <%= text_field_tag f.object.last_name.blank? ? "sadhak_profile[last_name]" : "", f.object.last_name, class: "form-control noBorder field", required: 'required', placeholder: 'Last name', disabled: f.object.last_name.present? %>
+                               </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="prelative">
+                            <div class="overlapping <%= 'overlay-active' if f.object.gender.present? %>"></div>
+                            <div class="box bordered-input">
+                               <label class="asterisk">Gender</label>
+                               <div class="gender">
+                                    <ul class="clearfix list-unstyled">
+                                        <% %w( male female ).each_with_index do |gender, index| %>
+                                          <li>
+                                                <div class="Custradio">
+                                                    <%= f.radio_button :gender, gender, class: "radiotype", required: 'required', checked: f.object.gender == gender || (!f.object.gender.present? && index.zero?), disabled: f.object.gender.present? %>
+                                                    <%= label_tag "gender#{gender}", gender.humanize %>
+                                                </div>
+                                            </li>
+                                          <% end %>
+                                    </ul>
+                               </div>
+                            </div>
+                          </div>
+                        </div>
+                        <% uniq_token = SecureRandom.uuid %>
+                        <div class="col-sm-6">
+                          <div class="prelative">
+                            <div class="overlapping <%= 'overlay-active' if f.object.date_of_birth.present? %>"></div>
+                            <div class="box bordered-input clearfix">
+                                <label class="asterisk">Date of Birth</label>
+                               <!--  <span class="infodetails">( Eligibility <%= SADHAK_MIN_AGE %> years and above )</span> -->
+                                <div class="input-group calenderdate date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker"  data-maxStartDate="<%= DateTime.current.change(hour: 23, minutes: 59, sec: 59)%>" data-minStartDate="<%= Date.today - SADHAK_MAX_AGE.years %>" data-defaultDate='<%= DateTime.current.years_ago(SADHAK_MIN_AGE) %>'>
+                                    <%= text_field_tag f.object.date_of_birth.blank? ? "sadhak_profile[date_of_birth]" : "", f.object.date_of_birth, class: 'form-control noBorder field datepicker', placeholder: Date.today.strftime("%d %d, %Y"), required: 'required', disabled: f.object.date_of_birth.present? %>
+                                    <span class="input-group-addon">
+                                        <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                    </span>
+                                </div>
+                           </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="shivyog-sepeator"></div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="headtittle"><h2>Address</h2></div>
+                        </div>
+                        <%= f.fields_for :address do |ff|%>
+                            <div class="col-sm-12">
+                              <div class="prelative">
+                                <div class="overlapping <%= 'overlay-active' if ff.object.first_line.present? %>"></div>
+                                <!-- Commented Search as per discussion -->
+<!--                                 <div class="box bordered-input">
+                                   <label>Search Address</label>
+                                  <div class="dropdown dropdown-field">
+                                    <div class="input-group box-input-group">
+                                      <span class="input-group-addon"><i class="icon-google-maps"></i></span>
+                                      <%#= text_field_tag :autocomplete_search, "", class: 'form-control noBorder field', "data-google-address-autocomplete": 'autocomplete', disabled: ff.object.first_line.present?, placeholder: "Search address" %>
+                                    </div>
+                                  </div>
+                                </div> -->
+                              </div>
+                            </div>                            
+                            <div class="col-sm-6">
+                              <div class="prelative">
+                                <div class="overlapping <%= 'overlay-active' if ff.object.first_line.present? %>"></div>
+                                <div class="box bordered-input">
+                                   <label class="asterisk">Address Line 1</label>
+                                   <div class="dropdown dropdown-field">
+                                      <%= text_field_tag ff.object.first_line.blank? ? "sadhak_profile[address_attributes][first_line]" : "", ff.object.first_line, class: 'form-control noBorder field', required: 'required', disabled: ff.object.first_line.present?%>
+                                   </div>
+                                </div>
+                              </div>
+                            </div>                            
+                            <div class="col-sm-6">
+                              <div class="prelative">
+                                <div class="overlapping <%= 'overlay-active' if ff.object.first_line.present? %>"></div>
+                                <div class="box bordered-input">
+                                   <label>Address Line 2</label>
+                                   <div class="dropdown dropdown-field">
+                                      <%= text_field_tag ff.object.second_line.blank? ? "sadhak_profile[address_attributes][second_line]" : "", ff.object.second_line, class: 'form-control noBorder field', disabled: ff.object.first_line.present? %>
+                                   </div>
+                                </div>
+                              </div>
+                            </div>
+                            <%= render partial: 'country_state_city_select', locals: { f: ff, overlay: true } %>
+                            <div class="col-sm-6">
+                              <div class="prelative">
+                                <div class="overlapping <%= 'overlay-active' if ff.object.postal_code.present? %>"></div>
+                                <div class="box bordered-input">
+                                   <label class="asterisk">Postal Code</label>
+                                   <div class="dropdown dropdown-field">
+                                      <%= text_field_tag ff.object.postal_code.blank? ? "sadhak_profile[address_attributes][postal_code]" : "", ff.object.postal_code, class: "form-control noBorder field", required: 'required', disabled: ff.object.postal_code.present?, placeholder: "Postal code" %> 
+                                   </div>
+                                </div>
+                              </div>
+                            </div>
+                        <% end %>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="headtittle">
+                                <h2>Contact 
+                                    <%if f.object.is_verified? %>
+                                        <span class="infodetails success-color floatdetails"> Verified</span>
+                                    <% else %>
+                                        <span class="infodetails">( Please Verify your Mobile or Email )</span>
+                                        <span class="infodetails primary-color floatdetails"> Not Verified</span>
+                                    <%end%>
+                                </h2>
+                            </div>
+                                      
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="prelative">
+                            <div class="overlapping <%= 'overlay-active' if f.object.is_verified? %>"></div>
+                            <div class="box bordered-input">
+                               <label class="asterisk">Mobile Number</label>
+                               <span class="infodetails success-color floatdetails"><%= 'Verified' if f.object.mobile.present? && f.object.is_mobile_verified?%></span>
+                               <div class="dropdown dropdown-field numbercode clearfix">
+                                    <div class="input-group">
+                                        <span class="input-group-addon code telephone_prefix_code <%= "active" if f.object.mobile.present? %>" id="basic-addon2">+<%= f.object.try(:address).try(:db_country).try(:telephone_prefix) || 91 %> </span>
+                                            <%= text_field_tag f.object.is_verified? ? "" : "sadhak_profile[mobile]", f.object.mobile, class: "form-control noBorder field code-input", placeholder: "Mobile number", "aria-describedby": "basic-addon2", disabled: f.object.is_verified? %>
+                                    </div>
+                               </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="prelative">
+                            <div class="overlapping <%= 'overlay-active' if f.object.is_verified? %>"></div>
+                            <div class="box bordered-input">
+                               <label class="asterisk">Email</label>
+                               <span class="infodetails success-color floatdetails"><%= 'Verified' if f.object.email.present? && f.object.is_email_verified?%></span>
+                               <div class="dropdown dropdown-field">
+                                  <%= email_field_tag f.object.is_verified? ? "" : "sadhak_profile[email]", f.object.email, class: 'form-control noBorder field', autocomplete: "off", disabled: f.object.is_verified?, placeholder: "Email"%>
+                               </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="row mg-t30">
+                        <div class="col-sm-12">
+                            <div class="pannel-btn clearfix">
+                                <%= f.submit  "SAVE & CONTINUE", class: ' btn btn-info pull-right' %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>

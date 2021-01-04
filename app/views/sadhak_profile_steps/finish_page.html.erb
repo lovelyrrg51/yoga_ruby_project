@@ -1,0 +1,21 @@
+<div class="CompletepflscuccessCntrl boxheight">
+    <div class="display-table">
+        <div class="display-table-cell">
+            <div class="centerblock boxCntrl">
+                <div class="boxsuccess">
+                    <span class="round one">
+                        <span class="round two">
+                            <i class="icon-check"></i>
+                        </span>
+                    </span>
+                </div>
+                <div class="successContent text-center">
+                    <h2>Success !</h2>
+                    <p>NMS <%= @sadhak_profile.try(:syid) %> - <%= @sadhak_profile.try(:full_name) %>, Your profile has been successfully updated. Now you can register to event <%= @event.try(:event_name_with_location) %> </p>
+                    <a href="<%= cookies.encrypted[COMPLETE_PROFILE_REDIRECT_URL.encrypt] || root_path %>" class="btn btn-success btn-round">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+       

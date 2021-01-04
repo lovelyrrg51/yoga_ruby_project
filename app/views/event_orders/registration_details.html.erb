@@ -1,0 +1,177 @@
+<div class="registrationCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Registration Details</h2>
+        <span class="subheading">Registration Reference Number: <strong class="texttransform"><%= @event_order.reg_ref_number %></strong></span>
+    </div>
+    <div class="boxsection-lg boxsection-xs boxshadow registrationdetailsCntrl">
+        <div class="row">
+            <form action="<%= check_registration_exists_event_orders_path %>" method="get">
+                <div class="col-sm-12 mg-b30">
+                    <div class="searchCntrl">
+                        <label>Enter Registration Reference Number</label>
+                        <div class="input-group prelative">
+                            <input type="text" class="form-control searchbox" name="reg_ref_number" placeholder="Search reg. ref. number">
+                            <button class="close-icon" type="reset">&times;</button>
+                            <span class="input-group-addon">
+                                <button type="submit" class=""><i class="icon-search"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="col-sm-12">
+                <ul class="panellist-btn">
+                    <li>
+                        <%= link_to "PRINT CONFIRMATION", polymorphic_url([@event_order], action: :confirmation_details), class: "btn btn-info" %>
+                    </li>
+                    <li>
+                        <%= link_to "EMAIL CONFIRMATION", polymorphic_url([@event_order], action: :resend_transaction_receipt_email), class: "btn btn-info" %>
+                    </li>
+                </ul>
+            </div>
+            <%= form_for :event_order, url: edit_details_event_event_order_path(@event, @event_order), html: { id: "edit_registration_details_form" } do |f| %>
+                <div class="col-sm-12">
+                    <div class="tableCntrl">
+                        <div class="table-responsive tableScrollbar">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="width-50">
+                                            <div class="CustomCheckbox nobg-Checkbox select_all_line_item_div">
+                                            <% if @is_event_running %>
+                                                <input type="checkbox" name="" class="select_all_line_item_checkbox" onclick="onSelectAllCheckboxClick(this)">
+                                            <% end %>
+                                                <label></label>
+                                            </div>
+                                        </th>
+                                        <th>Name / SYID</th>
+                                        <th>Shivir</th>
+                                        <th>Seating Category</th>
+                                        <th>Amount (<%= @event.try(:currency_code) %>)</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% (@event_order.event_order_line_items.includes(:transferred_event_order) || []).each do |line_item| %>
+                                        <tr id="<%= line_item.id %>">
+                                            <td>
+                                                <% if line_item.payment_refund_line_item %>
+                                                    <p class="warning-color primarybold">INITIATED</p>
+                                                <% elsif EventOrderLineItem.statuses.slice(:shivir_changed, :cancelled_refunded).has_key?(line_item.status) %>
+                                                    <p class="warning-color primarybold"><%= line_item.status.try(:humanize).try(:upcase) %></p>
+                                                <% elsif @event_order.pending? || @event_order.failure? || @event_order.approve? %>
+                                                    <p class="warning-color primarybold"><%= @event_order.status.try(:humanize).try(:upcase) %></p>
+                                                <% else %>
+                                                    <div class="CustomCheckbox nobg-Checkbox">
+                                                        <% if @is_event_running %>
+                                                            <input type="checkbox" name="event_order[event_order_line_item_ids][]" class="line_item_checkbox" value="<%= line_item.try(:id) %>">
+                                                        <% end %>
+                                                        <label></label>
+                                                    </div>
+                                                <% end %>
+                                            </td>
+                                            <td>
+                                                <div class="textgroup">
+                                                    <p class="primarybold"><%= line_item.sadhak_profile.try(:full_name) %></p>
+                                                    <span><%= line_item.sadhak_profile.try(:syid) %></span>
+                                                </div>
+                                            </td>
+                                            <td><%= @event.try(:event_name) %></td>
+                                            <td><%= line_item.try(:category_name) %></td>
+                                            <td><%= "#{@event.try(:currency_code)} #{line_item.try(:category_price)}" %></td>
+                                            <% if EventOrderLineItem.statuses.slice(:shivir_changed).has_key?(line_item.status) && line_item.transferred_event_order %>
+                                                <td class="primary-color"><%= link_to "#{line_item.status.try(:humanize).try(:upcase)}", registration_details_event_order_path(line_item.transferred_event_order), target: '_blank', class: "primary-color" %></td>
+                                            <% else %>
+                                                <td class="primary-color"><%= line_item.event_registration.try(:status).try(:humanize).try(:upcase) || @event_order.try(:status).try(:humanize).try(:upcase) %></td>
+                                            <% end %>
+                                        </tr>
+                                    <% end %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <% if @is_registration_changes_possible %>
+                    <div class="col-sm-12 reg_details_toggle_div hidden">
+                        <ul class="reg_detailsoption">
+                            <li>
+                                <label class="radio-box radiobg">
+                                    <input type="radio" name="event_order_action" value="transfer" />
+                                    <span class="radiocheck">Transfer</span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="radio-box radiobg">
+                                    <input type="radio" name="event_order_action" value="upgrade_downgrade"/>
+                                    <span class="radiocheck">Upgrade / Downgrade</span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="radio-box radiobg">
+                                    <input type="radio" name="event_order_action" value="cancel"/>
+                                    <span class="radiocheck">Cancel</span>
+                                </label>
+                            </li>
+                        </ul>
+                        <div class="row">
+                            <div class="col-sm-6 transfer_event_select_div hidden">
+                                <div class="outbox">
+                                    <label>Transfer Event</label>
+                                    <div class="box bordered-input dropdown">
+                                        <div class="dropdown-field selectTwo-dropdown">
+                                        <%= select_tag "event_order[to_event_id]", options_for_select([]), { include_blank: " ----- Select ----- ", class: "form-control basic-single", onChange: "onTransferEventSelect(this)" } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type='hidden' value="" name='event_order[action]'>
+                            <input type='hidden' value="<%= @event_order.try(:slug) %>" name='current_event_order'>
+                            <input type='hidden' value="<%= @event.try(:slug) %>" name='event_order[from_event_id]'>
+                            <div class="col-sm-12">
+                                <div class="pannel-btn text-right">
+                                    <button class="btn btn-info">PROCEED</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% elsif @event.is_in_india? %>
+                    <div class="col-sm-12 reg_details_toggle_div hidden">
+                        <ul class="reg_detailsoption">
+                            <li>
+                                <label class="radio-box radiobg">
+                                    <input type="radio" name="event_order_action" value="upgrade_downgrade"/>
+                                    <span class="radiocheck">Upgrade</span>
+                                </label>
+                            </li>
+                        </ul>
+                        <div class="row">
+                            <input type='hidden' value="" name='event_order[action]'>
+                            <input type='hidden' value="<%= @event_order.try(:slug) %>" name='current_event_order'>
+                            <input type='hidden' value="<%= @event.try(:slug) %>" name='event_order[from_event_id]'>
+                            <div class="col-sm-12">
+                                <div class="pannel-btn text-right">
+                                    <button class="btn btn-info">PROCEED</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>
+                
+                <% if (@event.pre_approval_required && @event_order.approve?) || (!@event.pre_approval_required && @event_order.pending?)%>
+                    <div class="col-sm-12">
+                        <div class="pannel-btn text-right">
+                            <%= link_to "PROCEED FOR PAYMENT", event_event_order_path(@event, @event_order), class: "btn btn-info" %>
+                        </div>
+                    </div>
+                <% end %>
+            <% end %>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        if($('.line_item_checkbox').length == 0) $('div.select_all_line_item_div').addClass('hidden');
+    });
+</script>

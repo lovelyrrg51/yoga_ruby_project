@@ -1,0 +1,64 @@
+<tr>
+  <td style="padding: 20px 30px; background: #f8f8f8;" colspan="2">
+    <% @event = @options[:event] %>
+    <% @seating_category_details = @options[:seating_category_details] %>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EAE8E8" style="font-family:Verdana, Geneva, Helvetica, Arial, sans-serif;">
+      <tr>
+        <td>  
+          <table width="80%" border="0" cellspacing="0" cellpadding="0" style="padding:10px 0; margin:0 auto;">
+            <tr>
+              <td style="padding: 20px 0; text-align: center; font-size: 2.0em; font-weight:bold ; color:#900; line-height: 24px;"><i><%=@event.event_name%>, start date: <%=@event.event_start_date%> | end date: <%= @event.event_end_date%></i></td>     
+            </tr>
+            <tr>
+              <td style="padding: 20px 0; text-align: center; font-size: 1.5em; font-weight: bold; color:#900; line-height: 24px;">Categories Availability Details</td>     
+            </tr>
+            <% if @seating_category_details.present? %>
+              <tr>
+                <td align="center">
+                  <table border="0" width="100%"cellpadding="0" cellspacing="0" style=" border: 1px solid #ccc;">
+                    <tr>
+                      <td width="20%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px;">
+                        <b>Category Name:</b>
+                      </td>
+                      <td width="20%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px;">
+                        <b>Total Seats:</b>
+                      </td>
+                      <td width="20%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px;">
+                        <b>Seats Occupied:</b>
+                      </td>
+                      <td width="20%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px;">
+                        <b>Extra Seats Alloted:</b>
+                      </td>
+                      <td width="20%" align="left" bgcolor="#EEEEEE" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px;">
+                        <b>Available Seats:</b>
+                      </td>
+                    </tr>
+                    <% @seating_category_details.each_with_index do |sc, index| %>
+                      <tr>
+                        <td width="20%" align="left" bgcolor="<%= index%2 == 0 ? '#FFFFFF' : '#EEEEEE' %>" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px; ">
+                          <b><%= sc[:category_name] %></b>
+                        </td>
+                        <td width="20%" align="left" bgcolor="<%= index%2 == 0 ? '#FFFFFF' : '#EEEEEE' %>" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px; ">
+                          <%= sc[:total_seats] %>
+                        </td>
+                        <td width="20%" align="left" bgcolor="<%= index%2 == 0 ? '#FFFFFF' : '#EEEEEE' %>" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px; ">
+                          <%= sc[:seats_occupied] %>
+                        </td>
+                        <td width="20%" align="left" bgcolor="<%= index%2 == 0 ? '#FFFFFF' : '#EEEEEE' %>" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px; ">
+                          <%= sc[:extra_seats] %>
+                        </td>
+                        <td width="20%" align="left" bgcolor="<%= index%2 == 0 ? '#FFFFFF' : '#EEEEEE' %>" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 1.2em; color: #252525; padding:10px; ">
+                          <%= (sc.total_seats - sc.seats_occupied) < 0 ? 0 : (sc.total_seats - sc.seats_occupied) %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </table>
+                </td>
+              </tr>
+            <% end %>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>

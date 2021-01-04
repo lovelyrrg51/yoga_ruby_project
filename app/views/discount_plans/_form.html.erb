@@ -1,0 +1,51 @@
+<%= form_for @discount_plan, html:{ id: "discount_plan_form", class: "table-screen-next"} do |f| %>
+  <div class="prelative mg-b30">
+    <div class="overlapping "></div>
+    <div class="row mg-t30">
+        <div class="col-sm-6">
+            <div class="box bordered-input">
+                <label class="asterisk">Name</label>
+                <div class="dropdown dropdown-field">
+                    <%= f.text_field :name, class: 'form-control noBorder field', required: true, placeholder: "Name" %>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="box bordered-input">
+                <label class="asterisk">Amount</label>
+                <div class="dropdown dropdown-field">
+                    <%= f.text_field :discount_amount, class: 'form-control noBorder field', required: true, placeholder: "Amount" %>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="box bordered-input dropdown">
+                <label class="asterisk">Discount Type</label>
+                <div class="dropdown-field selectTwo-dropdown">
+                  <%= f.select(:discount_type , options_for_select( discount_type_select_options, f.object.discount_type ), {prompt: '----- Select -----'}, { class: 'simple-single', required: true }) %>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="box bordered-input">
+                <label>Events</label>
+                  <div class="dropdown-field innermultiple">
+                    <%= f.select :event_ids, options_for_select(@discounted_events.pluck(:event_name, :id), :selected => f.object.event_ids ), {}, { multiple: true , class: "multiple-select" } %>
+                  </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="pannel-btn text-right">
+                <button type="reset" class="btn btn-danger mg-r10 resetForm" >CLEAR</button>
+                <%= f.submit params[:action] == "edit" ? "UPDATE" : 'CREATE', {class: 'btn btn-info'} %>
+            </div>
+        </div>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#discount_plan_form").validate();
+  });
+</script>

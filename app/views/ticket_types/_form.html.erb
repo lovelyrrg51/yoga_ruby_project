@@ -1,0 +1,34 @@
+<%= form_for @ticket_type, html:{class: "table-screen-next", id: "ticket_type_form"} do |f| %>
+  <div class="prelative mg-b30">
+    <div class="overlapping "></div>
+    <div class="row mg-t30">
+        <div class="col-sm-6">
+            <div class="box bordered-input">
+                <label class="asterisk">Name</label>
+                <div class="dropdown dropdown-field">
+                    <%= f.text_field :ticket_type, class: 'form-control noBorder field', required: true, placeholder: "Type name" %>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="box bordered-input dropdown">
+                <label class="asterisk">Group Name</label>
+                <div class="dropdown-field selectTwo-dropdown">
+                  <%= f.select(:ticket_group_id , options_for_select(TicketGroup.pluck(:name, :id), f.object.ticket_group_id), { prompt: 'Select status' }, { class: 'basic-single', required: true }) %>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="pannel-btn text-right">
+                <button type="reset" class="btn btn-danger mg-r10 resetForm" >CLEAR</button>
+                <%= f.submit params[:action] == "edit" ? "UPDATE" : 'CREATE', {class: 'btn btn-info'} %>
+            </div>
+        </div>
+    </div>
+  </div>
+<% end %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#ticket_type_form").validate();
+  });
+</script>

@@ -1,0 +1,194 @@
+<div class="panel">
+    <div class="panel-heading" role="tab" id="headingThree">
+        <h4 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion4" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                <i class="more-less glyphicon glyphicon-plus"></i>
+                <% if @sadhak_profile.advance_profile.try(:is_complete?) %>
+                <i class="success-btn">
+                 <%= image_tag "check-mark.png" %>
+                </i>
+                <% else %>
+                <i class="error-btn"><%= image_tag "warning.png" %></i>
+                <% end %>
+                <% @guide_lines = (GlobalPreference.find_by_key(:photo_and_photo_id_upload_guidelines).try(:val).try(:split, ',') || []) %>
+                
+                <span class="prelative">Advance Profile <% if @guide_lines.present? %><i class="fa fa-info infoicon" data-toggle="modal" data-target="#InformationModal"></i><%end%></span>
+                
+            </a>
+        </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+        <div class="panel-body">
+        <%= form_for @sadhak_profile, html:{ id: 'edit_sadhak_profiles_advance_profile' } do |f|%>
+            <%= f.hidden_field :sp_accordion_id, value: 'collapseThree', id: 'sadhak_profiles_advance_profile_accodion_id'  %>
+            <%= f.fields_for :advance_profile do |ff|%>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="box bordered-input dropdown">
+                        <label class="asterisk">Faith</label>
+                        <div class="dropdown-field selectTwo-dropdown">
+                            <%= ff.select :faith, options_for_select(AdvanceProfile.faith_options, ff.object.try(:faith)), { include_blank: " ----- Select ----- " }, { class: 'basic-single', required: 'required'}%>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box bordered-input">
+                        <label class="asterisk">Have you attended any Shivirs</label>
+                        <div class="gender">
+                            <ul class="clearfix list-unstyled">
+                                <li>
+                                    <div class="Custradio">
+                                        <%= ff.radio_button :attended_any_shivir, true, class: "radiotype", required: 'required'%>
+                                        <label for="shivirsyes">Yes</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="Custradio">
+                                        <%= ff.radio_button :attended_any_shivir, false, class: "radiotype", required: 'required'%>
+                                        <label for="shivirsno">No</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="box bordered-input">
+                        <label class="asterisk">Are you facing any leagal proceedings</label>
+                        <div class="gender">
+                            <ul class="clearfix list-unstyled">
+                                <li>
+                                    <div class="Custradio">
+                                        <%= ff.radio_button :any_legal_proceeding, true, class: "radiotype", required: 'required' %>
+                                        <label for="leagalyes">Yes</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="Custradio">
+                                        <%= ff.radio_button :any_legal_proceeding, false, class: "radiotype", required: 'required' %>
+                                        <label for="leagalno">No</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="box bordered-input box-upload prelative photoIdProof" id="photoIdProof">
+                        <div class="clearfix">
+                            <label class="asterisk">Upload Photo</label>
+                            <span class="infodetails">( Face should be clearly visible in photo otherwise photo will be rejected. Please upload only .JPEG or .PNG files Max size 1MB )</span>
+                        </div>
+                        <%= ff.fields_for :advance_profile_photograph do |img|%>
+                            <ul class="clearfix choosenphoto">
+                                <li>
+                                    <div class="clickable">
+                                        <%= img.file_field :name , onChange: "removeCameraSnapshot(this); readURL(this);" , 'data-extension': 'image', required: img.object.name.blank? %>
+                                        <div class="Custinput"><a class="btn btn-danger" href="">CHOOSE FILE</a> <span><%= img.object.name? ? filename(img.object.try(:name)) : "No file choosen" %></span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="#cameraModal" class="choosecamera" data-toggle="modal" data-target="#cameraModal" id="open_camera"  data-keyboard="false"><i class="fa fa-camera" aria-hidden="true"></i></a>
+                                </li>
+                            </ul>
+                            <% if img.object.name?%>
+                                <div class="uploadedimage">
+                                    <%= link_to img.object.try(:s3_url) || img.object.try(:thumb_url) || "javascript:void(0);", target: '_blank' do%>
+                                        <%= image_tag preview_or_default_image_for_file(img.object.name), class: "mCS_img_loaded", alt: "profile image" %>
+                                    <%end%>
+                                </div>
+                            <% end %>
+                            <%= img.hidden_field :image_data_base64, value: ""%>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+            <div class="shivyog-sepeator"></div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="headingtittle"><h5>Personal Information</h5><span class="sub-headingtittle">(Collection of personal information is meant only for verification purpose. Data remains highly secured in your SYID profile and ShivYog never discloses your personal data to any other organization.)</span></div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="box bordered-input dropdown">
+                        <label class="asterisk">Photo Id Proof</label>
+                        <span class="infodetails info-big">( Name mentioned on photo ID you are uploading should match the name mentioned in basic profile above )</span>
+                        <div class="dropdown-field selectTwo-dropdown">
+                            <%= ff.select :photo_id_proof_type_id, options_for_select(PhotoIdType.pluck(:name, :id), ff.object.photo_id_proof_type_id), {include_blank: " ----- Select ----- " }, { class: "basic-single", required: 'required' } %>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box bordered-input">
+                        <label class="asterisk">Id Proof Number</label>
+                        <div class="dropdown dropdown-field">
+                            <%= ff.text_field :photo_id_proof_number, class: "form-control noBorder field", required: 'required', placeholder: "Id proof number"%>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box bordered-input dropdown">
+                        <label class="">Address Proof</label>
+                        <div class="dropdown-field selectTwo-dropdown">
+                            <%= ff.select :address_proof_type_id, options_for_select(AddressProofType.pluck(:name,:id).uniq, ff.object.address_proof_type_id), { include_blank: " ----- Select ----- " }, { class: "basic-single" } %>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="box bordered-input box-upload prelative identityProof">
+                        <div class="clearfix">
+                            <label class="asterisk">Upload Photo ID Proof</label>
+                            <span class="infodetails">( Face should be clearly visible in photo otherwise photo will be rejected. Please upload only .JPEG or .PNG files Max size 1MB )</span>
+                        </div>
+                        <%= ff.fields_for :advance_profile_identity_proof do |img|%>
+                            <div class="clickable">
+                                <%= img.file_field :name , onChange: "readURL(this)", 'data-extension': 'image', required: img.object.name.blank?%>
+                                <div class="Custinput"><a class="btn btn-danger" href="">CHOOSE FILE</a> <span><%= img.object.name? ? filename(img.object.try(:name)) : "No file choosen" %></span>
+                                </div>
+                            </div>
+                            <% if img.object.name?%>
+                                <div class="uploadedimage">
+                                    <%= link_to img.object.try(:s3_url) || img.object.try(:thumb_url) || "javascript:void(0);", target: '_blank' do%>
+                                        <%= image_tag preview_or_default_image_for_file(img.object.name), class: "mCS_img_loaded", alt: "profile image" %>
+                                    <%end%>
+                                </div>
+                            <% end %>
+                        <% end %>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="box bordered-input box-upload prelative addressProof">
+                        <div class="clearfix">
+                            <label class="">Upload Address Proof</label>
+                            <span class="infodetails">( Face should be clearly visible in photo otherwise photo will be rejected. Please upload only .JPEG or .PNG files Max size 1MB )</span>
+                        </div>
+                        <%= ff.fields_for :advance_profile_address_proof do |img|%>
+                            <div class="clickable">
+                                <%= img.file_field :name , onChange: "readURL(this)", 'data-extension': 'image'%>
+                                <div class="Custinput"><a class="btn btn-danger" href="">CHOOSE FILE</a> <span><%= img.object.name? ? filename(img.object.try(:name)) : "No file choosen" %></span>
+                                </div>
+                            </div>
+                            <% if img.object.name?%>
+                                <div class="uploadedimage">
+                                    <%= link_to img.object.try(:s3_url) || img.object.try(:thumb_url) || "javascript:void(0);", target: '_blank' do%>
+                                        <%= image_tag preview_or_default_image_for_file(img.object.name), class: "mCS_img_loaded", alt: "profile image" %>
+                                    <%end%>
+                                </div>
+                            <% end %>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="pannel-btn">
+                        <button class="btn btn-danger mg-r10" type="button" onclick='Turbolinks.visit("<%= edit_sadhak_profile_path(@sadhak_profile) %>")'>CLEAR</button>
+                        <%= f.submit  "SAVE", class: ' btn btn-info' %>
+                    </div>
+                </div>
+            </div>
+            <% end %>
+        <% end %>
+        </div>
+    </div>
+</div>

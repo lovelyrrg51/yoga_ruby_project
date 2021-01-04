@@ -1,0 +1,41 @@
+<%= content_for(:title, "Forums") %>
+<section class="forum-banner margin-bottom-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md 12">
+        <div class="banner_text">
+          <div class="main_banner_heading">
+            Find a Forum
+          </div>
+        </div>
+        <div class="search-bar-form">
+          <%= search_form_for @q, {url: v2_forums_path, remote:true, html: {class: "forum-form", id: "forum-search-form"}} do |f| %>
+            <%= f.search_field(:name_cont, class: "form-control", placeholder: "Search a Forum", id:"forum-search-input", autofocus: true) %>
+            <a href="javascript:void(0)" class="search">
+                <%= image_tag "v2/forum/arrow.png" %>
+            </a>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="map-section margin-bottom-0">
+  <div class="map">
+    <div class="bh-sl-container">
+      <div id="bh-sl-map-container" class="bh-sl-map-container"
+        data-close-icon="<%= image_path('v2/close-icon-dark.png') %>"
+        data-forum-icon="<%= image_path('v2/icons/forum_icon.png') %>"
+      >
+        <div id="bh-sl-map" class="bh-sl-map">
+          <%= image_tag "v2/forum/image-loader.gif",  class: "map_loader_img" %></div>
+        <div class="bh-sl-loc-list">
+          <ul class="list list-unstyled"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<div class="clear"></div>

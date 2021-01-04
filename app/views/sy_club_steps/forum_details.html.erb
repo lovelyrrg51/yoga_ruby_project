@@ -1,0 +1,129 @@
+<% content_for(:title, 'Forum | Forum Details') %>
+<div class="CompleteprofileCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Forum</h2>
+        <span class="subheading">ShivYog Forum <strong class="texttransform"><%= @sy_club.name.try(:titleize) %></strong></span>
+    </div>
+    <div class="boxsection-lg boxsection-xs boxshadow prelative">
+        <div class="progressCntrl text-right">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:<%= @sy_club.completed.rnd %>%">
+                </div>
+            </div>
+            <span><%= @sy_club.completed.rnd %>%</span>
+        </div>
+        <div class="tab-content">
+          <%= form_for @sy_club, url: wizard_path, html: { id: "sy_club_form" } do |f| %>
+            <%= f.fields_for :sy_club_venue_detail do |ff| %>
+              <div class="tab-pane" role="tabpanel" id="OtherDetails">
+                  <div class="row">
+                      <div class="col-sm-12 mg-b30">
+                          <div class="headtittle text-center">
+                              <h2>ShivYog Forum Details</h2>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>Min. Size of the room</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :room_size, class: "form-control noBorder field only_integers", placeholder: "Min size" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>No. of Doors</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :doors_count, class: "form-control noBorder field only_integers", placeholder: "No. of doors" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>No. of Windows</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :windows_count, class: "form-control noBorder field only_integers", placeholder: "No. of windows" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>No. of Fans</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :fans_count, class: "form-control noBorder field only_integers", placeholder: "No. of fans" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>What is the colour of room ?</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :room_color, class: "form-control noBorder field", placeholder: "Colour" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>What kind of Carpet is there ?</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :carpet_type, class: "form-control noBorder field", placeholder: "Carpet type" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>How many Yantras are in your room ?</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :yantras_count, class: "form-control noBorder field only_integers", placeholder: "No. of yantras" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input dropdown">
+                              <label>Venue Type is</label>
+                              <div class="dropdown-field selectTwo-dropdown">
+                                  <%= ff.select :venue_type, options_for_select( VenueType.pluck(:name, :id), ff.object.venue_type ), { include_blank: " ----- Select ----- " }, { class: "basic-single" } %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>What arrangement for Lighting do you have ?</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :lighting_arrangement, class: "form-control noBorder field", placeholder: "Lighting type" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>If the room is being used for any other activity</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :room_other_activities, class: "form-control noBorder field", placeholder: "Other activity" %>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="box bordered-input">
+                              <label>Specify if there is any other painting in the room</label>
+                              <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :painting_in_room, class: "form-control noBorder field", placeholder: "Painting" %>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row mg-t30">
+                      <div class="col-sm-12">
+                          <div class="pannel-btn clearfix">
+                              <%= link_to 'PREVIOUS', previous_wizard_path(), class: "btn btn-info pull-left prev-step" %>
+                              <button class="btn btn-info pull-right next-step">SAVE & CONTUNUE</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+    </div>
+</div>

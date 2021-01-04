@@ -1,0 +1,13 @@
+<% if @message.present? %>
+
+  toastr.error("<%= @message %>");
+
+<% else %>
+
+    $("#eventTransactionDetailsModal").remove();
+    $("body").append("<%= escape_javascript(render(partial: 'events/show_event_transaction_details', locals: {event_order: @event_order})) %>");
+    $("#eventTransactionDetailsModal").modal('show');
+  $(".simple-single").select2({
+        minimumResultsForSearch: Infinity
+    });
+<% end %>

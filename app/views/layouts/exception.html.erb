@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html class="height-full">
+  <head>
+    <title><%= content_for?(:title) ? "#{content_for(:title)} | ShivYog | Emerging Infinite" : 'ShivYog | Emerging Infinite' %></title>
+    <meta charset="utf-8">
+    <meta name="description" content="Shivyog">
+    <meta name="Author" content="Designed by MetaDesign Solutions">
+    <!-- change into index, follow -->
+    <!-- Mobile Specific Metas ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- CSS ================================================== -->
+    <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i"%>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= yield :stylesheets %>
+  </head>
+  <body class="height-full">
+    <section class="wrapperCntrl">
+        <section class="loginmainCntrl">
+          <%= yield %>
+        </section>
+    </section>
+  </body>
+</html>

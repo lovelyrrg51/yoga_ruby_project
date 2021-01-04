@@ -1,0 +1,77 @@
+<div id="how_to_enable_popup_modal" class="modal fade Custommodal" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="headtittle">Steps to enable popups</h2>
+            <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png", alt: "close"%></button>
+        </div>
+        <div class="modal-body mCustomScrollbar enablePopups">
+            <div class="row">
+                <div class="col-sm-12">
+                  <h3>Safari (macOS)</h3>
+                  <p>Safari for macOS has no per-website control over blocking pop-up windows. Pop-ups are either blocked, or they are not. To allow pop-ups:</p>
+                  <ol>
+                    <li>From the Safari menu, choose Preferences... and click the Security tab.</li>
+                    <li>Ensure the Block pop-up windows option is not checked. Unchecking this option will allow pop-ups.</li>
+                    <li>To block pop-ups once again, check the Block pop-up windows checkbox.</li>
+                  </ol>
+                  <p><strong>Note:</strong> If you are concerned about allowing pop-ups globally for all websites that you browse, consider using another web browser that allows website exceptions such as Chrome or Firefox.</p>
+
+                  <!-- Chrome -->
+                  <h3>Chrome (Windows/macOS/Linux)</h3>
+                  <p>To see blocked pop-ups for a site, follow the steps listed below:</p>
+                  <ol>
+                    <li>If pop-ups have been blocked, you'll see the blocked <%= image_tag 'popup-blocked-chrome.png', style: 'display: inline-block'%> in the address bar. Click the icon to see a list of the blocked pop-ups.
+                    A menu is displayed with the following choices:</li>
+                    <ul>
+                      <li>Always allow pop-ups and redirects from this site.</li>
+                      <li>Continue Blocking</li>
+                    </ul>
+                    <li>Click on Allow allow pop-ups and redirects from this site.</li>
+                    <li>Click on done.</li>
+                  </ol>
+                  <h3>Firefox (Windows/macOS/Linux)</h3>
+                  <p>When blocking a pop-up, Firefox displays an information bar (if it hasn’t been previously dismissed – see below), as well as an icon  <%= image_tag 'popup-blocked-firefox.png', style: 'display: inline-block'%> in the address bar.</p>
+                  <ol>
+                    <li>When you click either the Preferences  button in the info bar or the icon in the address bar, a menu is displayed with the following choices:</li>
+                    <ul>
+                      <li>Allow/Block pop-ups for this site</li>
+                      <li>Edit Pop-up Blocker Preferences…</li>
+                      <li>Don't show this message when pop-ups are blocked</li>
+                    </ul>
+                    <li>Select Allow/Block pop-ups for this site.</li>
+                    <li>Click on </li>
+                  </ol>
+
+                <h3>Internet Explorer (Windows)</h3>
+                <p>When a website attempts to launch a new pop-up window, you may see dialog boxes alerting you of pop-up windows that have been blocked. Follow the instructions below to allow pop-up windows on a per-website basis.</p>
+                <ol>
+                  <li>Open Internet Explorer, then go to the web page that you want to allow pop-ups.</li>
+                  <li>In Internet Explorer's Address field, highlight the entire web address of the current page, then right-click and choose the Copy command.</li>
+                  <li>From the Tools menu (the gear icon on the far right), select Internet options. The Internet Options dialog box opens.</li>
+                  <li>Click on the Privacy tab.</li>
+                  <li>Under Pop-up Blocker ensure the Turn on Pop-up Blocker checkbox is checked, and then click Settings. The Pop-up Blocker Settings dialog box opens.</li>
+                  <li>Right-click in the Address of website to allow: field, then choose the Paste command.</li>
+                  <p><strong>Notes:</strong> Pasting the web address of a page you wish to allow pop-ups is recommended, rather than typing the generic main web address. For example, you might visit www.example.com/requirepopup.html, but the page is actually hosted at popup.example.com/forms/popupform.html. In this example, you must allow popup.example.com, not www.example.com. Note also that entire websites must be allowed, not individual directories or pages, so in this example Internet Explorer will automatically add the top level popup.example.com to its Allowed sites.</p>
+                  <p>For more information about pop-ups, see Learn more about Pop-up Blocker, located at the bottom of the dialog box.</p>
+                  <li>Click Add.</li>
+                  <li>Close any remaining dialog boxes.</li>
+                </ol>
+                <h3>Edge (Windows 10 only)</h3>
+                <p>Microsoft Edge for Windows 10 has no per-website control over blocking pop-up windows. Pop-ups are either blocked, or they are not. To allow pop-ups:</p>
+                <ol>
+                  <li>Click the ellipsis icon (...) in the upper right corner of your web browser, and then click Settings.</li>
+                  <li>In the Advanced settings section, click View advanced settings.</li>
+                  <li>In the Block pop-ups section, click the switch to Off. Pop-ups are now allowed.</li>
+                  <li>To block pop-ups once again, click the switch to On.</li>
+                </ol>
+                <p><strong>Note:</strong> If you are concerned about allowing pop-ups globally for all websites that you browse, consider using another web browser that allows website exceptions such as Chrome or Firefox.</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+        </div>
+    </div>
+  </div>
+</div>

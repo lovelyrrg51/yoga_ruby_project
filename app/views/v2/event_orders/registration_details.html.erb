@@ -1,0 +1,161 @@
+<%= content_for(:title, "Registration Details") %>
+
+<section id="registration-status-banner">
+</section>
+
+<div class="clearfix"></div>
+
+<section class="">
+  <div class="container">
+    <div class="row clearfix">
+      <div class="col-sm-12">
+        <div class="heading_subtitle"><h2>Registration Details</h2></div>
+        <div class="dashed_divider m-b-30"></div>
+        <div class="card">
+          <div class="body">
+            <div class="flash-message">
+              <% if flash.present? %>
+                <%= render 'layouts/v2/flash_messages' %>
+              <% end %>
+            </div>
+            <div class="header text-align-center">
+              <h2>Details of Registration Reference Number: <%= @event_order.reg_ref_number %></h2>
+            </div>
+            <div class="confirmation_buttons">
+              <div class="shivyog-btn">
+                <%= link_to confirmation_details_v2_event_order_path, class: "cta_button_small bg-red waves-effect" do %>
+                  <i class="fa fa-print" aria-hidden="true"></i>&nbsp;Print Confirmation
+                <% end %>
+              </div>
+              &nbsp;&nbsp;
+              <div class="shivyog-btn">
+                <%= link_to resend_transaction_receipt_email_v2_event_order_path(@event_order), method: :post, class: "cta_button_small bg-red waves-effect" do %>
+                  <i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;Email Confirmation
+                <% end %>
+              </div>
+            </div>
+            <%= form_for :event_order, url: url_for(:controller => 'v2/event_orders'), html: { id: "reg_actions_form", remote: true } do |f| %>
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th class="text-align-center">
+                        <% if @is_event_running %>
+                          <input name="select_all" class="checkboxall" id="checkboxall_head" type="checkbox" />
+                            <label for="checkboxall_head"></label>
+                        <% end %>
+                      </th>
+                      <th>Name/SYID</th>
+                      <th>Shivir</th>
+                      <th>Seating Category</th>
+                      <th>Amount (<%= @event&.currency_code %>)</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% (@event_order.event_order_line_items.includes(:transferred_event_order) || []).each_with_index do |line_item, index| %>
+                      <tr id="<%= line_item.id %>">
+                        <td class="text-align-center">
+                          <% if line_item.payment_refund_line_item %>
+                            <div class="shivyog-btn"><a href="#" class="btn cta_button_small bg-red waves-effect" disabled="disabled">Initiated</a></div>
+                          <% elsif EventOrderLineItem.statuses.slice(:shivir_changed, :cancelled_refunded).has_key?(line_item.status) %>
+                            <div class="shivyog-btn"><a href="#" class="btn cta_button_small bg-red waves-effect" disabled="disabled"><%= line_item.status&.humanize %></a></div>
+                          <% elsif @event_order.pending? || @event_order.failure? || @event_order.approve? || @event_order.rejected? %>
+                            <div class="shivyog-btn"><a href="#" class="btn cta_button_small bg-red waves-effect" disabled="disabled"><%= @event_order.status&.humanize %></a></div>
+                          <% else %>
+                            <% if @is_event_running %>
+                              <input name="event_order[event_order_line_item_ids][]" class="table_checkbox" id="table_checkbox_0<%= index + 1 %>" type="checkbox" value="<%= line_item.try(:id) %>">
+                              <!-- <input name="registration_details_checkbox[]" class="table_checkbox" id="table_checkbox_01" type="checkbox"> -->
+                              <label for="table_checkbox_0<%= index + 1 %>"></label>
+                            <% end %>
+                          <% end %>
+                        </td>
+                        <td><strong><%= line_item.sadhak_profile&.full_name %> <br /><span class="red-text small"><%= line_item.sadhak_profile&.syid %></span></strong></td>
+                        <td><%= @event&.event_name %></td>
+                        <td><%= line_item.category_name %></td>
+                        <td><%= "#{@event&.currency_code} #{line_item&.category_price}" %></td>
+                        <td>
+                          <% if EventOrderLineItem.statuses.slice(:shivir_changed).has_key?(line_item.status) && line_item.transferred_event_order %>
+                            <span class="label label-<%= get_status_color(line_item.status) %>"><%= line_item.status&.humanize %></span>
+                          <% else %>
+                            <span class="label label-<%= get_status_color(line_item.event_registration&.status || @event_order&.status) %>"><%= line_item.event_registration&.status&.humanize || @event_order&.status&.humanize %></span>
+                          <% end %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="action_items">
+                <div class="header p-10-0"><h2>Actions</h2></div>
+                  <div class="actions">
+                    <div class="row m-b-30">
+                      <div class="col-sm-12">
+                        <div class="gender-radio-btn">
+                          <input name="registration_actions" type="radio" value="transfer" id="transfer" class="registration_actions radio-col-red with-gap" />
+                          <label for="transfer">TRANSFER</label>&nbsp;&nbsp;
+                          <input name="registration_actions" value="upgrade_downgrade" type="radio" id="upgrade" class="registration_actions radio-col-red with-gap" />
+                          <label for="upgrade">UPGRADE/DOWNGRADE</label>&nbsp;&nbsp;
+                          <input name="registration_actions" type="radio" value="cancel" id="cancel" class="registration_actions radio-col-red with-gap" />
+                          <label for="cancel">CANCEL</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row transfer_event" id="transfer_event">
+                      <div class="col-sm-12">
+                        <div class="md-form">
+                          <%= select_tag "event_order[to_event_id]", options_for_select([]), { class: "form-control show-tick shivyog_dropdown", onChange: "onTransferEventSelect(this)" } %>
+                        </div>
+                      </div>
+                    </div>
+                    <input type='hidden' value="" name='event_order[action]'>
+                    <input type='hidden' value="<%= @event_order.try(:slug) %>" name='current_event_order'>
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="shivyog-btn" id="registration_action_proceed_btn"><button type="submit" class="btn cta_button_small bg-red waves-effect">Proceed</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            <% end %>
+
+            <% if (@event.pre_approval_required && @event_order.approve?) || (!@event.pre_approval_required && @event_order.pending?) %>
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="alert-warning p-3">
+                    This application has been accepted by admin. Please proceed for payment.
+                  </div>
+                  <div class="pannel-btn text-right">
+                    <strong>
+                      <%= link_to "PROCEED FOR PAYMENT", v2_event_order_path(@event_order), class: "cta_button_small bg-red waves-effect" %>
+                    </strong>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="body">
+            <%= render 'check_registration_status' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="payment_mode_details_div">
+</div>
+
+<%= render "v2/shared/newsletter" %>
+
+<script>
+  function onTransferEventSelect(e){
+    var action = "/event_orders/" + $("input[name='current_event_order']").val() + "/edit_details"
+    $('form#reg_actions_form').attr('action', action);
+  }
+</script>

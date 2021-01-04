@@ -1,0 +1,82 @@
+<div id="clubMembersInfoModal" class="modal fade Custommodal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag("close.png") %></button>
+                <h2 class="headtittle">Member(s) Transfer</h2>
+            </div>
+            <%= form_for :event_order, url: process_club_members_sy_club_path(@sy_club), method: :post, html: { id: "verify_club_members_form" } do |f| %>
+              <% if @details[:data] %>
+                <div class="modal-body mCustomScrollbar">
+                    <div class="row">
+                        <div class="col-sm-12 mg-t10 mg-b30">
+                            <div class="tableCntrl no-margintable">
+                                <div class="table-responsive tableScrollbar">
+                                    <table class="table">
+                                        <thead>
+                                            <th>Renew</th>
+                                            <th>SYID</th>
+                                            <th width="180px">Registered Forum</th>
+                                            <th width="180px">New Forum</th>
+                                            <th width="180px">Mesage</th>
+                                            <th width="150px">Membership Expiration Date</th>
+                                        </thead>
+                                        <tbody>
+                                          <% @details[:data].each do |data| %>
+                                            <tr>
+                                                <td>
+                                                    <div class="CustomCheckbox nobg-Checkbox no-padding">
+                                                        <input type="checkbox" name="check" class="renew_member_checkbox">
+                                                        <label></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="textgroup">
+                                                        <p class="primarybold"><%= data[:syid] %></p>
+                                                    </div>
+                                                </td>
+                                                <td><%= data[:sy_club_name] %></td>
+                                                <td><%= data[:new_sy_club_name] %></td>
+                                                <td><%= data[:message] %></td>
+                                                <td><%= data[:expiration_date] %></td>
+                                            </tr>
+                                          <% end %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <ul class="list-unstyled whitesmoke-bg listofterm">
+                                <li>New Registrations are not allowed to proceed with existing transfer/renewal requests.</li>
+                                <li>Renewal profiles on same forum are not allowed to proceed with transfer requests without renewal from other forum at same time.</li>
+                                <li>Renewal of profiles can be only done within a period of 30 days before the membership expires.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+              <% end %>
+              <%= f.hidden_field "#{SY_CLUB_DETAILS.encrypt}", value: @encrypted_params %>
+              <%= f.hidden_field :is_renewal_process, value: false %>
+              <div class="modal-footer">
+                  <div class="pannel-btn text-right">
+                      <button class="btn btn-danger mg-r5" data-dismiss="modal" type="button">CANCEL</button>
+                      <button class="btn btn-info">PROCEED</button>
+                  </div>
+              </div>
+            <% end %>
+        </div>
+    </div>
+</div>
+<script>
+  $('form#verify_club_members_form').submit(function(){
+    if($(".renew_member_checkbox:checked").length && $(".renew_member_checkbox:checked").length != $(".renew_member_checkbox").length){
+      toastr.error("Either all the Members will proceed For Renewal or None.");
+      return false;
+    }
+    if($(".renew_member_checkbox:checked").length) $("input[name='event_order[is_renewal_process]']").val("true");
+  });
+  (function(){
+    modalHeight();
+  })()
+</script>

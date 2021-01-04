@@ -1,0 +1,73 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="body">
+        <div class="row clearfix forum_details_box m-b-30">
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                    <span class="title">Forum ID: </span><%= @sy_club.id %>
+                </div> 
+              </div>                    
+            </div>  
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title">President: </span><%= @sy_club.sy_club_user_roles.where(role_name: 'President').last.role_name %>
+                </div> 
+              </div>                    
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title">Vice President: </span><%= @sy_club.sy_club_user_roles.where(role_name: 'Vice-President-1').first.role_name %>
+                </div> 
+              </div>                    
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title">Venue: </span><%= @sy_club.address.street_address%> <%= @sy_club&.city_name%>  <%= @sy_club&.state_name%> <%= @sy_club&.address&.country_name %>
+                  <%= @sy_club&.address&.postal_code %>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                    <%= link_to "Visit Forum", v2_forum_path(@sy_club), class: "cta_button_small" %>
+                </div> 
+              </div>                    
+            </div>                  
+          </div> 
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title">Forum Name: </span><%= @sy_club.name %>
+                </div> 
+              </div>                    
+            </div>
+            
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title">Contact Details: </span><%= @sy_club.contact_details %>
+                </div> 
+              </div>                    
+            </div>
+            
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title">Annual contribution towards digital content for continuous learning program (per year) $50.00 </span>
+                </div> 
+              </div>                    
+            </div>
+          </div>                
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

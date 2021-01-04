@@ -1,0 +1,22 @@
+<%= form_for @payment_reconcilation, html: { id: "payment_reconcilation_form" } do |f| %>
+  <%= f.fields_for :attachments do |attachment|%>
+    <div class="row mg-b30">
+      <div class="col-sm-12">
+        <div class="box bordered-input clearfix prelative box-upload">
+          <label>Upload file</label>
+          <div class="clickable mg-t5">
+            <%= attachment.file_field :content, onChange: "readURL(this);", 'data-extension': 'xls', required: true %>
+            <div class="Custinput">
+              <a class="btn btn-danger" href="">CHOOSE FILE</a>
+              <span>No file choosen</span>
+            </div>
+          </div>
+          <div class="payment_reconcilation_content_error"></div>
+        </div>
+        <div class="pannel-btn text-right">
+          <button class="btn btn-info">SUBMIT</button>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

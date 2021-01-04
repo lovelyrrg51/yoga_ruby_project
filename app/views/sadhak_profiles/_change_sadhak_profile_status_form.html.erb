@@ -1,0 +1,41 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="headtittle">Sadhak Status Change</h2>
+            <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png", alt: "close"%></button>
+        </div>
+        <%= form_for @sadhak_profile, url: update_sadhak_profile_status_sadhak_profile_path(@sadhak_profile), remote: true, method: :patch, html: { id: "change_sadhak_profile_status" } do |f|%>
+        <div class="modal-body mCustomScrollbar">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="outbox">
+                        <label>Please specify the status for this sadhak</label>
+                        <div class="box bordered-input dropdown">
+                            <div class="dropdown-field selectTwo-dropdown">
+                            <%= f.select :status, options_for_select(SadhakProfile.statuses.collect{ |v,k| [v.humanize, v] }, f.object.status), { include_blank: "------select-----" }, class: "basic-single", required: true%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="outbox">
+                        <label>Status Change Admin Notes</label>
+                        <div class="box bordered-input border-textarea">
+                            <div class="dropdown dropdown-field">
+                                <%= f.text_area :status_notes, class: "form-control noBorder field", required: true, placeholder: "Status change admin notes"%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="pannel-btn text-right">
+                <button type="button" class="btn btn-danger mg-r5" data-dismiss="modal">CANCEL</button>
+                <button class="btn btn-danger mg-r5 resetForm" type="button">CLEAR</button>
+                <button class="btn btn-info">SAVE</button>
+            </div>
+        </div>
+        <% end%>
+    </div>
+</div>

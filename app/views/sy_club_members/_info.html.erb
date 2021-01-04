@@ -1,0 +1,56 @@
+<div id="sy_club_member_info" class="modal fade Custommodal" role="dialog">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="headtittle">Forum Member Details</h2>
+            <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png", alt: "close"%></button>
+        </div>
+        <div class="modal-body mCustomScrollbar">
+          <div class="row">
+              <div class="col-sm-12">
+                  <div class="tableCntrl tableCntrllist">
+                      <div class="table-responsive">
+                          <table class="table">
+                              <tbody>
+                                  <tr>
+                                      <td data-th="Name/SYID">
+                                          <div class="textgroup">
+                                              <p class="primarybold"><%= @sy_club_member.sadhak_full_name %></p>
+                                              <span><%= @sy_club_member.sadhak_syid %></span>
+                                          </div>
+                                      </td>
+                                      <td data-th="Forum Name"><%= @sy_club_member.sy_club.try(:name) %></td>
+                                      <td data-th="Expiration Date">
+                                          <div class="textpanel">
+                                              <p class="primarybold"><%= @sy_club_member.try(:expiration_date) %></p>
+                                          </div>
+                                      </td>
+                                      <% if @sy_club_member.try(:board_member_position) %>
+                                        <td data-th="Board Member Designation">
+                                            <div class="textpanel">
+                                                <p class="primarybold"><%= @sy_club_member.try(:board_member_position) %></p>
+                                            </div>
+                                        </td>
+                                      <% end %>
+                                      <% if @sy_club_member.try(:board_member_forum_name) %>
+                                        <td data-th="Board Member Forum Name">
+                                            <div class="textpanel">
+                                                <p class="primarybold"><%= @sy_club_member.try(:board_member_forum_name) %></p>
+                                            </div>
+                                        </td>
+                                      <% end %>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+            <%= link_to "RENEW", polymorphic_url(@sy_club_member.sy_club, action: :register), class: "btn btn-info mg-r5" if (@sy_club_member.sadhak_profile.try(:renewal_events) || []).include?(@sy_club_member.clp_event) %>
+            <button class="btn btn-info" data-dismiss="modal" type="button">CANCEL</button>
+        </div>
+      </div>
+  </div>
+ </div>

@@ -1,0 +1,118 @@
+<div class="stripe_form">
+  <%= form_for :payment_details, url: pay_v2_event_order_path(event_order), method: :post, html: { id: "stripe-payment-gateway-form" } do |f| %>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">person</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :card_holder_name, class: "form-control", placeholder: "Name (as it appears on your card)", required: true, id: "card_holder" %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group">
+            <span class="input-group-addon">
+              <i class="material-icons">credit_card</i>
+            </span>
+            <div class="form-line">
+              <%= f.text_field :stripe_card_holder_number, class: "form-control credit-card", placeholder: "Card Number", required: true, id: "card_number", :"data-stripe"=>"number" %>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <span class="cvv_icon"></span>
+        </span>
+        <div class="form-line">
+          <%= f.number_field :stripe_cvc, class: "form-control", placeholder: "CVV", required: true, id: "cvv", :"data-stripe"=>"cvc" %>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-5">
+        <%= f.select(:stripe_exp_month, options_for_select(['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']), {:prompt => '---Month---'}, class: "form-control show-tick shivyog_dropdown stripe_date_dropdown", :"data-stripe"=>'exp_month', name: "stripe_exp_month") %>
+      </div>
+
+      <div class="col-sm-4">
+        <%= f.select(:stripe_exp_year, options_for_select(['2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030']), {:prompt => '---Year---'}, class: "form-control show-tick shivyog_dropdown stripe_date_dropdown", :"data-stripe"=>'exp_year', name: "stripe_exp_year") %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="input-group">
+        <span class="input-group-addon">
+              <i class="material-icons">phone</i>
+            </span>
+          <div class="form-line">
+            <%= f.text_field :mobile, class: "form-control mobile-phone-number", placeholder: "Mobile Number" %>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <div class="input-group">
+          <span class="input-group-addon">
+              <i class="material-icons">email</i>
+            </span>
+            <div class="form-line">
+              <%= f.text_field :billing_email, class: "form-control email", placeholder: "Email ID" %>
+            </div>
+
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn cta_button_small bg-red waves-effect pay-now-btn">PAY NOW</button>
+    <%= render partial: "hidden_field_data", locals: { amount: amount, gateway: gateway, event_order_id: event_order_id, upgrade: upgrade, parent_event_order_id: parent_event_order_id, before_event_order_line_items: before_event_order_line_items, sadhak_details_hash: sadhak_details_hash, payment_method: "stripe" }  %>
+  <% end %>
+</div>
+<script type="text/javascript">
+  Stripe.setPublishableKey('<%= gateway.try(gateway.payment_gateway_type.relation_name).try(:publishable_key) %>');
+
+  $(function() {
+    $('#stripe-payment-gateway-form').validate();
+    var $form = $('#stripe-payment-gateway-form');
+    var amount = $('.net-amount').text()
+    $form.submit(function(event) {
+      event.preventDefault();
+      swal({
+        title: "Are you sure you want to proceed with upgrade/downgrade ?",
+        text: "Please check again your net amount payable is: "+amount,
+        type: "warning",
+        showCancelButton: true,
+        cancelButtonText: "No, Let me check once again.",
+        confirmButtonColor: "#DD6B55",
+        showLoaderOnConfirm: false,
+        confirmButtonText: "Yes, I am sure !",
+        closeOnConfirm: true
+        }, function () {
+          Stripe.card.createToken($form, stripeResponseHandler);
+          return false;
+      });
+    });
+  });
+
+  var stripeResponseHandler = function stripeResponseHandler(status, response) {
+    var $form = $('#stripe-payment-gateway-form');
+    if (!response.error) {
+      var token = response.id;
+      // Insert the token ID into the form so it gets submitted to the server:
+      $form.append($('<input type="hidden" name="payment_details[stripeToken]">').val(token));
+      $form.get(0).submit();
+      $form.find('.pay-now-btn').prop('disabled', true);
+      $form.find('.pay-now-btn').text('PROCESSING');
+    }
+    else{
+      $form.find('.pay-now-btn').prop('disabled', false);
+      $form.find('.pay-now-btn').text('PAY NOW');
+      $('#stripe-payment-gateway-form').prepend('<span>'+response.error.message+'</span>').css('color', '#F44336')
+    }
+  };
+  $('.stripe_date_dropdown').selectize();
+</script>

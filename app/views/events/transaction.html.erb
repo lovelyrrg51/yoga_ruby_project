@@ -1,0 +1,177 @@
+<% content_for(:title, 'Event | Transactions') %>
+
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Event</h2>
+        <span class="subheading"><%= @event.event_name_with_location %></span>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+            <%= render partial: 'events/event_organize_left_panel', locals: {event: @event} %>
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxsection-xs boxshadow prelative">
+
+                    <div class="rightContent">
+                        <div id="Transactions" class="">
+                            <div class="row">
+                                <div class="col-sm-12 mg-b30">
+                                     <div class="headtittle text-center">
+                                        <h2>Transactions</h2>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <a href="#RegisterInvoices" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+                                    <div class="refineCntrl collapse in" aria-expanded="true" id="RegisterInvoices" role="tablist">
+                                        <div class="refinesub-group">
+                                            <div class="row">
+                                              <form action="" method="get" id="">
+                                                <div class="col-sm-6">
+                                                    <div class="outbox">
+                                                        <label>Reg. Ref. Number</label>
+                                                        <div class="box bordered-input">
+                                                           <div class="dropdown dropdown-field">
+                                                              <input type="text" class="form-control noBorder field" placeholder="Reg ref. number" value="<%= params[:reg_ref_number] %>" name="reg_ref_number">  
+                                                           </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="outbox">
+                                                        <label>Transaction Id</label>
+                                                        <div class="box bordered-input">
+                                                           <div class="dropdown dropdown-field">
+                                                              <input type="text" class="form-control noBorder field" placeholder="Transaction id" value="<%= params[:transaction_id] %>" name="transaction_id">  
+                                                           </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="outbox">
+                                                        <label>Payment Method</label>
+                                                        <div class="box bordered-input dropdown">
+                                                            <div class="dropdown-field selectTwo-dropdown">
+                                                                <%= select_tag 'payment_method', options_for_select(TransferredEventOrder.gateways.collect{|gateway| [gateway[:payment_method], gateway[:payment_method]]}, params[:payment_method]), {prompt: 'Select Method', class: 'basic-single'} %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="outbox">
+                                                        <label>Registered Sadhak(s)</label>
+                                                        <div class="box bordered-input">
+                                                           <div class="dropdown dropdown-field">
+                                                              <input type="text" class="form-control noBorder field" placeholder="Registered sadhak(s)" value="<%= params[:search_in_applied_sadhak_names] %>" name="search_in_applied_sadhak_names">  
+                                                           </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="outbox">
+                                                        <label>Registered By</label>
+                                                        <div class="box bordered-input">
+                                                           <div class="dropdown dropdown-field">
+                                                              <input type="text" class="form-control noBorder field" placeholder="Registered by" value="<%= params[:registered_by] %>" name="registered_by">
+                                                           </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="outbox">
+                                                        <label>Status</label>
+                                                        <div class="box bordered-input dropdown">
+                                                            <div class="dropdown-field selectTwo-dropdown">
+                                                                <%= select_tag 'status', options_for_select(EventOrder.statuses.collect{|k, v| [k.downcase.tr("_ ", " ").titleize, k]}, params[:status]), {prompt: 'Select Status', class: 'basic-single'} %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div class="pannel-btn text-right">
+                                                        <%= link_to "CLEAR", transaction_event_path(@event), class: "btn btn-danger mg-r10" %>
+                                                        <button class="btn btn-info" type="submit" data-disable-with="SEARCHING...!">SEARCH</button>
+                                                    </div>
+                                                </div>
+                                              </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <%= render partial: 'application/no_records', locals: {message: 'No Event Applications Found.'} unless @event_orders.present? %>
+                                <% if @event_orders.size > 0 %>
+                                  <div class="col-sm-12 mg-t60">
+                                      <div class="row">
+                                          <div class="col-sm-6">
+                                              <div class="Boxdrop dropdown mg-x-b15">
+                                                  <%= render "per_page" %>
+                                              </div>
+                                          </div>
+                                          <div class="col-sm-6">
+                                              <div class="pannel-btn panel-sm">
+                                                  <%= link_to "EXPORT CSV", generate_csv_event_orders_path(event_id: @event.id, format: "csv"), class: "btn btn-info" %>
+                                                  <%= link_to "EXPORT EXCEL", generate_csv_event_orders_path(event_id: @event.id, format: "excel"), class: "btn btn-info" %>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="tableCntrl">
+                                          <div class="table-responsive tableScrollbar">
+                                              <table class="table">
+                                                  <thead>
+                                                      <tr>
+                                                          <th>Reg. Ref. No.</th>
+                                                          <th>Transition Id</th>
+                                                          <th>Payment Method</th>
+                                                          <th>Registered By</th>
+                                                          <th class="text-center">More</th>
+                                                          <th class="text-center">Status</th>
+                                                      </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    <% @event_orders.each do |event_order|%>
+                                                      <tr>
+                                                          <td class="primarybold"><%= event_order.try(:reg_ref_number) || "-" %></td>
+                                                          <td><%= event_order.try(:transaction_id) || "-" %></td>
+                                                          <td><%= event_order.try(:payment_method) || "-" %></td>
+                                                          <td>
+                                                              <div class="textgroup">
+                                                                  <p class="primarybold"><%= event_order.try(:user).try(:sadhak_profile).try(:full_name) || "Guest User" %></p>
+                                                                  <span><%= event_order.try(:user).try(:sadhak_profile).try(:syid) || "" %></span>
+                                                              </div>
+                                                          </td>
+                                                          <td class="text-center">
+                                                              <div class="dropover dropdown">
+                                                                  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                                                                  </button>
+                                                                  <ul class="dropdown-menu">
+                                                                      <li><a href=<%= show_event_transaction_details_events_path(event_order: event_order) %> data-remote="true" >Details</a></li>
+                                                                      <% if @event.pre_approval_required? && (event_order.pending? || event_order.approve? || event_order.rejected? || event_order.failure? ) %>
+                                                                          <li class="active"><a href=<%= show_resend_pre_approval_email_events_path(event_order: event_order, redirect_url: resend_pre_approval_email_event_order_path(event_order)) %> data-remote="true" >Resend Approval Email</a></li>
+                                                                      <% end %>
+                                                                      <% if event_order.success? || event_order.dd_received_by_rc? || event_order.dd_received_by_india_admin? || event_order.dd_received_by_ashram? %>
+                                                                          <li class="active"><a href=<%= show_event_transaction_receipt_events_path(event_order: event_order, redirect_url: resend_transaction_receipt_email_event_order_path(event_order)) %> data-remote="true" >Resend Transaction Receipt</a></li>
+                                                                      <% end %>
+                                                                  </ul>
+                                                              </div>
+                                                          </td>
+                                                          <td class="primary-color text-center"><%= event_order.try(:status).try(:titleize) || "-" %></td>
+                                                      </tr>
+                                                    <% end %>
+                                                  </tbody>
+                                              </table>
+                                          </div>
+                                          <div class="table-pagination">
+                                              <div class="show-pgnation">
+                                                  <p class="primarybold"><%= custom_page_entries_info(@event_orders) %></p>
+                                              </div>
+                                              <%= paginate @event_orders %>
+                                          </div>
+                                      </div>
+                                  </div>
+                                <% end %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>

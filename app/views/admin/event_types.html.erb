@@ -1,0 +1,58 @@
+<% content_for(:title, 'Admin | Event Types') %>
+<section id="contentCntr" class="sub2">
+    <section id="centerCntr">
+        <div class="eventsArea transparent_bg head data No_paddingTop organise_eventContainer">
+            <div class="topbar eventorganize_topbar ">
+                <div class="container">
+                    <h2><i class="fa fa-calendar"></i><span>Admin</span>
+                    </h2>
+                </div>
+            </div>
+            <div class="container tabPanel_Conatiner">
+                <div class="row">
+                    <%= render partial: 'admin/admin_left_panel', locals: {admin: @event} %>
+                    <div class="col-sm-8">
+                        <div class="right tabPanel_right top-margin-0 reg_block">
+                            <div class="heading">
+                                <h2 class="col-sm-7 col-xs-6">Event Types</h2>
+                                <%= button_tag "Create New", type: "button", class: "btn btn-danger btn-orange", id: "event_type_create_new_button"%>
+                            </div>
+                            <div class="clearfix"></div>
+                            <%= render partial: 'application/no_records', locals: {message: 'No Event Registrations Found.'} unless @event_types.present? %>
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default saved">
+                                    <div id="collapseOne" class="panel-collapse collapse cat_block in">
+                                        <div class="panel-body">
+                                            <div class="table-responsive">
+                                                <% if @event_types.present? %>
+                                                    <table class="table tablebg tablesaw" data-tablesaw-mode="columntoggle">
+                                                        <thead>
+                                                            <tr>
+                                                                <td>Name</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% @event_types.each do |event_type|%>
+                                                                <tr>
+                                                                    <td><%= event_type.name %></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            <% end %>
+                                                        </tbody>
+                                                    </table>
+                                                <% end %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

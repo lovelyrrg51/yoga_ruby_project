@@ -1,0 +1,20 @@
+<body style="margin:0px;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="white" style="font-family:Verdana, Geneva, Helvetica, Arial, sans-serif;">
+    <tr style=" width: 100%;  border-bottom: 1px solid #900;  background: #900;" bgcolor="#EAE8E8">
+      <td style="padding: 10px;"><a href="#"><img src="https://dmhtmt59mq15j.cloudfront.net/assets/images/logo.png" alt=""></a></td>        
+    </tr>
+    <% @sadhak_profiles.each do |sadhak| %>
+      <tr style=" width: 100%;  border-bottom: 1px solid #900;">
+        <td style="padding: 10px;"> Namah Shivay <b><%= sadhak.full_name %></b> with SYID: <b><%= sadhak.syid %></b><br>
+        <% if @sy_club.present? %>
+          <label>Notification message from shivyog club admin, please have a look at this.</label><br>
+          Club: <b><%= @sy_club.name.capitalize %></b><br>
+        <% else %>
+          <label>Notification message from shivyog admin, please have a look at this.</label><br>
+        <% end %>
+        Message: <%= raw(@message) %>
+        </td>        
+      </tr>
+    <% end %>
+  </table>
+</body>

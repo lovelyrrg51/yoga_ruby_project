@@ -1,0 +1,74 @@
+<div id="cash" class="tab-pane active tabsubcontent">
+  <%= form_for :payment_details, url: pay_event_order_path(@event_order), method: :post, html: { id: "cash-gateway-payment-form" } do |f|  %>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="box bordered-input clearfix">
+               <label class="asterisk">Date of Payment</label>
+               <div class="calenderdate dropdown-field">
+                    <input type="text" class="form-control noBorder field" placeholder="Date" value=<%= Date.today.to_s %> disabled>
+                </div>
+           </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="box bordered-input">
+               <label class="asterisk">Amount</label>
+               <div class="dropdown dropdown-field">
+                  <input type="text" class="form-control noBorder field" placeholder="Amount" value="<%= "#{currency} #{(amount + gateway_charges(gateway, amount).rnd)}" %>" disabled>
+               </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="box bordered-input border-textarea">
+               <label class="">Additional</label>
+               <div class="dropdown dropdown-field">
+                  <textarea class="form-control noBorder field" placeholder="Additional Comments" name="payment_details[additional_details]"></textarea>
+               </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="box">
+                <div class="CustomCheckbox pg_cash_payment_ack_div">
+                    <input type="checkbox" name="payment_details[is_terms_accepted]" id="pg_cash_payment_ack_checkbox">
+                    <label>I acknowledge that I have read all of the provisions above and fully understand the terms and conditions expressed and agree to be bound by such <%= link_to "Terms and conditions", cash_payment_terms_and_conditions_path , target: :_blank, class: "primary-color anchorlink" %>.</label>
+                </div>
+                <span class="labelerror pg_cash_payment_ack_checkbox_error_span"></span>
+            </div>
+            <div class="pannel-btn text-right mg-t30">
+                <button type="submit" class="btn btn-info" data-disable-with="PROCESSING...!">PAY NOW</button>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="payment_details[amount]" value=<%= (amount + gateway_charges(gateway, amount).rnd) %>>
+    <input type="hidden" name="payment_details[event_order_id]" value=<%= event_order_id %>>
+    <input type="hidden" name="payment_details[config_id]" value=<%= gateway.try(gateway.try(:payment_gateway_type).try(:relation_name)).try(:id).to_s %>>
+    <input type="hidden" name="method" value='cash'>
+    <input type="hidden" name="payment_details[payment_date]" value=<%= Date.today.to_s %>>
+    <input type="hidden" name="payment_details[upgrade]" value=<%= @upgrade.present? %> >
+    <input type="hidden" name="payment_details[parent_event_order_id]" value=<%= @parent_event_order_id %> >
+    <input type="hidden" name="<%= ENCRYPT_PAYMENT_DETAILS_KEY.encrypt %>" value=<%= encryped_payment_details({ amount: (amount + gateway_charges(gateway, amount).rnd), event_order_id: event_order_id, config_id: gateway.try(gateway.try(:payment_gateway_type).try(:relation_name)).try(:id).to_s, method: 'cash', payment_date: Date.today.to_s, upgrade: @upgrade.present?, parent_event_order_id: @parent_event_order_id }) %>>
+    <input type="hidden" name="<%= EVENT_ORDER_LINE_ITEM_IDS.encrypt %>" value=<%= @before_event_order_line_items.to_json.encrypt %> >
+    <input type="hidden" name="<%= SADHAK_PROFILE_DETAILS.encrypt %>" value=<%= @sadhak_details_hash.to_json.encrypt %> >
+  <% end %>
+</div>
+<script type="text/javascript">
+  (function(){
+    $('#cash-gateway-payment-form').validate();
+    $('#cash-gateway-payment-form').submit(function(){
+      if(!$('input#pg_cash_payment_ack_checkbox').prop('checked'))
+      {
+        $('input#pg_cash_payment_ack_checkbox').parents('div.CustomCheckbox.pg_cash_payment_ack_div').siblings('span.pg_cash_payment_ack_checkbox_error_span').text('This field is required.');
+        return false;
+      }
+      var target_url;
+      if(document.location.href === document.referrer || document.referrer === ""){
+          target_url = "<%= Rails.application.config.app_base_url %>"
+      }else{
+          var target_url = document.referrer
+      }
+      for (i = 0; i < 100 ; i++){
+          window.history.pushState(null, document.title, target_url);
+      }
+    });
+
+  })();
+</script>

@@ -1,0 +1,46 @@
+<div class="headingtittle-h2 text-center">
+    <h2>Forum Data Migration</h2>
+</div>
+<div class="boxsection-lg boxsection-xs boxshadow prelative">
+    <div class="row">
+    <%= form_tag migrate_offline_forum_data_sy_clubs_path, multipart: true, id: "migrate_offline_forum_data" do%>
+        <div class="col-lg-6">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="box bordered-input tagbox prelative">
+                        <label class="asterisk">Email</label>
+                        <div class="boot-taginput inner-taginput mCustomScrollbar">
+                        	<%= text_field_tag :recipients, "", 'data-role': "tagsinput", required: true %>
+                        </div>
+                        <div class="recipients-error"></div>
+                    </div>
+                </div>
+                <div class="col-sm-12 mg-b30">
+                    <div class="box bordered-input clearfix prelative box-upload">
+                        <label class="asterisk">Upload Data File</label>
+                        <span class="infodetails">( Please upload only .xls or .xlsx files )</span>
+                        <div class="clickable mg-t5">
+                          	<%= file_field_tag :forum_offline_data_file, onchange: 'readURL(this)', required: true, 'data-extension': 'xls'%>
+                          	<div class="Custinput"><a class="btn btn-danger" href="">CHOOSE FILE</a> <span>No file choosen</span></div>
+                        </div>
+                        <div class="forum_offline_data_file-error"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="box bordered-input border-textarea">
+                <label class="asterisk">Additional Details</label>
+                <div class="dropdown dropdown-field">
+                		<%= text_area :additiona_details, "",  class: "form-control noBorder field", placeholder: "Additional Details", required: true %>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="pannel-btn text-right">
+                <button class="btn btn-info">SUBMIT</button>
+            </div>
+        </div>
+        <%end%>
+    </div>
+</div>

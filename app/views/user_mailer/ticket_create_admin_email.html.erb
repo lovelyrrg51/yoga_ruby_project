@@ -1,0 +1,16 @@
+<%@user = @options[:user] %>
+<%@ticket = @options[:ticket] %>
+ Namah Shivay <%= @user.name %> <%= @user.last_name %>,
+<br />
+New ticket #<%= @ticket.id %> created.
+<br />
+---------------------------
+<br />
+<strong>Created By:</strong><br />
+<% if @ticket.user.present?  %>
+  <strong>Name :</strong> <%= @ticket.user.name %> <%= @ticket.user.last_name %><br />
+<% end %>
+  <strong>Type :</strong> <% if @ticket.ticket_type %> <%= @ticket.ticket_type.ticket_type %> <% end %><br />
+  <strong>Title :</strong> <%= @ticket.title %><br />
+  <strong>Description :</strong> <%= @ticket.description %><br />
+

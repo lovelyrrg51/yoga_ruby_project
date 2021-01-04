@@ -1,0 +1,23 @@
+<h1>Listing event_registrations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @event_registrations.each do |event_registration| %>
+      <tr>
+        <td><%= link_to 'Show', event_registration %></td>
+        <td><%= link_to 'Edit', edit_event_registration_path(event_registration) %></td>
+        <td><%= link_to 'Destroy', event_registration, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Event registration', new_event_registration_path %>

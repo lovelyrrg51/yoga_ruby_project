@@ -1,0 +1,58 @@
+<div id="shivirdetails">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <div class="headtittle">
+                <h2>Shivir Details <span class="sub-tittle">Tax Type</span></h2>
+            </div>
+            <%= render 'shivir_status'%>
+        </div>
+    </div>
+    <div class="detailshivir tax">
+    <%= form_for @event ,:html=>{ id: "event_tax_type_form", class: ""} do |f| %>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="tableCntrl <%= 'hidden' unless f.object.event_tax_type_associations.present? %>">
+                    <div class="table-responsive tableScrollbar">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Percent</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+							<tbody id="tableappend">
+								<%= f.fields_for :event_tax_type_associations do |etta| %>
+									<%= render 'events/event_tax_type_association_fields', f: etta %>
+								<% end %>
+							</tbody>
+                        </table>
+                    </div>
+                </div>
+				<div class="links pannel-btn mg-b30">
+					<%= link_to_add_association  "ADD TYPE", f, :event_tax_type_associations, { "data-association-insertion-node":'#tableappend', :class => 'btn btn-info addtype-btn',"data-association-insertion-method":'append' } %>
+				</div>
+                <div class="row <%= 'hidden' if f.object.event_tax_type_associations.present? %>" id="NoTaxTypeAvailable">
+                    <%= render partial: 'application/no_records', locals: { message: "No Tax Type Available." }  %>
+                </div>
+                <div class="pannel-btn text-right <%= 'hidden' unless  f.object.event_tax_type_associations.present? %>" id="TaxTypeAction">
+                    <button class="btn btn-danger mg-r10 turbolinkReload" type="reset">CLEAR</button>      
+                    <%= f.submit 'SAVE', class: 'btn btn-info', id: 'save-tax-type'%>
+                </div>
+            </div>
+        </div>
+    <% end %>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#tableappend').on('cocoon:after-insert cocoon:after-remove', function(e, insertedItem) {
+    		$(this).parents('.tableCntrl').removeClass("hidden");
+        if ($('form#event_tax_type_form').find('tr.nested-fields').length == 0){
+            $("#TaxTypeAction").addClass('hidden');
+            $("#NoTaxTypeAvailable").removeClass('hidden');
+        } else {
+            $("#TaxTypeAction").removeClass('hidden');
+            $("#NoTaxTypeAvailable").addClass('hidden');
+        }
+    });
+</script>

@@ -1,0 +1,119 @@
+<div class="modal fade" id="cancel_registration" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="largeModalLabel">Registration Refund Details</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="body">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="header p-10-0"><h2>Registration Summary <%= "(Before)" if pay_or_refund[:touched_event_order_line_items].size.positive? %></h2></div>
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>S. No.</th>
+                            <th>Name/SYID</th>
+                            <th>Seating Category</th>
+                            <th>Discount</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% @pay_or_refund[:old_details].each_with_index do |old_detail, index| %>
+                            <tr>
+                              <td><%= index+1 %>. </td>
+                              <td><strong><%= old_detail[:full_name] %> <br /><span class="red-text small"><%= old_detail[:syid] %></span></strong></td>
+                              <td><strong><%= old_detail[:seating_category] %> <br /><span class="red-text small"><%= old_detail[:price] %></span></strong></td>
+                              <td><%= old_detail[:discount] %></td>
+                            </tr>
+                          <% end %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <% if pay_or_refund[:touched_event_order_line_items].size.positive? %>
+                    <div class="col-sm-12">
+                      <div class="header p-10-0"><h2>Registration Summary (After)</h2></div>
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover">
+                          <thead>
+                            <tr>
+                              <th>S. No.</th>
+                              <th>Name/SYID</th>
+                              <th>Seating Category</th>
+                              <th>Discount</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% pay_or_refund[:new_details].each_with_index do |new_detail, index| %>
+                              <tr>
+                                <td><%= index+1 %>. </td>
+                                <td><strong><%= new_detail[:full_name] %> <br /><span class="red-text small"><%= new_detail[:syid] %></span></strong></td>
+                                <td><strong><%= new_detail[:seating_category] %> <br /><span class="red-text small"><%= new_detail[:price] %></span></strong></td>
+                                <td><%= new_detail[:discount] %></td>
+                              </tr>
+                            <% end %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="header p-10-0"><h2>Registration Refund Details for <%= from_event_order.reg_ref_number %></h2></div>
+                    <div class="table-responsive">
+                      <form class="reg_details_form" id="reg_details_form" action="#">
+                        <table class="table table-bordered table-striped table-hover">
+                          <thead>
+                            <tr>
+                              <th>Description</th>
+                              <th>Details</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Registration Reference Number</td>
+                              <td><%= from_event_order.reg_ref_number %></td>
+                            </tr>
+                            <tr>
+                              <td>Refundable Amount</td>
+                              <td class="refundable-amount"><%= "#{event.currency_code} #{db_refundable_amount.rnd}" %></td>
+                            </tr>
+                            <tr>
+                              <td>Cancellation Charges</td>
+                              <td><%= "#{event.currency_code} #{cancellation_charges_by_policy.rnd}" %></td>
+                            </tr>
+                            <tr>
+                              <td><strong>Net Refundable Amount</strong></td>
+                              <td><span class="red-text"><strong><%= "#{event.currency_code} #{net_amount.rnd}" %></strong></span></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <%= form_for(:event_orders, url: payment_refunds_v2_event_order_path(from_event_order), method: :post, html: { id: "cancel_reg_form"}) do |f| %>
+                  <div class="row">
+                    <div class="col-sm-12 text-align-center">
+                      <input type="hidden" name="event_orders[<%= PAYMENT_REFUND_PARAMS.encrypt %>]" value="<%= enc_request_params %>" />
+                      <button type="submit" class="cancel_confirm_btn btn cta_button_small bg-red waves-effect" id="cancel_confirm_btn">Confirm</button>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="shivyog-btn" data-dismiss="modal"><a href="javascript: void(0);" class="btn cta_button_small bg-red waves-effect">Close</a></div>
+      </div>
+    </div>
+  </div>
+</div>

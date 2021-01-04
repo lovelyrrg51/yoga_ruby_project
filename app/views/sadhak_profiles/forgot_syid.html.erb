@@ -1,0 +1,199 @@
+<% uniq_token = SecureRandom.uuid %>
+<div class="">
+    <div class="headingtittle-h2 text-center">
+        <h2>Forgot SYID</h2>
+    </div>
+    <div class="boxsection-lg boxsection-xs boxshadow prelative">
+        <div class="row">
+            <div class="col-sm-12">
+                <a href="#Refine" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+                <div class="refineCntrl collapse in" aria-expanded="true" id="Refine" role="tablist">
+                    <div class="refinesub-group forgot_syid">
+                        <ul class="refinelist">
+                            <li>
+                                <label class="radio-box radiobg">
+                                <%= radio_button_tag("radio", "", !params[:search_by_details].present?, 'data-target': "#searchbynumber" )%>
+                                    <span class="radiocheck">Search By Email / Phone Number</span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="radio-box radiobg">
+                                <%= radio_button_tag("radio", "", params[:search_by_details].present?, 'data-target': "#searchbydetails" )%>
+                                    <span class="radiocheck">Search By Details</span>
+                                </label>
+                            </li>
+                        </ul>
+                        <%= form_tag search_syid_by_mobile_or_email_sadhak_profiles_path, method: :get, id: 'search_syid_by_mobile_or_email' do %>
+                        <div class="tabs" id="searchbynumber" style="<%= 'display: none;' if params[:search_by_details].present? %>">
+                            <div class="searchbynumber mg-t30 ">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="outbox">
+                                            <label>Search By</label>
+                                            <div class="box bordered-input dropdown">
+                                                <div class="dropdown-field selectTwo-dropdown">
+                                                <%= select_tag :medium, options_for_select(MEDIUM_TO_SEND_VERIFICATION_TOKEN.slice(0, 1).collect{ |key, val| ["Search By #{val.capitalize}", val]}, params[:medium]), class: "simple-single"%>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 search_option <%= 'hidden' if params[:mobile].present?%>" id="email">
+                                        <div class="outbox">
+                                            <label class="asterisk">Search By Email</label>
+                                            <div class="box bordered-input">
+                                                <div class="dropdown dropdown-field">
+                                                    <%= text_field_tag :email, params[:email], class: "form-control noBorder field", placeholder: "Email"%>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 search_option <%= 'hidden' unless params[:mobile].present?%>" id="mobile">
+                                        <div class="outbox">
+                                            <label class="asterisk">Search By Mobile</label>
+                                            <div class="box bordered-input">
+                                                <div class="dropdown dropdown-field">
+                                                    <%= text_field_tag :mobile, params[:mobile], class: "form-control noBorder field", placeholder: "Mobile number"%>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% if @success.present?%>
+                            <div class="text-center primarybold successofferCntrl successgapping-20 success-pd12">
+                                <p class="succes-img succes-sm-img"><%= @success %></p>
+                            </div>
+                            <%end%>
+                            <div class="mg-t20">
+                                <ul class="panellist-btn text-right">
+                                    <li>
+                                        <button class="btn btn-danger resetForm" type="button" onclick='Turbolinks.visit("<%= forgot_syid_sadhak_profiles_path%>")'>CLEAR</button>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-info" type="submit">SEARCH</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <%end%>
+                        <%= form_tag search_syid_by_details_sadhak_profiles_path, method: :get, id: 'search_syid_by_details' do %>
+                        <%= hidden_field_tag :search_by_details, value: true %>
+                        <div class="tabs" id="searchbydetails"  style="<%= 'display: none;' unless params[:search_by_details].present? %>">
+                            <div class="searchbydetails mg-t30">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="outbox">
+                                            <label class="asterisk">First Name</label>
+                                            <div class="box bordered-input">
+                                                <div class="dropdown dropdown-field">
+                                                    <%= text_field_tag :first_name, params[:first_name], class: "form-control noBorder field", placeholder: "First name"%>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="outbox">
+                                            <label class="">Last Name</label>
+                                            <div class="box bordered-input">
+                                                <div class="dropdown dropdown-field">
+                                                   <%= text_field_tag :last_name, params[:last_name], class: "form-control noBorder field", placeholder: "Last name"%>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="outbox">
+                                            <label class="asterisk">Date of Birth</label>
+                                            <div class="box bordered-input">
+                                                <div class="input-group dropdown-field calenderdate date" id="datetimepicker1" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker"  data-maxStartDate="<%= Date.current.end_of_day%>" data-minStartDate="<%= Date.current - SADHAK_MAX_AGE.years %>" data-defaultDate='<%= DateTime.current.years_ago(SADHAK_MIN_AGE) %>'>
+                                                <%= text_field_tag :date_of_birth, params[:date_of_birth], class: "form-control noBorder field", placeholder:"Jan 01, 2015", readonly:"true"%>
+                                                    <span class="input-group-addon">
+                                                        <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="sepeator">
+                                <div class="row mg-t30">
+                                    <div class="col-sm-12">
+                                        <div class="headtittle">
+                                            <h2>Address</h2></div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="outbox">
+                                            <label>Country</label>
+                                            <div class="box bordered-input dropdown">
+                                                <div class="dropdown-field selectTwo-dropdown">
+                                                    <%=  select_tag :country_id, options_for_select(DbCountry.pluck(:name, :id)||[], params[:country_id]), include_blank: " ----- Select ----- ", class: "basic-single", id: "country_#{uniq_token}", onChange: "countrySelectChange('#{uniq_token}')"%>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="outbox">
+                                            <label>State</label>
+                                            <div class="box bordered-input dropdown">
+                                                <div class="dropdown-field selectTwo-dropdown">
+                                                   <%=  select_tag :state_id, options_for_select(@states.try(:pluck, :name, :id)||[], params[:state_id]), include_blank: " ----- Select ----- ", class: "basic-single", "data-changable-id": "#{uniq_token}", onChange: "stateSelectChange('#{uniq_token}')", id: "state_#{uniq_token}" %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="outbox">
+                                            <label>City</label>
+                                            <div class="box bordered-input dropdown">
+                                                <div class="dropdown-field selectTwo-dropdown">
+                                                   <%=  select_tag :city_id, options_for_select(@cities.try(:pluck, :name, :id)||[], params[:city_id]), include_blank: " ----- Select ----- ", class: "basic-single", id: "city_#{uniq_token}"%>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mg-t20">
+                                <ul class="panellist-btn text-right">
+                                    <li>
+                                        <button class="btn btn-danger resetForm" type="button" onclick='Turbolinks.visit("<%= forgot_syid_sadhak_profiles_path%>")'>CLEAR</button>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-info" type="submit">SEARCH</button>
+                                    </li>
+                                </ul>
+                            </div>
+                      	</div>
+                       <%end%> 
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 mg-t30">
+            	<%if @error.present?%>
+                <div class="text-center primarybold offerCntrl offergapping-30 offer-pd12">
+                    <p class="error-img error-sm-img"><%= @error%></p>
+                </div>
+                <%end%>
+                <%if params[:search_by_details].present? && @sadhak_profile.present?%>
+                    <div class="tableCntrl tableCntrllist">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td data-th="Name">
+                                            <p class="primarybold"><%= @sadhak_profile.full_name%></p>
+                                        </td>
+                                        <td data-th="SYID Number">
+                                            <p class="primarybold primary-color"><%= @sadhak_profile.syid%></p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <%end%>
+            </div>
+        </div>
+    </div>
+</div>

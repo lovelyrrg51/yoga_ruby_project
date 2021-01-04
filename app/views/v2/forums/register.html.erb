@@ -1,0 +1,52 @@
+<%= content_for(:title, "Forum Registration") %>
+<section class="forum-member-registration-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md 12">
+        <div class="banner_text">
+          <div class="main_banner_heading">
+            Forum Member Registration
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="forum_member_registration">
+  <div class="container">
+    <div class="heading_subtitle"><h2><%= @sy_club.name %></h2></div>
+    <div class="dashed_divider m-b-30"></div>
+
+    <%= render "v2/forums/detail", back_to_forum_button: false %>
+
+    <% if current_user %>
+      <div class="row clearfix">
+        <div class="col-sm-12" data-behavior="vue">
+          <forum-register
+            :forum-id="<%= @sy_club.id.to_json %>"
+            :seating-category-list="<%= @seat_data.to_json %>"
+            :currency="<%= @clp_event.currency_code.to_json %>"
+          ></forum-register>
+        </div>
+      </div>
+    <% else %>
+      <div class="row clearfix">
+        <div class="col-sm-12">
+          <div class="unlock_all_courses">
+            <div class="timer"><i class="material-icons">timer</i></div>
+            <div class="unlock_text">Register for this forum</div>
+            <p class="text-center text-muted">Please login to register for this forum.</p>
+            <div class="shivyog-btn">
+              <%= link_to new_user_session_path, class: "cta_button_small bg-red waves-effect" do %>
+                <i class="fa fa-sign-in"></i>&nbsp;Login Now
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<div class="clear"></div>

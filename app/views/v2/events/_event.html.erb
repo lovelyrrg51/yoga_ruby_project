@@ -1,0 +1,23 @@
+<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 event-col">
+  <div class="result-box">
+    <%= link_to v2_event_path(event.id) do %>
+      <h4><%= event.event_name %></h4>
+    <% end %>
+    <h6><%= event.event_duration %></h6>
+    <div class="pro">
+      <div class="profile-img">
+        <%= image_tag "#{has_asset?(event.graced_by.to_s.gsub(" ", "").downcase + "sm.png") ? event.graced_by.to_s.gsub(" ", "").downcase + "sm.png" : "profile.png"}", alt: "profile image"%>
+        </div>
+      <div class="profile-des">
+        <h6><strong>Graced By</strong>: <%= event.graced_by %></h6>
+        <h6><strong>Venue</strong>: <%= event.event_location %> </h6>
+        <h6><a href="Javascript: void(0);" data-trigger="focus" data-container="body" title="Contact Numbers" data-toggle="popover" data-placement="top" data-content="<%= event.contact_details %>">Contacts</a></h6>
+      </div>
+    </div>
+    <div class="register-btn">
+      <%= link_to v2_event_path(event.id), class: "cta_button_small bg-red waves-effect" do %>
+        <i class="material-icons">group_add</i>&nbsp;Register Now
+      <% end %>
+    </div>
+  </div>
+</div>

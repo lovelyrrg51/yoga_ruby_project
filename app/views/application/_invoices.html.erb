@@ -1,0 +1,162 @@
+<% uniq_token = SecureRandom.uuid %>
+<div class="col-sm-12">
+    <a href="#RegisterInvoices" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+    <div class="refineCntrl collapse in" aria-expanded="true" id="RegisterInvoices" role="tablist">
+        <form action=<%= clear_path %> method='get' id="registration_invoices_form">
+            <div class="refinesub-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label class="asterisk">Date</label>
+                            <div class="box outerbox outerheight light-bg ">
+                                <div class="rangercode">
+                                    <div class="dropdown-field numbercode">
+                                        <div class="input-group date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker">
+                                            <input type="text" class="form-control code-input" placeholder="<%= Date.today.strftime('%b %d, %Y') %>" name="reg_invoice_from" value="<%= params[:reg_invoice_from] %>" readonly="true" required>
+                                            <span class="input-group-addon">
+                                                <button class="" type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-field">
+                                        <label class="middletab mg-t10">To</label>
+                                    </div>
+                                    <div class="dropdown-field numbercode">
+                                        <div class="input-group date" id="<%= uniq_token %>_end" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker">
+                                            <input type="text" class="form-control code-input" placeholder="<%= Date.today.strftime('%b %d, %Y') %>" name="reg_invoice_to" value="<%= params[:reg_invoice_to] %>" readonly="true" required>
+                                            <span class="input-group-addon" id="basic-addon3">
+                                                <button type="button" ><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label>Invoice / Receipt No.</label>
+                            <div class="box bordered-input">
+                               <div class="dropdown dropdown-field">
+                                  <input type="text" class="form-control noBorder field" placeholder="Invoice / Receipt No." name="invoice_number" value="<%=params[:invoice_number] %>">  
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label>Payment Method</label>
+                            <div class="box bordered-input dropdown">
+                                <div class="dropdown-field selectTwo-dropdown">
+                                <%= select_tag :payment_method, options_for_select(TransferredEventOrder.gateways.collect{|g| [g[:payment_method], g[:payment_method]]}, params[:payment_method]), {prompt: 'Select Payment Method', class: 'basic-single'} %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label>Reg. Ref No. </label>
+                            <div class="box bordered-input">
+                               <div class="dropdown dropdown-field">
+                                  <input type="text" class="form-control noBorder field" placeholder="Reg. Ref No." name="reg_ref_number" value="<%= params[:reg_ref_number] %>">  
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label>Transaction Ref No. </label>
+                            <div class="box bordered-input">
+                               <div class="dropdown dropdown-field">
+                                  <input type="text" class="form-control noBorder field" placeholder="Transaction Ref No." name="transaction_id" value="<%= params[:transaction_id] %>">  
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% unless event.present? %>
+                        <div class="col-sm-6">
+                            <div class="outbox">
+                                <label>Event</label>
+                                <div class="box bordered-input dropdown">
+                                    <div class="dropdown-field selectTwo-dropdown">
+                                    <%= select_tag :reg_invoice_event, options_for_select(Event.pluck(:event_name, :id), params[:reg_invoice_event]), {prompt: 'Select Event', class: 'basic-single', id: "reg_invoice_event_select_tag"} %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                    <div class="col-sm-12">
+                        <div class="pannel-btn text-right">
+                            <%= link_to "CLEAR", clear_path, class: 'btn btn-danger mg-r10' %>
+                            <button class="btn btn-info" type="submit" data-disable-with="SEARCHING...!" >SEARCH</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%= render partial: 'application/no_records', locals: {message: 'No Registration Invoices Found.'} unless event_registrations.present? %>
+
+<% if event_registrations.present? %>
+
+    <div class="col-sm-12 mg-t30">
+        <div class="tableCntrl">
+            <div class="table-responsive tableScrollbar">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <% unless event.present? %>
+                                <th>Event Name</td>
+                            <% end %>
+                            <th>Payment</th>
+                            <th>Invoice No.</th>
+                            <th>Reg. Ref. No.</th>
+                            <th>Transition Ref.</th>
+                            <th>Invoice</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% event_registrations.each do |event_registration|%>
+                            <tr>
+                                <td>
+                                    <div class="textgroup">
+                                        <p class="primarybold"><%= event_registration.sadhak_profile.try(:full_name) %></p>
+                                        <span><%= event_registration.sadhak_profile.try(:syid) %></span>
+                                    </div>
+                                </td>
+                                <% unless event.present? %>
+                                    <td><%= event_registration.try(:event).try(:event_name) %></td>
+                                <% end %>
+                                <td><%= event_registration.event_order.try(:payment_method) %></td>
+                                <%if event_registration.sy_event_company_id.present? %>
+                                  <td><%= event_registration.try(:invoice_number) %></td>
+                                <% else %>
+                                  <td class="primary-color">Not Avaiable</td>
+                                <% end %>
+                                <td><%= event_registration.event_order.reg_ref_number %></td>
+                                <td><%= event_registration.event_order.transaction_id %></td>
+                                <% if is_eligible_to_download_invoice_receipt?(event_registration) %>
+                                    <td class="icon_popup" title="Invoice Receipt Avaliable - Click to download" onclick=<%= "window.open('#{event_registration.attachments.last.try(:s3_url)}','_blank');" %>><a href="javascript:void(0)" class="primary-color">Download</a></td>
+                                <% else %>
+                                    <td class="primary-color" title="<%= invoice_receipt_download_error_text(event_registration) %>">Not Avaiable</td>
+                                <% end %>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-pagination">
+                <div class="show-pgnation">
+                    <p class="primarybold"><%= custom_page_entries_info(@event_registrations) %></p>
+                </div>
+                <%= paginate @event_registrations %>
+            </div>
+        </div>
+    </div>
+
+<% end %>

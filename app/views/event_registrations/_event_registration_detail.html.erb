@@ -1,0 +1,57 @@
+<div id="viewModal" class="modal fade Custommodal" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="headtittle">Registration Details</h2>
+            <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png"%></button>
+        </div>
+        <div class="modal-body mCustomScrollbar">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="tableCntrl tableCntrllist">
+                        <div class="table-responsive ">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td data-th="Name">
+                                            <div class="textgroup">
+                                                <p class="primarybold"><%= @full_name%></p>
+                                                <span><%= @syid %></span>
+                                            </div>
+                                        </td>
+                                        <td data-th="Reg. Ref. Number"><%= @reg_ref_number%></td>
+                                        <td data-th="Transation Id" data-toggle="tooltip" data-placement="top" title="<%= @transaction_id %>"><%= @transaction_id %></td>
+                                        <td data-th="Payment Method"><%= @payment_method%></td>
+                                        <td data-th="Registration Date">
+                                            <div class="textpanel">
+                                                <p class="primarybold"><%=  @registration_date %></p>
+                                                <span class="senary-color"><%= @registration_time %></span>
+                                            </div>
+                                        </td>
+                                        <td data-th="Status" class="text-center"><p class="primary-color"><%= @status %></p></td>
+                                        <%if @event_registration.event.is_in_india?%>
+                                            <%if @event_registration.receipt_voucher.present?%>
+                                                <td data-th="Registration Receipt" class="text-center"><p class="primary-color"><%= link_to "#{@event_registration.receipt_voucher.s3_filepath}", @event_registration.receipt_voucher.s3_filepath, target: "_blank" %></p></td>
+                                            <%elsif (@event_registration.success? || @event_registration.upgraded?) && !@is_transfered%>
+                                            <td data-th="Registration Receipt" class="text-center"><p class="primary-color"><%= link_to "Generate receipt", generate_voucher_event_registration_path(@event_registration) %></p></td>
+                                            <%end%>
+                                            <%if @event_registration.invoice_voucher.present?%>
+                                                <td data-th="Registration Invoice" class="text-center"><p class="primary-color"><%= link_to "#{@event_registration.invoice_voucher.s3_filepath}", @event_registration.invoice_voucher.s3_filepath ,target: "_blank"  %></p></td>
+                                            <%elsif (@event_registration.success? || @event_registration.upgraded?) && !@is_transfered%>
+                                                <td data-th="Registration Invoice" class="text-center"><p class="primary-color"><%= link_to "Generate invoice", generate_voucher_event_registration_path(@event_registration)%></p></td>
+                                            <%end%>
+                                        <%end%>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+        </div>
+    </div>
+  </div>
+</div>

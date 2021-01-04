@@ -1,0 +1,86 @@
+<div class="headingtittle-h2 text-center">
+    <h2>Forums</h2>
+</div>
+<% uniq_token = SecureRandom.uuid %>
+<div class="boxsection-lg boxsection-xs boxshadow">
+    <% if policy(:sy_club).index? %>
+      <div class="detailshead">
+        <%= link_to "START NEW INTERNATIONAL FORUM", new_sy_club_path, class: "btn btn-info mg-b20 lg-btn" %>
+      </div>
+    <% end %>
+    <div class="mg-b50">
+        <a href="#transactions" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+        <div class="refineCntrl collapse filter-panel" aria-expanded="true" id="transactions" role="tablist">
+            <div class="refinesub-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="outbox">
+                            <label>Country</label>
+                            <div class="box bordered-input dropdown">
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%=  select_tag :country_id, options_for_select(DbCountry.pluck(:name, :id)||[], params[:country_id]), include_blank: " ----- Select ----- ", class: "basic-single", id: "country_#{uniq_token}", onChange: "countrySelectChange('#{uniq_token}')"%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" style="display: none;">
+                        <div class="outbox">
+                            <label>State</label>
+                            <div class="box bordered-input dropdown">
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%=  select_tag :state_id, options_for_select(@states.try(:pluck, :name, :id)||[], params[:state_id]), include_blank: " ----- Select ----- ", class: "basic-single", "data-changable-id": "#{uniq_token}", onChange: "stateSelectChange('#{uniq_token}')", id: "state_#{uniq_token}" %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" style="display: none;">
+                        <div class="outbox">
+                            <label>City</label>
+                            <div class="box bordered-input dropdown">
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%=  select_tag :city_id, options_for_select(@cities.try(:pluck, :name, :id)||[], params[:city_id]), include_blank: " ----- Select ----- ", class: "basic-single", id: "city_#{uniq_token}", "data-visible": false%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="pannel-btn text-right">
+                            <%= link_to 'CLEAR', sy_clubs_path, class: "btn btn-danger mg-r10" %>
+                            <button class="btn btn-info" id='data-table-filter'>FILTER</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tableCntrl tabledataCntrl prelative" style="display: none;">
+        <div class="searboxCntrl">
+            <div class="input-group">
+                <%= text_field_tag :sy_club_search, nil, placeholder: 'Search...', class: 'form-control', "aria-describedby": "basic-addon2" %>
+                <span class="input-group-addon" id="basic-addon2"><button class="searchicon" id="sy_club_search_btn"><i class="icon icon-search" aria-hidden="true"></i></button></span>
+            </div>
+        </div>
+        <table class="table datatable table-hover" id="syClubTableData" data-url="<%= datatables_sy_clubs_path(format: :json) %>">
+            <thead>
+                <tr>
+                    <th>Forum Name</th>
+                    <th>Forum Id</th>
+                    <th>Country</th>
+                    <th>State</th>
+                    <th>City</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+    $('#sy_club_search_btn').on('click', function() {
+        $('#syClubTableData').DataTable().search($('#sy_club_search').val().trim(), false, true).draw();
+    });
+
+    $('.dataTables_filter').hide();
+    });
+</script>

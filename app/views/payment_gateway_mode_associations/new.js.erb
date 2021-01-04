@@ -1,0 +1,13 @@
+<% if @message.present? %>
+  toastr.error("<%= @message %>");
+<% else %>
+
+  var appearance = $("<%= escape_javascript(render(partial: 'ccavenue_configs/payment_mode_association', locals: { payment_gateway_mode_association: @payment_gateway_mode_association, payment_mode: @payment_mode, ccavenue_config: @ccavenue_config })) %>");
+
+  $('#payment_gateway_mode_association_div').html(appearance);
+
+  $(".basic-single").select2({
+      minimumResultsForSearch: Infinity
+  });
+
+<% end %>

@@ -1,0 +1,141 @@
+<div class="registrationCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Registration Details Payment</h2>
+    </div>
+    <div class="boxsection-lg boxsection-xs boxshadow prelative">
+        <div class="paymentflowCntrl">
+            <div class="row">
+                <div class="col-sm-12 mg-b20">
+                    <div class="offerCntrl primarybold text-center offergap-t30">
+                        <p>Please do not refresh the page/press back button.</p>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="headtittle">
+                        <h2>Registration Summary <span>(Before)</span></h2>
+                    </div>
+                    <div class="tableCntrl">
+                        <div class="table-responsive tableScrollbar">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>S.No.</th>
+                                        <th>SYID</th>
+                                        <th>Name</th>
+                                        <th>Seating Category</th>
+                                        <th>Discount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% (@before_sadhak_details || []).each_with_index do |detail, index| %>
+                                        <tr>
+                                            <td><%= index + 1 %></td>
+                                            <td><%= detail[:syid] %></td>
+                                            <td><%= detail[:full_name] %></td>
+                                            <td>
+                                                <div class="textgroup">
+                                                    <p><%= detail[:category_name] %></p>
+                                                    <span><%= detail[:price] %></span>
+                                                </div>
+                                            </td>
+                                            <td><%= detail[:discount] %></td>
+                                        </tr>
+                                    <% end %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="headtittle">
+                        <h2>Registration Summary <span>(After)</span></h2>
+                    </div>
+                    <div class="tableCntrl">
+                        <div class="table-responsive tableScrollbar">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>S.No.</th>
+                                        <th>SYID</th>
+                                        <th>Name</th>
+                                        <th>Seating Category</th>
+                                        <th>Discount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% (@after_sadhak_details || []).each_with_index do |detail, index| %>
+                                        <tr>
+                                            <td><%= index + 1 %></td>
+                                            <td><%= detail[:syid] %></td>
+                                            <td><%= detail[:full_name] %></td>
+                                            <td>
+                                                <div class="textgroup">
+                                                    <p><%= detail[:seating_category] %></p>
+                                                    <span><%= detail[:price] %></span>
+                                                </div>
+                                            </td>
+                                            <td><%= detail[:discount] %></td>
+                                        </tr>
+                                    <% end %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="headtittle">
+                        <h2>Payment Summary</h2>
+                    </div>
+                    <div class="paymenttable mg-t30">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th class="text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="primarybold">Registration Fees</td>
+                                        <td class="text-right primarybold"><%= "#{@event.currency_code} #{number_with_precision((@payment_params[:total_new_price] - @payment_params[:total_old_price]).rnd, precision: 2)}" %></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="primarybold"><%= (@payment_params[:total_new_discount] - @payment_params[:total_old_discount]).rnd.negative? ? 'Payable Discount' : 'Discount' %></td>
+                                        <td class="text-right primarybold"><%= "#{@event.currency_code} #{number_with_precision((@payment_params[:total_new_discount] - @payment_params[:total_old_discount]).rnd.abs, precision: 2)}" %></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="primarybold">Amount</td>
+                                        <td class="text-right primarybold"><%= "#{@event.currency_code} #{number_with_precision(@payment_params[:net_result].rnd, precision: 2)}" %></td>
+                                    </tr>
+                                    <% (@tax_details[:tax_breakup] || []).each do |tax| %>
+                                        <tr>
+                                            <td class="primarybold"><%= tax[:tax_name] %></td>
+                                            <td class="text-right primarybold"><%= "#{@event.currency_code} #{number_with_precision(tax[:amount].rnd, precision: 2)}" %></td>
+                                        </tr>
+                                    <% end %>
+                                    
+                                    <tr>
+                                        <td class="primaryblackbold">Net Amount</td>
+                                        <td class="text-right primaryblackbold"><%= "#{@event.currency_code} #{number_with_precision((@tax_details[:total_tax_applied] + @payment_params[:net_result]).rnd, precision: 2)}" %></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <% unless @is_registrations_allowed %>
+                    <div class="col-sm-12 mg-b20">
+                        <div class="offerCntrl text-center offergapping-30 primarybold">
+                            <p>Online Registrations are closed at the moment</p>
+                        </div>
+                    </div>
+                <% else %>
+                    <% if event_online_payment_gatways(@event).size > 0 || event_offline_payment_gateways(@event).size > 0 %>
+                        <%= render partial: "event_orders/payment_gateways", locals: { amount: (@tax_details[:total_tax_applied] + @payment_params[:net_result]).rnd } %>
+                    <% end %>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

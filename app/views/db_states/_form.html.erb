@@ -1,0 +1,25 @@
+<%= form_for [@db_country, @db_state], html:{class: "table-screen-next", id: "db_state_form"} do |f| %>
+
+  <div class="prelative mg-b30">
+    <div class="overlapping"></div>
+    <div class="row mg-t30">
+        <div class="col-sm-12">
+            <div class="box bordered-input">
+                <label class="asterisk">State Name</label>
+                <div class="dropdown dropdown-field">
+                    <%= f.text_field :name, class: 'form-control noBorder field', required: true, placeholder: 'State name' %>
+                </div>
+            </div>
+            <div class="pannel-btn text-right">
+                <button type="reset" class="btn btn-danger mg-r10" >CLEAR</button>
+                <%= f.submit params[:action] == "edit" ? "UPDATE" : 'CREATE', {class: 'btn btn-info'} %>
+            </div>
+        </div>
+    </div>
+  </div>
+<% end %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#db_state_form").validate();  
+  });
+</script>

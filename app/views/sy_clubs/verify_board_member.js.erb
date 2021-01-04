@@ -1,0 +1,40 @@
+function clearFields(){
+  $("input[id=" + <%= @index %> + "_last_name]").val("");
+  $("input[id=" + <%= @index %> + "_date_of_birth]").val("");
+  $("input[name='sy_club[sy_club_sadhak_profile_associations_attributes][<%= @index %>][sadhak_profile_id]']").val("");
+  $("input[name='sy_club[sy_club_sadhak_profile_associations_attributes][<%= @index %>][syid]']").val("");
+  $("input[name='sy_club[sy_club_sadhak_profile_associations_attributes][<%= @index %>][first_name]']").val("");
+  $("input[name='member_gender[<%= @index %>]']").prop('checked', false);
+}
+
+<% if @message.present? %>
+
+  toastr.error("<%= @message %>");
+  clearFields();
+
+<% else %>
+  var sadhak_id = "<%= @sadhak_profile.id %>"
+  var sadhak_added_times = 0;
+  $("input[id*='syid']").each(function(){
+    sadhak_added_times += ($(this).val().toUpperCase() == sadhak_id || $(this).val().replace(/[A-Za-z$-]/g, "") == sadhak_id) ? 1 : 0;
+  })
+
+  if(sadhak_added_times > 1){
+    clearFields();
+    sadhak_added_times = 0;
+    toastr.error("<%= @sadhak_profile.syid %> is already added to the list.");
+
+  }else{
+    $("input[id=" + <%= @index %> + "_last_name]").val("<%= @sadhak_profile.last_name %>");
+
+    $("input[id=" + 'sy_club_sy_club_sadhak_profile_associations_attributes_' + <%= @index %> + "_first_name]")[0].setAttribute("value", "<%= @sadhak_profile.first_name %>");
+
+    $("input[id=" + 'sy_club_sy_club_sadhak_profile_associations_attributes_' + <%= @index %> + "_syid]")[0].setAttribute("value", "<%= @sadhak_profile.syid %>");
+
+    $("input[id=" + <%= @index %> + "_date_of_birth]").val("<%= @sadhak_profile.date_of_birth.try(:strftime, "%b %d, %Y") %>");
+    $("input[id=<%= @index %>_<%= @sadhak_profile.gender %>]").prop('checked', true);
+    $("input[name='sy_club[sy_club_sadhak_profile_associations_attributes][<%= @index %>][sadhak_profile_id]']").val("<%= @sadhak_profile.id %>");
+
+  }
+
+<% end %>

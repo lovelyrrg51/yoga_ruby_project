@@ -1,0 +1,236 @@
+
+<div class="CompleteprofileCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Profile</h2>
+    </div>
+    <div class="boxsection-md boxshadow prelative">
+        <div class="progressCntrl text-right">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:<%= @sadhak_profile.completed.to_i %>%">
+                </div>
+            </div>
+            <span><%= @sadhak_profile.completed.to_i %>%</span>
+        </div>
+        <div class="tab-content">
+            <%= form_for @sadhak_profile, url: wizard_path, html: { id: 'sadhak_profile_step_medical_practitioners_profile_form' } do |f| %>
+                <%= f.fields_for :medical_practitioners_profile do |ff|%>
+                    <div class="tab-pane active" role="tabpanel" id="Medical">
+                        <div class="row">
+                            <div class="col-sm-12 mg-b30">
+                                <div class="headtittle text-center">
+                                    <h2>Medical Practitioner</h2>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' unless ff.object.practiced_integrative_health_care.nil? %>"></div>
+                                    <div class="outbox">
+                                        <label class="asterisk">Do you practice Integrative health care?</label>
+                                        <div class="box bordered-input ">
+                                           <div class="gender">
+                                                <ul class="clearfix list-unstyled">
+                                                    <li>
+                                                        <div class="Custradio">
+                                                            <%= radio_button_tag ff.object.practiced_integrative_health_care.nil? ? "sadhak_profile[medical_practitioners_profile_attributes][practiced_integrative_health_care]" : "", 'true', ff.object.practiced_integrative_health_care.present?,  class: "radiotype", disabled: ff.object.practiced_integrative_health_care.present? %>
+                                                            <label for="integrativeYes">Yes</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="Custradio">
+                                                            <%= radio_button_tag ff.object.practiced_integrative_health_care.nil? ? "sadhak_profile[medical_practitioners_profile_attributes][practiced_integrative_health_care]" : "", 'false', ff.object.practiced_integrative_health_care.blank? , class: "radiotype", disabled: ff.object.practiced_integrative_health_care.present? %>
+                                                            <label for="integrativeNo">No</label>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% unless ff.object.work_enviroment.present? %>
+                                <div class="col-sm-6">
+                                    <div class="outbox">
+                                        <label class="asterisk">Work Environment</label>
+                                        <div class="box bordered-input dropdown">
+                                            <div class="dropdown-field selectTwo-dropdown">
+                                                <%= ff.select :work_enviroment, options_for_select(medical_practitioners_profile_work_enviroment_list, ff.object.work_enviroment), { include_blank: ' ----- Select ----- '}, { class: 'basic-single', required: true } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% else %>
+                                <div class="col-sm-6">
+                                    <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.work_enviroment.present? %>"></div>
+                                        <div class="outbox">
+                                            <label class="asterisk">Work Environment</label>
+                                            <div class="box bordered-input">
+                                               <div class="dropdown dropdown-field">
+                                                  <input type="text" name="" value="<%= ff.object.work_enviroment %>" class="form-control noBorder field" disabled="true" placeholder="Work enviroment"> 
+                                               </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                            <% unless ff.object.medical_practitioner_speciality_area_id.present? %>
+                                <div class="col-sm-6">
+                                    <div class="outbox">
+                                        <label>Please enter your Medical specialization</label>
+                                        <div class="box bordered-input dropdown">
+                                            <div class="dropdown-field selectTwo-dropdown">
+                                                <%= ff.select :medical_practitioner_speciality_area_id, options_for_select(MedicalPractitionerSpecialityArea.pluck(:name, :id), ff.object.medical_practitioner_speciality_area_id), { include_blank: ' ----- Select ----- '}, { class: 'basic-single' } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% else %>
+                                <div class="col-sm-6">
+                                    <div class="prelative">
+                                        <div class="overlapping <%= 'overlay-active' if ff.object.medical_practitioner_speciality_area_id.present? %>"></div>
+                                        <div class="outbox">
+                                            <label class="asterisk">Please enter your Medical specialization</label>
+                                            <div class="box bordered-input">
+                                               <div class="dropdown dropdown-field">
+                                                  <input type="text" name="" value="<%= ff.object.medical_practitioner_speciality_area_id %>" class="form-control noBorder field" disabled="true" placeholder="Medical specialization"> 
+                                               </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                            <div class="col-sm-6">
+                                <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.other_speciality.present? %>"></div>
+                                    <div class="outbox">
+                                       <label>Please describe your Medical specialization, if not listed</label>
+                                        <div class="box bordered-input">
+                                           <div class="dropdown dropdown-field">
+                                              <%= text_field_tag ff.object.other_speciality.blank? ? "sadhak_profile[medical_practitioners_profile_attributes][other_speciality]" : "", ff.object.other_speciality, class: 'form-control noBorder field', disabled: ff.object.other_speciality.present?, placeholder: "Describe your medical specialization" %>
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.medical_degree.present? %>"></div>
+                                    <div class="outbox">
+                                        <label class="asterisk">Medical / Healthcare Provider / Extender degree</label>
+                                        <div class="box bordered-input">
+                                           <div class="dropdown dropdown-field">
+                                              <%= text_field_tag ff.object.medical_degree.blank? ? "sadhak_profile[medical_practitioners_profile_attributes][medical_degree]" : "", ff.object.medical_degree, class: 'form-control noBorder field', required: true, disabled: ff.object.medical_degree.present?, placeholder: "Medical degree" %> 
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% unless ff.object.current_professional_role.present? %>
+                                <div class="col-sm-6">
+                                    <div class="outbox">
+                                        <label class="asterisk">Please select your current professional role</label>
+                                        <div class="box bordered-input dropdown">
+                                            <div class="dropdown-field selectTwo-dropdown">
+                                                <%= ff.select :current_professional_role, options_for_select(medical_practitioners_profile_current_professional_role_list, ff.object.current_professional_role), { include_blank: ' ----- Select ----- '}, { class: 'basic-single', required: true  } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% else %>
+                                <div class="col-sm-6">
+                                    <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.current_professional_role.present? %>"></div>
+                                        <div class="outbox">
+                                            <label class="asterisk">Please select your current professional role</label>
+                                            <div class="box bordered-input">
+                                               <div class="dropdown dropdown-field">
+                                                  <input type="text" name="" value="<%= ff.object.current_professional_role %>" class="form-control noBorder field" disabled="true" placeholder="Professional role"> 
+                                               </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                            <div class="col-sm-6">
+                                <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.other_role.present? %>"></div>
+                                    <div class="outbox">
+                                        <label>Please describe your professional role, if not listed</label>
+                                        <div class="box bordered-input">
+                                           <div class="dropdown dropdown-field">
+                                              <%= text_field_tag ff.object.other_role.blank? ? "sadhak_profile[medical_practitioners_profile_attributes][other_role]" : "", ff.object.other_role, class: 'form-control noBorder field', disabled: ff.object.other_role.present?, placeholder: "Describe your professional role"%>  
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' unless ff.object.interested_in_panel_discussion.nil? %>"></div>
+                                    <div class="outbox">
+                                        <label class="asterisk">Would you be interested in taking part in a panel discussion ?</label>
+                                        <div class="box bordered-input">
+                                           <div class="gender">
+                                                <ul class="clearfix list-unstyled">
+                                                    <li>
+                                                        <div class="Custradio">
+                                                            <%= radio_button_tag ff.object.interested_in_panel_discussion.nil? ? "sadhak_profile[medical_practitioners_profile_attributes][interested_in_panel_discussion]": "", "true", ff.object.interested_in_panel_discussion.present?, class: "radiotype", disabled: ff.object.interested_in_panel_discussion.present? %>
+                                                            <label for="panelYes">Yes</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="Custradio">
+                                                            <%= radio_button_tag ff.object.interested_in_panel_discussion.nil? ? "sadhak_profile[medical_practitioners_profile_attributes][interested_in_panel_discussion]": "", "false", ff.object.interested_in_panel_discussion.blank?, class: "radiotype", disabled: ff.object.interested_in_panel_discussion.present? %>
+                                                            <label for="panelNo">No</label>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' unless ff.object.interested_in_volunteering.nil? %>"></div>
+                                    <div class="outbox">
+                                        <label class="asterisk">Would you be interested in volunteering at the conference?</label>
+                                        <div class="box bordered-input ">
+                                           <div class="gender">
+                                                <ul class="clearfix list-unstyled">
+                                                    <li>
+                                                        <div class="Custradio">
+                                                            <%= radio_button_tag ff.object.interested_in_volunteering.nil? ? "sadhak_profile[medical_practitioners_profile_attributes][interested_in_volunteering]": "", "true", ff.object.interested_in_volunteering.present?, class: "radiotype", disabled: ff.object.interested_in_volunteering.present? %>
+                                                            <label for="volunteeringYes">Yes</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="Custradio">
+                                                            <%= radio_button_tag ff.object.interested_in_volunteering.nil? ? "sadhak_profile[medical_practitioners_profile_attributes][interested_in_volunteering]": "", "false", ff.object.interested_in_volunteering.blank?, class: "radiotype", disabled: ff.object.interested_in_volunteering.present? %>
+                                                            <label for="volunteeringNo">No</label>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                           </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mg-t30">
+                            <div class="col-sm-12">
+                                <div class="pannel-btn clearfix">
+                                    <%= link_to 'PREVIOUS', previous_wizard_path(previous: true), class: "btn btn-info mg-r5" %>
+                                    <div class="pull-right">
+                                        <%= link_to 'SKIP', next_wizard_path, class: "btn btn-info mg-r5" unless @event.full_profile_needed? %>
+                                        <%= f.submit  "SAVE & CONTINUE", class: ' btn btn-info' %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>
+            <% end %>
+        </div>
+    </div>
+</div>

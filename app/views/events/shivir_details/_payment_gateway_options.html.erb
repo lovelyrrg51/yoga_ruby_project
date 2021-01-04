@@ -1,0 +1,44 @@
+<div id="shivirdetails" class="">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <div class="headtittle">
+                <h2>Payment  Gateway Options<span class="sub-tittle">Shivir</span></h2>
+            </div>
+            <%= render 'shivir_status'%>
+        </div>
+    
+      <% if @event_payment_gateway_associations.present? %>
+        <%= form_for @event, html: {id: "event_payment_gateway_assosiation_form"} do |f|%>
+
+          <% @event_payment_gateway_associations.each do |payment_gateway_type_name, payment_gateways| %>
+
+            <div class="detailshivir paymentgateway">
+                <div class="row">
+                    <div class="col-sm-12 mg-b20">
+                        <div class="detailshead">
+                            <h2><%= payment_gateway_type_name %></h2>
+                        </div>
+                    </div>
+
+                    <% payment_gateways.each do |payment_gateway| %>
+                      <%= f.fields_for :event_payment_gateway_associations, payment_gateway  do |association_form| %>
+                        <%= render partial: 'events/shivir_details/event_payment_gateway_association_fields', locals: {f: association_form, payment_gateway_type_name: payment_gateway_type_name} %>
+
+                      <% end %>
+                    <% end %>
+
+                </div>
+            </div>
+
+          <% end %>
+          <div class="pannel-btn text-right">
+              <%= link_to "CLEAR", payment_gateway_options_event_path , class: "btn btn-danger mg-r10" %>
+              <%= f.submit "SUBMIT", class: "btn btn-info", data: { disable_with: "SUBMITING" } %>
+          </div>
+        <% end %>
+      <% else %>
+        <%= render partial: 'no_records', locals: { message: "No Paymeny Gateway is configured for this event's country. Please contact Ashram." } %>
+      <% end %>
+    </div>
+    
+</div>

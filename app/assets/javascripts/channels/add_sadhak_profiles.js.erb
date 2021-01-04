@@ -1,0 +1,7 @@
+App.cable.subscriptions.create({ channel:  'AddSadhakProfilesChannel' }, {
+
+  received: function(data) {
+    $("input[type='submit']#" + data.add_sadhak_profile_token + "").click();
+  }
+
+});

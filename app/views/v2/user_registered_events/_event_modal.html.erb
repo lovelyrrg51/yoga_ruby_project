@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="body">
+        <div class="row clearfix forum_details_box m-b-30">
+          <div class="col-sm-4">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title">Graced By: </span><span class="babaji_pic">
+                    <%= image_tag "#{has_asset?(@event.graced_by.to_s.gsub(" ", "").downcase + "sm.png") ? @event.graced_by.to_s.gsub(" ", "").downcase + "sm.png" : "profile.png"}", alt: "profile image"%>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-8">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title">Event Name: </span><%= @event.event_name%>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title">Contact Details: </span><%= @event.contact_details %>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title">Contact Email: </span><%= @event.contact_email.present? ? @event.contact_email : "N/A" %>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title">Venue: </span><%= @event.event_location %>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title">Reference No:  </span><%= link_to get_ref_number(@event), registration_details_v2_event_order_path(get_event_order(get_ref_number(@event))) %>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="forum_specifications">
+                  <span class="title">Date & Time: </span><%= @event.event_start_date %>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <%= link_to "Visit Event", v2_event_path(@event.id), class: "cta_button_small bg-red waves-effect" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

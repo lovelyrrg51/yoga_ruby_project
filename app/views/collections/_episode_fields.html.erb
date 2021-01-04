@@ -1,0 +1,91 @@
+<% uniq_token = SecureRandom.uuid %>
+<div class="nested-fields mg-t20" id="asset_<%= f.object.try(:id)%>" >
+    <span class="ui-icon ui-icon-arrowthick-2-n-s"></span><a href="#<%= f.object.try(:id) %>" class="refinemenu primary-color subheading primarybold" data-toggle="collapse" aria-expanded="true">
+        <i class="fa fa-filter" aria-hidden="true"></i> Episode: <%= f.object.try(:asset_name) %></a>
+    <div class="refineCntr collapse in quaternary-bg" aria-expanded="true" id="<%= f.object.try(:id)%>" role="tablist">
+        <div class="refinesub-group">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="outbox">
+                        <label class="asterisk">Tittle</label>
+                        <div class="box bordered-input">
+                            <div class="dropdown dropdown-field">
+                                <%= f.text_field :asset_name, class: "form-control noBorder field", required: true, placeholder: "Tittle"%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="outbox">
+                        <label class="asterisk">Assets Url</label>
+                        <div class="box bordered-input">
+                            <div class="dropdown dropdown-field">
+                                <%= f.text_field :asset_url, value: f.object.try(:digital_asset_secret).try(:asset_url), class: "form-control noBorder field", required: true, placeholder: "Asset url"%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="outbox">
+                <label class="asterisk">Content Type</label>
+                <div class="box bordered-input dropdown">
+                    <div class="dropdown-field selectTwo-dropdown">
+                        <%= f.select :language, options_for_select(SY_CONTENT_TYPE.to_a, f.object.try(:language)), { include_blank: " ----- Select -----" }, class: "simple-single", required: true %>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="outbox">
+                        <label class="asterisk">Publish on</label>
+                        <div class="box bordered-input">
+                            <div class="input-group calenderdate date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" >
+                                <%= f.text_field :published_on, class: "form-control noBorder field", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true, value: f.object.try(:published_on).try(:strftime, '%b %d, %Y'), required: true%>
+                                <span class="input-group-addon">
+                                <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="outbox">
+                        <label class="asterisk">Expires on</label>
+                        <div class="box bordered-input">
+                            <div class="input-group calenderdate date" id="<%= uniq_token %>_end" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" >
+                                <%= f.text_field :expires_at, class: "form-control noBorder field", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true, value: f.object.try(:expires_at).try(:strftime, '%b %d, %Y'), required: true%>
+                                <span class="input-group-addon">
+                                <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="outbox">
+                        <label>Description</label>
+                        <div class="box bordered-input border-textarea">
+                            <div class="dropdown dropdown-field">
+                                <%= f.text_area :asset_description, class: "form-control noBorder field", placeholder: "Description"%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="pannel-btn text-left">
+                        <%= link_to_remove_association f, class: "btn btn-info", data: { confirm: "Are you sure?"} do%>
+                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        <%end%>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="pannel-btn text-left">
+                <%= link_to_remove_association f, class: "btn btn-info", data: { confirm: "Are you sure?"} do%>
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                <%end%>
+            </div>
+        </div>
+    </div>
+</div>

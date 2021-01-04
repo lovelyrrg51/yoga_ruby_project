@@ -1,0 +1,63 @@
+<div id="clubMembersInfoModal" class="modal fade Custommodal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag("close.png") %></button>
+                <h2 class="headtittle">Member(s) Info</h2>
+            </div>
+            <%= form_for :event_order, url: process_club_members_sy_club_path(@sy_club), method: :post do |f| %>
+              <div class="modal-body mCustomScrollbar">
+                  <% if error %>
+                    <div class="errorCntrl text-center primarybold">
+                        <p class="error-img"><%= message %></p>
+                    </div>
+                  <% else %>
+                    <div class="successCntrl text-center primarybold">
+                        <p class="succes-img"><%= message %></p>
+                    </div>
+                  <% end %>
+                  <% if @sadhak_profiles %>
+                    <div class="row">
+                        <div class="col-sm-12 mg-t10 mg-b30">
+                            <div class="tableCntrl no-margintable">
+                                <div class="table-responsive tableScrollbar">
+                                    <table class="table">
+                                        <thead>
+                                            <th>Name / SYID</th>
+                                            <th>Email</th>
+                                            <th>City</th>
+                                        </thead>
+                                        <tbody>
+                                          <% @sadhak_profiles.each do |sadhak_profile| %>
+                                            <tr>
+                                                <td>
+                                                    <div class="textgroup">
+                                                        <p class="primarybold"><%= sadhak_profile.full_name %></p>
+                                                        <span><%= sadhak_profile.syid %></span>
+                                                    </div>
+                                                </td>
+                                                <td><%= sadhak_profile.email %></td>
+                                                <td><%= sadhak_profile.city_name %></td>
+                                            </tr>
+                                          <% end %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  <% end %>
+              </div>
+              <%= f.hidden_field "#{SY_CLUB_DETAILS.encrypt}", value: @encrypted_params %>
+              <div class="modal-footer">
+                  <div class="pannel-btn text-right">
+                      <button class="btn btn-danger mg-r5" data-dismiss="modal" type="button">CANCEL</button>
+                      <% unless error %>
+                        <button class="btn btn-info">PROCEED</button>
+                      <% end %>
+                  </div>
+              </div>
+            <% end %>
+        </div>
+    </div>
+</div>

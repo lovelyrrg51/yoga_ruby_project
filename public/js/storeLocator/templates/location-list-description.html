@@ -1,0 +1,73 @@
+{{#location}}
+<li data-markerid="{{markerid}}">
+<div class="forum-place">
+	<!--<div class="list-label">{{marker}}</div>-->
+	<h2>{{name}}</h2>
+			<!--<h3>{{time}}</h3>-->
+			<p>{{address}}</p>
+
+	<!--<button type="button" data-color="blue" class="btn bg-blue waves-effect" alt="Inventory Details" data-toggle="modal" data-target="#enlargeImageModal">INVENTORY</button>	-->
+	<!--<button type="button" class="btn btn-success inventory_modal_btn" data-toggle="modal_inventory" data-target="#inventory_details" data-marker_id="{{markerid}}" data-content="{{#each inventory}}{{product_name}} = {{product_quantity}}<br />{{/each}}">View Inventory</button>-->
+	<a href="/forum/{{id}}"><button type="button" class="btn btn-primary btn-lg btn-frm"> Forum Details </button></a>
+
+
+	<div class="modal fade" id="mdModal" tabindex="-1" role="dialog">
+							<div class="modal-dialog modal-lg" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close"><img src="/assets/v2/close.png"></button>
+									</div>
+									<div class="modal-body">
+										Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sodales orci ante, sed ornare eros vestibulum ut. Ut accumsan
+										vitae eros sit amet tristique. Nullam scelerisque nunc enim, non dignissim nibh faucibus ullamcorper.
+										Fusce pulvinar libero vel ligula iaculis ullamcorper. Integer dapibus, mi ac tempor varius, purus
+										nibh mattis erat, vitae porta nunc nisi non tellus. Vivamus mollis ante non massa egestas fringilla.
+										Vestibulum egestas consectetur nunc at ultricies. Morbi quis consectetur nunc.
+									</div>
+									<!--<div class="modal-footer">
+										<button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+									</div>-->
+								</div>
+							</div>
+						</div>
+
+
+	</div>
+</li>
+{{/location}}
+
+<script>
+var $modal = $('#mdModal');
+
+// Show loader & then get content when modal is shown
+$modal.on('show.bs.modal', function(e) {
+  //var paragraphs = $(e.relatedTarget).data('paragraphs');
+  //var forum_name = "";
+  var color = $(e.relatedTarget).data('color');
+  //alert(color);
+  var paragraphs = 1;
+  //alert('clicekd');
+//return false;
+  $(this)
+    .addClass('modal-scrollfix')
+    .find('.modal-body')
+    .html('<img src="images/image-loader.gif" />')
+	//.load('https://baconipsum.com/api/?type=meat-and-filler&paras=' + paragraphs, function() {
+		.load("forum_location.htm", function(response) {
+			//var split_response = response.split("-");
+			//alert(split_response[0]);
+			//var distributor_name = split_response[0];
+			//console.log(response);
+		$modal
+		.removeClass('modal-scrollfix')
+        .modal('handleUpdate');
+    });
+	//.html(distributor_unique_code);
+    //.html(content);
+
+	$(this)
+    .find('.modal-header')
+	.html('<button type="button" class="close" data-dismiss="modal" aria-label="Close"><img src="/assets/images/close.png"></button>');
+
+});
+</script>

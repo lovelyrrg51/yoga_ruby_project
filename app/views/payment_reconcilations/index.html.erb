@@ -1,0 +1,129 @@
+<% uniq_token = SecureRandom.uuid %>
+<div class="adminCntrl">
+  <div class="headingtittle-h2 text-center">
+    <h2>Payment Reconciliation</h2>
+  </div>
+  <div class="row">
+    <div class="boxsection-lg boxsection-xs boxshadow prelative">
+      <div class="paymentreconciliation">
+        <%= render "form" %>
+        <form>
+          <div class="row mg-b30">
+            <div class="col-sm-12">
+              <a href="#paymentreconciliation" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true">
+                <i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+              <div class="refineCntrl collapse in" aria-expanded="true" id="paymentreconciliation" role="tabpanel">
+                <div class="refinesub-group clearfix">
+                  <div class="col-sm-6">
+                    <div class="outbox">
+                      <label>File Name</label>
+                      <div class="box bordered-input">
+                        <div class="dropdown dropdown-field">
+                          <input type="text" class="form-control noBorder field" placeholder="File name" name="file_name" value="<%= params[:file_name] %>">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="outbox">
+                      <label>Upload Date</label>
+                      <div class="box bordered-input">
+                        <div class="input-group calenderdate date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" data-maxStartDate="<%= DateTime.current.change(hour: 23, minutes: 59, sec: 59)%>">
+                          <input class="form-control noBorder field" type="text" placeholder="Upload Date" readonly="true" name="upload_date" value="<%= params[:upload_date] %>">
+                          <span class="input-group-addon">
+                            <button type="button" type="button">
+                              <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </button>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="outbox">
+                      <label class="asterisk">Status</label>
+                      <div class="box bordered-input dropdown">
+                        <div class="dropdown-field selectTwo-dropdown">
+                          <%= select_tag 'status', options_for_select(PaymentReconcilation.statuses.collect{ |k, v| [k.titleize, k] }, params[:status]), { prompt: "----- Select -----", class: "basic-single"} %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="pannel-btn text-right">
+                      <button class="btn btn-danger mg-r10 turbolinkReload" type="button">CLEAR</button>
+                      <button class="btn btn-info">SEARCH</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <hr>
+        <% if @payment_reconcilations.present? %>
+          <div class="row mg-t30">
+            <div class="col-sm-12">
+              <div class="Boxdrop dropdown">
+                <%= render 'application/per_page' %>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="tableCntrl">
+                <div class="table-responsive tableScrollbar">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>S.No.</th>
+                        <th width="600px">File Name</th>
+                        <th width="200px">Upload Date</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% @payment_reconcilations.each_with_index do |payment_reconcilation, index| %>
+                        <tr>
+                          <td><%= index + 1 %></td>
+                          <td width="600px">
+                            <%= link_to payment_reconcilation.file_name, generate_reconcilation_file_payment_reconcilation_path(payment_reconcilation, file_type: PaymentReconcilation::FILE_TYPE[:original]) , class: "primary-color" %>
+                          </td>
+                          <td width="200px">
+                            <div class="textpanel">
+                              <p class="primarybold"><%= payment_reconcilation.created_at.try(:strftime, "%b %d, %Y") %></p>
+                              <span class="senary-color"><%= payment_reconcilation.created_at.try(:strftime, "%I:%M:%S %p") %></span>
+                            </div>
+                          </td>
+                          <td class="text-center <%= payment_reconcilation_status_color(payment_reconcilation) %>"><%= payment_reconcilation.status.try(:capitalize) %></td>
+                          <td class="text-center primary-color">
+                            <% if payment_reconcilation.completed? %>
+                              <a href=<%= generate_reconcilation_file_payment_reconcilation_path(payment_reconcilation, file_type: PaymentReconcilation::FILE_TYPE[:valid]) %> class="primary-color">
+                                <i class="icon icon-download-file font-32"></i>
+                              </a>
+                            <% else %>
+                              <span class="" title="<%= payment_reconcilation_error_text(payment_reconcilation) %>" disabled>
+                                <a href="javascript:void(0)" class="primary-color"><i class="fa fa-info-circle"></i></a>
+                              </span>
+                            <% end %>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="table-pagination">
+                  <div class="show-pgnation">
+                    <p class="primarybold"><%= custom_page_entries_info(@payment_reconcilations) %></p>
+                  </div>
+                  <%= paginate @payment_reconcilations %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% else %>
+          <%= render partial: 'application/no_records', locals: { message: "No Payment Concilation Found." }  %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

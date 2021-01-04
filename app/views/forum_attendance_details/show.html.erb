@@ -1,0 +1,214 @@
+<% content_for(:title, 'Forum Attendance | show') %>
+<%= link_to "BACK", sy_club_digital_asset_forum_attendance_details_path(@sy_club, @digital_asset), class: "btn btn-info" %>
+<div class="headingtittle-h2 text-center">
+    <h2>Forum Attendance Summary</h2>
+    <span class="subheading primary-color primarybold">Forum ID: <%= @sy_club.id %></span>
+    <span class="subheading">ShivYog Forum <strong class="texttransform"><%= @sy_club.name.try(:titleize) %></strong></span>
+</div>
+<%= render "forum_attendance_details_info", locals: {sy_club: @sy_club, digital_asset: @digital_asset}%>
+<div class="headingtittle-h2 text-center">
+    <h2>Forum Attendance</h2>
+</div>
+<div class="boxsection-lg boxsection-xs boxshadow adminCntrl">
+    <%= form_for @forum_attendance_detail, url:  sy_club_digital_asset_forum_attendance_detail_update_attendance_path(@sy_club, @digital_asset,@forum_attendance_detail), method: 'PUT' do |f| %>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="dataTables_wrapper no-footer">
+                    <div class="tableCntrl tabledataCntrl prelative" style="display: none;">
+                        <div class="dataTables_length box bordered-input" id="syClubTableData_length" style="opacity: 0"></div>
+                        <div class="searboxCntrl">
+                            <div class="input-group">
+                                <%= text_field_tag :forum_attendance_search, nil, placeholder: 'Search Forum Members Details', class: 'form-control', "aria-describedby": "basic-addon2" %>
+                                <span class="input-group-addon" id="basic-addon2"><button class="searchicon" type="button"><i class="icon icon-search" aria-hidden="true"></i></button></span>
+                            </div>
+                        </div>
+                        <table class="table datatable-no-ajax" id="ForumAttendanceTableData" class="display" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th class="nosort">
+                                        <div class="CustomCheckbox">
+                                            <%= check_box_tag :check, 'check', @all_present, id: "select-all"%>
+                                            <label></label>
+                                        </div>Select All
+                                    </th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>SYID</th>
+                                    <th>Attendance Status</th>
+                                    <th>Forum Validity</th>
+                                </tr>
+                            </thead>
+                            <tbody class="data_list_container">
+                                <%= f.fields_for :current_forum_attendances  do |ff|%>
+                                <tr>
+                                    <td><div class="CustomCheckbox"><%= ff.check_box :is_attended %><label></label></div></td>
+                                    <td><%= ff.object.sadhak_profile.first_name %></td>
+                                    <td><%= ff.object.sadhak_profile.last_name %></td>
+                                    <td><%= ff.object.sadhak_profile.syid %></td>
+                                    <td class="<%= ff.object.is_attended ? 'success-color' : 'warning-color' %>"><%= ff.object.is_attended ? "Present" : "Absent" %>
+                                        <%= ff.hidden_field :id, value: ff.object.id%>
+                                        <%= ff.hidden_field :is_current_forum_member, value: true%>
+                                        <%= ff.hidden_field :sy_club_member_id%>
+                                        <%= ff.hidden_field :sadhak_profile_id%>
+                                        <%= ff.hidden_field :last_updated_by, value: current_user.id %>
+                                    </td>
+                                    <td><%= ff.object.sy_club_member.try(:expiration_date) %></td>
+                                </tr>
+                                <% end %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-12 adminCntrl " id="member_from_other_forum">
+                <div class="headingtittle-h2 mg-b20 mg-t20">
+                    <h2>To Mark Attendance of Members of Other forums who attended session at your Venue</h2>
+                </div>
+                 <%= button_tag "ADD MEMBER FROM OTHER FORUM", class: "btn btn-info", onClick: "$('#add_member_from_other_forum').modal('show')", type: :button %>
+                <div class="tableCntrl">
+                    <div class="headingtittle-h2 text-center mg-b20">
+                        <h3 class="subheading">Members from other forum</h3>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Full Name</th>
+                                <th>SYID</th>
+                                <th>Forum Name</th>
+                                <th>Forum ID</th>
+                                <th>Forum Validity</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <%= f.fields_for :other_forum_attendances  do |ff|%>
+                                <tr class="nested-fields">
+                                    <%= ff.hidden_field :is_attended, value: 1%>
+                                    <%= ff.hidden_field :id, value: ff.object.id%>
+                                    <td><%= ff.object.sadhak_profile.full_name %> </td>
+                                    <td><%= ff.object.sadhak_profile.syid %></td>
+                                    <td><%= ff.object.sadhak_profile.active_forum_name %></td>
+                                    <td><%= ff.object.sadhak_profile.active_club.id%></td>
+                                    <td><%= ff.object.sadhak_profile.expiration_date %></td>
+                                    <td><%= link_to_remove_association "REMOVE", ff, class: "btn btn-info", data: { confirm: "Are you sure?"} %></td>
+                                    <%= ff.hidden_field :sy_club_member_id%>
+                                    <%= ff.hidden_field :sadhak_profile_id%>
+                                    <%= ff.hidden_field :is_current_forum_member, value: false %>
+                                    <%= ff.hidden_field :last_updated_by, value: current_user.id %>
+                                </tr>
+                                <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <%= button_tag "CHECK BEFORE SUBMIT", class: "btn btn-info", onClick: "preview_before_submit()", type: :button %>
+            </div>
+        </div>
+    <%end%>
+    <dir class="row">
+        <dir class="col-sm-12 text-center mg-t20">
+            <%= link_to "CLOSE", sy_club_forum_attendance_path(@sy_club), class: "btn btn-info" %>
+        </dir>
+    </dir>
+</div>
+
+<div id="add_member_from_other_forum" class="modal fade Custommodal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png", alt: "close"%></button>
+                <h2 class="headtittle text-center">Search Sadhak Details</h2>
+            </div>
+            <%= form_tag search_member_from_other_forum_sy_clubs_path, { id: 'add_member_from_other_forum_form', method: :post, remote: true} do %>
+            <%= hidden_field_tag :sy_club_id, @sy_club.id %>
+            <%= hidden_field_tag :noLoading, true %>
+            <%= hidden_field_tag :digital_asset_id, @digital_asset.id %>
+            <%= hidden_field_tag :forum_attendance_detail_id, @forum_attendance_detail.id %>
+            <div class="modal-body mCustomScrollbar">
+                <div class="col-sm-6">
+                    <div class="outbox">
+                        <div class="box bordered-input">
+                            <div class="dropdown dropdown-field">
+                                <%= text_field_tag :syid, params[:syid], class: 'form-control noBorder field', placeholder: 'ShivYog ID (SYID)', required: true %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="outbox">
+                        <div class="box bordered-input">
+                            <div class="dropdown dropdown-field">
+                                <%= text_field_tag :first_name, params[:first_name], class: 'form-control noBorder field', placeholder: 'First name', required: true %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="pannel-btn pull-right">
+                        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+                        <button type="button" class="btn btn-danger mg-r5" data-dismiss="modal">CANCEL</button>
+                        <%= submit_tag  "SEARCH", class: ' btn btn-info' %>
+                    </div>
+                </div>
+                <div id="add_or_remove_member_from_other_forum" class="col-sm-12">
+                    
+                </div>
+            </div>
+            <%end%>
+        </div>
+    </div>
+</div>
+<div id="show_absent_sadhaks" class="modal fade Custommodal" role="dialog">
+
+</div>
+<script type="text/javascript">
+    $(document).on('click', '#select-all', function() {
+        $('tbody input[type=checkbox]').prop('checked', $(this).prop('checked'));
+    });
+
+    $(document).on('click', 'tbody.data_list_container input[type=checkbox]', function() {
+        $('#select-all').prop('checked', $('tbody.data_list_container input[type=checkbox]:checked').length == $('tbody.data_list_container input[type=checkbox]').length)
+    });
+    function remove_member(item) {
+        $(item).parents('tr').find('input[type=hidden]').eq(0).val("false");
+        $(item).parents('tr').find('td').remove();
+    }
+
+    $(document).ready(function(){
+        $('#forum_attendance_search').on('keyup', function() {
+            $('#ForumAttendanceTableData').DataTable().search($('#forum_attendance_search').val().trim(), false, true).draw();
+        });
+        $(window).keydown(function(event){
+            if(event.keyCode == 13) {
+              event.preventDefault();
+              return false;
+            }
+        });
+    });
+
+    function preview_before_submit(){
+        var unSelectedStatusIds = new Array();
+        $.each($('.edit_forum_attendance_detail input:checkbox:not(:checked):not("#select-all")').parents("tr"), function (i, item) {
+            unSelectedStatusIds.push($(item).find("input[type=hidden]").eq(1).val());
+        });
+        jQuery.ajax({
+            url: "/v1/forums/absent_members_details",
+            type: "POST",
+            data: { attendance_ids: unSelectedStatusIds, noLoading: true },
+            dataType: "script",
+            success: function(data) {
+                $('#show_absent_sadhaks').modal('show');
+            }
+        });
+    }
+    function attendanceFinalSubmit(){
+        var isSubmit = window.confirm("Attendance marking  will be  disabled if submitted five times. Are you sure?");
+        if (isSubmit == true) {
+            $("form.edit_forum_attendance_detail").submit();
+        }
+    }
+</script>

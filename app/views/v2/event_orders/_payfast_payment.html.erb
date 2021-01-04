@@ -1,0 +1,66 @@
+<div class="stripe_form">
+  <%= form_for :payment_details, url: pay_v2_event_order_path(@event_order), method: :post, html: { id: "payfast-gateway-payment-form" } do |f| %>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">person</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :name_first, class: "form-control", placeholder: "First name", required: true %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">person</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :name_last, class: "form-control", placeholder: "Last name", required: true %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">email</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :email_address, class: "form-control email", placeholder: "Email", required: true %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn cta_button_small bg-red waves-effect pay-now-btn">PAY NOW</button>
+    <%= render partial: "hidden_field_data", locals: { amount: amount, gateway: gateway, event_order_id: event_order_id, upgrade: upgrade, parent_event_order_id: parent_event_order_id, before_event_order_line_items: before_event_order_line_items, sadhak_details_hash: sadhak_details_hash, payment_method: "payfast" }  %>
+  <% end %>
+</div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    var amount = $('.net-amount').text();
+    $('#payfast-gateway-payment-form').validate();
+    $('#payfast-gateway-payment-form').submit(function(event){
+      event.preventDefault();
+      swal({
+        title: "Are you sure you want to proceed with upgrade/downgrade ?",
+        text: "Please check again your net amount payable is: "+amount,
+        type: "warning",
+        showCancelButton: true,
+        cancelButtonText: "No, Let me check once again.",
+        confirmButtonColor: "#DD6B55",
+        showLoaderOnConfirm: false,
+        confirmButtonText: "Yes, I am sure !",
+        closeOnConfirm: true
+        }, function () {
+          $('#payfast-gateway-payment-form').find('.pay-now-btn').prop('disabled', true);
+          $('#payfast-gateway-payment-form').find('.pay-now-btn').text('PROCESSING');
+          $('#payfast-gateway-payment-form').get(0).submit();
+      });
+    });
+  });
+</script>

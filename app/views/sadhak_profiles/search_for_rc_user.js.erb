@@ -1,0 +1,22 @@
+<% if @sadhak.present? %>
+
+  <% if @sadhak.banned? %>
+
+    toastr.error("This is Banned Sadhak.");
+
+  <% else %>
+
+    var appearance = $("<%= escape_javascript(render partial: 'sadhak_profiles/rc_user', locals: {sadhak_profile: @sadhak}) %>");
+    $("#event-registration-center-users-list-table-body").append(appearance);
+    if($('div.temp-added-event-rcmembers-div').find('table').find('tbody').find('tr').length != 0)
+    {
+      $('div.temp-added-event-rcmembers-div').removeClass('hidden');
+    }
+
+  <% end %>
+
+<% else %>
+	
+	toastr.error("No sadhak profile found.");
+
+<% end %>

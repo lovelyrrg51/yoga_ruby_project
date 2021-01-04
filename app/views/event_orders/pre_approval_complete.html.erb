@@ -1,0 +1,134 @@
+<div class="eventCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Event Registration</h2>
+        <span class="subheading"><%= @event.event_name_with_location %></span>
+    </div>
+    <div class="boxsection-lg boxsection-xs boxshadow prelative">
+      <%= render 'events/event_registration_header' %>
+        <div class="registrationStatus">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="headtittle mg-b30">
+                        <h2>Registration Request Sent</h2>
+                        <%= link_to "Register More Members", register_event_path(@event) , class: 'btn primary-bg primarybold btn-register' %>
+                    </div>
+                    <div class="text-center primarybold successCntrl">
+                        <p class="succes-img">You have successfully submitted your application for Approval for <%= @event.event_name_with_location %>.</p>
+                    </div>
+                    <div class="notetittle">
+                        <h6 class="primarybold primary-color">Please take a note of the registration reference number and Registration Number alloted to you and following points for further action</h6>
+                        <ul class="list-unstyled">
+                            <li>ShivYog Events are not recommended for children under the age of 12. A child may participate only under supervision and complete responsibility of a Parent or Legal Guardian.</li>
+                            <li>Teenage Children (between 12 and 18) may attend the event under the supervision and complete responsibility of a registered adult.</li>
+                            <li>Children are expected to maintain discipline during the event and if their behavior is deemed to be disruptive or inappropriate by Venue Volunteers or Staff, both the Child and the supervising adult will be requested to vacate the venue.</li>
+                            <li>Please note your transaction details for future reference.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="headtittle">
+                        <h2>Registration Request Summary</h2>
+                    </div>
+                    <div class="paymenttable">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th class="">Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="primarybold">Event</td>
+                                        <td class=""><%= @event.event_name_with_location %></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="primarybold">Registration Date</td>
+                                        <td class=""><%= @event_order.created_at.strftime('%B %d,%Y ') %></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="primarybold">Status</td>
+                                        <td class="primary-color"><%= @event_order.status.capitalize %></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="paymenttable">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th class="">Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="primarybold">Registration Reference Number</td>
+                                        <td class=""><%= @event_order.try(:reg_ref_number) %></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="primarybold">Registration Fees</td>
+                                        <td class=""><%= number_with_precision(@event_order.try(:total_amount).to_f, precision: 2) %></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="headtittle">
+                        <h2>Registration Summary</h2>
+                    </div>
+                    <div class="tableCntrl tableheight mCustomScrollbar">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Srl.No.</th>
+                                        <th>Registration Number</th>
+                                        <th>SYID</th>
+                                        <th>Name</th>
+                                        <th>Seating Category</th>
+                                        <th>Discount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  <% @event_order.event_order_line_items.each_with_index do |item, item_index| %>
+                                    <tr>
+                                        <td><%= item_index+1 %>.</td>
+                                        <td><%= item.event_registration.try(:serial_number).to_i + 100%></td>
+                                        <td><%= item.sadhak_profile.syid %></td>
+                                        <td><%= item.sadhak_profile.full_name %></td>
+                                        <td>
+                                            <div class="textgroup">
+                                                <p><%= item.event_seating_category_association.try(:seating_category).try(:category_name) %></p>
+                                                <span><%= "#{@currency} " '%.2f' % item.category_price.to_f %></span>
+                                            </div>
+                                        </td>
+                                        <td><%= @currency + ' ' + '%.2f' % discount_per_sadhak(item).to_f %></td>
+                                    </tr>
+                                  <% end %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mg-b20 mg-t20">
+                <div class="col-sm-12">
+                    <div class="eventoption text-center">
+                        <p class="tagtittle">Please print and keep your details with you</p>
+                        <div class="eventaction">
+                            <button class="btn btn-danger"><i class="fa fa-print mg-r5" aria-hidden="true"></i> Print</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

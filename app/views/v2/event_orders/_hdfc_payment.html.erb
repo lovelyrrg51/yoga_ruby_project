@@ -1,0 +1,139 @@
+<div class="stripe_form">
+  <%= form_for :payment_details, url: pay_v2_event_order_path(event_order), method: :post, html: { id: type == "ccavenue_payment" ? "ccavenue-payment-form" : "hdfc-gateway-payment-form", class: "hdfc-gateway-payment-form" } do |f|  %>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">person</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :billing_name, class: "form-control", placeholder: "Billing Name", required: true %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">home</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :billing_address, class: "form-control", placeholder: "Billing Address", required: true %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">location_city</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :billing_address_country, class: "form-control", placeholder: "Country", required: true %>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">location_city</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :billing_address_state, class: "form-control", placeholder: "State", required: true %>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">location_city</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :billing_address_city, class: "form-control", placeholder: "City", required: true %>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">location_city</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :billing_address_postal_code, class: "form-control", placeholder: "Postal code", required: true, size: 6 %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">phone</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :billing_phone, class: "form-control mobile-phone-number", placeholder: "Phone", required: true %>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">email</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :billing_email, class: "form-control email", placeholder: "Email", required: true %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% unless type == "ccavenue_payment" %>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="input-group">
+          <div class="form-group form-float pg_hdfc_payment_ack_div">
+            <input name="payment_details[is_terms_accepted]" class="acknowledge_checkbox" id="pg_hdfc_payment_ack_checkbox" type="checkbox">
+            <label for="pg_hdfc_payment_ack_checkbox">I acknowledge that I have read all of the provisions above and fully understand the terms and conditions expressed and agree to be bound by such <%= link_to "Terms and conditions", online_payment_terms_and_conditions_path , target: :_blank %>.</label>
+            </div>
+            <span class="labelerror pg_hdfc_payment_ack_checkbox_error_span"></span>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <button type="submit" class="btn cta_button_small bg-red waves-effect pay-now-btn">PAY NOW</button>
+    <%= render partial: "hidden_field_data", locals: { amount: amount, gateway: gateway, event_order_id: event_order_id, upgrade: upgrade, parent_event_order_id: parent_event_order_id, before_event_order_line_items: before_event_order_line_items, sadhak_details_hash: sadhak_details_hash, payment_method: "ccavenue" }  %>
+  <% end %>
+</div>
+<script type="text/javascript">
+  (function(){
+    var amount = $('.net-amount').text();
+    $('#hdfc-gateway-payment-form').validate();
+    $('#hdfc-gateway-payment-form').submit(function(event){
+    if(!$('input#pg_hdfc_payment_ack_checkbox').prop('checked'))
+    {
+      $('input#pg_hdfc_payment_ack_checkbox').parents('div.pg_hdfc_payment_ack_div').siblings('span.pg_hdfc_payment_ack_checkbox_error_span').text('This field is required.').css('color', '#F44336');
+        return false;
+    }
+    else{
+      event.preventDefault();
+      swal({
+        title: "Are you sure you want to proceed with upgrade/downgrade ?",
+        text: "Please check again your net amount payable is: "+amount,
+        type: "warning",
+        showCancelButton: true,
+        cancelButtonText: "No, Let me check once again.",
+        confirmButtonColor: "#DD6B55",
+        showLoaderOnConfirm: false,
+        confirmButtonText: "Yes, I am sure !",
+        closeOnConfirm: true
+        }, function () {
+          $('#hdfc-gateway-payment-form').find('.pay-now-btn').prop('disabled', true);
+          $('#hdfc-gateway-payment-form').find('.pay-now-btn').text('PROCESSING');
+          $('#hdfc-gateway-payment-form').get(0).submit();
+      });
+    }
+  });
+
+  }());
+</script>

@@ -1,0 +1,45 @@
+<div class="signup-box">
+  <div class="logo">
+    <a href="javascript:void(0);"><%= image_tag "v2/logo.png" %></a>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="wrapper">
+        <div id="login" class="animate form">
+          <%= form_for @user, url: update_password_users_path, html: { id: "update_user_password", method: "put"}  do |f| %>
+            <div class="msg">RESET PASSWORD</div> 
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="material-icons">lock</i>
+              </span>
+              <div class="form-line">
+                <%= f.password_field :current_password, autofocus: true, autocomplete: "off", class: "form-control", placeholder: "Current password" %>
+              </div>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="material-icons">lock</i>
+              </span>
+              <div class="form-line">
+                <%= f.password_field :password, autofocus: true, autocomplete: "off", class: "form-control", placeholder: "New password", "data-rule-required": true, "data-rule-minlength": "8" %>
+              </div>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="material-icons">lock</i>
+              </span>
+              <div class="form-line">
+                <%= f.password_field :password_confirmation, autocomplete: "off",  class: "form-control", placeholder: "Confirm password", "data-rule-equalTo": "#user_new_password", "data-rule-required": true, "data-rule-minlength": "8" %>
+              </div>
+            </div>
+            <div class="row m-t-15">
+              <div class="col-xs-12 mg-t10 text-center">
+                <%= f.submit "Update Password", class: "btn bg-red waves-effect" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

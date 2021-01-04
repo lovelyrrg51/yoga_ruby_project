@@ -1,0 +1,40 @@
+version: '3'
+services:
+  db:
+    image: postgres:10.6
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+  redis:
+    image: redis:4.0.9
+    volumes:
+      - ./tmp/redis:/data
+  web:
+    depends_on:
+      - db
+      - redis
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/shivyog
+      - ./config/database.yml.docker.example:/shivyog/config/database.yml
+    ports:
+      - 3000:3000
+    environment:
+      - REDIS_URL=redis://redis:6379/
+  webpacker:
+    build: .
+    environment:
+      - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
+      - NODE_ENV=development
+    command: ./bin/webpack-dev-server
+    volumes:
+      - .:/shivyog
+    ports:
+      - 3035:3035
+  # worker:
+  #   depends_on:
+  #     - db
+  #   build: .
+  #   command: bundle exec rake jobs:work
+  #   volumes:
+  #     - .:/shivyog

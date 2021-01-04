@@ -1,0 +1,23 @@
+<h1>Listing pg_sydd_transactions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pg_sydd_transactions.each do |pg_sydd_transaction| %>
+      <tr>
+        <td><%= link_to 'Show', pg_sydd_transaction %></td>
+        <td><%= link_to 'Edit', edit_pg_sydd_transaction_path(pg_sydd_transaction) %></td>
+        <td><%= link_to 'Destroy', pg_sydd_transaction, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Pg sydd transaction', new_pg_sydd_transaction_path %>

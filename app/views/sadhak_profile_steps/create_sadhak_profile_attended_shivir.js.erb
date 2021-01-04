@@ -1,0 +1,18 @@
+<% if @message.present? %>
+
+  toastr.error('<%= @message %>.');
+
+<% else %>
+  
+  var appearance = $("<%= escape_javascript(render(partial: 'sadhak_profile_steps/sadhak_profile_attended_shivir_fields')) %>");
+
+  $("#sadhak_profile_steps_sadhak_profile_attended_shivir_fields_tbody").append(appearance);
+
+  toastr.success('Saved successfully.');
+
+  $("#sadhak_profile_step_sadhak_profile_attended_shivir_form").trigger('reset') 
+                                                              .find("select").trigger("change");
+
+  $('#sadhak_profile_steps_self_reported_save_cont_button').removeAttr("disabled");
+
+<% end %>

@@ -1,0 +1,143 @@
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Forum Admin</h2>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+            <%= render "admin/forum_admin_left_panel"%>
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                    <div class="row">
+                        <div class="headtittle text-center">
+                            <h2>Forums</h2>
+                        </div>
+                        <div class="col-sm-12 mg-t30">
+                            <a href="#transactions" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+                            <div class="refineCntrl collapse" aria-expanded="true" id="transactions" role="tablist">
+                                <div class="refinesub-group">
+                                    <div class="row">
+                                    <%= form_tag forum_admin_sy_clubs_path, method: :get do%>
+                                        <div class="col-sm-6">
+                                            <div class="outbox">
+                                                <label>Name</label>
+                                                <div class="box bordered-input">
+                                                    <div class="dropdown dropdown-field"> 
+                                                    <%= text_field_tag :sy_club_name, params[:sy_club_name], class: "form-control noBorder field", placeholder: "Name"%>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="outbox">
+                                                <label>Status</label>
+                                                <div class="box bordered-input dropdown">
+                                                    <div class="dropdown-field selectTwo-dropdown">
+                                                        <%= select_tag :status, options_for_select(SyClub.statuses.map{|k,v| [k.titleize, k]}, params[:status]), include_blank: "All", class: "simple-single"%>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="pannel-btn text-right">
+                                                <button class="btn btn-danger mg-r10" type="button" onclick='Turbolinks.visit("<%= forum_admin_sy_clubs_path%>")'>CLEAR</button>
+                                                <button class="btn btn-info">SEARCH</button>
+                                            </div>
+                                        </div>
+                                        <%end%>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% if @sy_clubs.present? %>
+                        <div class="col-sm-12 mg-t60">
+                            <div class="Boxdrop dropdown mg-x-b15">
+                                <%= render 'application/per_page' %>
+                            </div>
+                            <div class="tableCntrl">
+                                <div class="table-responsive tableScrollbar">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Forum Name</th>
+                                                <th>Status</th>
+                                                <th class="text-center hidden">More</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <%@sy_clubs.each do |sy_club|%>
+                                            <tr>
+                                                <td>
+                                                    <p class="primarybold"><%= sy_club.name %></p>
+                                                </td>
+                                                <td class="sy_clubs_row">
+                                                    <div class="toggle toggle-rect">
+                                                        <label class="switch">
+                                                            <input type="checkbox" class="updateForumStatusInput" data-id= "<%= sy_club.slug %>" <%= 'checked' if sy_club.enabled? %>>
+                                                            <span class="slider round">
+                                                            <span class="on">ENABLE</span>
+                                                            <span class="off">DISABLE</span>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center hidden">
+                                                    <div class="dropover dropdown">
+                                                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu mCustomScrollbar">
+                                                            <li><a href="javascript:void(0)">Edit Attendance</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <%end%>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="table-pagination">
+                                  <div class="show-pgnation">
+                                    <p class="primarybold"><%= custom_page_entries_info(@sy_clubs) %></p>
+                                  </div>
+                                  <%= paginate @sy_clubs %>
+                                </div>
+                            </div>
+                        </div>
+                        <%else%>
+                           <%= render partial: 'application/no_records', locals: {message: 'No Forum Found.'} %> 
+                        <%end%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="forum_status_update_note_modal" class="modal fade Custommodal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag("close.png") %></button>
+            <h2 class="headtittle">Confirm Note</h2>
+        </div>
+        <%= form_for :sy_club, url: "", method: :patch, html: { id: 'sy_club_form' } do |f| %>
+        <div class="modal-body rejectlist mCustomScrollbar">
+            <div class="row mg-t10 mg-b10">
+                <div class="col-sm-12">
+                    <div class="box bordered-input border-textarea">
+                        <div class="dropdown dropdown-field">
+                            <%= f.text_area(:status_notes, class: 'form-control noBorder field', required: true, placeholder: "Confirm note")%>
+                        </div>
+                    </div>
+                </div>
+                <%= f.hidden_field :status, value: "" %>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="pannel-btn text-right">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+                <%= f.submit "SUBMIT", { class: 'btn btn-info'} %>
+            </div>
+        </div>
+        <% end %>
+    </div>
+  </div>
+</div>

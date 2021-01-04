@@ -1,0 +1,25 @@
+<% post.fragments.each do |fr|%>
+  <div class="col- col-sm-12 col-md-4 col-lg-4 col-xl-4">
+    <div class="read-img"> <%= fr.content[/img.*?src="(.*?)"/i,1].nil? ? (image_tag  "v2/read-img1.jpg") : (image_tag fr.content[/img.*?src="(.*?)"/i,1]) %>
+      <div class="read-date">
+        <%= post.published_at.strftime("%b") %>
+        <span><%= post.published_at.to_a[3]%>, <%= post.published_at.to_a[5]%></span>
+      </div>
+    </div>
+  </div>
+  <div class="col- col-sm-12 col-md-8 col-lg-8 col-xl-8">
+    <div class="orange-bg">
+      <ul>
+        <li><a href="#">Shiv Yogi</a></li>
+        <li>/</li>
+        <li><a href="#">Uncategorized</a></li>
+      </ul>
+      <div class="heading_title">
+        <%= link_to post.title, v2_blog_path(post.slug) %>
+      </div>
+      <div class="shivyog-btn display-inline-block">
+        <%= link_to "Read More", v2_blog_path(post.slug), class: "cta_button_white_small waves-effect" %>
+      </div>
+    </div>
+  </div>
+<% end %>

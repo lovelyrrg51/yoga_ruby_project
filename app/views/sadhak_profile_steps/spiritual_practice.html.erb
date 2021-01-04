@@ -1,0 +1,221 @@
+
+<div class="CompleteprofileCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Profile</h2>
+    </div>
+    <div class="boxsection-md boxshadow prelative">
+        <div class="progressCntrl text-right">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:<%= @sadhak_profile.completed.to_i %>%">
+                </div>
+            </div>
+            <span><%= @sadhak_profile.completed.to_i %>%</span>
+        </div>
+        <div class="tab-content">
+            <%= form_for @sadhak_profile, url: wizard_path, html:{ id: "sadhak_profiles_steps_spiritual_practice_form" }  do |f|%>
+                <%= f.fields_for :spiritual_practice, @spiritual_practice do |ff|%>
+                    <div class="tab-pane active" role="tabpanel" id="Spiritual">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="headtittle text-center">
+                                    <h2>Spiritual Practice</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mg-t30">
+                            <% unless ff.object.morning_sadha_duration_hours.present? %>
+                                <div class="col-sm-6">
+                                    <div class="box bordered-input dropdown">
+                                        <label class="asterisk">Morning Duration (Hours)</label>
+                                        <div class="dropdown-field selectTwo-dropdown">
+                                            <%= ff.select :morning_sadha_duration_hours, options_for_select( (0..4).to_a, ff.object.morning_sadha_duration_hours), { include_blank: "----- Select -----" }, { class: "basic-single" } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% else %>
+                                <div class="col-sm-6">
+                                    <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.morning_sadha_duration_hours.present? %>"></div>
+                                        <div class="box bordered-input">
+                                           <label class="asterisk">Morning Duration (Hours)</label>
+                                           <div class="dropdown dropdown-field">
+                                              <input type="text" name="" value="<%= ff.object.morning_sadha_duration_hours %>" class="form-control noBorder field" disabled="true" placeholder="Morning duration (hours)"> 
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                            <% unless ff.object.afternoon_sadha_duration_hours.present? %>
+                                <div class="col-sm-6">
+                                    <div class="box bordered-input dropdown">
+                                        <label class="asterisk">After Noon Duration (Hours)</label>
+                                        <div class="dropdown-field selectTwo-dropdown">
+                                            <%= ff.select :afternoon_sadha_duration_hours, options_for_select( (0..4).to_a, ff.object.afternoon_sadha_duration_hours), { include_blank: " ----- Select ----- " }, { class: "basic-single" } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% else %>
+                                <div class="col-sm-6">
+                                    <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.afternoon_sadha_duration_hours.present? %>"></div>
+                                        <div class="box bordered-input">
+                                           <label class="asterisk">After Noon Duration (Hours)</label>
+                                           <div class="dropdown dropdown-field">
+                                              <input type="text" name="" value="<%= ff.object.afternoon_sadha_duration_hours %>" class="form-control noBorder field" disabled="true" placeholder="After noon duration (hours)"> 
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                            <% unless ff.object.evening_sadha_duration_hours.present? %>
+                                <div class="col-sm-6">
+                                    <div class="box bordered-input dropdown">
+                                        <label class="asterisk">Evening Duration (Hours)</label>
+                                        <div class="dropdown-field selectTwo-dropdown">
+                                            <%= ff.select :evening_sadha_duration_hours, options_for_select( (0..4).to_a, ff.object.evening_sadha_duration_hours), { include_blank: " ----- Select ----- " }, { class: "basic-single" } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% else %>
+                                <div class="col-sm-6">
+                                    <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.evening_sadha_duration_hours.present? %>"></div>
+                                        <div class="box bordered-input">
+                                           <label class="asterisk">Evening Duration (Hours)</label>
+                                           <div class="dropdown dropdown-field">
+                                              <input type="text" name="" value="<%= ff.object.evening_sadha_duration_hours %>" class="form-control noBorder field" disabled="true" placeholder="Evening duration (hours)"> 
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                            <div class="col-sm-6">
+                                <div class="prelative">
+                                <div class="overlapping <%= 'overlay-active' if ff.object.other_sadha_duration_hours.present? %>"></div>
+                                    <div class="box bordered-input dropdown">
+                                        <label class="asterisk">Other Duration (Hours)</label>
+                                        <div class="dropdown dropdown-field">
+                                          <%= text_field_tag ff.object.other_sadha_duration_hours.blank? ? "sadhak_profile[spiritual_practice_attributes][other_sadha_duration_hours]" : "", ff.object.other_sadha_duration_hours, class: "form-control noBorder field", disabled: ff.object.other_sadha_duration_hours.present?, placeholder: "Other duration (hours)"%>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% unless ff.object.sadhana_frequency_days_per_week.present? %>
+                                <div class="col-sm-6">
+                                    <div class="box bordered-input dropdown">
+                                        <label class="asterisk">Sadhna Frequency</label>
+                                        <div class="dropdown-field selectTwo-dropdown">
+                                            <%= ff.select :sadhana_frequency_days_per_week, options_for_select( SpiritualPractice.sadhana_frequency_days_per_weeks.map{ |k, v| [k.humanize, k] }, ff.object.sadhana_frequency_days_per_week), { include_blank: " ----- Select ----- " }, { class: 'simple-single' } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% else %>
+                                <div class="col-sm-6">
+                                    <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.sadhana_frequency_days_per_week.present? %>"></div>
+                                        <div class="box bordered-input">
+                                           <label class="asterisk">Sadhna Frequency</label>
+                                           <div class="dropdown dropdown-field">
+                                              <input type="text" name="" value="<%= ff.object.sadhana_frequency_days_per_week %>" class="form-control noBorder field" disabled="true" placeholder="Sadhna frequency"> 
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                            <% unless ff.object.frequency_period.present? %>
+                                <div class="col-sm-6">
+                                    <div class="box bordered-input dropdown">
+                                        <label class="asterisk">Frequency Period</label>
+                                        <div class="dropdown-field selectTwo-dropdown">
+                                            <%= ff.select :frequency_period, options_for_select(%w(Daily Weekly Monthly), ff.object.frequency_period), { include_blank: " ----- Select ----- " }, { class: "simple-single" }%>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% else %>
+                                <div class="col-sm-6">
+                                    <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.frequency_period.present? %>"></div>
+                                        <div class="box bordered-input">
+                                           <label class="asterisk">Sadhna Frequency</label>
+                                           <div class="dropdown dropdown-field">
+                                              <input type="text" name="" value="<%= ff.object.frequency_period %>" class="form-control noBorder field" disabled="true" placeholder="Sadhna frequency"> 
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                        </div>
+                        <div class="shivyog-sepeator"></div>
+                        <div class="row mg-t30 mg-b30">
+                            <div class="col-sm-12">
+                                <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.frequent_sadhna_types.present? %>"></div>
+                                <div class="headtittle"><h2>Frequent Sadhna</h2></div>
+                                    <ul class="list-unstyled featuredlist">
+                                        <% FrequentSadhnaType.all.each do |fstype|%>
+                                            <li>
+                                                <div class="CustomCheckbox">
+                                                    <%= check_box_tag 'sadhak_profile[spiritual_practice_attributes][frequent_sadhna_type_ids][]', fstype.id, ff.object.try(:frequent_sadhna_type_ids).try(:any?){ |id| id == fstype.id} %>
+                                                    <label><%= fstype.name %></label>
+                                                </div>
+                                            </li>
+                                        <% end %>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="shivyog-sepeator"></div>
+                        <div class="row mg-t30 mg-b30">
+                            <div class="col-sm-12">
+                                <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.physical_exercise_types.present? %>"></div>
+                                <div class="headtittle"><h2>Physical Exercise and Subtle Exercises</h2></div>
+                                    <ul class="list-unstyled featuredlist">
+                                        <% PhysicalExerciseType.all.each do |petype|%>
+                                            <li>
+                                                <div class="CustomCheckbox">
+                                                    <%= check_box_tag 'sadhak_profile[spiritual_practice_attributes][physical_exercise_type_ids][]', petype.id, ff.object.try(:physical_exercise_type_ids).try(:any?){ |id| id == petype.id} %>
+                                                    <label><%= petype.name %></label>
+                                                </div>
+                                            </li>
+                                        <% end %>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="shivyog-sepeator"></div>
+                        <div class="row mg-t30 mg-b30">
+                            <div class="col-sm-12">
+                                <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.shivyog_teachings.present? %>"></div>
+                                <div class="headtittle"><h2>Shiv Yog teaching that I apply in my life</h2></div>
+                                    <ul class="list-unstyled featuredlist">
+                                        <% ShivyogTeaching.all.each do |s_teaching|%>
+                                            <li>
+                                                <div class="CustomCheckbox">
+                                                    <%= check_box_tag 'sadhak_profile[spiritual_practice_attributes][shivyog_teaching_ids][]', s_teaching.id, ff.object.try(:shivyog_teaching_ids).try(:any?){ |id| id == s_teaching.id} %>
+                                                    <label><%= s_teaching.name %></label>
+                                                </div>
+                                            </li>
+                                        <% end %>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mg-t30">
+                            <div class="col-sm-12">
+                                <div class="pannel-btn clearfix">
+                                    <%= link_to 'PREVIOUS', previous_wizard_path(previous: true), class: "btn btn-info mg-r5" %>
+                                    <div class="pull-right">
+                                        <%= link_to 'SKIP', next_wizard_path, class: "btn btn-info mg-r5" unless @event.full_profile_needed? %>
+                                        <%= f.submit  "SAVE & CONTINUE", class: ' btn btn-info' %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>
+            <% end %>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,276 @@
+<!doctype html>
+<html>
+<head>
+	<title>Shivyog Event Registration</title>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+	<div style="width:920px; margin:0 auto;">
+		<div style="background:#990000; padding:20px 20px;">
+			<img src="https://dmhtmt59mq15j.cloudfront.net/assets/images/logo.png" alt="" width="148px" height="49px">
+		</div>
+
+		<% if data.try(:event).try(:pay_in_usd) %>
+			<% currency = 'USD' %>
+		<% else %>
+			<% currency = data.try(:event).try(:address).try(:country_currency_code).present? ? data.event.address.country_currency_code : '' %>
+		<% end %>
+		<% order_tax_detail = (data.order_tax_detail || {}) %>
+		<% is_success = (status == 'success') %>
+
+		<% if is_success && data.try(:event).try(:shivir_card_enabled?) && data.try(:event).try(:event_start_date).present? && data.try(:event).event_start_date >= (Date.today - 1.day) %>
+			<div id="entryCardDiv" style="display: none;">
+				<div>
+				  <div style="float:left;margin: 5px 5px;/* padding: 10px 31px 10px 18px; *//* width: 200px; */">
+				  <button type="text" style="padding: 8px 30px; border-radius: 5px; background-color: #990000; color: #fff; font-size: 15px; border: 1px solid #990010;" onclick="back()">Back</button>
+
+				  </div>
+				    <div style="float:right;margin: 5px 5px;">
+				    <button type="text" style="padding: 8px 30px; border-radius: 5px; background-color: #990000; color: #fff; font-size: 15px; border: 1px solid #990010;" onclick="redirectToRegisterPage()">Register More Members</button>
+				  </div>
+				</div>
+				<div style="clear:both"></div>
+				<div style="border:1px solid #ececec; margin-top:15px; padding:10px 10px; border-radius:10px; font-size:15px;">
+					<div style="font-family: Arial, Helvetica, sans-serif; line-height:27px; text-align:left">
+						<div style="margin-top:20px; line-height:32px;">
+							<div style="font-size:24px; padding:25px 0px 10px;">
+								Registration Summary:
+							</div>
+							<table width="100%" cellpadding="10px;" cellspacing="0px;" style="border-collapse: collapse; border:1px solid #e5e5e5;">
+								<tr style="background:#ececec">
+									<td>
+										SYID
+									</td>
+									<td>
+										Name
+									</td>
+									<td>
+										Entry Card
+									</td>
+								</tr>
+								<% data.event_order_line_items.each_with_index do |item, index| %>
+									<tr style="border-bottom:1pt solid #e5e5e5;">
+										<td>
+											<%= item.sadhak_profile.syid %>
+										</td>
+										<td>
+											<%= item.sadhak_profile.full_name %>
+										</td>
+										<td>
+											<% if item.sadhak_profile.try(:photo_and_photo_id_approved?) %>
+												<a style="color:#900;" target="_blank" href=<%= "#{Rails.application.config.app_base_url}/v1/sadhak_profiles?reg_ref_number=#{data.reg_ref_number}&sadhak_profile_id=#{item.sadhak_profile_id}" %> >Download Entry Card</a>.
+											<% else %>
+												Photo or Photo ID under approval<sup>**</sup>
+											<% end %>
+										</td>
+									</tr>
+								<% end %>
+							</table>
+              <% photo_and_photo_id_statuses = data.event_order_line_items.collect{|item| item.sadhak_profile.photo_and_photo_id_approved? } %>
+              <% if photo_and_photo_id_statuses.include?(false) %>
+							<div>
+								<% redirect_link = "#{Rails.application.config.app_base_url}/users/sign_in" %>
+								<% if current_user.present? && current_user.sadhak_profile.present? %>
+									<% redirect_link = "#{Rails.application.config.app_base_url}/v1/sadhak_profiles/#{current_user.sadhak_profile.id}/related_sadhak_profiles" %>
+								<% end %>
+								<sup>**</sup>Photo and photo ID is under approval. Please make sure that correct photo and photo ID proof is uploaded with face of sadhak clearly visible in photo. In case photo and photo ID of sadhak is not approved then entry will not be allowed in the shivir. In case you wish to update photo and photo ID proof then please <a href=<%= redirect_link %> >click here</a>.
+							</div>
+              <% end %>
+						</div>
+					</div>
+				</div>
+			</div>
+		<% end %>
+
+		<div id="successDiv" style="display: block;">
+			<% if is_success %>
+				<div>
+          <% if data.try(:event).try(:shivir_card_enabled?) && data.try(:event).try(:event_start_date).present? && data.try(:event).event_start_date >= (Date.today - 1.day) %>
+            <div style="float:left;margin-top: 5px;/* padding: 10px 31px 10px 18px; *//* width: 200px; */">
+              <button type="text" style="padding: 8px 30px; border-radius: 5px; background-color: #990000; color: #fff; font-size: 15px; border: 1px solid #990010;" onclick="downloadEntryCard()">Download Entry Card</button>
+            </div>
+          <% end %>
+				  <div style="float:right;margin-top: 5px;">
+				    <button type="text" style="padding: 8px 30px; border-radius: 5px; background-color: #990000; color: #fff; font-size: 15px; border: 1px solid #990010;" onclick="redirectToRegisterPage()">Register More Members</button>
+				  </div>
+				</div>
+				<div style="clear:both"></div>
+			<% end %>
+			<div style="font-size:20px; margin-top:15px; color:#990000; ;font-family: Arial, Helvetica, sans-serif;">
+				Event Registration
+			</div>
+			<div style="font-size:28px; color:#000; font-family: Arial, Helvetica, sans-serif; margin-top:10px;">
+				<i class="fa fa-calendar"></i><span style="margin:0px 15px 0px 15px;">Event: <%=data.event.event_name %></span>
+			</div>
+			<div style="border:1px solid #ececec; margin-top:15px; padding:10px 10px; border-radius:10px; font-size:15px;">
+				<div style="font-family: Arial, Helvetica, sans-serif; line-height:27px; text-align:left">
+					<div style="margin-top:20px; line-height:32px;">
+						<% if is_success %>
+							Congratulations, you have succesfully registered for the event.
+							Please note following-
+							<div>
+								<img src="/assets/right.jpg" alt="right icon" align="center">
+								<span style="margin-left:15px;">Carrying registration card in the shivir is necessary. Please reach registration counters on time as per schedules to collect your registration card..</span>
+							</div>
+							<div>
+								<img src="/assets/right.jpg" alt="right icon" align="center">
+								<span style="margin-left:15px;">Please avoid carrying your mobile phones in the shivir. If unavoidable then please keep them switched off inside the hall.</span>
+							</div>
+							<div>
+								<img src="/assets/right.jpg" alt="right icon" align="center">
+								<span style="margin-left:15px;">Any kind of photography or video recording is strictly prohibited in the shivir premises. If you are found doing it, the registration will be cancelled without any refunds and you will be asked to leave the premises immediately.</span>
+							</div>
+							<div>
+								<img src="/assets/right.jpg" alt="right icon" align="center">
+								<span style="margin-left:15px;">Eatables are not allowed inside the hall. Only water bottle can be brought inside the hall.</span>
+							</div>
+							<div>
+								<img src="/assets/right.jpg" alt="right icon" align="center">
+								<span style="margin-left:15px;"> For maximum benefit, when session gets over keep sitting in your place for a few minutes and absorb the healing energies around you.</span>
+							</div>
+							<div>
+								<img src="/assets/right.jpg" alt="right icon" align="center">
+								<span style="margin-left:15px;"> Your SYID is your permanent identification and must be used to register for all the future Shivyog shivirs.</span>
+							</div>
+						<% else %>
+							<h2> Payment Failure- Please try again with accurate payment details </h2> Failure Errors: <%= message %>
+						<% end %>
+							<div style="font-size:24px; padding:25px 0px 10px; border-bottom:1px solid #ececec;">
+								Transaction Status:
+							</div>
+							<div style="text-align:center; margin-top:10px;">
+								<% if is_success %>
+									<div>
+										<span style="font-weight:bold">Registration Reference Number:</span> <%= data.reg_ref_number %>
+									</div>
+								<% end %>
+								<div>
+									<span style="font-weight:bold">Transaction:</span> <%= data.transaction_id.present? ? data.transaction_id : "NA" %>
+								</div>
+								<% if is_success %>
+									<div>
+										<span style="font-weight:bold">Order Amount:</span> <%= currency %> <%= "%.2f" % data.total_amount.to_f.round(2) %>
+									</div>
+									<% if data.event.discount_plan_id.present? %>
+										<div>
+											<span style="font-weight:bold">Discount:</span> <%= currency %> <%= "%.2f" % data.total_discount.to_f.round(2) %>
+										</div>
+									<% end %>
+									<% (order_tax_detail.tax_breakup || []).each do |tax| %>
+										<div>
+											<span style="font-weight:bold"><%= tax.tax_name %>:</span> <%= currency %> <%= "%.2f" % tax.amount %>
+										</div>
+									<% end %>
+									<% if order_tax_detail.total_convenience_charges.to_f > 0 %>
+										<div>
+											<span style="font-weight:bold">Transaction Charges:</span> <%= currency %> <%= "%.2f" % order_tax_detail.total_convenience_charges.to_f.round(2) %>
+										</div>
+									<% end %>
+									<div>
+										<span style="font-weight:bold">Net Amount paid:</span> <%= currency %> <%= "%.2f" % (data.total_amount - data.total_discount + order_tax_detail.total_tax_paid.to_f + order_tax_detail.total_convenience_charges.to_f).round(2) %>
+									</div>
+								<% end %>
+								<div>
+									<span style="font-weight:bold">Status:</span> <%= status %>
+								</div>
+							</div>
+							<% if is_success %>
+								<div style="font-size:24px; padding:25px 0px 10px;">
+									Registration Summary:
+								</div>
+								<table width="100%" cellpadding="10px;" cellspacing="0px;" style="border-collapse: collapse; border:1px solid #e5e5e5;">
+									<tr style="background:#ececec">
+										<td>
+											S.No.
+										</td>
+										<% if is_success %>
+											<td>
+												Registration Number
+											</td>
+										<% end %>
+										<td>
+											SYID
+										</td>
+										<td>
+											Name
+										</td>
+										<td>
+											Seating Category
+										</td>
+										<% if data.event.discount_plan_id.present? %>
+											<td>
+												Discount
+											</td>
+										<% end %>
+										<% if is_success %>
+											<td>
+												Status
+											</td>
+										<% end %>
+									</tr>
+									<% data.event_order_line_items(true).each_with_index do |item, index| %>
+										<tr style="border-bottom:1pt solid #e5e5e5;">
+											<td>
+												<%= index+1 %>
+											</td>
+											<% if is_success %>
+												<td>
+													<% if item.event_registration.present? and item.event.sy_event_company_id.present?%>
+														<%= item.event_registration.try(:serial_number).to_i + 100 %>
+													<% else  %>
+														<%= item.registration_number %>
+													<% end %>
+												</td>
+											<% end %>
+											<td>
+												SY<%= item.sadhak_profile_id %>
+											</td>
+											<td>
+												<%= item.sadhak_profile.full_name %>
+											</td>
+											<td>
+												<%=item.seating_category.category_name%> - <%= "%.2f" % item.event_seating_category_association.price.to_f%>
+											</td>
+											<% if data.event.discount_plan_id.present? %>
+												<td>
+													<%= "%.2f" % item.discount.to_f %>
+												</td>
+											<% end %>
+											<% if is_success %>
+											<td>
+												<%= item.status.present? ? item.status.titleize : 'Success' %>
+											</td>
+										<% end %>
+										</tr>
+									<% end %>
+								</table>
+								<div style="text-align:center; margin-top:30px;">
+									Please print and keep your details with you
+									<div>
+										<a href="#" style="color:#000; text-decoration:none" onclick="window.print()">Print</a>
+									</div>
+								</div>
+							<% end %>
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script>
+	function print_page() {
+	    window.print();
+	}
+	function downloadEntryCard() {
+		document.getElementById('successDiv').style.display = 'none';
+		document.getElementById('entryCardDiv').style.display = 'block';
+	}
+	function back() {
+		document.getElementById('successDiv').style.display = 'block';
+		document.getElementById('entryCardDiv').style.display = 'none';
+	}
+	function redirectToRegisterPage(){
+		window.location.href = '<%= "#{Rails.application.config.app_base_url}/v1/events/#{data.event_id}/register" %>';
+	}
+</script>

@@ -1,0 +1,2 @@
+module PgSyPayfastConfigsHelper
+end

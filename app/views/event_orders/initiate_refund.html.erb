@@ -1,0 +1,140 @@
+<div class="registrationCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Registration Refund Details</h2>
+    </div>
+    <div class="boxsection-lg boxsection-xs boxshadow prelative">
+        <div class="preapprovalemail">
+            <div class="row"> 
+                <div class="col-sm-12 mg-b20">
+                    <div class="offerCntrl primarybold text-center offergap-t30">
+                        <p>Please do not refresh the page/press back button.</p>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="headtittle">
+                        <h2>Registration Summary <%= "(Before)" if @pay_or_refund[:touched_event_order_line_items].size.positive? %></h2>
+                    </div>
+                    <div class="tableCntrl tableheight mCustomScrollbar">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>S.No.</th>
+                                        <th>Name / SYID</th>
+                                        <th>Seating Category</th>
+                                        <th>Discount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  <% @pay_or_refund[:old_details].each_with_index do |d, i| %>
+                                    <tr>
+                                        <td><%= i+1 %></td>
+                                        <td>
+                                            <div class="textgroup">
+                                                <p class="primarybold"><%= d[:full_name] %></p>
+                                                <span><%= d[:syid] %></span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="textgroup">
+                                                <p><%= d[:seating_category] %></p>
+                                                <span><%= d[:price] %></span>
+                                            </div>
+                                        </td>
+                                        <td><%= d[:discount] %></td>
+                                    </tr>
+                                  <% end %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <% if @pay_or_refund[:touched_event_order_line_items].size.positive? %>
+                  <div class="col-sm-12">
+                      <div class="headtittle">
+                          <h2>Registration Summary (After)</h2>
+                      </div>
+                      <div class="tableCntrl tableheight mCustomScrollbar">
+                          <div class="table-responsive">
+                              <table class="table">
+                                  <thead>
+                                      <tr>
+                                          <th>S.No.</th>
+                                          <th>Name / SYID</th>
+                                          <th>Seating Category</th>
+                                          <th>Discount</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                    <% @pay_or_refund[:new_details].each_with_index do |d, i| %>
+                                      <tr>
+                                          <td><%= i+1 %></td>
+                                          <td>
+                                              <div class="textgroup">
+                                                  <p class="primarybold"><%= d[:full_name] %></p>
+                                                  <span><%= d[:syid] %></span>
+                                              </div>
+                                          </td>
+                                          <td>
+                                              <div class="textgroup">
+                                                  <p><%= d[:seating_category] %></p>
+                                                  <span><%= d[:price] %></span>
+                                              </div>
+                                          </td>
+                                          <td><%= d[:discount] %></td>
+                                      </tr>
+                                    <% end %>
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+                <% end %>
+                <div class="col-sm-12">
+                  <div class="headtittle">
+                      <h2>Registration Refund Details</h2>
+                  </div>
+                  <div class="paymenttable">
+                      <div class="table-responsive">
+                          <table class="table table-bordered">
+                              <thead>
+                                  <tr>
+                                      <th>Description</th>
+                                      <th class="">Details</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr>
+                                      <td class="primarybold">Registration Reference Number</td>
+                                      <td class=""><%= @from_event_order.reg_ref_number %></td>
+                                  </tr>
+                                  <tr>
+                                      <td class="primarybold">Refundable Amount</td>
+                                      <td class=""><%= "#{@event.currency_code} #{@db_refundable_amount.rnd}" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td class="primarybold">Cancellation Charges</td>
+                                      <td class=""><%= "#{@event.currency_code} #{@cancellation_charges_by_policy.rnd}" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td class="primarybold">Net Refundable Amount</td>
+                                      <td class="primary-color primarybold"><%= "#{@event.currency_code} #{@net_amount.rnd}" %></td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+                </div>
+                <%= form_for(:event_orders, url: payment_refunds_event_event_order_path(@event, @from_event_order), method: :post) do |f| %>
+                  <div class="col-sm-12">
+                      <div class="pannel-btn text-right">
+                        <input type="hidden" name="event_orders[<%= PAYMENT_REFUND_PARAMS.encrypt %>]" value="<%= @enc_request_params %>" />
+                        <%= f.submit 'CONFIRM', data: { confirm: "Are you sure. Please check again your refundable amount is: #{@event.currency_code} #{@net_amount.rnd}" }, class: 'btn btn-info' %>
+                        <%= link_to 'CANCEL', registration_details_event_order_path(@from_event_order), class: 'btn btn-info' %>
+                      </div>
+                  </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,343 @@
+<% terms_and_conditions = ["I undertake that I'm not allergic to any food items. I shall happily accept food given to me during the shivir. (Please note no special food will be provided to anybody, satvic yogic food will be served during the shivir.)", "I undertake that I'm in sound physical and mental health to attend shivir.", "I undertake that during the shivir I'll not use cellphone", "I undertake that during the shivir I'll observe silence", "I undertake that I'll perform the sewa assigned to me", "I undertake that I shall report on the specified date and leave the ashram on the specified date and will not insist to leave the ashram in between", "I undertake that I am a believer of God and seek to awaken the Shiva consciousness within me", "I undertake that I'm grateful to shivyog guru Avdhoot Shivanand who is helping me to open the path of higher consciousness", "All the above information given by me are truthful", "I agree that the organization reserves the right to not accept my application and my stay in the ashram if found not truthful.", "With gratitude to God and the guru I write my name, it can be considered as my signature."] %>
+<tr>
+    <td style="padding: 20px 15px; background: #f8f8f8;" colspan="2">
+        <p style="text-align: center; display: block; color: #666; font-weight: 700; font-size: 22px; margin: 20px 0 0">Event Application Request</p>
+        <p style="margin: 0; text-align: center; color: #909090; font-size: 15px; font-weight: 400;">Please find the details of Shadhak(s)</p>
+    </td>
+</tr>
+<% (@options[:sadhak_details] || []).each do |sadhak| %>
+  <tr>
+      <td style="padding: 20px 15px; background: #f8f8f8;" colspan="2">
+          <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+              <tbody>
+                  <tr>
+                      <td>
+                          <table cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%; margin: 0 0 20px;">
+                              <tbody>
+                                  <tr>
+                                      <td colspan="2">
+                                          <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+                                              <tbody>
+                                                  <tr>
+                                                      <td style="padding: 15px 0;">
+                                                          <p><span style="font-weight: 600; font-size: 16px;">Name :</span> <%= sadhak[:fullname] || "NA" %></p>
+                                                      </td>
+                                                  </tr>
+                                              </tbody>
+                                          </table>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td colspan="2" style="border: 1px solid #ccc; padding: 8px 12px; ">
+                                          <p style="font-size: 15px; font-weight: 600; ">Basic Info</p>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Name / SYID </td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc;">
+                                          <div style="width: 52px; height: 52px; overflow: hidden; border-radius: 50%; float: left;">
+                                            <% if sadhak.advance_profile.present? and sadhak.advance_profile.advance_profile_photograph.present? and sadhak.advance_profile.advance_profile_photograph.s3_url.present? %>
+                                              <img width="52" height="52" style="max-width: 100%;" src='<%= sadhak.advance_profile.advance_profile_photograph.s3_url%>'/>
+                                            <% else %>
+                                              <img width="52" height="52" style="max-width: 100%;" src='https://syregportalprofilepictures.s3.amazonaws.com/no_image_other.jpg'/>
+                                            <% end %>
+                                          </div>
+                                          <div style="margin-left: 60px; padding: 11px 0;">
+                                              <p style="font-size: 14px; font-weight: 600; margin: 0;"><%= sadhak[:fullname] || "NA" %></p>
+                                              <span style="font-size: 13px; font-weight: 600; color: #990000; display: block;"><%= sadhak[:syid] || "NA" %></span>
+                                          </div>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Father's Name</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"><%= sadhak[:special_event_sadhak_profile_other_info].try(:father_name) || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Mother's Name</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"><%= sadhak[:special_event_sadhak_profile_other_info].try(:mother_name) || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Address</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"><%= sadhak[:address].try(:full_address) || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Date of birth</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"><%= sadhak[:date_of_birth].try(:strftime, "%b %m, %Y") || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Gender</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"><%= sadhak[:gender].try(:titleize) || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Email</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px; color: #990000;"><%= sadhak[:email] || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Mobile</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"><%= sadhak[:mobile] || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td colspan="2" style="border: 1px solid #ccc; padding: 8px 12px; ">
+                                          <p style="font-size: 15px; font-weight: 600; ">Name Of Guru</p>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Guru Name</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"><%= sadhak[:guru_name].try(:titleize) || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Spiritual Organization</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"><%= sadhak.spiritual_org_name.try(:titleize) || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Are you a member of any political party?</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"><%= sadhak[:special_event_sadhak_profile_other_info].try(:are_you_member_of_political_party?) ? 'Yes' : 'No' %></td>
+                                  </tr>
+                                  <% if sadhak[:special_event_sadhak_profile_other_info].try(:are_you_member_of_political_party?) %>
+                                    <tr>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Political Party Name</td>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"><%= sadhak[:special_event_sadhak_profile_other_info].try(:political_party_name) || "NA" %></td>
+                                    </tr>
+                                  <% end %>
+                                  <tr>
+                                      <td colspan="2" style="border: 1px solid #ccc; padding: 8px 12px; ">
+                                          <p style="font-size: 15px; font-weight: 600; ">Forum Details</p>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Name Of Forum</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:forum_name] || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Address Of Forum</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:forum_address].present? ? "#{sadhak[:forum_address].try(:first_line)} #{sadhak[:forum_address].try(:city_name)} #{sadhak[:forum_address].try(:state_name)} #{sadhak[:forum_address].try(:country_name)}" : "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Duration sadhak has been part of this forum</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:membership_since].present? ? "Since #{sadhak[:membership_since]}" : 'NA' %></td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Designation in the forum</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:designation_in_forum] || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td colspan="2" style="border: 1px solid #ccc; padding: 8px 12px; ">
+                                          <p style="font-size: 15px; font-weight: 600; ">How long are you associated with Shivyog?</p>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">How long are you associated with Shivyog?</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:special_event_sadhak_profile_other_info].try(:how_long_associated_with_shivyog) || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td colspan="2" style="border: 1px solid #ccc; padding: 8px 12px; ">
+                                          <p style="font-size: 15px; font-weight: 600; ">Number of shivirs</p>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Number of shivirs (Total)</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:total_shivirs_attended] || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Baba Ji</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:attended_babaji_shivirs] || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Ishan Ji</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:attended_ishanji_shivirs] || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Online</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:attended_online_shivirs] || "NA" %></td>
+                                  </tr>
+                                  <% if sadhak.professional_detail.present? %>
+                                    <tr>
+                                        <td colspan="2" style="border: 1px solid #ccc; border-top: 0; border-bottom: 0; padding: 8px 12px;">
+                                            <p style="font-size: 15px; font-weight: 600; ">Professional Details</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Educational Qualification</td>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak.professional_detail.highest_degree.try(:titleize) || "NA" %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Profession</td>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak.professional_detail.try(:profession_name).try(:titleize) || "NA" %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Designation</td>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak.professional_detail.designation || "NA" %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Occupation</td>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak.professional_detail.occupation || "NA" %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Name of Orgnization</td>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak.professional_detail.name_of_organization || "NA" %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Personal Specialization</td>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak.professional_detail.professional_specialization.try(:titleize) || "NA" %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Personal Interests</td>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak.professional_detail.personal_interests.try(:titleize) || "NA" %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Yrs. of Experience</td>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak.professional_detail.years_of_experience || "NA" %></td>
+                                    </tr>
+                                  <% else %>
+                                    <tr>
+                                        <td colspan="2" style="border: 1px solid #ccc; border-top: 0; border-bottom: 0; padding: 8px 12px;">
+                                            <p style="font-size: 15px; font-weight: 600; ">No Professional Detail</p>
+                                        </td>
+                                    </tr>
+                                  <% end %>
+                                  <tr>
+                                      <td colspan="2" style="border: 1px solid #ccc; padding: 8px 12px; ">
+                                          <p style="font-size: 15px; font-weight: 600; ">Are you on any medication?</p>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Are you on any medication?</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:special_event_sadhak_profile_other_info].try(:are_you_taking_medication?) ? 'Yes' : 'No' %></td>
+                                  </tr>
+                                  <% if sadhak[:special_event_sadhak_profile_other_info].try(:are_you_taking_medication?) %>
+                                    <tr>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Medication Details</td>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:special_event_sadhak_profile_other_info].try(:medication_details) || "NA" %></td>
+                                    </tr>
+                                  <% end %>
+                                  <tr>
+                                      <td colspan="2" style="border: 1px solid #ccc; padding: 8px 12px; ">
+                                          <p style="font-size: 15px; font-weight: 600; ">Are you suffering from any physical or Mental ailments</p>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Are you suffering from any physical or Mental ailments</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:special_event_sadhak_profile_other_info].try(:are_you_suffering_from_physical_or_mental_ailments?) ? 'Yes' : 'No' %></td>
+                                  </tr>
+                                  <% if sadhak[:special_event_sadhak_profile_other_info].try(:are_you_suffering_from_physical_or_mental_ailments?) %>
+                                    <tr>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Ailments Details</td>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:special_event_sadhak_profile_other_info].try(:ailment_details) || "NA" %></td>
+                                    </tr>
+                                  <% end %>
+                                  <tr>
+                                      <td colspan="2" style="border: 1px solid #ccc; padding: 8px 12px; ">
+                                          <p style="font-size: 15px; font-weight: 600; ">Are you involved in any litigation cases (civil/ criminal)</p>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Are you involved in any litigation cases (civil/ criminal)</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:special_event_sadhak_profile_other_info].try(:are_you_involved_in_any_litigation_cases?) ? 'Yes' : 'No' %></td>
+                                  </tr>
+                                  <% if sadhak[:special_event_sadhak_profile_other_info].try(:are_you_involved_in_any_litigation_cases?) %>
+                                    <tr>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Case Details</td>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:special_event_sadhak_profile_other_info].try(:case_details) || "NA" %></td>
+                                    </tr>
+                                  <% end %>
+                                  <% if sadhak[:special_event_sadhak_profile_other_info].try(:sadhak_profiles).present? %>
+                                    <tr>
+                                        <td colspan="2" style="border: 1px solid #ccc; padding: 8px 12px;">
+                                            <p style="font-size: 15px; font-weight: 600; ">Sadhak Profile References</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+                                                <thead style="font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc;">
+                                                    <tr>
+                                                        <th style="padding: 8px 12px; border: 1px solid #ccc; border-top: 0; text-align: left;">SYID</th>
+                                                        <th style="padding: 8px 12px; border: 1px solid #ccc; border-top: 0; text-align: left;">Name</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <% sadhak[:special_event_sadhak_profile_other_info].try(:sadhak_profiles).each do |ref_sadhak_profile| %>
+                                                    <tr>
+                                                        <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"><%= ref_sadhak_profile.try(:syid) || "NA" %></td>
+                                                        <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"><%= ref_sadhak_profile.try(:full_name).try(:titleize) || "NA"  %></td>
+                                                    </tr>
+                                                  <% end %>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                  <% end %>
+                                  <tr>
+                                      <td colspan="2" style="border: 1px solid #ccc; padding: 8px 12px; ">
+                                          <p style="font-size: 15px; font-weight: 600; ">Why and How</p>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Why you want to attend this shivir?</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:special_event_sadhak_profile_other_info].try(:why_you_want_to_attend_this_shivir) || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">How did you come to know about this shivir?</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:special_event_sadhak_profile_other_info].try(:how_did_you_came_to_know_about_the_shivir) || "NA" %></td>
+                                  </tr>
+                                  <tr>
+                                      <td colspan="2" style="border: 1px solid #ccc; padding: 8px 12px; ">
+                                          <p style="font-size: 15px; font-weight: 600; ">Would you like to participate in the divine mission of shivyog</p>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Would you like to participate in the divine mission of shivyog</td>
+                                      <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:special_event_sadhak_profile_other_info].try(:would_you_like_to_participate_in_the_devine_mission_of_shivyog?) ? 'Yes' : 'No' %></td>
+                                  </tr>
+                                  <% if sadhak[:special_event_sadhak_profile_other_info].try(:would_you_like_to_participate_in_the_devine_mission_of_shivyog?) %>
+                                    <tr>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;">Participation Details</td>
+                                        <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:special_event_sadhak_profile_other_info].try(:participation_details) || "NA" %></td>
+                                    </tr>
+                                  <% end %>
+                                  <% if sadhak[:special_event_sadhak_profile_other_info].try(:accepted_terms_and_conditions).present? %>
+                                    <tr>
+                                        <td colspan="2" style="border: 1px solid #ccc; padding: 8px 12px; ">
+                                            <p style="font-size: 15px; font-weight: 600; ">Accepted Terms and Conditions</p>
+                                        </td>
+                                    </tr>
+
+                                    <% terms_and_conditions.each do |t_and_c| %>
+                                      <tr>
+                                          <td style="padding: 8px 12px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc; font-weight: 600;"><%= t_and_c %></td>
+                                          <td style="padding: 8px 12px; border: 1px solid #ccc; font-size: 14px;"> <%= sadhak[:special_event_sadhak_profile_other_info].try(:accepted_terms_and_conditions).include?(t_and_c) ? 'Yes' : 'No' %></td>
+                                      </tr>
+                                    <% end %>
+                                  <% else %>
+                                    <tr>
+                                        <td colspan="2" style="border: 1px solid #ccc; padding: 8px 12px; ">
+                                            <p style="font-size: 15px; font-weight: 600; ">No Terms and Conditions Accepted</p>
+                                        </td>
+                                    </tr>
+                                  <% end %>
+                              </tbody>
+                          </table>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan="2" style="background:#f8f8f8">
+      <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+          <tbody>
+              <tr>
+                  <td style="padding: 15px 0;">
+                  </td>
+                  <td style="padding: 15px 0; text-align: right;">
+                      <%= link_to 'Reject', "#{pre_approval_event_application_event_orders_url}?token=#{@options[:reject_token]}", {style: 'background: #990000; border: 0; padding: 8px 12px; border-radius: 3px; color: #fff; text-transform: capitalize; font-weight: 600;'} %>
+                      <%= link_to 'Approve', "#{pre_approval_event_application_event_orders_url}?token=#{@options[:approve_token]}", { style: 'background: #4CAF50; border: 0; padding: 8px 12px; border-radius: 3px; color: #fff; text-transform: capitalize; font-weight: 600;' } %>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+  </td>
+</tr>
+

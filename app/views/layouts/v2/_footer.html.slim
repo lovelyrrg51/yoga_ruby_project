@@ -1,0 +1,48 @@
+section#footer.margin-bottom-0
+  .container
+    .row
+      .col-sm-12
+        .footer_links
+          ul.quick_links
+            li = link_to 'Home', root_path
+            li = link_to 'About', v2_our_story_path
+            li = link_to 'What is Shiv Yog', v2_what_is_shivyog_path
+            li = link_to 'Contributions', v2_contributions_path
+            li = link_to 'Forums', v2_what_are_sy_forums_path
+            li = link_to 'Blog', v2_blogs_path
+            li = link_to 'Download', 'https://shivyog.com/downloads/'
+            li = link_to 'Buy', 'https://digitalstore.shivyog.com/'
+            li = link_to 'Contact Us', v2_contact_path
+
+    .row
+      .col-sm-12
+        .footer_text.text-align-center
+          .footer_title FOLLOW US
+          ul.social_media
+            li
+              = link_to Settings.social.facebook, target: "_blank" do
+                i class="fa fa-facebook" aria-hidden="true"
+            li
+              = link_to Settings.social.twitter, target: "_blank" do
+                i class="fa fa-twitter" aria-hidden="true"
+            li
+              = link_to Settings.social.instagram, target: "_blank" do
+                i class="fa fa-instagram" aria-hidden="true"
+            li
+              = link_to Settings.social.youtube, target: "_blank" do
+                i class="fa fa-youtube" aria-hidden="true"
+            li
+              = link_to Settings.social.pinterest, target: "_blank" do
+                i class="fa fa-pinterest" aria-hidden="true"
+
+.clear
+
+section#copyright.margin-bottom-0
+  .container
+    .row
+      .col-sm-12
+        .copyright Copyright &copy; ShivYog. All Rights Reserved.
+
+.clear
+
+= render "v2/pages/video_modal"

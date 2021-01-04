@@ -1,0 +1,108 @@
+
+<div class="CompleteprofileCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Profile</h2>
+    </div>
+    <div class="boxsection-md boxshadow prelative">
+        <div class="progressCntrl text-right ">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:<%= @sadhak_profile.completed.to_i %>%">
+                </div>
+            </div>
+            <span><%= @sadhak_profile.completed.to_i %>%</span>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane active" role="tabpanel" id="SelfReported">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="headtittle text-center">
+                            <h2>Self Reported</h2>
+                        </div>
+                    </div>
+                </div>
+                <%= form_for @sadhak_profile_attended_shivir, url: create_sadhak_profile_attended_shivir_event_sadhak_profile_sadhak_profile_steps_path(@event, @sadhak_profile) , html: { id: 'sadhak_profile_step_sadhak_profile_attended_shivir_form', remote: true } do |ff| %>
+                    <div class="row mg-t30">
+                    <div class="col-sm-12">
+                         <div class="headtittle"><h2>Please specify the shivir you have attended in the past</h2></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                           <label class="asterisk">Shivir Name</label>
+                           <div class="dropdown dropdown-field">
+                              <%= ff.text_field :shivir_name, class: 'form-control noBorder field', required: true, placeholder: "Shivir name" %>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                           <label class="asterisk">Place</label>
+                           <div class="dropdown dropdown-field">
+                              <%= ff.text_field :place, class: 'form-control noBorder field', required: true, placeholder: "Place" %>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input dropdown">
+                            <label class="asterisk">Year</label>
+                            <div class="dropdown-field selectTwo-dropdown">
+                                <%= ff.select :year, options_for_select(1980.. Date.today.year), { include_blank: ' ----- Select ----- ' }, { class: 'basic-single', required: true } %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input dropdown">
+                            <label class="asterisk">Month</label>
+                            <div class="dropdown-field selectTwo-dropdown">
+                                <%= ff.select :month, options_for_select(1..12), { include_blank: ' ----- Select ----- ' }, { class: 'basic-single', required: true } %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="pannel-btn text-right">
+                                <button class="btn btn-danger mg-r10 resetForm" type="reset">CLEAR</button>
+                                <button class="btn btn-info" id="sadhak_profile_step_sadhak_profile_attended_shivir_create_button">CREATE</button>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="tableCntrl">
+                            <div class="table-responsive ">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Shivir Name </th>
+                                            <th>Place</th>
+                                            <th>Month / Year </th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sadhak_profile_steps_sadhak_profile_attended_shivir_fields_tbody">
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <%= form_for :sadhak_profile, url: wizard_path, method: :get, html: { id: "sadhak_profile_steps_self_reported_save_cont_form" } do |f| %>
+                    <div class="row mg-t30">
+                        <div class="col-sm-12">
+                            <div class="pannel-btn clearfix">
+                                <%= link_to 'PREVIOUS', previous_wizard_path(previous: true), class: "btn btn-info mg-r5" %>
+                                <div class="pull-right">
+                                    <%= link_to 'SKIP', next_wizard_path, class: "btn btn-info mg-r5" unless @event.full_profile_needed? %>
+                                    <%= f.submit  "SAVE & CONTINUE", class: ' btn btn-info', id: "sadhak_profile_steps_self_reported_save_cont_button", disabled: true %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

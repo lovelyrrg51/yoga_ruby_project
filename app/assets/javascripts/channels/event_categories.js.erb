@@ -1,0 +1,25 @@
+App.cable.subscriptions.create({ channel:  'EventCategoriesChannel' }, {
+
+  received: function(data) {
+
+    var oldSeatingCapacityEle = $("[data-seating-category-id= '" + data.old_event_seating_category_association_id + "']").find("span.catogeryinc"), newSeatingCapacityEle = $("[data-seating-category-id= '" + data.new_event_seating_category_association_id + "']").find("span.catogeryinc");
+
+    $(oldSeatingCapacityEle).fadeOut(0, function(){
+                              $(this).addClass("tableinc");
+                            })
+                            .text(data.old_seating_capacity)
+                            .fadeIn(0, function(){
+                              $(this).removeClass("tableinc");
+                            });
+
+    $(newSeatingCapacityEle).fadeOut(0, function(){
+                              $(this).addClass("tableinc");
+                            })
+                            .text(data.new_seating_capacity)
+                            .fadeIn(0, function(){
+                              $(this).removeClass("tableinc");
+                            });
+
+  }
+
+});

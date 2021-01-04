@@ -1,0 +1,55 @@
+<div class="profileCntrl">
+    <div class="row">
+        <div class="col-sm-12"><div class="text-center headingtittle-h2"><h2>Profile</h2></div></div>
+    </div>
+    <div class="row mg-b30">
+        <div class="col-sm-12">
+            <div class="panel-group Custompanel-group" id="sp_accordion_id" role="tablist" aria-multiselectable="true">
+                <input type='hidden' value=<%= @sp_accordion_id.present? ? @sp_accordion_id : 'collapseOne'%> id="sadhak_profile_accordion_id">
+                <%= render 'sadhak_profiles/profile_sections/basic_info', locals: { sadhak_profile: @sadhak_profile } %>
+                <% if @sadhak_profile.is_basic_profile_complete? && @sadhak_profile.persisted? %>
+                    <%= render 'sadhak_profiles/profile_sections/professional_details', locals: { sadhak_profile: @sadhak_profile } %>
+                    <%= render 'sadhak_profiles/profile_sections/doctors_profile' unless @sadhak_profile.is_not_doctor_profession?%>
+                    <%= render 'sadhak_profiles/profile_sections/advance_profile', locals: { sadhak_profile: @sadhak_profile } %>
+                    <%#= render 'sadhak_profiles/profile_sections/spiritual_practice', locals: { sadhak_profile: @sadhak_profile } %>
+                    <%#= render 'sadhak_profiles/profile_sections/spiritual_journey' %>
+                    <%= render 'sadhak_profiles/profile_sections/self_reported' %>
+                    <%= render 'sadhak_profiles/profile_sections/guru_name' %>
+                    <%= render 'sadhak_profiles/profile_sections/other_association' %>
+                    <%= render 'sadhak_profiles/profile_sections/life_aspects' %>
+                    <%= render 'sadhak_profiles/profile_sections/sadhak_seva_preference', locals: { sadhak_profile: @sadhak_profile } %>
+                    <%= render 'sadhak_profiles/profile_sections/medical_practitioner', locals: { sadhak_profile: @sadhak_profile } unless @sadhak_profile.is_not_doctor_profession?%>
+                <% end %>
+
+            </div>
+        </div>
+    </div>
+    <%= render "application/global_search_shivyog_forum" %>
+</div>
+<div id="InformationModal" class="modal fade Custommodal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png" %></button>
+                <h2 class="headtittle">Advance Profile Details</h2>
+            </div>
+            <div class="modal-body infomationmodal mCustomScrollbar">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="infolist">
+                           <% (@guide_lines || []).each do |guideline| %>
+                                <li><%= guideline %></li>
+                            <%end%>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="pannel-btn text-right">
+                    <button class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%= render 'capture_image'%>

@@ -1,0 +1,9 @@
+
+<% unless @message.nil? %>
+	showNotification("alert-danger", "<%= @message %>", "bottom", "center", "", "");
+<% else %>
+	$('form').trigger('reset');
+  showNotification("alert-success", "Verification code has been resent on <%= @text %> successfully.", "bottom", "center", "", "");
+	<% cookies[RESEND_TIMER_KEY] = { value: RESEND_TIMER, expires: RESEND_TIMER.seconds.from_now } %>
+ 	resend();
+<% end %>

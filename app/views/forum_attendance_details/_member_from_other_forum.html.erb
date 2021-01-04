@@ -1,0 +1,11 @@
+<%uniq_id = (Random.rand * 10000000).to_i%>
+<td id="other_forum_attendance_<%= @sadhak_profile.id%>"><%= @sadhak_profile.full_name %></td>
+<td><%= @sadhak_profile.syid %></td>
+<td><%= @sadhak_profile.active_forum_name %></td>
+<td><%= @sadhak_profile.active_club.id%></td>
+<td><%= @sadhak_profile.expiration_date %></td>
+<td><a class='remove_fields dynamic btn btn-info' href='#' data-confirm='Are you sure?'>REMOVE</a>
+<%= hidden_field_tag "forum_attendance_detail[other_forum_attendances_attributes][#{uniq_id}][sadhak_profile_id]", @sadhak_profile.id%>
+<%= hidden_field_tag "forum_attendance_detail[other_forum_attendances_attributes][#{uniq_id}][sy_club_member_id]", @sadhak_profile.active_club_membership.try(:id)%>
+<%= hidden_field_tag "forum_attendance_detail[other_forum_attendances_attributes][#{uniq_id}][is_current_forum_member]", false%>
+<%= hidden_field_tag "forum_attendance_detail[other_forum_attendances_attributes][#{uniq_id}][is_attended]", true%>

@@ -1,0 +1,30 @@
+<div id="shivirdetails">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <div class="headtittle">
+                <h2>Shivir Details <span class="sub-tittle">Tax Type</span></h2>
+            </div>
+            <%= render 'shivir_status'%>
+        </div>
+    </div>
+    <div class="detailshivir additionaldetails">
+        <div class="row">
+        <%= form_for @event do |f| %>
+            <div class="col-sm-12">
+                <div class="outbox">
+                    <label class="asterisk">Additional Detail</label>
+                    <div class="box bordered-input border-textarea">
+                        <div class="dropdown dropdown-field">
+                          <%= f.text_area :additional_details, value: f.object.try(:additional_details), :class=>"form-control  noBorder field", placeholder: "Please enter any other details that you wish to highlights as part of your awareness plan" %>
+                        </div>
+                    </div>
+                </div>
+                <div class="pannel-btn text-right">
+                    <%= f.button "CLEAR", type: :reset, class: "btn btn-danger mg-r10"%>
+                    <%= f.submit "SAVE", class: "btn btn-info" %>
+                </div>
+            </div>
+            <% end %>
+        </div>
+    </div>
+</div>

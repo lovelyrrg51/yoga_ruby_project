@@ -1,0 +1,9 @@
+<%= form_for authoriztion, url: change_users_associated_with_provider_admin_index_path , method: :post do |f| %>
+  <tr>
+    <td><%= authoriztion.provider %></td>
+    <td><%= authoriztion.email %></td>
+    <td><%= f.select :user_id , options_for_select(User.where(email: authoriztion.email).collect{ |u| [u.sadhak_profile.syid, u.id] }, f.object.user_id), {}, { class: 'form-control inputbox select_for_users_associated_with_provider', 'data-authoriztion-id': "#{authoriztion.id}" } %></td>
+    <%= f.hidden_field :id, value: authoriztion.id %>
+    <td><%= f.submit 'Save', { class: 'btn btn-primary', id: "#{authoriztion.id}-authoriztion-button", disabled: true } %></td>
+  </tr>
+<% end %>

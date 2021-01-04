@@ -1,0 +1,113 @@
+<div class="stripe_form">
+  <%= form_for :payment_details, url: pay_v2_event_order_path(event_order), method: :post, html: { id: "ddraft-gateway-payment-form" } do |f| %>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">person</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :full_name, class: "form-control", placeholder: "Full name", required: true %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">phone</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :mobile, class: "form-control mobile-phone-number", placeholder: "Contact number", required: true %>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">email</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :email, class: "form-control email", placeholder: "email", required: true %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">credit_card</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :dd_number, class: "form-control", placeholder: "Demand draft number", required: true %>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">date_range</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :dd_date, class: "form-control", placeholder: "Demand draft date", readonly: true, :"data-provide" => 'datepicker', required: true, :"data-date-end-date"=>"0d" %>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="input-group">
+        <span class="input-group-addon">
+          <i class="material-icons">credit_card</i>
+        </span>
+          <div class="form-line">
+            <%= f.text_field :bank_name, class: "form-control", placeholder: "Bank name", required: true %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group">
+        <div class="form-group form-float pg_sydd_payment_ack_div">
+          <input name="payment_details[is_terms_accepted]" class="acknowledge_checkbox" id="pg_sydd_payment_ack_checkbox" type="checkbox">
+          <label for="pg_sydd_payment_ack_checkbox">I acknowledge that I have read all of the provisions above and fully understand the terms and conditions expressed and agree to be bound by such <%= link_to "Terms and conditions", cash_payment_terms_and_conditions_path , target: :_blank %>.</label>
+          </div>
+          <span class="labelerror pg_sydd_payment_ack_checkbox_error_span"></span>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn cta_button_small bg-red waves-effect pay-now-btn">PAY NOW</button>
+    <%= render partial: "hidden_field_data", locals: { amount: amount, gateway: gateway, event_order_id: event_order_id, upgrade: upgrade, parent_event_order_id: parent_event_order_id, before_event_order_line_items: before_event_order_line_items, sadhak_details_hash: sadhak_details_hash, payment_method: "demand_draft" }  %>
+  <% end %>
+</div>
+<script type="text/javascript">
+  (function(){
+    var amount = $('.net-amount').text();
+    $('#ddraft-gateway-payment-form').validate();
+    $('#ddraft-gateway-payment-form').submit(function(event){
+      if(!$('input#pg_sydd_payment_ack_checkbox').prop('checked'))
+      {
+        $('input#pg_sydd_payment_ack_checkbox').parents('div.pg_sydd_payment_ack_div').siblings('span.pg_sydd_payment_ack_checkbox_error_span').text('This field is required.').css('color', '#F44336');
+        return false;
+      }else{
+        event.preventDefault();
+        swal({
+        title: "Are you sure you want to proceed with upgrade/downgrade ?",
+        text: "Please check again your net amount payable is: "+amount,
+        type: "warning",
+        showCancelButton: true,
+        cancelButtonText: "No, Let me check once again.",
+        confirmButtonColor: "#DD6B55",
+        showLoaderOnConfirm: false,
+        confirmButtonText: "Yes, I am sure !",
+        closeOnConfirm: true
+        }, function () {
+          $('#ddraft-gateway-payment-form').find('.pay-now-btn').prop('disabled', true);
+          $('#ddraft-gateway-payment-form').find('.pay-now-btn').text('PROCESSING');
+          $('#ddraft-gateway-payment-form').get(0).submit();
+        });
+      }
+    });
+  }());
+</script>

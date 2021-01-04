@@ -1,0 +1,256 @@
+<% content_for(:title, 'Event | Photo Approval') %>
+
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Event Panel</h2>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+            <%= render partial: 'events/event_organize_left_panel', locals: { event: @event } %>
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                    
+                    <div class="rightContent">
+                      <div id="photoapprovalpanel" class="photoapprovalpanel">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="headtittle text-center">
+                                    <h2>Photo Approval Panel</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mg-b30">
+                            <div class="col-sm-12">
+                                <a href="#Refine" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+                                <div class="refineCntrl collapse in" aria-expanded="true" id="Refine" role="tablist">
+                                    <form action="" method="get">
+                                      <div class="refinesub-group">
+                                          <div class="row">
+                                              <div class="col-sm-6">
+                                                  <div class="outbox">
+                                                      <label>SYID</label>
+                                                      <div class="box bordered-input">
+                                                          <div class="dropdown dropdown-field">
+                                                            <input type="text" class="form-control noBorder field" placeholder="SYID" name="syid" value="<%= params[:syid] %>">  
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="col-sm-6">
+                                                  <div class="outbox">
+                                                      <label>FIRST NAME</label>
+                                                      <div class="box bordered-input">
+                                                          <div class="dropdown dropdown-field">
+                                                            <input type="text" class="form-control noBorder field" placeholder="First name" name="first_name" value="<%= params[:first_name] %>">  
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="col-sm-6">
+                                                  <div class="outbox">
+                                                      <label>EMAIL</label>
+                                                      <div class="box bordered-input">
+                                                          <div class="dropdown dropdown-field">
+                                                            <input type="text" class="form-control noBorder field" placeholder="Email" name="email" value="<%= params[:email] %>">  
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="col-sm-12">
+                                                  <div class="pannel-btn text-right">
+                                                      <%= link_to "CLEAR", photo_approval_event_path(@event), class: "btn btn-danger mg-r10" %>
+                                                      <%= submit_tag 'SEARCH', { class: 'btn btn-info', data: {  disable_with: "SEARCHING...!" } } %>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="shivyog-sepeator"></div>
+                        <% if @sadhak_profiles.size > 0 %>
+                          <div class="row mg-t30">
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="Boxdrop dropdown mg-r10 mg-x-b15 ">
+                                  <button class="btn boxdrop-btn" data-toggle="dropdown">
+                                      <span>All</span>
+                                      <span class="btnarrow"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                                  </button>
+                                  <div class="dropdown-menu dropdownCntrl">
+                                    <ul class="list-unstyled">
+                                        <li class="active"><a href="javascript:void(0)" onclick="photoApprovalProfilesSelectOpertaions('all')">All</a></li>
+                                        <li><a href="javascript:void(0)" onclick="photoApprovalProfilesSelectOpertaions('pending')">Pending</a></li>
+                                        <li><a href="javascript:void(0)" onclick="photoApprovalProfilesSelectOpertaions('approved')">Approved</a></li>
+                                        <li><a href="javascript:void(0)" onclick="photoApprovalProfilesSelectOpertaions('rejected')">Rejected</a></li>
+                                        <li><a href="javascript:void(0)" onclick="photoApprovalProfilesSelectOpertaions('not_available')">Not Avaiable</a></li>
+                                    </ul>
+                                  </div>
+                                </div>
+                                <div class="Boxdrop dropdown mg-x-b15">
+                                  <%= render 'application/per_page' %> 
+                                </div>
+                            </div>
+                            <% if @sadhak_profiles.size > 0 %>
+                              <div class="col-sm-6 col-xs-12">
+                                <div class="pannel-btn panel-sm">
+                                <button class="btn btn-info" onclick="$('#exportPhotoApprovalListEvent').modal('show');"> EMAIL LIST</button>
+                                  <button class="btn btn-info" onclick="exportPhotoApprovalListEvent('csv')">EXPORT CSV</button>
+                                  <button class="btn btn-info" onclick="exportPhotoApprovalListEvent('xls')">EXPORT EXCEL</button>
+                                </div>
+                              </div>
+                            <% end %>
+                          </div>
+                          <div class="row">
+                              <div class="col-sm-12">
+                                  <div class="tableCntrl">
+                                      <div class="table-responsive tableScrollbar">
+                                          <table class="table">
+                                              <thead>
+                                                  <tr>
+                                                      <th class="width-max-70">
+                                                          <div class="CustomCheckbox">
+                                                              <%= check_box_tag "photo_approval_select_profiles", "", false %>
+                                                              <label></label>
+                                                          </div>
+                                                          <div class="boxicon-drop dropdown">
+                                                              <button class="btn boxdrop-btn" data-toggle="dropdown">
+                                                                  <span class="btnarrow"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                                                              </button>
+                                                              <div class="dropdown-menu dropdownCntrl">
+                                                                  <ul class="list-unstyled">
+                                                                      <li class="active" onclick="approveRejectSelectedProfiles('approve')" data-event-id='<%= @event.try(:id) %>'><a href="javascript:void(0)" data-event-id='<%= @event.try(:id) %>'>Approve Selected</a></li>
+                                                                      <li data-toggle="modal" data-target="#photo_approval_sadhak_profile_rejection_reasons_modal" data-event-id='<%= @event.try(:id) %>'><a href="javascript:void(0)" data-event-id='<%= @event.try(:id) %>'>Reject Selected</a></li>
+                                                                  </ul>
+                                                              </div> 
+                                                          </div>
+                                                      </th>
+                                                      <th>Name</th>
+                                                      <th>Date of Birth</th>
+                                                      <th>Photo</th>
+                                                      <th>ID Proof</th>
+                                                      <th class="text-center">Action</th>
+                                                      <th class="text-center">Status</th>
+                                                  </tr>
+                                              </thead>
+                                              <tbody class="rails_photo_approval_content_table">
+                                                <% @sadhak_profiles.each do |sadhak_profile| %>
+                                                  <%= render partial: 'application/photo_approval_table_row', locals: {sadhak_profile: sadhak_profile, event: @event} %>
+                                                <% end %>
+                                              </tbody>   
+                                          </table>
+                                      </div>
+                                  </div>
+                                  <div class="table-pagination">
+                                    <div class="show-pgnation">
+                                      <p class="primarybold"><%= custom_page_entries_info(@sadhak_profiles) %></p>
+                                    </div>
+                                    <%= paginate @sadhak_profiles %>
+                                  </div>
+                              </div>
+                          </div>
+                        <% else %>
+                          <div class="row">
+                          <%= render partial: 'application/no_records', locals: {message: 'NMS..!! No valid registrations found for this Event...!!'} %>
+                          </div>
+                        <% end %>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>
+
+<%= form_for(:sadhak_profile, remote: true, url: '', html: {id: 'photo_approval_approve_reject_form'}) do |f| %>
+<% end %>
+<%= form_for(:sadhak_profile, remote: false, url: '', html: {id: 'photo_approval_approve_reject_selected_profiles'}) do |f| %>
+<% end %>
+<!-- Modal -->
+<div id="photo_approval_sadhak_profile_rejection_reasons_modal" class="modal fade Custommodal" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="headtittle">Choose Reason(s) of Rejection</h4>
+        <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag('close.png', alt: 'NA') %></button>
+        
+      </div>
+      <div class="modal-body rejectlist mCustomScrollbar">
+        <ul class="list-unstyled mg-t20">
+            <% rejection_reasons.each do |rejection_reason| %>
+              <li>
+                <div class="CustomCheckbox nobg-Checkbox">
+                    <%= check_box_tag 'sadhak_profile[status_notes][]', rejection_reason, false, {class: 'photo_approval_sadhak_profile_reason_of_rejection'} %>
+                    <%= label_tag rejection_reason %>
+                </div>
+              </li>
+            <% end %>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <div class="pannel-btn mg-t20 text-right">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+          <button class="btn btn-info">REJECT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal -->
+
+<div id="exportPhotoApprovalListEvent" class="modal fade Custommodal" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    <%= form_tag export_photo_approval_list_event_url(@event.id), method: :get, id: "exportPhotoApprovalListForm" do %>
+    	<%= hidden_field_tag :report_master_id, 4%>
+    	<%= hidden_field_tag :type, 'xls'%>
+      <div class="modal-header">
+        <h4 class="headtittle">Export PhotoApproval List </h4>
+        <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag('close.png', alt: 'NA') %></button>
+      </div>
+      <div class="modal-body mCustomScrollbar">
+	      <div class="row">
+	          <div class="col-sm-12">
+	            <div class="outbox">
+	             <label class="asterisk">Recipients</label>
+	                <div class="box bordered-input prelative">
+	                  <div class="dropdown box-taginput">
+	                      <%= text_field_tag :recipients, "", class: 'form-control noBorder field box-field tagsinput', 'data-role': 'tagsinput', style: "display:none;", placeholder: "Recipients" %>
+	                    </div>
+	                    <div class="merge-error"></div>
+	                </div>
+	            </div>
+	          </div>
+	      </div>
+      </div>
+      <div class="modal-footer">
+        <div class="pannel-btn mg-t20 text-right">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+          <button class="btn btn-info">SEND</button>
+        </div>
+      </div>
+    <%end%>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  function exportPhotoApprovalListEvent(type) {
+    window.location.href = '<%= export_photo_approval_list_event_url(@event) + "?report_master_id=4&type=" %>' + type;
+  }
+  $('form#exportPhotoApprovalListForm').validate({
+  	rules: {
+  		'recipients': { required: true, email:true }
+  	},
+  	errorPlacement: function(error, element) {
+	    if (element.attr("name") == "recipients")
+	        error.appendTo("form#exportPhotoApprovalListForm .merge-error");
+	    else{
+	      	error.insertAfter(element);
+	      }
+    },
+  	submitHandler: function(form){
+  		form.submit();
+  	}
+  });
+</script>

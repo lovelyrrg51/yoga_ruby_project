@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>Receipt Voucher</title>
+    <style type="text/css">
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
+        }
+        table, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            margin: 10px auto;
+            color: #333;
+            border-spacing: 0;
+            border-color: #333;
+        }
+        .bgheadcolor {
+            background: #fff8dc;
+        }
+        .bgrowcolor {
+            background: #e4e4e4;
+        }
+
+        .mg-t {
+            margin: 10px 0 0;
+        }
+
+        .mg-b {
+            margin: 0 0 10px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <table style="width: 980px">
+        <tr class="bgheadcolor text-center">
+            <td colspan="6" style="border-bottom: 0; border-right: 0;">
+              <h2 style="font-size: 22px; font-weight: 700; padding: 12px; margin: 0;"><%= data[:company_name] %></h2>
+            </td>
+        </tr>
+        <tr class="bgheadcolor text-center">
+            <td colspan="6" style="border-top: 0;">
+                 <p style="font-size: 14px; margin: 0; padding: 0;"><%= "#{data[:company_address]} #{data[:company_city]} #{data[:company_state]} #{data[:company_country]} #{data[:zipcode]}".split(' ').join(' ') %></p>
+                <p style="font-size: 14px; margin: 0; padding: 5px 0 0;" ><strong>E-Mail :</strong> <%= data[:contact_email] %></p>
+                <p style="font-size: 14px; margin: 0; padding: 5px 0 10px;"><strong>LLPIN :</strong> <strong><%= data[:llpin_number] || 'AAA-3351' %></strong>, <strong>GSTIN :</strong> <%= data[:company_gstin_number]%></p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" style="text-align: center; padding: 10px; font-size: 20px; font-weight: 700;" class="bgrowcolor">Receipt Voucher</td>
+        </tr>
+        <tr>
+            <td colspan="3" width="50%"><div style="font-size: 14px; font-weight: 700; text-align: center; padding: 10px;" class="bgrowcolor">Details of Voucher</div></td>
+            <td colspan="3" width="50%"><div style="font-size: 14px; font-weight: 700; text-align: center; padding: 10px;" class="bgrowcolor">Details of Service Receiver</div></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor">Receipt Voucher No</td>
+            <td style="padding: 10px; font-size: 13px; text-align: center;"><%= data[:receipt_voucher_number] %></td>
+            <td style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor">Name</td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; text-align: center;"><%= data[:sadhak_full_name] %></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor">Receipt Voucher Date</td>
+            <td style="padding: 10px; font-size: 13px; text-align: center;"><%= data[:receipt_voucher_date] %></td>
+            <td style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor">SYID</td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; text-align: center;"><%= data[:sadhak_syid] %></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor">Reverse Charge(Y/N)</td>
+            <td style="padding: 10px; font-size: 13px; text-align: center;">NO</td>
+            <td style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor">Address</td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; text-align: center;"><%= data[:sadhak_full_address] %></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor">State of Supplier of Services</td>
+            <td style="padding: 10px; font-size: 13px; text-align: center;"><%= data[:company_state] || STATE_DELHI %></td>
+            <td style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor">GSTIN</td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; text-align: center;">N/A</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor">Place of Supply & Code </td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; text-align: center;"><%= data[:place_of_supply].try(:titleize) %> & <%= 
+            STATE_WITH_INVOICE_CODE[data[:place_of_supply].try(:titleize)].try(:[], :tin_number) || "" %>(<%= STATE_WITH_INVOICE_CODE[data[:place_of_supply].try(:titleize)].try(:[], :code) || "" %>)</td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor"> <%= data[:is_forum] ? "Forum Membership Validity" : "Date of Shivir" %> </td>
+            <td style="padding: 10px; font-size: 13px; text-align: center;">
+            <%= data[:validity]%> 
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor"> Invoice Voucher No. </td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; text-align: center;">
+                <%= data[:invoice_voucher_number]%>
+            </td>
+            <% if data[:shivir_type] == "main_shivir" %>
+                <td style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor"> Seating Category </td>
+                <td colspan="2" style="padding: 10px; font-size: 13px; text-align: center;">
+                    <%= data[:seating_category]%>
+                </td>
+            <%end%>
+        </tr>
+        <tr>            
+            <td colspan="2" width="25%" style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor">Mode of Payment</td>
+            <td  width="25%"style="padding: 10px; font-size: 13px; text-align: center;"><%= data[:mode_of_payment] %></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor">Online/Cheque/DD Reference No.</td>
+            <td style="padding: 10px; font-size: 13px; text-align: center;"><%= data[:transaction_number] %></td>
+            <td style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor">Details of shivir</td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; text-align: center;"><%= data[:place_of_shivir] %></td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-size: 13px; font-weight: 700; text-align: center;" class="bgrowcolor" >S.No.</td>
+            <td style="padding: 10px; font-size: 13px; font-weight: 700; text-align: center; width: 220px;" class="bgrowcolor" >Description of Service</td>
+            <td style="padding: 10px; font-size: 13px; font-weight: 700; text-align: center;" class="bgrowcolor" >SAC
+                <br /> Code
+            </td>
+            <td style="padding: 10px; font-size: 13px; font-weight: 700; text-align: center;" class="bgrowcolor" >Advance Amount</td>
+            <td style="padding: 10px; font-size: 13px; font-weight: 700; text-align: center;" class="bgrowcolor" >Discount</td>
+            <td style="padding: 10px; font-size: 13px; font-weight: 700; text-align: center;" class="bgrowcolor" >Total Amount (After Discount)</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;">1</td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center; width: 220px;"><%= data[:event_name] %></td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;">999723</td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;"><%= "%.2f" % data[:basic_fee].to_f %></td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;"><%= "%.2f" % data[:discount].to_f %></td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;"><%= "%.2f" % data[:net_fee].to_f %></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="padding: 10px; font-size: 13px; font-weight: 700; text-align: center;" class="bgrowcolor"  >Total</td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;"><%= "%.2f" % data[:basic_fee].to_f %></td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;"><%= "%.2f" % data[:discount].to_f %></td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;"><%= "%.2f" % data[:net_fee].to_f %></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="padding: 10px; font-size: 13px; font-weight: 700; text-align: center;" class="bgrowcolor" >Terms &amp; Condition </td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; font-weight: 700; text-align: center;" >Total Amount</td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;"><%= "%.2f" % data[:net_fee].to_f %></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="padding: 10px; font-size: 12px; text-align: center; border-bottom: 0; ">As per policy agreed by you at the time of registration <span style="font-size: 13px; font-weight: 700;"> (# Amount is Non-Refundable)</span> </td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; font-weight: 700;" >Add: CGST @ 9%</td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;"><%= "%.2f" % data[:cgst][:tax_amount].to_f %></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="padding: 10px; font-size: 12px; border-bottom: 0; border-top: 0;">&nbsp;</td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; font-weight: 700;">Add: SGST/ UTGST @ 9%</td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;"><%= "%.2f" % data[:sgst][:tax_amount].to_f %></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="padding: 10px; font-size: 12px; border-top: 0; border-bottom: 0;">&nbsp;</td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; font-weight: 700;" >Add: IGST @ 18%</td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;"><%= "%.2f" % data[:igst][:tax_amount].to_f %></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="padding: 10px; font-size: 12px; border-top: 0; border-bottom: 0;">&nbsp;</td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; font-weight: 700;" >Total Taxable Amount</td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;"><%= "%.2f" % data[:tax_applicable].to_f %></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="padding: 10px; font-size: 12px; border-top: 0; border-bottom: 0;">&nbsp;</td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; font-weight: 700;" >Total Amount (Including Tax)</td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;"><%= "%.2f" % data[:paid_amount_with_all_charges].to_f %></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="padding: 10px; font-size: 12px; border-top: 0; border-bottom: 0;">&nbsp;</td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; font-weight: 700;" >Online Charges (inclusive of <%= data[:igst].present? ? "IGST" : "CGST, SGST"%>)</td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;"><%= "%.2f" % data[:convienence_charges].to_f.rnd %></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="padding: 10px; font-size: 12px; border-top: 0; border-bottom: 0;">&nbsp;</td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor">GST on Reverse Charge</td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;">0</td>
+        </tr>
+        <tr>
+            <td colspan="3" style="padding: 10px; font-size: 12px; border-top: 0; border-bottom: 0;">&nbsp;</td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor">Total Amount Received</td>
+            <td style="padding: 10px; font-size: 14px; font-weight: 700; text-align: center;"><%= "%.2f" % (data[:paid_amount_with_all_charges].to_f + data[:convienence_charges].to_f.rnd) %></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="padding: 10px; font-size: 12px; border-top: 0; border-bottom: 0;">&nbsp;</td>
+            <td style="padding: 10px; font-size: 13px; font-weight: 700;" class="bgrowcolor">Amount In Words :</td>
+            <td colspan="2" style="padding: 10px; font-size: 13px; font-weight: 700; text-transform: capitalize;" class="bgrowcolor"><%= (data[:paid_amount_with_all_charges].to_f + data[:convienence_charges].to_f.rnd).to_f.to_words %></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="padding: 10px; font-size: 12px; border-top: 0; border-bottom: 0;">&nbsp;</td>
+            <td colspan="3" style="padding: 10px; font-size: 12px; text-align: center;" >Ceritified that the particulars given above are true and correct</td>
+        </tr>
+        <tr> 
+            <td colspan="3" style="padding: 10px; font-size: 12px; border-top: 0; border-bottom: 0;"># online generated E- Receipt, Doesn't require signature.</td>
+            <td colspan="3" style="padding: 10px; font-size: 12px; text-align: center;">
+                <div>For <%= data[:company_name] %></div>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <div>Authorised signatory</div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

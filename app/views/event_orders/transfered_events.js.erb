@@ -1,0 +1,17 @@
+<% if @message.present? %>
+
+    toastr.error("<%= @message %>")
+        
+<% else %>
+
+    var eventSelect =  $("select[name='event_order[to_event_id]']");
+    eventSelect.html("<option value=''>----- Select -----</option>");
+
+    <% @events.each do |event| %>
+        eventSelect.append($("<option/>", {
+        value: "<%= event.try(:slug) %>",
+        text : "<%= event.try(:event_name) %>"
+        }));
+    <% end %>
+
+<% end %>

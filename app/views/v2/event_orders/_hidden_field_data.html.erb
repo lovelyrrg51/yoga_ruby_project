@@ -1,0 +1,16 @@
+<input type="hidden" name="payment_details[amount]" value=<%= (amount + gateway_charges(gateway, amount).rnd) %>>
+<input type="hidden" name="payment_details[event_order_id]" value=<%= event_order_id %>>
+<input type="hidden" name="payment_details[config_id]" value=<%= gateway.try(gateway.try(:payment_gateway_type).try(:relation_name)).try(:id).to_s %>>
+<input type="hidden" name="method" value=<%= gateway.try(:payment_gateway_type).try(:name).to_s %>>
+<input type="hidden" name="payment_details[payment_date]" value=<%= Date.today.to_s %>>
+<input type="hidden" name="payment_details[payment_gateway_mode_association_id]" value="" >
+<input type="hidden" name="payment_details[upgrade]" value=<%= upgrade.present? %> >
+<input type="hidden" name="payment_details[parent_event_order_id]" value=<%= parent_event_order_id %> >
+<input type="hidden" name="<%= EVENT_ORDER_LINE_ITEM_IDS.encrypt %>" value=<%= before_event_order_line_items.to_json.encrypt %> >
+<input type="hidden" name="<%= SADHAK_PROFILE_DETAILS.encrypt %>" value=<%= sadhak_details_hash.to_json.encrypt %> >
+<% if payment_method.present? && payment_method == "cash" %>
+  <input type="hidden" name="method" value='cash'>
+  <input type="hidden" name="<%= ENCRYPT_PAYMENT_DETAILS_KEY.encrypt %>" value=<%= encryped_payment_details({ amount: (amount + gateway_charges(gateway, amount).rnd), event_order_id: event_order_id, config_id: gateway.try(gateway.try(:payment_gateway_type).try(:relation_name)).try(:id).to_s, method: 'cash', payment_date: Date.today.to_s, upgrade: upgrade.present?, parent_event_order_id: parent_event_order_id }) %>>
+<% else %>
+  <input type="hidden" name="<%= ENCRYPT_PAYMENT_DETAILS_KEY.encrypt %>" value=<%= encryped_payment_details({ amount: (amount + gateway_charges(gateway, amount).rnd), event_order_id: event_order_id, config_id: gateway.try(gateway.try(:payment_gateway_type).try(:relation_name)).try(:id).to_s, method: gateway.try(:payment_gateway_type).try(:name).to_s, payment_date: Date.today.to_s, payment_gateway_mode_association_id: "", upgrade: upgrade.present?, parent_event_order_id: parent_event_order_id }) %>>
+<% end %>

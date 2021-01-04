@@ -1,0 +1,88 @@
+<div class="modal fade" id="upgrade_summary_before_after" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="largeModalLabel">Registration Summary</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="body">
+                <%= form_for :event_order, url: process_event_order_details_v2_event_order_path(event_order), remote: true do |f| %>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="header p-10-0"><h2>Registration Summary (Before)</h2></div>
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover">
+                          <thead>
+                            <tr>
+                              <th>S. No.</th>
+                              <th>Name/SYID</th>
+                              <th>Seating Category</th>
+                              <th>Discount</th>                               
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% (before_sadhak_details || []).each_with_index do |detail, index| %>
+                              <tr>
+                                <td><%= index + 1 %>. </td>
+                                <td><strong><%= detail[:full_name] %> <br /><span class="red-text small"><%= detail[:syid] %></span></strong></td>
+                                <td><strong><%= detail[:category_name] %> <br /><span class="red-text small"><%= detail[:price] %></span></td>
+                                <td><%= detail[:discount] %></td>                               
+                              </tr>
+                            <% end %>                              
+                          </tbody>
+                        </table>
+                      </div>  
+                    </div>
+                  </div>
+                  <hr />
+                  <div class="row">
+                    <div class="col-sm-12">
+                    <div class="header p-10-0"><h2>Registration Summary (After)</h2></div>
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover">
+                          <thead>
+                            <tr>
+                              <th>S. No.</th>
+                              <th>Name/SYID</th>
+                              <th>Seating Category</th>
+                              <th>Discount</th>                               
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% (after_sadhak_details || []).each_with_index do |detail, index| %>
+                              <tr>
+                                <td><%= index + 1 %>. </td>
+                                <td><strong><%= detail[:full_name] %> <br /><span class="red-text small"><%= detail[:syid] %></span></strong></td>
+                                <td><strong><%= detail[:seating_category] %> <br /><span class="red-text small"><%= detail[:price] %></span></strong></td>
+                                <td><%= detail[:discount] %></td>
+                                <%= hidden_field_tag "event_order[event_order_line_items_attributes][#{index}][event_order_line_item_id]", detail[:event_order_line_item_id].to_i %>
+                                <%= hidden_field_tag "event_order[event_order_line_items_attributes][#{index}][sadhak_profile_id]", detail[:sadhak_profile_id].to_i %>
+                                <%= hidden_field_tag "event_order[event_order_line_items_attributes][#{index}][event_seating_category_association_id]", detail[:event_seating_category_association_id].to_i %>                  
+                              </tr>
+                            <% end %>                               
+                          </tbody>
+                        </table>
+                      </div>  
+                    </div>
+                  </div>
+                  <%= f.hidden_field :action, value: action %>
+                  <div class="row">
+                    <div class="col-sm-12 text-align-center">
+                      <div class="shivyog-btn upgrade_initiate_btn" data-toggle="modal" data-target="#upgrade_registration_refund_details" id="upgrade_initiate_btn"><button type="submit" class="btn cta_button_small bg-red waves-effect"><%= @payment_params[:pay] ? "Initiate Payment" : "Initiate Refund" %></button></div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="shivyog-btn" data-dismiss="modal"><a href="javascript: void(0);" class="btn cta_button_small bg-red waves-effect">Close</a></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html class="height-full">
+  <head>
+    <title><%= content_for?(:title) ? "#{content_for(:title)} | ShivYog | Emerging Infinite" : 'ShivYog | Emerging Infinite' %></title>
+    <meta charset="utf-8">
+    <meta name="description" content="Shivyog Portal">
+    <!-- Mobile Specific Metas ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- CSS ================================================== -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Ubuntu" %>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag    'v2/application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'v2/application', 'data-turbolinks-track': 'reload', defer: true  %>
+  </head>
+
+  <body data-class="<%= controller_name %>" data-action="<%= action_name %>" class="noscroll signup-page">
+
+    <div class="signup-box">
+      <div class="logo">
+          <%= link_to root_path do %>
+            <%= image_tag "v2/logo.png" %>
+          <% end %>
+      </div>
+
+      <%= yield %>
+    </div>
+
+
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="copyright text-align-center">&copy; <%= Date.current.year %> ShivYog Foundation</div>
+      </div>
+    </div>
+  </body>
+</html>

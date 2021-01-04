@@ -1,0 +1,10 @@
+<div class='autocomplete' >
+  <a class='event' href="<%= photo_approval_admin_event_path %>">
+    <%= event.event_name_with_location %>
+    <div class='description'>
+      <% if event.event_start_date.present? && event.event_end_date.present? %>
+        <%= "#{event.event_start_date.strftime('%b %d, %Y')} to #{event.event_end_date.strftime('%b %d, %Y')}" %>
+      <% end %>
+    </div>
+  </a>
+</div>

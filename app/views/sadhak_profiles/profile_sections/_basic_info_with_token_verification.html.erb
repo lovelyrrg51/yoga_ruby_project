@@ -1,0 +1,42 @@
+<div class="loginmainCntrl">
+    <div class="display-table">
+        <div class="display-table-cell">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5 col-sm-8 centerblock">
+                        <div class="loginlogo">
+                            <%= link_to image_tag("logo.png"), root_path %>
+                        </div>
+                        <div class="loginCntrl">
+                            <%= form_for @sadhak_profile, url: @url, html: { id: 'sadhak_profile_basic_info_verification' } do |f| %>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <p class="verifyhead">Enter verification code send to your mobile / email</p>
+                                    </div>
+                                    <div class="col-sm-12 mg-t30 clearfix">
+                                        <div class="outbox">
+                                            <label>Verification Code</label>
+                                            <div class="box bordered-input">
+                                                <div class="dropdown dropdown-field">
+                                                    <%= f.text_field :verification_token, class: "form-control noBorder field", required: "required", placeholder: "Verification code"%>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 mg-t30">
+                                        <div class="pannel-btn text-center">
+                                            <%= link_to "BACK", new_sadhak_profile_path(@sadhak_profile), class: "btn btn-info" %>
+                                            <%= link_to "RESEND", @sadhak_profile.persisted? ?  resend_edit_sadhak_profile_verification_token_sadhak_profiles_path : resend_sadhak_profile_verification_token_sadhak_profiles_path, class: "btn btn-info #{ 'disabled' if (cookies[RESEND_TIMER_KEY].to_i) > 0 }", id: "resend_verification_token", remote: true%>
+                                            <%= f.submit  "VERIFY", class: "btn btn-info mg-r10" %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                        </div>
+                        <p class="copy-right">&copy; <%= Time.now.year %> ShivYog Foundation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

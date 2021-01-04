@@ -1,0 +1,12 @@
+<% content_for(:title, 'Forum Attendance | Edit') %>
+<%= link_to "BACK", sy_club_forum_attendance_path(@sy_club), class: "btn btn-info" %>
+<div class="headingtittle-h2 text-center">
+    <h2>Forums</h2>
+    <span class="subheading primary-color primarybold">Forum ID: <%= @sy_club.id %></span>
+    <span class="subheading">ShivYog Forum <strong class="texttransform"><%= @sy_club.name.try(:titleize) %></strong></span>
+</div>
+<div class="boxsection-lg boxshadow prelative boxsection-xs">
+    <div class="row">
+        <%= render "form", locals: { forum_attendance_detail: @forum_attendance_detail}%>
+    </div>
+</div>

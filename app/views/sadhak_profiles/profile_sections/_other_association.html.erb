@@ -1,0 +1,130 @@
+<div class="panel">
+    <div class="panel-heading" role="tab" id="headingNine">
+        <h4 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#sp_accordion_id" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                <i class="more-less glyphicon glyphicon-plus"></i>
+                <% if @sadhak_profile.other_spiritual_associations.present? %>
+                <i class="success-btn">
+                 <%= image_tag "check-mark.png" %>
+                </i>
+                <% else %>
+                <i class="error-btn"><%= image_tag "warning.png" %></i>
+                <% end %>
+                <span>Other Association</span>
+            </a>
+        </h4>
+    </div>
+    <div id="collapseNine" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingNine">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="outbox">
+                    <label class="asterisk">Are you associated with any other organization ?</label>
+                        <div class="gender">
+                            <ul class="clearfix list-unstyled">
+                                <li>
+                                    <div class="Custradio">
+                                        <%= radio_button_tag 'radio_other_spiritual_association', '', @sadhak_profile.other_spiritual_associations.present?, { class: 'radiotype', id: 'yes_radio_other_spiritual_association_' } %>
+                                        <label for="organizationYes">Yes</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="Custradio">
+                                        <%= radio_button_tag 'radio_other_spiritual_association', '', @sadhak_profile.other_spiritual_associations.blank?, { class: 'radiotype', id: 'no_radio_other_spiritual_association_' } %>
+                                        <label for="organizationNo">No</label>
+                                    </div>
+                                </li>
+                            </ul>
+                       </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mg-t30 prelative">
+                <div class="overlapping overlay-active" id='other_spiritual_associations_toggle_div' ></div>
+                <%= form_for @other_spiritual_association, url: @other_spiritual_association.persisted? ? sadhak_profile_other_spiritual_association_path(@sadhak_profile, @other_spiritual_association) : sadhak_profile_other_spiritual_associations_path(@sadhak_profile) , html: { id: 'sadhak_profile_other_spiritual_association_form' } do |f| %>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                           <label class="asterisk">Name of Organization</label>
+                           <div class="dropdown dropdown-field">
+                              <!-- <input type="text" class="form-control noBorder field" placeholder=""> -->
+                              <%= f.text_field :organization_name, class: 'form-control noBorder field', required: true, placeholder: "Name of organization"%> 
+                           </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                           <label class="asterisk">Associated As</label>
+                           <div class="dropdown dropdown-field">
+                              <%= f.text_field :association_description, class: 'form-control noBorder field', required: true, placeholder: "Association description"%> 
+                           </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input dropdown">
+                            <label class="asterisk">Associated Since Year</label>
+                            <div class="dropdown-field selectTwo-dropdown">
+                                <%= f.select :associated_since_year, options_for_select(1980.. Date.today.year, f.object.associated_since_year), { include_blank: ' ----- Select ----- ' }, { class: 'basic-single', required: true } %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input dropdown">
+                            <label class="asterisk">Associated Since Month</label>
+                            <div class="dropdown-field selectTwo-dropdown">
+                                <%= f.select :associated_since_month, options_for_select(1..12, f.object.associated_since_month), { include_blank: ' ----- Select ----- ' }, { class: 'basic-single', required: true } %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                           <label class="asterisk">Duration of Practice</label>
+                           <div class="dropdown dropdown-field">
+                              <%= f.text_field :duration_of_practice, class: 'form-control noBorder field', required: true, placeholder: "Duration of practice"%>
+                           </div>
+                        </div>
+                    </div>
+                    <%= f.hidden_field :sadhak_profile_id, value: @sadhak_profile.id %>
+                    <%= hidden_field_tag :other_spiritual_association_sp_accordion_id, "collapseNine" %>
+                    <div class="col-sm-12">
+                        <div class="pannel-btn">
+                            <%= button_tag 'CLEAR', class: 'btn btn-danger mg-r10 resetForm', type: 'reset' %>
+                            <%= f.submit 'SAVE', class: 'btn btn-info' %>
+                        </div>
+                    </div>
+                <% end %>
+                <div class="col-sm-12">
+                    <div class="shivyogCntrl shivyogmg">
+                        <div class="tableCntrl tableheight mCustomScrollbar">
+                            <div class="table-responsive ">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Organization</th>
+                                            <th>Associated As</th>
+                                            <th>Since</th>
+                                            <th>Duration</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% if @other_spiritual_associations.present? %>
+                                        <% @other_spiritual_associations.each do |other_spiritual_association| %>
+                                            <tr>
+                                                <td><%= other_spiritual_association.organization_name %></td>
+                                                <td><%= other_spiritual_association.association_description %></td>
+                                                <td><%= other_spiritual_association.associated_since_month %> - <%= other_spiritual_association.associated_since_year %></td>
+                                                <td><%= other_spiritual_association.duration_of_practice %></td>
+                                                <td class="text-center"><a href="<%= edit_sadhak_profile_path(@sadhak_profile, other_spiritual_association_id: other_spiritual_association.id, sp_accordion_id: 'collapseNine') %>" class="action"><i class="fa fa-pencil" aria-hidden="true"></i></a><%= link_to '', sadhak_profile_other_spiritual_association_path(@sadhak_profile, other_spiritual_association, other_spiritual_association_sp_accordion_id: 'collapseNine'), method: :delete, data: { confirm: "Are you sure?" }, class: 'action fa fa-trash-o' %></td>
+                                            </tr>
+                                        <% end %>
+                                    <% end %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

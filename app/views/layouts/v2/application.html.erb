@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for?(:title) ? "#{content_for(:title)} | ShivYog | Emerging Infinite" : 'ShivYog | Emerging Infinite' %></title>
+    <meta charset="utf-8">
+    <meta name="description" content="Shivyog">
+    <!-- change into index, follow -->
+    <!-- Mobile Specific Metas ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <%= yield(:header) if content_for?(:header) %>
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <!-- <%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{ENV['GOOGLE_AUTOCOMPLETE_ADDRESS_ID']}&libraries=places" %>  -->
+    <%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=AIzaSyCqptBVzczzvtKNvhAElaE2sH8mnPYSXlE" %>
+    <%= stylesheet_link_tag    'v2/application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'v2/application', 'data-turbolinks-track': 'reload', defer: true %>
+    <%= javascript_include_tag 'https://js.stripe.com/v3/' %>
+    <%= stylesheet_pack_tag 'application' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true %>
+  </head>
+  <body data-class="<%= controller_name %>" data-action="<%= action_name %>">
+    <div class="clear"></div>
+
+    <%= render "layouts/v2/header" %>
+
+    <%= yield %>
+
+    <div class="clear"></div>
+
+    <%= render "layouts/v2/footer" %>
+  </body>
+</html>

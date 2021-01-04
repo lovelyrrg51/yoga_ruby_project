@@ -1,0 +1,5 @@
+// Correct webkit cancel button position on input[type="search"]
+#forum-search-input::-webkit-search-cancel-button{
+  position: relative;
+  right: 45px;
+}

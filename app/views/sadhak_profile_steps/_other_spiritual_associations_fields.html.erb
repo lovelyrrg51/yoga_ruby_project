@@ -1,0 +1,7 @@
+<tr id="<%= @other_spiritual_association.try(:id) %>">
+    <td><%= @other_spiritual_association.try(:organization_name) %></td>
+    <td><%= @other_spiritual_association.try(:association_description) %></td>
+    <td><%= @other_spiritual_association.try(:associated_since_month) %> - <%= @other_spiritual_association.try(:associated_since_year) %></td>
+    <td><%= @other_spiritual_association.try(:duration_of_practice) %></td>
+    <td class="text-center"><a href="<%= delete_other_spiritual_association_sadhak_profile_steps_path(other_spiritual_association_id: @other_spiritual_association.try(:id)) %>" class="action" data-remote="true"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
+</tr>

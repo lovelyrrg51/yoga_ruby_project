@@ -1,0 +1,104 @@
+<div class="panel">
+    <div class="panel-heading" role="tab" id="headingSix">
+        <h4 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#sp_accordion_id" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+
+                <i class="more-less glyphicon glyphicon-plus"></i>
+                <% if @sadhak_profile.sadhak_profile_attended_shivirs.present? %>
+                <i class="success-btn">
+                 <%= image_tag "check-mark.png" %>
+                </i>
+                <% else %>
+                <i class="error-btn"><%= image_tag "warning.png" %></i>
+                <% end %>
+                <span> Self Reported</span>
+            </a>
+        </h4>
+    </div>
+    <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+        <div class="panel-body">
+            <%= form_for @sadhak_profile_attended_shivir, url: @sadhak_profile_attended_shivir.persisted? ? sadhak_profile_sadhak_profile_attended_shivir_path(@sadhak_profile, @sadhak_profile_attended_shivir) : sadhak_profile_sadhak_profile_attended_shivirs_path(@sadhak_profile), html: { id: 'sadhak_profile_attended_shivir_form' } do |ff| %>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="headtittle">
+                            <h2>Please specify the shivir you have attended in the past</h2></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                            <label class="asterisk">Shivir Name</label>
+                            <div class="dropdown dropdown-field">
+                                <%= ff.text_field :shivir_name, class: 'form-control noBorder field', required: true, placeholder: "Shivir name"%>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                            <label class="asterisk">Place</label>
+                            <div class="dropdown dropdown-field">
+                                <%= ff.text_field :place, class: 'form-control noBorder field', required: true, placeholder: "Place"%>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input dropdown">
+                            <label class="asterisk">Year</label>
+                            <div class="dropdown-field selectTwo-dropdown">
+                                <%= ff.select :year, options_for_select(1980.. Date.today.year, ff.object.try(:year)), { include_blank: ' ----- Select ----- ' }, { class: 'basic-single', required: true } %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input dropdown">
+                            <label class="asterisk">Month</label>
+                            <div class="dropdown-field selectTwo-dropdown">
+                                <%= ff.select :month, options_for_select(1..12, ff.object.try(:month)), { include_blank: ' ----- Select ----- ' }, { class: 'basic-single', required: true } %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="pannel-btn">
+                            <%= hidden_field_tag :sadhak_profile_attended_shivir_sp_accordion_id, 'collapseSix', id: 'sadhak_profile_attended_shivir_sp_accordion_id'%>
+                        <%= button_tag 'CLEAR', class: 'btn btn-danger mg-r10 resetForm', type: 'reset' %>
+                        <%= ff.submit 'SAVE', class: 'btn btn-info' %>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="shivyogCntrl shivyogmg">
+                        <div class="tableCntrl tableheight mCustomScrollbar">
+                            <div class="table-responsive ">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Shivir Name </th>
+                                            <th>Place</th>
+                                            <th>Month / Year </th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if @sadhak_profile_attended_shivirs.present? %>
+                                            <% @sadhak_profile_attended_shivirs.each do |sadhak_profile_attended_shivir| %>
+                                                <tr>
+                                                    <td><%= sadhak_profile_attended_shivir.shivir_name %></td>
+                                                    <td><%= sadhak_profile_attended_shivir.place %></td>
+                                                    <td><%= sadhak_profile_attended_shivir.month %> / <%= sadhak_profile_attended_shivir.year %></td>
+                                                    <td class="text-center"><a href="<%= edit_sadhak_profile_path(@sadhak_profile, sadhak_profile_attended_shivir_id: sadhak_profile_attended_shivir.id, sp_accordion_id: 'collapseSix') %>" class="action"><i class="fa fa-pencil" aria-hidden="true"></i></a><%= link_to '', sadhak_profile_sadhak_profile_attended_shivir_path(@sadhak_profile, sadhak_profile_attended_shivir, sadhak_profile_attended_shivir_sp_accordion_id: 'collapseSix'), method: :delete, data: { confirm: "Are you sure?" }, class: 'action fa fa-trash-o' %></td>
+                                                </tr>
+                                            <% end %>
+                                        <% end %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

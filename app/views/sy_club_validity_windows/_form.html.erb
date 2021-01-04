@@ -1,0 +1,81 @@
+<%= form_for @sy_club_validity_window, html:{ id: "sy_club_validity_window_form", class: "table-screen-next"} do |f| %>
+<table class="table cat_table mb-0 payment-gatway-config">
+  <tbody>
+    <tr>
+      <td class="col-sm-4">
+        Forum Registration Start Date:<span class="red-star">*</span>
+      </td>
+      <td class="col-sm-8">
+        <%= f.text_field(:club_reg_start_date, class: "form-control sy_club_validity_window_datepicker", required: true, placeholder: 'Forum registration start date') %>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-sm-4">
+        Forum Registration End Date:<span class="red-star">*</span>
+      </td>
+      <td class="col-sm-8">
+        <%= f.text_field :club_reg_end_date, class: "form-control inputbox mt-4 sy_club_validity_window_datepicker", required:true, placeholder: 'Forum registration end date' %>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-sm-4">
+        Membership Start Date:<span class="red-star">*</span>
+      </td>
+      <td class="col-sm-8">
+        <%= f.text_field :membership_start_date, class: "form-control inputbox mt-4 sy_club_validity_window_datepicker", required: true, placeholder: 'Membership start date' %>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-sm-4">
+        Membership End Date:<span class="red-star">*</span>
+      </td>
+      <td class="col-sm-8">
+        <%= f.text_field :membership_end_date, class: "form-control inputbox mt-4 sy_club_validity_window_datepicker", required: true, placeholder: 'Membership end date' %>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><%= f.submit "Submit", class: "btn btn-primary mt-4 pull-right mb-10 mt-10", required: true %></td>
+    </tr>
+  </tbody>
+</table>
+<% end %>
+<script type="text/javascript">
+
+  $(document).ready(function(){
+
+    $("#sy_club_validity_window_form").validate();
+  
+    $("#sy_club_validity_window_form").submit(function(){
+    
+      $("#sy_club_validity_window_alert_message").text("");
+      
+      var club_reg_start_date = $("#sy_club_validity_window_club_reg_start_date").val();
+      var club_reg_end_date = $("#sy_club_validity_window_club_reg_end_date").val();
+      var membership_start_date = $("#sy_club_validity_window_membership_start_date").val();
+      var membership_end_date = $("#sy_club_validity_window_membership_end_date").val();
+      
+      if(membership_start_date >= club_reg_start_date && membership_start_date <= club_reg_end_date)
+      {
+        if(membership_end_date >= club_reg_start_date && membership_end_date <= club_reg_end_date)
+        {
+          return true;
+        }
+        else
+        {
+          toastr.error('Membership End Date is not in range.');
+          return false;
+        }
+      
+      }
+      else
+      {
+        toastr.error('Membership Start Date is not in range.');
+          return false;
+      }
+    
+    });
+  
+  });
+  
+</script>

@@ -1,0 +1,21 @@
+<% if @sadhak_profile.errors.empty? %>
+
+  var appearance = $("<%= escape_javascript(render(partial: 'application/photo_approval_table_row', locals: {sadhak_profile: @sadhak_profile, event: @event})) %>");
+
+  $('#' + "photo_approval_sadhak_profile_row_<%= @sadhak_profile.syid %>").replaceWith(appearance);
+
+  var rejectModal = $('#photo_approval_sadhak_profile_rejection_reasons_modal');
+
+  if (rejectModal.hasClass('in')) {
+    rejectModal.modal('hide');
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+  }
+
+  toastr.success('Information saved successfully.');
+
+<% else %>
+
+  toastr.error("<%= @sadhak_profile.errors.full_messages.first %>");
+
+<% end %>

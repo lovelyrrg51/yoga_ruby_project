@@ -1,0 +1,2 @@
+module DashboardWidgetConfigsHelper
+end

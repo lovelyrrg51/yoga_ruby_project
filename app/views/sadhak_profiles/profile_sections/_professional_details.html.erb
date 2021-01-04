@@ -1,0 +1,123 @@
+<% isNonProfessionaldetailProfession = NON_PROFESSIONAL_PROFESSIONS.include?(@sadhak_profile.professional_detail.try(:profession).try(:name)) %>
+<div class="panel">
+    <div class="panel-heading" role="tab" id="headingTwo">
+        <h4 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion4" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <i class="more-less glyphicon glyphicon-plus"></i>
+                <% if isNonProfessionaldetailProfession ? @sadhak_profile.professional_detail.try(:cal_completeness, ProfessionalDetail::NON_PROFESSIONAL_REQUIRED_FIELD) == 100.00 : @sadhak_profile.professional_detail.try(:is_complete?) %>
+                <i class="success-btn">
+                 <%= image_tag "check-mark.png" %>
+                </i>
+                <% else %>
+                <i class="error-btn"><%= image_tag "warning.png" %></i>
+                <% end %>
+                <span>Professional Details</span>
+            </a>
+        </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+        <div class="panel-body">
+         <%= form_for @sadhak_profile, html: { id: 'edit_sadhak_profile_professional_details' } do |f| %>
+            <%= f.hidden_field :sp_accordion_id, value: 'collapseTwo' %>
+            <%= f.fields_for :professional_detail do |ff|%>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="box bordered-input dropdown">
+                        <label class="asterisk">Education Qualification</label>
+                        <div class="dropdown-field selectTwo-dropdown">
+                            <%= ff.select :highest_degree, options_for_select( ProfessionalDetail.highest_degrees.map{ |k,v| [k.upcase.gsub('_',''), k] }, ff.object.highest_degree), { include_blank: " ----- Select ----- " }, { class: 'basic-single', required: 'required' }%>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box bordered-input dropdown">
+                        <label class="asterisk">Profession</label>
+                        <div class="dropdown-field selectTwo-dropdown">
+                        <%= ff.select :profession_id, options_for_select(Profession.pluck(:name, :id), ff.object.profession_id), { include_blank: " ----- Select ----- " }, { class: 'basic-single', required: 'required', onchange: 'checkProfession(this)' }%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="headtittle"><h2>Professional Details</h2></div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="prelative">
+                        <div class="overlapping <%= 'overlay-active' if isNonProfessionaldetailProfession %>"></div>
+                        <div class="box bordered-input">
+                            <label class="">Designation</label>
+                            <div class="dropdown dropdown-field">
+                                <%= ff.text_field :designation, class: 'form-control noBorder field', placeholder: "Designation"%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="prelative">
+                        <div class="overlapping <%= 'overlay-active' if isNonProfessionaldetailProfession %>"></div>
+                        <div class="box bordered-input">
+                            <label class="">Occupation</label>
+                            <div class="dropdown dropdown-field">
+                                <%= ff.text_field :occupation, class: 'form-control noBorder field', placeholder: "Occupation"%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="prelative">
+                        <div class="overlapping <%= 'overlay-active' if isNonProfessionaldetailProfession %>"></div>
+                        <div class="box bordered-input">
+                        <label class="">Name Of Organization</label>
+                        <div class="dropdown dropdown-field">
+                        <%= ff.text_field :name_of_organization, class: 'form-control noBorder field', placeholder: "Name of organization"%>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="prelative">
+                        <div class="overlapping <%= 'overlay-active' if isNonProfessionaldetailProfession %>"></div>
+                        <div class="box bordered-input">
+                    <label class="">Professional Specialization</label>
+                    <div class="dropdown dropdown-field">
+                    <%= ff.text_field :professional_specialization, class: 'form-control noBorder field', placeholder: "Professional specialization"%>
+                    </div></div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="prelative">
+                        <div class="overlapping <%= 'overlay-active' if isNonProfessionaldetailProfession %>"></div>
+                        <div class="box bordered-input">
+                    <label class="">Personal Interests</label>
+                    <div class="dropdown dropdown-field">
+                    <%= ff.text_field :personal_interests, class: 'form-control noBorder field', placeholder: "Personal interests"%>
+                    </div></div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="prelative">
+                      <div class="overlapping <%= 'overlay-active' if isNonProfessionaldetailProfession %>">
+                      </div>
+                      <div class="box bordered-input">
+                        <label class="">Years of Experience</label>
+                        <div class="dropdown dropdown-field">
+                        <%= ff.text_field :years_of_experience, class: 'form-control noBorder field', 'data-rule-digits': true, placeholder: "Years of experience"%>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <% end %>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="pannel-btn">
+                        <%= button_tag "CLEAR", :type => 'button', class: 'btn btn-danger mg-r10 turbolinkReload', id: 'professionaDetailForm' %>
+                        <%= f.submit  "SAVE", class: ' btn btn-info' %>
+                    </div>
+                </div>
+            </div>
+        <%end%>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,125 @@
+<% event_order = @options[:event_order] %>
+<% total_transactions_amount = @options[:total_transactions_amount] %>
+<% txns = @options[:txns] %>
+<% currency = event_order.event.try(:pay_in_usd) ? 'USD' : event_order.event.try(:address).try(:country_currency_code) %>
+<tr>
+    <td style="padding: 20px 30px; background: #f8f8f8;" colspan="2">
+        <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+            <tr>
+                <td style="text-align: center;">
+                  <div style="margin: 20px 0 5px">
+                    <span style="text-align: center; display: block; color: #666; font-weight: 700; font-size: 22px; margin: 20px 0 0;">Registration Receipt</span>
+                  </div>
+                  <% if event_order %>
+                    <p style="margin: 0 0 30px; color: #909090; font-size: 15px; font-weight: 400;">Duplicate registration(s) receipt for event <%= event_order.event.try(:event_name) %> with transaction id <%= event_order.transaction_id %>. Below are receipt details.</p>
+                  <% end %>
+                  <table style="margin: 40px 0 20px;">
+                    <tbody>
+                      <tr>
+                        <td style="font-size: 14px; text-transform: uppercase; font-weight: 500; color: #333; text-align: left; padding: 0 12px 6px 0;">Event Name :</td>
+                        <td style="font-size: 14px; color: #990000; padding: 0 0 6px; text-align: left; font-weight: 500;"><%= event_order.event.try(:event_name_with_location) || "-" %></td>
+                      </tr>
+                      <tr>
+                        <td style="font-size: 14px; text-transform: uppercase; font-weight: 500; color: #333; text-align: left; padding: 0 12px 6px 0;">Transaction id :</td>
+                        <td style="font-size: 14px; color: #990000; padding: 0 0 6px; text-align: left; font-weight: 500;"><%= event_order.transaction_id || "-" %></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+            </tr>
+            <tr>
+              <td colspan="7">
+                <p style="margin: 40px 0 15px; font-weight: 600;">Details</p>
+                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%; margin: 0 0 30px;">
+                  <thead style="font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc;">
+                    <tr>
+                      <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Event Start/End Date </th>
+                      <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Registration Reference No. </th>
+                      <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Order Status </th>
+                      <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Total Order Amount </th>
+                      <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Total Discount Amount </th>
+                      <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Total Amount Paid </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= event_order.event.try(:event_date) %></td>
+                        <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px; color: #990000"><%= event_order.reg_ref_number %></td>
+                        <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= event_order.status.try(:humanize) %></td>
+                        <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= currency %> <%= event_order.total_amount.rnd %></td>
+                        <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= currency %> <%= event_order.total_discount.rnd %></td>
+                        <td style="padding: 10px; border: 1px solid #ccc; font-size: 14px;"><%= currency %> <%= total_transactions_amount.rnd %></td>
+                    </tr>
+                            <tr>
+                                <td colspan="5" style="padding: 10px; border: 1px solid #ccc; font-size: 14px; font-weight: 600; text-align: center;">Net Amount</td>
+                                <td colspan="2" style="padding: 10px; border: 1px solid #ccc; font-size: 16px; font-weight: 600; text-align: center;"><%= currency %> <%= total_transactions_amount.rnd %></td>
+                            </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <% if txns.present? %>
+              <tr>
+                    <td colspan="6"><p style="margin: 20px 0 15px; font-weight: 600;">Transaction Details</p></td>
+              </tr>
+              <tr>
+                <td colspan="6">
+                  <table cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+                    <thead style="font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc;">
+                      <tr>
+                        <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Sl. No. </th>
+                        <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Transaction ID	</th>
+                        <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Amount</th>
+                        <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Payment Method</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% txns.each_with_index do |txn, index|%>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= index + 1 %></td>
+                            <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= txn[:transaction_id].to_s %></td>
+                            <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= currency %> <%= txn[:amount].rnd %></td>
+                            <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= txn[:payment_method].to_s %></td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            <% end %>
+            <% if event_order.event_order_line_items %>
+              <tr>
+                  <td colspan="6"><p style="margin: 20px 0 15px; font-weight: 600;">Sadhak Profiles</p></td>
+              </tr>
+              <tr>
+                <td colspan="6">
+                  <table cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+                    <thead style="font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc;">
+                      <tr>
+                        <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Sl. No. </th>
+                        <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Reg. Number</th>
+                        <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">SYID</th>
+                        <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Name</th>
+                        <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Seating Category</th>
+                        <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% event_order.event_order_line_items.includes(:sadhak_profile, :event_seating_category_association).each_with_index do |line_item, index| %>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= index + 1 %></td>
+                            <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;">134785</td>
+                            <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px; color: #990000;"><%= line_item.syid %></td>
+                            <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= line_item.full_name %></td>
+                            <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= line_item.category_name %></td>
+                            <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= line_item.status.try(:humanize) %></td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            <% end %>
+        </table>
+    </td>
+</tr>

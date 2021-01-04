@@ -1,0 +1,30 @@
+<% content_for(:title, 'Admin | Dashboard Widget Config') %>
+
+<div class="adminCntrl">
+  <div class="headingtittle-h2 text-center">
+    <h2>Admin Panel</h2>
+  </div>
+  <div class="row">
+    <div class="overflow-row">
+      <%= render 'admin/admin_left_panel' %>
+      <div class="rightCntrl">
+        <div class="boxsection-lg boxsection-xs boxshadow prelative">
+          <div class="rightContent">
+            <div id="dashboard_widget_configs">
+              <div class="row">
+                <div class="col-sm-12 mg-b30">
+                   <div class="headtittle text-center">
+                      <h2>Dashboard Widget Configs</h2>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <%= render "dashboard_widget_configs/form"%>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>    
+</div>

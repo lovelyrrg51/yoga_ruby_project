@@ -1,0 +1,20 @@
+<% content_for(:title, 'Event | Registration Discount Plan') %>
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Event</h2>
+        <span class="subheading primary-color primarybold">Event ID: <%= @event.id %></span>
+        <span class="subheading"><%= @event.event_name %></span>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+            <%= render partial: 'events/event_organize_left_panel', locals: { event: @event } %>
+                <div class="rightCntrl">
+                    <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                        <div class="rightContent">
+                            <%=render "events/shivir_details/registration_discount_plan"%>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>

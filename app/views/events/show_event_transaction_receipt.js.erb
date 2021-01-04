@@ -1,0 +1,6 @@
+<% if @event_order.present? %>
+
+  $("body").append("<%= escape_javascript(render(partial: 'events/show_event_transaction_receipt', locals: {order: @event_order})) %>");
+  $("#EventTransactionReceipt<%= @event_order.id %>").modal('show');
+
+<% end %>

@@ -1,0 +1,199 @@
+<% uniq_token = SecureRandom.uuid %>
+
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Forum Assets</h2>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+                <%= render "admin/forum_admin_left_panel"%>
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxsection-xs boxshadow">
+                    <div class="row">
+                        <div class="headtittle text-center">
+                            <h2>Assets</h2>
+                        </div>
+                        <div class="col-sm-12 mg-t20 mg-b30">
+                            <div class="row">
+                                <%= form_for @digital_asset, url: @digital_asset.persisted? &&  collection_digital_asset_path || collection_digital_assets_path, html: { id: "digital_asset_form" } do |f|%>
+                                <%= f.hidden_field :collection_id, value: @collection.id%>
+                                <div class="col-sm-6">
+                                    <div class="outbox">
+                                        <label class="asterisk">Tittle</label>
+                                        <div class="box bordered-input">
+                                            <div class="dropdown dropdown-field">
+                                                <%= f.text_field :asset_name, class: "form-control noBorder field", required: true, placeholder: "Tittle"%>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="outbox">
+                                        <label class="asterisk">Assets Url</label>
+                                        <div class="box bordered-input">
+                                            <div class="dropdown dropdown-field">
+                                                <%= f.text_field :asset_url, value: f.object.digital_asset_secret.try(:asset_url), class: "form-control noBorder field", required: true, placeholder: "Asset url"%>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="outbox">
+                                        <label class="asterisk">Content Type</label>
+                                        <div class="box bordered-input dropdown">
+                                            <div class="dropdown-field selectTwo-dropdown">
+                                                <%= f.select :language, options_for_select(SY_CONTENT_TYPE.to_a, f.object.language), {}, class: "simple-single", required: true %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="outbox">
+                                        <label>Publish on</label>
+                                        <div class="box bordered-input">
+                                            <div class="input-group calenderdate date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" >
+                                                <%= f.text_field :published_on, class: "form-control noBorder field", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true, value: f.object.published_on.try(:strftime, '%b %d, %Y'), required: true%>
+                                                <span class="input-group-addon">
+                                                <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="outbox">
+                                        <label>Expires on</label>
+                                        <div class="box bordered-input">
+                                            <div class="input-group calenderdate date" id="<%= uniq_token %>_end" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" >
+                                                <%= f.text_field :expires_at, class: "form-control noBorder field", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true, value: f.object.expires_at.try(:strftime, '%b %d, %Y'), required: true%>
+                                                <span class="input-group-addon">
+                                                <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="outbox">
+                                        <label class="asterisk">Description</label>
+                                        <div class="box bordered-input border-textarea">
+                                            <div class="dropdown dropdown-field">
+                                                <%= f.text_area :asset_description, class: "form-control noBorder field", required: true, placeholder: "Asset description"%>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="pannel-btn text-right">
+                                        <%= link_to "NEW COLLECTION", collection_digital_assets_path(@collection), class: "btn btn-info" if @digital_asset.persisted?%>
+                                        <button class="btn btn-info"><%= @digital_asset.persisted? && 'UPDATE' || 'CREATE'%></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <%end%>
+                        </div>
+                        <div class="col-sm-12">
+                            <%= form_tag collection_digital_assets_path(@collection), method: :get do%>
+                            <a href="#transactions" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+                            <div class="refineCntrl collapse in" aria-expanded="true" id="transactions" role="tablist">
+                                <div class="refinesub-group">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="outbox">
+                                                <label>Tittle</label>
+                                                <div class="box bordered-input">
+                                                    <div class="dropdown dropdown-field">
+                                                     <%= text_field_tag :asset_name, params[:asset_name], class: "form-control noBorder field", placeholder:"Search asset name"%>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="outbox">
+                                                <label>Content Type</label>
+                                                <div class="box bordered-input dropdown">
+                                                    <div class="dropdown-field selectTwo-dropdown">
+                                                        <%= select_tag :language, options_for_select(SY_CONTENT_TYPE.to_a, params[:language]), include_blank: 'All', class: "simple-single" %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="pannel-btn text-right">
+                                                <button class="btn btn-danger mg-r10" type="button" onclick='Turbolinks.visit("<%= collection_digital_assets_url(@collection.id)%>")'>CLEAR</button>
+                                                <button class="btn btn-info">SEARCH</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <%end%>
+                        </div>
+                        <% if @digital_assets.present? %>
+                            <div class="col-sm-12 mg-t60">
+                                <div class="Boxdrop dropdown mg-x-b15">
+                                    <%= render 'application/per_page' %>
+                                </div>
+                                <div class="tableCntrl">
+                                    <div class="table-responsive tableScrollbar">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Tittle</th>
+                                                    <th>Content Type</th>
+                                                    <th>Publish on</th>
+                                                    <th>Expires on</th>
+                                                    <th class="text-center">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            <% (@digital_assets || []).each do |digital_asset|%>
+                                                <tr>
+                                                    <td>
+                                                        <div class="iconwrap">
+                                                            <i class="icon-video-player"></i>
+                                                        </div>
+                                                    </td>
+                                                    <td><%= link_to digital_asset.asset_name, digital_asset.digital_asset_secret.try(:asset_url) || 'javascript:void(0)', target: '_blank'%></td>
+                                                    <td><%= digital_asset.language.try(:humanize) %></td>
+                                                    <td>
+                                                        <div class="textpanel">
+                                                            <p class="primarybold"><%= digital_asset.published_on.try(:strftime, "%d %b, %Y")%></p>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="textpanel">
+                                                            <p class="primarybold"><%= digital_asset.expires_at.try(:strftime, "%d %b, %Y")%></p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <%= link_to edit_collection_digital_asset_path(@collection.id, digital_asset.id), class: " primary-color" do %>
+                                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                        <%end%>
+                                                        <%= link_to collection_digital_asset_path(@collection.id, digital_asset.id), class: " primary-color", method: :delete, data: { confirm: "Are you sure?" } do %>
+                                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                        <%end%>
+                                                    </td>
+                                                </tr>
+                                            <%end%>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="table-pagination">
+                                      <div class="show-pgnation">
+                                        <p class="primarybold"><%= custom_page_entries_info(@digital_assets) %></p>
+                                      </div>
+                                      <%= paginate @digital_assets %>
+                                    </div>
+                                </div>
+                            </div>
+                        <%else%>
+                            <%= render partial: 'application/no_records', locals: {message: 'No Asset Found.'} %>
+                        <%end%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

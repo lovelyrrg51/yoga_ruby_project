@@ -1,0 +1,44 @@
+<div class="loginViaCntrl boxheightCntrl">
+    <div class="display-table">
+        <div class="display-table-cell">
+            <div class="row">
+                <div class="col-md-5 col-sm-8 centerblock">
+                    <div class="boxsection-lg boxsection-xs boxshadow">
+                         <h2 class="headtittle text-center">Login</h2>
+                        <%= form_for :syid_for_provider_login, url: verify_user_for_provider_login_sadhak_profiles_path, method: :post do |f| %>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="outbox">
+                                        <label>Email</label>
+                                        <div class="box bordered-input">
+                                            <div class="dropdown dropdown-field">
+                                                <%= f.text_field :email, value: @email, class: 'form-control noBorder field', disabled: true %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="outbox">
+                                        <label>SYID</label>
+                                        <div class="box bordered-input">
+                                            <div class="dropdown dropdown-field">
+                                                <%= f.text_field :syid, class: 'form-control noBorder field', placeholder: 'SYID', required: true %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <%= f.submit "LOGIN", class: 'btn btn-info' %>
+                                </div>
+                            </div>
+                            <%= f.hidden_field "#{OAUTH_PARAM_SYIDS.encrypt}", { value: params[OAUTH_PARAM_SYIDS.encrypt] } %>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,131 @@
+<div id="eventRegChangeDetailsModal" class="modal fade Custommodal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="headtittle">Event Application Details</h2>
+                <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag("close.png") %></button>
+            </div>
+            <div class="modal-body mCustomScrollbar">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="tableCntrl tableCntrllist">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td data-th="Transaction Id"><%= event_order.try(:transaction_id) || "-" %></td>
+                                            <td data-th="Reg Ref Number"><span class="textoverflow"><%= event_order.try(:reg_ref_number) || "-" %></span></td>
+                                            <td data-th="Payment Method"><%= event_order.try(:payment_method) || "-" %></td>
+                                            <td data-th="Registered By">
+                                                <div class="textgroup">
+                                                    <p class="primarybold"><%= event_order.try(:user).try(:sadhak_profile).try(:full_name) || "Guest User" %></p>
+                                                    <span><%= event_order.try(:user).try(:sadhak_profile).try(:syid) || "" %></span>
+                                                </div>
+                                            </td>
+                                            <td data-th="Registered Sadhaks">
+                                                <ul class="listsadhak">
+                                                    <% (event_order.try(:sadhak_profiles) || []).each do |sadhak_profile| %>
+                                                        <li><span class="primarybold"><%= sadhak_profile.try(:full_name) %></span></li>
+                                                    <% end %>
+                                                </ul>
+                                            </td>
+                                            <td data-th="Created Date">
+                                                <div class="textpanel">
+                                                    <p class="primarybold"><%= event_order.try(:created_at).try(:strftime, ('%b %d, %Y')) %></p>
+                                                    <span class="senary-color"><%= event_order.try(:created_at).try(:strftime, ("%I:%M:%S %p")) %></span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <% if @payment_refund.requested? %>
+                      <div class="col-sm-12">
+                          <div class="headtittle">
+                              <h2>Registration Summary <span>(Before)</span></h2>
+                          </div>
+                          <div class="tableCntrl">
+                              <div class="table-responsive tableScrollbar">
+                                  <table class="table">
+                                      <thead>
+                                          <tr>
+                                              <th>S.No.</th>
+                                              <th>SYID</th>
+                                              <th>Seating Category</th>
+                                              <th>Status</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <% (@payment_refund.try(:payment_refund_line_items) || []).each_with_index do |detail, index| %>
+                                              <tr>
+                                                  <td><%= index + 1 %></td>
+                                                  <td>
+                                                      <div class="textgroup">
+                                                          <p><%= detail.try(:event_order_line_item).try(:syid) %></p>
+                                                          <span><%= detail.try(:event_order_line_item).try(:full_name) %></span>
+                                                      </div>
+                                                  </td>
+                                                  <td>
+                                                      <div class="textgroup">
+                                                          <p><%= detail.try(:event_order_line_item).try(:category_name) %></p>
+                                                          <span><%= detail.try(:event_order_line_item).try(:category_price).rnd %></span>
+                                                      </div>
+                                                  </td>
+                                                  <td class="primary-color"><%= detail.try(:old_item_status).try(:humanize).try(:titleize) %></td>
+                                              </tr>
+                                          <% end %>
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+                    <% end %>
+                    <div class="col-sm-12">
+                        <div class="headtittle">
+                            <h2>Registration Summary<span><% "(After)" if @payment_refund.requested? %></span></h2>
+                        </div>
+                        <div class="tableCntrl">
+                            <div class="table-responsive tableScrollbar">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>S.No.</th>
+                                            <th>SYID</th>
+                                            <th>Seating Category</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% (@payment_refund.try(:payment_refund_line_items) || []).each_with_index do |detail, index| %>
+                                            <tr>
+                                                <td><%= index + 1 %></td>
+                                                <td>
+                                                    <div class="textgroup">
+                                                        <p><%= detail.try(:syid) %></p>
+                                                        <span><%= detail.try(:full_name) %></span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="textgroup">
+                                                        <p><%= detail.category_name %></p>
+                                                        <span><%= detail.category_price.rnd %></span>
+                                                    </div>
+                                                </td>
+                                                <td class="primary-color"><%= EventRegistration.statuses.key(detail.new_item_status).try(:humanize).try(:titleize)  %></td>
+                                            </tr>
+                                        <% end %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+            </div>
+        </div>
+    </div>
+</div>

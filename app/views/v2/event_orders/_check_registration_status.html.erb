@@ -1,0 +1,18 @@
+<%= form_tag check_registration_exists_v2_event_orders_path, method: 'GET', class: "form-horizontal login-form" do %>
+  <div class="header p-10-0"><h2>Registration Status</h2></div>
+  <div class="col-sm-12 clearfix">
+    <div class="md-form">
+      <%= text_field_tag :reg_ref_number, nil, class: "form-control", id: "reg_ref_num", required: true %>
+      <label for="reg_ref_num">Enter Registration Reference Number</label>
+    </div>
+  </div>
+  <div class="col-sm-12 clearfix">
+    <div class="form-group">
+      <div class="col-sm-12 text-align-center">
+        <div class="shivyog-btn">
+          <button type="submit" class="btn cta_button_small bg-red waves-effect">SUBMIT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

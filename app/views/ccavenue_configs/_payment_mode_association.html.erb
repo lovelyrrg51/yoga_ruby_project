@@ -1,0 +1,94 @@
+<%= form_for [ccavenue_config, payment_gateway_mode_association], html: { id: "admin_payment_gateway_mode_association_form" } do |f| %>
+    <div class="tabtittle"><h2><%= payment_mode.try(:name) %></h2></div>
+    <div class="tableCntrl">
+        <div class="table-responsive tableScrollbar">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Short Code</th>
+                        <th>Refine</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="">
+                        <td>
+                          <%= payment_mode.try(:name) %>
+                        </td>
+                        <td>
+                          <%= payment_mode.try(:shortcode) %>
+                        </td>
+                        <td>
+                          <div class="outbox">
+                              <div class="box bordered-input dropdown tablebox">
+                                  <div class="dropdown-field selectTwo-dropdown">
+                                    <%= f.select :percent_type, options_for_select(PaymentGatewayModeAssociation.percent_types.collect{ |k,v| [k.titleize, k] }, f.object.percent_type), { include_blank: false }, { class: 'basic-single', onChange: 'onPercentTypeChange(this)' }%>
+                                  </div>
+                              </div>
+                          </div>
+                        </td>
+                        <td class="<%= 'tdoverlay' if f.object.range? %>">
+                          <div class="outbox">
+                              <div class="box bordered-input">
+                                 <div class="dropdown dropdown-field">
+                                    <%= f.text_field :percent, class: 'form-control noBorder field', required: true, placeholder: "Percent" %>
+                                 </div>
+                              </div>
+                          </div>
+                        </td>
+                    </tr>
+                    <tr id="payment_gateway_mode_association_range_tr" class="<%= 'hidden' if f.object.payment_gateway_mode_association_ranges.any?{ |range| range.new_record? } || f.object.payment_gateway_mode_association_ranges.blank? %>">
+                        <td colspan="5" class="t-padding">
+                          <table class="table whitesmoke-bg">
+                            <thead>
+                                <tr>
+                                    <th>Min Value</th>
+                                    <th>Max Value</th>
+                                    <th>Percentage</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payment_gateway_mode_association_range_tbody">
+                              <%= f.fields_for :payment_gateway_mode_association_ranges do |ff|%>
+                                <%= render 'ccavenue_configs/payment_gateway_mode_association_range_row', f: ff %>
+                              <% end %>
+                            </tbody>
+                          </table>
+                          <div class="pannel-btn text-left mg-t10 mg-b10">
+                            <%= link_to_add_association  "ADD MORE", f, :payment_gateway_mode_association_ranges, { "data-association-insertion-node":'#payment_gateway_mode_association_range_tbody', :class => 'btn btn-info',"data-association-insertion-method":'append', partial: 'ccavenue_configs/payment_gateway_mode_association_range_row' }  %>
+                          </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="tabtittle"><h2>Modes Tax</h2></div>
+    <div class="tableCntrl">
+        <div class="table-responsive tableScrollbar">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Tax Group</th>
+                        <th>Percentage</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="payment_gateway_mode_association_tax_type_tbody">
+                  <%= f.fields_for :payment_gateway_mode_association_tax_types do |ff|%>
+                    <%= render 'ccavenue_configs/payment_gateway_mode_association_tax_type_row', f: ff %>
+                  <% end %>
+                </tbody>
+            </table>
+            <div class="pannel-btn text-left mg-t10 mg-b10">
+              <%= link_to_add_association  "ADD MORE", f, :payment_gateway_mode_association_tax_types, { "data-association-insertion-node":'#payment_gateway_mode_association_tax_type_tbody', :class => 'btn btn-info',"data-association-insertion-method":'append', partial: 'ccavenue_configs/payment_gateway_mode_association_tax_type_row' } %>
+            </div>
+        </div>
+    </div>
+  <input type="hidden" name="payment_gateway_mode_association[payment_mode_id]" value="<%= payment_mode.try(:id) %>">
+  <div class="pannel-btn text-right">
+      <%= link_to "CLEAR", payment_mode_new_edit_url(@payment_gateway, payment_mode), class: "btn btn-danger mg-r10", data: { toggle: 'tab', remote: 'true' } %>
+      <button class="btn btn-info" data-disable-with="SAVING...">SAVE</button>
+  </div>
+<% end %>

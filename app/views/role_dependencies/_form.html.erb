@@ -1,0 +1,64 @@
+<% uniq_token = SecureRandom.uuid %>
+<%= form_for role_dependency, html: { id: "photo_approval_admin_role_dependency_form" } do |f| %>
+  <div class="row mg-t30">
+    <div class="col-sm-6">
+        <div class="outbox">
+           <label class="asterisk">SYID</label>
+            <div class="box bordered-input">
+                <div class="dropdown dropdown-field">
+                  <%= f.text_field :syid, class: 'form-control noBorder field', placeholder: 'SYID', required: true %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="outbox">
+            <label class="asterisk">First Name</label>
+            <div class="box bordered-input">
+                <div class="dropdown dropdown-field">
+                  <%= f.text_field :first_name, class: 'form-control noBorder field', placeholder: 'First name', required: true %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="outbox">
+          <% uniq_token = SecureRandom.uuid %>
+          <label class="asterisk">Date</label>
+          <div class="box outerbox outerheight">
+              <div class="rangercode">
+                  <div class="dropdown-field numbercode">
+                      <div class="input-group date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" data-minStartDate="<%= Date.today %>" >
+                          <%= f.text_field :start_date, class: "form-control code-input ", placeholder:"#{ Date.today.try(:strftime, '%b %d, %Y') }", readonly: true, value: f.object.try(:start_date).try(:strftime, '%b %d, %Y'), required: true  %>
+
+                          <span class="input-group-addon">
+                              <button class="" type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                          </span>
+                      </div>
+                  </div>
+                  <div class="dropdown-field">
+                      <label class="middletab mg-t10">To</label>
+                  </div>
+                  <div class="dropdown-field numbercode">
+                      <div class="input-group date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker">
+                          <%= f.text_field :end_date, class: "form-control code-input ", placeholder:"#{ Date.today.try(:strftime, '%b %d, %Y') }", readonly: true, value: f.object.try(:end_date).try(:strftime, '%b %d, %Y'),  required: true %>
+                          <span class="input-group-addon" id="basic-addon3">
+                              <button type="button" ><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                          </span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+    <%= f.hidden_field :role, {value: @role} %>
+    <%= f.hidden_field :role_dependable_type, {value: @event.class.to_s} %>
+    <%= f.hidden_field :role_dependable_id, {value: @event.id} %>
+    <div class="col-sm-12">
+        <div class="pannel-btn text-right">
+          <%= f.submit 'CLEAR', {class: 'btn btn-danger mg-r10', type: 'reset'} %>
+          <%= f.submit role_dependency.persisted? ? 'UPDATE' : 'SAVE', class: 'btn btn-info', disabled_with: role_dependency.persisted? ? 'UPDATING...!' : 'SAVING...!' %>
+        </div>
+    </div>
+  </div>
+<% end %>

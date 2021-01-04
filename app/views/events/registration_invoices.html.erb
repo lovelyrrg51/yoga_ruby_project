@@ -1,0 +1,30 @@
+<% content_for(:title, 'Event | Registration Invoice') %>
+
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Event</h2>
+        <span class="subheading primary-color primarybold">Event ID: <%= @event.id %></span>
+        <span class="subheading"><%= @event.event_name_with_location %></span>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+            <%= render partial: 'events/event_organize_left_panel', locals: { event: @event } %>
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                    <div class="rightContent">
+                        <div id="RegistrationInvoices" class="">
+                            <div class="row">
+                                <div class="col-sm-12 mg-b30">
+                                     <div class="headtittle text-center">
+                                        <h2>Registration Invoices</h2>
+                                    </div>
+                                </div>
+                                <%= render partial: 'application/invoices', locals: { clear_path: registration_invoices_event_path, event_registrations: @event_registrations, event: @event } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

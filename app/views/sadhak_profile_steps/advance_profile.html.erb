@@ -1,0 +1,255 @@
+
+<div class="CompleteprofileCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Profile</h2>
+    </div>
+    <div class="boxsection-md boxshadow prelative">
+        <div class="progressCntrl text-right">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:<%= @sadhak_profile.completed.to_i %>%">
+                </div>
+            </div>
+            <span><%= @sadhak_profile.completed.to_i %>%</span>
+        </div>
+        <div class="tab-content">
+            <%= form_for @sadhak_profile, url: wizard_path ,html:{ id: 'edit_sadhak_profiles_steps_advance_profile' } do |f|%>
+	            <div class="tab-pane active" role="tabpanel" id="Advanceprofile">
+	                <div class="row">
+	                    <div class="col-sm-12">
+	                        <div class="headtittle text-center">
+	                            <h2>Advance Profile</h2>
+	                        </div>
+	                    </div>
+	                </div>
+	                <%= f.fields_for :advance_profile do |ff|%>
+	                    <div class="row mg-t30">
+	                        <% unless ff.object.faith.present? %>
+	                            <div class="col-sm-6">
+	                                <div class="box bordered-input dropdown">
+	                                    <label class="asterisk">Faith</label>
+	                                    <div class="dropdown-field selectTwo-dropdown">
+	                                        <%= ff.select :faith, options_for_select(AdvanceProfile.faith_options, ff.object.try(:faith)), { include_blank: " ----- Select ----- " }, { class: 'basic-single', required: 'required' }%>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        <% else %>
+	                            <div class="col-sm-6">
+	                                <div class="prelative">
+	                                <div class="overlapping <%= 'overlay-active' if ff.object.faith.present? %>"></div>
+	                                    <div class="box bordered-input">
+	                                       <label class="asterisk">Faith</label>
+	                                       <div class="dropdown dropdown-field">
+	                                          <input type="text" name="" value="<%= ff.object.faith %>" class="form-control noBorder field" disabled="true" placeholder="Faith" > 
+	                                       </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        <% end %>
+	                        <div class="col-sm-6">
+	                            <div class="prelative">
+                             			<div class="overlapping <%= 'overlay-active' if ff.object.persisted? %>"></div>
+	                                <div class="box bordered-input ">
+	                                   <label class="asterisk">Are you facing any leagal proceedings</label>
+	                                   <div class="gender">
+	                                        <ul class="clearfix list-unstyled">
+	                                            <li>
+	                                                <div class="Custradio">
+	                                                    <%= radio_button_tag ff.object.any_legal_proceeding.blank? ? "sadhak_profile[advance_profile_attributes][any_legal_proceeding]" : "", "true", ff.object.any_legal_proceeding.present?, class: "radiotype", disabled: ff.object.any_legal_proceeding.present? %>
+	                                                    <label for="leagalyes">Yes</label>
+	                                                </div>
+	                                            </li>
+	                                            <li>
+	                                                <div class="Custradio">
+	                                                    <%= radio_button_tag ff.object.any_legal_proceeding.blank? ? "sadhak_profile[advance_profile_attributes][any_legal_proceeding]" : "", "false", ff.object.any_legal_proceeding.blank?, class: "radiotype", disabled: ff.object.any_legal_proceeding.present? %>
+	                                                    <label for="leagalno">No</label>
+	                                                </div>
+	                                            </li>
+	                                        </ul>
+	                                   </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-sm-6">
+	                            <div class="prelative">
+                                	<div class="overlapping <%= 'overlay-active' if ff.object.persisted? %>"></div>
+	                                <div class="box bordered-input">
+	                                   <label class="asterisk">Have you attended any Shivirs</label>
+	                                   <div class="gender">
+	                                        <ul class="clearfix list-unstyled">
+	                                            <li>
+	                                                <div class="Custradio">
+	                                                    <%= radio_button_tag ff.object.attended_any_shivir.blank? ? "sadhak_profile[advance_profile_attributes][attended_any_shivir]" : "", "true", ff.object.attended_any_shivir.present?, class: "radiotype", disabled: ff.object.attended_any_shivir.present? %>
+	                                                    <label for="shivirsyes">Yes</label>
+	                                                </div>
+	                                            </li>
+	                                            <li>
+	                                                <div class="Custradio">
+	                                                    <%= radio_button_tag ff.object.attended_any_shivir.blank? ? "sadhak_profile[advance_profile_attributes][attended_any_shivir]" : "", "false", ff.object.attended_any_shivir.blank?, class: "radiotype", disabled: ff.object.attended_any_shivir.present? %>
+	                                                    <label for="shivirsno">No</label>
+	                                                </div>
+	                                            </li>
+	                                        </ul>
+	                                   </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-sm-12">
+	                            <div class="prelative">
+	                                <div class="overlapping <%= 'overlay-active' if ff.object.advance_profile_photograph.persisted? %>"></div>
+	                                <div class="box bordered-input box-upload prelative photoIdProof" id="photoIdProof">
+	                                   <div class="clearfix"><label class="asterisk">Upload Photo</label>
+	                                   <span class="infodetails">( Face should be clearly visible in photo otherwise photo will be rejected. Please upload only .JPEG or .PNG files Max size 1MB )</span></div>
+	                                    <%= ff.fields_for :advance_profile_photograph do |img|%>
+	                                        <ul class="clearfix choosenphoto">
+	                                            <li>
+	                                                <div class="clickable">
+	                                                    <%= img.file_field :name , onChange: "removeCameraSnapshot(this); readURL(this);", required: img.object.name.blank?, 'data-extension': 'image'%>
+	                                                    <div class="Custinput"><a class="btn btn-danger" href="">CHOOSE FILE</a> <span><%= img.object.name? ? filename(img.object.try(:name)) : "No file choosen" %></span>
+	                                                    </div>
+	                                                </div>
+	                                            </li>
+	                                            <li>
+	                                                <a href="#cameraModal" class="choosecamera" data-toggle="modal" data-target="#cameraModal" id="open_camera"  data-keyboard="false"><i class="fa fa-camera" aria-hidden="true"></i></a>
+	                                            </li>
+	                                        </ul>
+	                                        <% if img.object.name?%>
+	                                            <div class="uploadedimage">
+	                                                <%= link_to img.object.try(:thumb_url) || img.object.try(:s3_url) || "javascript:void(0);", target: '_blank' do%>
+	                                                    <%= image_tag preview_or_default_image_for_file(img.object.name), class: "mCS_img_loaded", alt: "profile image" %>
+	                                                <%end%>
+	                                            </div>
+	                                        <% end %>
+	                                        <%= img.hidden_field :image_data_base64, value: ""%>
+	                                    <% end %>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <div class="shivyog-sepeator"></div>
+	                    <div class="row mg-t30">
+	                        <div class="col-sm-12">
+	                            <div class="headtittle headdetailsCntrl">
+	                                <h2>Personal Information</h2>
+	                                <span class="subheaddetails">(Collection of personal information is meant only for verification purpose. Data remains highly secured in your SYID profile and ShivYog never discloses your personal data to any other organization.)</span>
+	                            </div>
+	                        </div>
+	                        <% unless ff.object.photo_id_proof_type_id.present? %>
+	                            <div class="col-sm-12">
+	                                <div class="box bordered-input dropdown">
+	                                    <label class="asterisk">Photo Id Proof</label>
+	                                    <span class="infodetails info-big">( Name mentioned on photo ID you are uploading should match the name mentioned in basic profile above )</span>
+	                                    <div class="dropdown-field selectTwo-dropdown">
+	                                        <%= ff.select :photo_id_proof_type_id, options_for_select(PhotoIdType.pluck(:name, :id), ff.object.photo_id_proof_type_id), {include_blank: " ----- Select ----- " }, { class: "basic-single", required: 'required' } %>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        <% else %>
+	                            <div class="col-sm-12">
+	                                <div class="prelative">
+	                                    <div class="overlapping <%= 'overlay-active' if ff.object.photo_id_proof_type_id.present? %>"></div>
+	                                    <div class="box bordered-input">
+	                                       <label class="asterisk">Photo Id Proof</label>
+	                                       <div class="dropdown dropdown-field">
+	                                          <input type="text" name="" value="<%= PhotoIdType.find(ff.object.photo_id_proof_type_id).try(:name) %>" class="form-control noBorder field" disabled="true" placeholder="Photo id proof"> 
+	                                       </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        <% end %>
+	                        <div class="col-sm-6">
+	                            <div class="prelative">
+	                                <div class="overlapping <%= 'overlay-active' if ff.object.photo_id_proof_number.present? %>"></div>
+	                                <div class="box bordered-input">
+	                                   <label class="asterisk">Id Proof Number</label>
+	                                   <div class="dropdown dropdown-field">
+	                                      <%= text_field_tag ff.object.photo_id_proof_number.blank? ? "sadhak_profile[advance_profile_attributes][photo_id_proof_number]" : "", ff.object.photo_id_proof_number, class: "form-control noBorder field", required: 'required', disabled: ff.object.photo_id_proof_number.present?, placeholder: "Id proof number"%> 
+	                                   </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <% unless ff.object.address_proof_type_id.present? %>
+	                            <div class="col-sm-6">
+	                                <div class="box bordered-input dropdown">
+	                                    <label>Address Proof</label>
+	                                    <div class="dropdown-field selectTwo-dropdown">
+                                        <%= ff.select :address_proof_type_id, options_for_select(AddressProofType.pluck(:name,:id).uniq, ff.object.address_proof_type_id), { include_blank: " ----- Select ----- " }, { class: "basic-single" } %>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        <% else %>
+	                            <div class="col-sm-6">
+	                                <div class="prelative">
+	                                <div class="overlapping <%= 'overlay-active' if ff.object.address_proof_type_id.present? %>"></div>
+	                                    <div class="box bordered-input">
+	                                       <label>Address Proof</label>
+	                                       <div class="dropdown dropdown-field">
+	                                          <input type="text" name="" value="<%= AddressProofType.find(ff.object.address_proof_type_id).try(:name) %>" class="form-control noBorder field" disabled="true" placeholder="Address proof">
+	                                       </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        <% end %>
+	                        <div class="col-sm-12">
+	                            <div class="prelative">
+	                                <div class="overlapping <%= 'overlay-active' if ff.object.advance_profile_identity_proof.persisted? %>"></div>
+	                                <div class="box bordered-input box-upload prelative identityProof">
+	                                   <div class="clearfix"><label class="asterisk">Upload Photo ID Proof</label>
+	                                   <span class="infodetails info-big">( Face should be clearly visible in photo otherwise photo will be rejected. Please upload only .JPEG or .PNG files Max size 1MB )</span></div>
+	                                    <%= ff.fields_for :advance_profile_identity_proof do |img|%>
+	                                       <div class="clickable">
+	                                            <%= img.file_field :name , onChange: "readURL(this)", required: img.object.name.blank?, 'data-extension': 'image'%>
+	                                            <div class="Custinput"><a class="btn btn-danger" href="">CHOOSE FILE</a> <span><%= img.object.name? ? filename(img.object.try(:name)) : "No file choosen" %></span></div>
+	                                        </div>
+	                                        <% if img.object.name?%>
+	                                            <div class="uploadedimage">
+	                                                <%= link_to img.object.try(:thumb_url) || img.object.try(:s3_url) || "javascript:void(0);", target: '_blank' do%>
+	                                                    <%= image_tag preview_or_default_image_for_file(img.object.name), class: "mCS_img_loaded", alt: "profile image" %>
+	                                                <%end%>
+	                                            </div>
+	                                        <% end %>
+	                                    <% end %>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-sm-12">
+	                            <div class="prelative">
+	                                <div class="overlapping <%= 'overlay-active' if ff.object.advance_profile_address_proof.persisted? %>"></div>
+	                                <div class="box bordered-input box-upload prelative addressProof">
+	                                   <div class="clearfix"><label>Upload Address Proof</label>
+	                                   <span class="infodetails info-big">( Face should be clearly visible in photo otherwise photo will be rejected. Please upload only .JPEG or .PNG files Max size 1MB )</span></div>
+	                                   <%= ff.fields_for :advance_profile_address_proof do |img|%>
+	                                       <div class="clickable">
+	                                            <%= img.file_field :name , onChange: "readURL(this)", 'data-extension': 'image'%>
+	                                            <div class="Custinput"><a class="btn btn-danger" href="">CHOOSE FILE</a> <span><%= img.object.name? ? filename(img.object.try(:name)) : "No file choosen" %></span></div>
+	                                        </div>
+	                                        <% if img.object.name?%>
+	                                            <div class="uploadedimage">
+	                                                <%= link_to img.object.try(:thumb_url) || img.object.try(:s3_url) || "javascript:void(0);", target: '_blank' do%>
+	                                                    <%= image_tag preview_or_default_image_for_file(img.object.name), class: "mCS_img_loaded", alt: "profile image" %>
+	                                                <%end%>
+	                                            </div>
+	                                        <% end %>
+	                                    <% end %>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <div class="row mg-t30">
+	                        <div class="col-sm-12">
+	                            <div class="pannel-btn clearfix">
+	                                <%= link_to 'PREVIOUS', previous_wizard_path(previous: true), class: "btn btn-info mg-r5" %>
+                                  <div class="pull-right">
+                                      <%= link_to 'SKIP', next_wizard_path, class: "btn btn-info mg-r5" unless @event.full_profile_needed? %>
+	                                    <%= f.submit  "SAVE & CONTINUE", class: ' btn btn-info' %>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                <% end %>
+	          	</div>
+            <% end %>
+        </div>
+    </div>
+</div>
+
+<%= render 'sadhak_profiles/capture_image'%>

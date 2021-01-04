@@ -1,0 +1,339 @@
+<% content_for(:title, 'Event | Registration Status') %>
+
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Event</h2>
+        <span class="subheading primary-color primarybold">Event ID: <%= @event.id %></span>
+        <span class="subheading"><%= @event.event_name %></span>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+         <%= render partial: 'events/event_organize_left_panel', locals: { event: @event } %>
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                    <div class="rightContent">
+                        <div id="registrationstatus" class="">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="headtittle text-center">
+                                        <h2>Registration Status</h2>
+                                        <span class="subheading mg-success">Total Registration: <%= @event.valid_event_registrations.count %></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mg-t30">
+                                <div class="col-sm-12">
+                                    <a href="#Refine" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+                                    <div class="refineCntrl collapse in" aria-expanded="true" id="Refine" role="tabpanel">
+                                        <div class="refinesub-group clearfix">
+                                         <form action="" method="get" id="">
+                                            <div class="col-sm-6">
+                                                <div class="outbox">
+                                                    <label>SYID</label>
+                                                    <div class="box bordered-input">
+                                                        <div class="dropdown dropdown-field">
+                                                            <input type="text" class="form-control noBorder field" placeholder="SYID" value="<%= params[:syid] %>" name="syid">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="outbox">
+                                                    <label>Full Name</label>
+                                                    <div class="box bordered-input">
+                                                        <div class="dropdown dropdown-field">
+                                                            <input type="text" class="form-control noBorder field" placeholder="Full name" value="<%= params[:full_name] %>" name="full_name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="outbox">
+                                                    <label>Reg. Ref. Number</label>
+                                                    <div class="box bordered-input">
+                                                        <div class="dropdown dropdown-field">
+                                                            <input type="text" class="form-control noBorder field" placeholder="Reg. ref. number" value="<%= params[:reg_ref_number] %>" name="reg_ref_number">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="outbox">
+                                                    <label>Status</label>
+                                                    <div class="box bordered-input dropdown">
+                                                        <div class="dropdown-field selectTwo-dropdown">
+                                                        <%= select_tag 'status', options_for_select(EventRegistration.statuses.collect{|k, v| [k.downcase.tr("_ ", " ").titleize, k]}, params[:status]), { prompt: "----- Select -----", class: "basic-single"} %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="pannel-btn text-right">
+                                                    <%= link_to "CLEAR", registration_status_event_path(@event), class: "btn btn-danger mg-r10" %>
+                                                    <%= submit_tag 'SEARCH', { class: 'btn btn-info', data: {  disable_with: "SEARCHING...!" } } %>
+                                                </div>
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% unless @event_registrations.present? %>
+                                    <div>
+                                    <%= render partial: 'application/no_records', locals: { message: "No Event Registrations Found." }  %>
+                                    </div>
+                                <% end %>
+                            </div>
+                            <% if @event_registrations.present? %>
+                                <div class="row mg-t30">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                        <div class="col-lg-3">
+                                            <div class="Boxdrop dropdown">
+                                                <%= render 'application/per_page' %> 
+                                            </div>  
+                                        </div>
+                                        <div class="col-lg-9">
+                                            <div class="pannel-btn">
+                                                <ul>    
+                                                    <li><%= link_to "EXPORT CSV", generate_csv_event_registrations_path(event_id: @event.id, format: "csv"), class: "btn btn-info" %></li>
+                                                    <li><%= link_to "EXPORT EXCEL", generate_csv_event_registrations_path(event_id: @event.id, format: "excel"), class: "btn btn-info" %></li>
+                                                    <li><%= link_to "DOWNLOAD SEWA REPORT", generate_sewa_report_event_registrations_path(event_id: @event.id), class: "btn btn-info" %></li>
+                                                    <li><button class="btn btn-info" data-toggle="modal" data-target="#EventEmailExcelReportModal">EMAIL EXCEL REPORT</button></li>
+                                                    <li><button class="btn btn-info" data-toggle="modal" data-target="#EventEmailTallyReportModal">EMAIL TALLY REPORT</button></li>
+                                                    <% if @questionnaire_form_enabled%>
+                                                    <li><%= link_to "DOWNLOAD QUESTIONNAIRE REPORT", download_questionnaire_report_event_path(event_id: @event), class: "btn btn-info", target: '_blank' %></li>
+                                                    <%end%>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="tableCntrl ">
+                                            <div class="table-responsive ">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>Reg. Ref. Number</th>
+                                                            <th class="text-center">Status</th>
+                                                            <!-- <th class="text-center">Entry Card</th> -->
+                                                            <th class="text-center">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <% @event_registrations.each do |event_registration|%>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="textgroup">
+                                                                    <p class="primarybold"><%= event_registration.sadhak_profile.try(:full_name) %></p>
+                                                                    <span><%= event_registration.sadhak_profile.try(:syid) %></span>
+                                                                </div>
+                                                            </td>
+                                                            <td class="width-150"><span class="textoverflow" data-toggle="tooltip" data-placement="top" title="<%= event_registration.event_order.try(:reg_ref_number) %>"><%= event_registration.event_order.try(:reg_ref_number) %></span></td>
+                                                            <td class="text-center primary-color"><%= event_registration.status.downcase.tr("_ ", " ").titleize %></td>
+
+                                                            <% if is_eligible_to_download_shivir_card?(event_registration) %>
+                                                            <td class="text-center">
+                                                                <span class="" title="Entry Card Avaliable - Click to download" onclick=<%= "window.open('#{generate_card_sadhak_profiles_url}?sadhak_profile_id=#{event_registration.sadhak_profile.try(:id)}&reg_ref_number=#{event_registration.reg_ref_number}','_blank');" %>>
+                                                                <a href="javascript:void(0)" class="primary-color"><i class="fa fa-download"></i></a>
+                                                                </span>
+                                                            </td>
+                                                            <% else %>
+                                                            <td class="text-center">
+                                                                <span class="" title="<%= entry_card_download_error_text(event_registration) %>" disabled>
+                                                                <a href="javascript:void(0)" class="primary-color"><i class="fa fa-info-circle"></i></a>
+                                                                </span>
+                                                            </td>
+                                                            <% end if false%>
+                                                            <td class="text-center">
+                                                            <%= link_to "View More", event_registration_detail_event_registration_path(event_registration.id), class: "primary-color", remote: true %>
+                                                            </td> 
+                                                        </tr>
+                                                    <% end %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="table-pagination">
+                                                <div class="show-pgnation">
+                                                    <p class="primarybold"><%= custom_page_entries_info(@event_registrations) %></p>
+                                                </div>
+                                                <%= paginate @event_registrations %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="EventEmailExcelReportModal" class="modal fade Custommodal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="headtittle">Email Excel Report</h2>
+                <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png" %></button>
+            </div>
+            <%= form_for(:report_master, url: process_report_report_master_path(@event_registration_report), method: :post, html: { id: "event_email_excel_report_form" }) do |f| %>
+            <div class="modal-body mCustomScrollbar">
+                  <div class="row">
+                      <div class="col-sm-12">
+                          <div class="tableCntrl">
+                              <div class="table-responsive tableheight mCustomScrollbar">
+                                  <table class="table">
+                                      <thead>
+                                          <th width="20px">
+                                              <div class="CustomCheckbox nobg-Checkbox no-padding">
+                                                  <%= f.check_box :selectAll, onchange: "eventRegistrationReportFieldsSelectAll(this)" %>
+                                                  <label></label>
+                                              </div>
+                                          </th>
+                                          <th></th>
+                                      </thead>
+                                      <tbody>
+                                        <% @event_registration_report.report_master_field_associations.each do |report_master_field_association| %>
+                                          <tr>
+                                              <td width="20px">
+                                                  <div class="CustomCheckbox nobg-Checkbox no-padding">
+                                                      <%= check_box_tag 'report_master[report_master_field_association_ids][]', report_master_field_association.id.to_s, false, { class: "event_registration_report_master_field" } %>
+                                                      <label></label>
+                                                  </div>
+                                              </td>
+                                              <td class="primarybold">
+                                                  <%= report_master_field_association.try(:report_master_field).try(:field_name).try(:titleize) %> 
+                                              </td>
+                                          </tr>
+                                        <% end %>
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-12">
+                          <div class="outbox">
+                              <label class="asterisk">Email Recipients</label>
+                              <div class="box bordered-input">
+                                  <div class="dropdown box-taginput">
+                                      <%= f.text_field :email, required: true, class: "form-control noBorder field box-field tagsinput", "data-role": "tagsinput" %>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <% uniq_token = SecureRandom.uuid %>
+                      <div class="col-sm-12">
+                          <div class="outbox">
+                              <label>Registration by Date</label>
+                              <div class="box outerbox box-Cntrl">
+                                  <div class="rangercode">
+                                      <div class="dropdown-field numbercode">
+                                          <div class="input-group date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker">
+                                              <%= f.text_field :from, placeholder: Date.today.strftime('%b %d, %Y'), class: 'form-control code-input', readonly: true %>
+                                              <span class="input-group-addon">
+                                                  <button class="" type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                              </span>
+                                          </div>
+                                      </div>
+                                      <div class="dropdown-field">
+                                          <label class="middletab">To</label>
+                                      </div>
+                                      <div class="dropdown-field numbercode">
+                                          <div class="input-group date" id="<%= uniq_token %>_end" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker">
+                                              <%= f.text_field :to, placeholder: Date.today.strftime('%b %d, %Y'), class: 'form-control code-input', readonly: true %>
+                                              <span class="input-group-addon">
+                                                  <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                              </span>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <%= f.hidden_field :event_id, { value: @event.id } %>
+                      <%= f.hidden_field :report_master_id, { value: @event_registration_report.id } %>
+                  </div>
+            </div>
+            <div class="modal-footer">
+              <div class="pannel-btn text-right">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+                    <button class="btn btn-info">SUBMIT</button>
+              </div>
+            </div>
+            <% end %>
+        </div>
+    </div>
+</div>
+
+<div id="EventEmailTallyReportModal" class="modal fade Custommodal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="headtittle">Email Tally Report</h2>
+                <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png" %></button>
+            </div>
+            <%= form_for(:report_master, url: generate_report_report_master_path(@event_registration_tally_report), method: :get, html: { id: "event_email_tally_report_excel_form"}) do |f| %>
+            <div class="modal-body mCustomScrollbar">
+                  <div class="row mg-t30">
+                      <div class="col-sm-12">
+                          <div class="outbox">
+                              <label class="asterisk">Email Recipients</label>
+                              <div class="box bordered-input">
+                                    <div class="dropdown box-taginput">
+                                        <%= f.text_field :email, required: true, class: "form-control noBorder field box-field tagsinput", "data-role": "tagsinput" %>
+                                    </div>
+                                </div>
+                          </div>
+                      </div>
+                      <% uniq_token = SecureRandom.uuid %>
+                      <div class="col-sm-12">
+                          <div class="outbox">
+                              <label>Registration by Date</label>
+                              <div class="box outerbox box-Cntrl">
+                                  <div class="rangercode">
+                                      <div class="dropdown-field numbercode">
+                                          <div class="input-group date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker">
+                                              <%= f.text_field :from, placeholder: Date.today.strftime('%b %d, %Y'), class: 'form-control code-input', readonly: true %>
+                                              <span class="input-group-addon">
+                                                  <button class="" type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                              </span>
+                                          </div>
+                                      </div>
+                                      <div class="dropdown-field">
+                                          <label class="middletab">To</label>
+                                      </div>
+                                      <div class="dropdown-field numbercode">
+                                          <div class="input-group date" id="<%= uniq_token %>_end" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker">
+                                              <%= f.text_field :to, placeholder: Date.today.strftime('%b %d, %Y'), class: 'form-control code-input', readonly: true %>
+                                              <span class="input-group-addon">
+                                                  <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                              </span>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-12">
+                          <div class="CustomCheckbox nobg-Checkbox no-padding">
+                              <%= f.check_box :for_cash_and_dd, onchange: "switchToCashDDTallyReport(this)", data: {event_registration_cash_dd_tally_report_url: generate_report_report_master_path(@event_registration_dd_cash_tally_report), event_registration_tally_report_url: generate_report_report_master_path(@event_registration_tally_report)} %>
+                              <label>For Cash & DD</label>
+                          </div>
+                      </div>
+                      <%= f.hidden_field :event_id, { value: @event.id } %>
+                  </div>
+            </div>
+            <div class="modal-footer">
+                <div class="pannel-btn text-right">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+                    <button class="btn btn-info">SUBMIT</button>
+                </div>
+            </div>
+            <% end %>
+        </div>
+    </div>
+</div>

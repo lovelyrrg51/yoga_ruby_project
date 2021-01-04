@@ -1,0 +1,59 @@
+<% content_for(:title, 'Admin | Dashboard Widget Config') %>
+
+<div class="adminCntrl">
+	<div class="headingtittle-h2 text-center">
+		<h2>Admin Panel</h2>
+	</div>
+	<div class="row">
+		<div class="overflow-row">
+			<%= render 'admin/admin_left_panel' %>
+			<div class="rightCntrl">
+			    <div class="boxsection-lg boxsection-xs boxshadow prelative">
+			        <div class="rightContent">
+			          <div id="dashboard_widget_configs">
+			              <div class="row">
+			                  <div class="col-sm-12 mg-b30">
+			                       <div class="headtittle text-center">
+			                          <h2>Dashboard Widget Configs</h2>
+			                      </div>
+			                  </div>
+			                  <div class="col-sm-12">
+			                  </div>
+			                  <% if @dashboard_widget_configs.present? %>
+			                    <div class="col-sm-12">
+			                        <div class="tableCntrl">
+			                            <div class="table-responsive tableScrollbar">
+			                                <table class="table">
+			                                    <thead>
+			                                        <tr>
+			                                            <th>Name</th>
+			                                            <th>Visibility</th>
+			                                            <th class="text-center">Action</th>
+			                                        </tr>
+			                                    </thead>
+			                                    <tbody>
+			                                      <% @dashboard_widget_configs.each do |dashboard_widget_config|%>
+			                                        <tr>
+			                                            <td><%= dashboard_widget_config.name %></td>
+			                                            <td><%= dashboard_widget_config.is_visible %></td>
+			                                            <td class="text-center">
+			                                                <%= link_to "", edit_dashboard_widget_config_path(dashboard_widget_config), class: "mg-r10 primary-color fa fa-pencil" %>
+			                                            </td>
+			                                        </tr>
+			                                      <% end %>
+			                                    </tbody>
+			                                </table>
+			                            </div>
+			                        </div>
+			                    </div>
+			                  <% else %>
+			                    <%= render partial: 'application/no_records', locals: {message: 'No Dashboard Widget Config Found.'} %>
+			                  <% end %>
+			              </div>
+			          </div>
+			        </div>
+			    </div>
+			</div>
+		</div>
+	</div>    
+</div>

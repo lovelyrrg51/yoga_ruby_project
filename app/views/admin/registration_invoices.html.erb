@@ -1,0 +1,28 @@
+<% content_for(:title, 'Registration Invoice') %>
+<div class="adminCntrl">
+<div class="headingtittle-h2 text-center">
+    <h2>Admin Panel</h2>
+</div>
+<div class="row">
+    <div class="overflow-row">
+        <%= render 'admin/admin_left_panel' %>
+        <div class="rightCntrl">
+            <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                <div class="rightContent">
+                    <div id="RegistrationInvoices" class="">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="headtittle text-center">
+                                    <h2>Registration Invoices</h2>
+                                </div>
+                            </div>
+                            <%= render partial: 'application/invoices', locals: {clear_path: registration_invoices_admin_index_path, event_registrations: @event_registrations, event: @event} %>
+                        </div>
+                    </div>                              
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<%= render 'application/global_search_shivyog_forum' %>

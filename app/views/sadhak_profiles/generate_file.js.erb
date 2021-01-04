@@ -1,0 +1,7 @@
+<% if @error.present? %>
+  toastr.error("<%= @error %>");
+<% else %>
+	$('#email_list').find('#recipients').tagsinput('removeAll');
+  $('#email_list').modal('hide');
+  toastr.success("<%= @success %>");
+<% end %>

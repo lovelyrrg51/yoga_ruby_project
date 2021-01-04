@@ -1,0 +1,71 @@
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Event</h2>
+        <span class="subheading"><%= @event.event_name_with_location %></span>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+            <%= render partial: 'events/event_organize_left_panel', locals: {event: @event} %>
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                    <div class="rightContent">
+                        <div id="photoadmin">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="headtittle text-center">
+                                        <h2>Photo Approval Admin</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <%= render partial: 'role_dependencies/form', locals: {role_dependency: @role_dependency, role_dependable_type: 'Event', role_dependable_id: @event.id, role: @role} %>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="tableCntrl ">
+                                        <div class="table-responsive ">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>SYID</th>
+                                                        <th>Name</th>
+                                                        <th>From Date</th>
+                                                        <th>To Date</th>
+                                                        <th class="text-center">Option</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <% @role_dependencies.each do |role_dependency| %>
+                                                    <tr>
+                                                      <td><%= role_dependency.sadhak_profile.syid %></td>
+                                                      <td><p class="primarybold"><%= role_dependency.sadhak_profile.full_name %></p></td>
+                                                      <td><%= role_dependency.start_date.try(:strftime, '%b %d, %Y') %></td>
+                                                      <td><%= role_dependency.end_date.try(:strftime, '%b %d, %Y') %></td>
+                                                      <td class="text-center">
+                                                          <%= link_to photo_approval_admin_event_path(@event, role_dependency_id: role_dependency.id), {class: 'action primary-color'} do %>
+                                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                          <% end %>
+                                                          <%= link_to role_dependency, {method: 'delete', data: { confirm: 'Are you sure?' }, class: 'action primary-color'} do %>
+                                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                          <% end %>
+                                                      </td>
+                                                    </tr>
+                                                  <% end %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="table-pagination">
+                                          <div class="show-pgnation">
+                                            <p class="primarybold"><%= custom_page_entries_info(@role_dependencies) %></p>
+                                          </div>
+                                          <%= paginate @role_dependencies %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
+

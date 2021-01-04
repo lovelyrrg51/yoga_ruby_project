@@ -1,0 +1,2 @@
+module PgCashPaymentTransactionsHelper
+end

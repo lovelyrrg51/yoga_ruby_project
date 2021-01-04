@@ -1,0 +1,105 @@
+<% content_for(:title, 'Admin | Payment Modes') %>
+
+<div class="adminCntrl">
+	<div class="headingtittle-h2 text-center">
+		<h2>Admin Panel</h2>
+	</div>
+	<div class="row">
+		<div class="overflow-row">
+		    <%= render 'admin/admin_left_panel' %>
+		    <div class="rightCntrl">
+		        <div class="boxsection-lg boxsection-xs boxshadow prelative">
+
+		            <div class="rightContent">
+		              <div id="payment_modes">
+		                  <div class="row">
+		                      <div class="col-sm-12 mg-b30">
+		                           <div class="headtittle text-center">
+		                              <h2>Payment Modes</h2>
+		                          </div>
+		                      </div>
+		                      <div class="col-sm-12">
+		                          <%= render "payment_modes/form"%>
+		                          <a href="#Registercenters" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+		                          <div class="refineCntrl collapse in" aria-expanded="true" id="Registercenters" role="tablist">
+		                            <form action="<%= payment_modes_path %>" class="table-screen-next">
+		                              <div class="refinesub-group">
+		                                  <div class="row">
+		                                      <div class="col-sm-6">
+		                                          <div class="outbox">
+		                                              <label>Search By Name</label>
+		                                              <div class="box bordered-input">
+		                                                 <div class="dropdown dropdown-field">
+		                                                    <input type="text" class="form-control noBorder field" placeholder="Search name" name="mode_name", value="<%= params[:mode_name] %>">  
+		                                                 </div>
+		                                              </div>
+		                                          </div>
+		                                      </div>
+		                                      <div class="col-sm-6">
+		                                          <div class="outbox">
+		                                              <label>Search By Group</label>
+		                                              <div class="box bordered-input dropdown">
+		                                                 <div class="dropdown-field selectTwo-dropdown">
+		                                                    <%= select_tag(:group_name , options_for_select(PaymentMode.group_names.collect{|k,v| [k.titleize,v] }, params[:group_name]), { include_blank: " ----- Select -----", class: 'basic-single'}) %> 
+		                                                 </div>
+		                                              </div>
+		                                          </div>
+		                                      </div>
+		                                      <div class="col-sm-12">
+		                                          <div class="pannel-btn text-right">
+		                                              <%= link_to "CLEAR", payment_modes_path, class: 'btn btn-danger mg-r10' %>
+		                                              <button class="btn btn-info">SEARCH</button>
+		                                          </div>
+		                                      </div>
+		                                  </div>
+		                              </div>
+		                            </form>
+		                          </div>
+		                      </div>
+		                      <% if @payment_modes.present? %>
+		                        <div class="col-sm-12">
+		                            <div class="tableCntrl">
+		                                <div class="table-responsive tableScrollbar">
+		                                    <table class="table">
+		                                        <thead>
+		                                            <tr>
+		                                                <th>Name</th>
+		                                                <th>Short Code</th>
+		                                                <th>Group Name</th>
+		                                                <th class="text-center">Action</th>
+		                                            </tr>
+		                                        </thead>
+		                                        <tbody>
+		                                          <% @payment_modes.each do |payment_mode|%>
+		                                            <tr>
+		                                                <td><%= payment_mode.try(:name) %></td>
+		                                                <td><%= payment_mode.try(:shortcode) %></td>
+		                                                <td><%= payment_mode.try(:group_name).try(:titleize) %></td>
+		                                                <td class="text-center">
+		                                                    <%= link_to "", edit_payment_mode_path(payment_mode), class: "mg-r10 primary-color fa fa-pencil" %>
+		                                                    <%= link_to "", payment_mode_path(payment_mode), method: :delete,data: { confirm: "Are you sure?" }, class: " primary-color fa fa-trash-o"%>
+		                                                </td>
+		                                            </tr>
+		                                          <% end %>
+		                                        </tbody>
+		                                    </table>
+		                                </div>
+		                                <div class="table-pagination">
+		                                    <div class="show-pgnation">
+		                                        <p class="primarybold"><%= custom_page_entries_info(@payment_modes) %></p>
+		                                    </div>
+		                                    <%= paginate @payment_modes %>
+		                                </div>
+		                            </div>
+		                        </div>
+		                      <% else %>
+		                        <%= render partial: 'application/no_records', locals: {message: 'No Payment Modes Found.'} %>
+		                      <% end %>
+		                  </div>
+		              </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</div>    
+</div>

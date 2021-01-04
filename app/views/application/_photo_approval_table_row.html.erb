@@ -1,0 +1,54 @@
+<% profile_status_text = cumulative_photo_and_photo_id_status_text(sadhak_profile) %>
+<% is_pending = profile_status_text == 'Pending' %>
+<tr class="photo_approval_sadhak_profile_row_<%= cumulative_photo_and_photo_id_status_rails_class(sadhak_profile) %> <%= is_pending ? '' : 'tableoverlay' %>" id="photo_approval_sadhak_profile_row_<%= sadhak_profile.syid %>">
+    <td>
+        <div class="CustomCheckbox">
+            <input type="checkbox" name="check">
+            <% if is_pending %>
+              <%= check_box_tag "", "", false, class: 'rails_photo_approval_sadhak_select_checkbox', data: {syid: "#{sadhak_profile.syid}", sadhak_profile_id: "#{sadhak_profile.id}", status: "#{profile_status_text.downcase}" } %>
+              <label></label>
+            <% else %>
+              <%= check_box_tag "", "", false, {disabled: true} %>
+            <% end %>
+            <label></label>
+        </div>
+    </td>
+    <td>
+        <div class="textgroup">
+            <p class="primarybold"><%= sadhak_profile.full_name %></p>
+            <span><%= sadhak_profile.syid %></span>
+        </div>
+    </td>
+    <td><%= sadhak_profile.date_of_birth.try(:strftime, '%b %d, %Y')%></td>
+    <td>
+      <div class="profileimg">
+        <% if sadhak_profile.try(:advance_profile).try(:advance_profile_photograph).try(:s3_url).present? %>
+          <img data-role="<%= is_pending ? 'ezPlus' : '' %>" src=<%= sadhak_profile.try(:advance_profile_thumb_url) %> alt="" class='width40'>
+        <% else %>
+          <%= image_tag('profile.png', alt: "", class: 'width40') %>
+        <% end %>
+      </div>
+    </td>
+    <td>
+      <div class="profileimg">
+        <% if sadhak_profile.try(:advance_profile).try(:advance_profile_identity_proof).try(:s3_url).present? %>
+          <img data-role="<%= is_pending ? 'ezPlus' : '' %>" src=<%= sadhak_profile.try(:advance_profile_identity_proof_thumb_url) %> alt='' data-zoom-image=<%= sadhak_profile.try(:advance_profile_identity_proof_s3_url)%> class='width40'>
+        <% else %>
+          <%= image_tag('nophoto.jpg', alt: '', class: 'width40') %>
+        <% end %>
+      </div>
+    </td>
+    <td class="text-center">
+        <div class="dropover dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+            </button>
+              <ul class="dropdown-menu">
+                <% if is_pending %>
+                  <li class="active"><a href="javascript:void(0)" onclick="createAndSubmitApproveRejectForm('approve')" data-id="<%= sadhak_profile.id %>" data-event-id='<%= event.try(:id) %>'>Approve</a></li>
+                  <li><a data-toggle="modal" data-target="#photo_approval_sadhak_profile_rejection_reasons_modal" data-id="<%= sadhak_profile.id %>" data-event-id='<%= event.try(:id) %>' class="photo_approval_admin_panel_sadhak_profile_reject">Reject</a></li>
+                <% end %>
+              </ul>
+        </div>
+    </td>
+    <td class="primary-color text-center"><%= profile_status_text %></td>
+</tr>

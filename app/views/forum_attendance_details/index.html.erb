@@ -1,0 +1,57 @@
+<% content_for(:title, 'Forum Attendance | index') %>
+<%= link_to "BACK", sy_club_forum_attendance_path(@sy_club), class: "btn btn-info" %>
+<div class="headingtittle-h2 text-center">
+    <h2>Forums</h2>
+    <span class="subheading primary-color primarybold">Forum ID: <%= @sy_club.id %></span>
+    <span class="subheading">ShivYog Forum <strong class="texttransform"><%= @sy_club.name.try(:titleize) %></strong></span>
+</div>
+<div class="boxsection-lg boxshadow prelative boxsection-xs">
+    <div class="row">
+        <%= render "form", locals: { forum_attendance_detail: @forum_attendance_detail}%>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="tableCntrl mCustomScrollbar">
+                    <div class="table-responsive tableScrollbar">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No</th>
+                                    <th>Forum Name</th>
+                                    <th>Episode</th>
+                                    <th>Conducted On</th>
+                                    <th>Last Updated on</th>
+                                    <th>Last Updated By</th>
+                                    <th>Edit Count</th>
+                                    <th>Action</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              <% (@forum_attendance_details || []).reverse.each.with_index(1) do |ftd, index| %>
+                                <tr>
+                                    <td><%= index %></td>
+                                    <td><%= ftd.sy_club.name %></td>
+                                    <td><%= ftd.digital_asset.asset_name %></td>
+                                    <td><%= ftd.conducted_on.strftime('%b %d, %Y %I:%M %p')%></td>
+                                    <td><%= ftd.created_at.strftime('%b %d, %Y %I:%M %p')%></td>
+                                    <td><%= ftd.who_last_updated_sadhak_profile.syid%></td>
+                                    <td><%= ftd.edit_count %></td>
+                                    <td>
+                                        <%= link_to edit_sy_club_digital_asset_forum_attendance_detail_path(@sy_club, @digital_asset, ftd), class: " primary-color" do %>
+                                            <i class="fa fa-pencil" aria-hidden="true" data-toggle="tooltip" title="Edit Attendance Detail"></i>
+                                        <%end%>
+                                        <% link_to "EDIT",edit_sy_club_digital_asset_forum_attendance_detail_path(@sy_club, @digital_asset, ftd), class: " btn btn-info" %>
+                                    </td>
+                                    <td>
+                                        <%= link_to "MARK", sy_club_digital_asset_forum_attendance_detail_path(@sy_club, @digital_asset, ftd), class: "btn btn-info","data-toggle": "tooltip", title: "Mark Forum Attendance" %>
+                                    </td>
+                                </tr>
+                              <% end %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

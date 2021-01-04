@@ -1,0 +1,5 @@
+<%= content_tag :li, class: current_page.first? ? 'previous disabled' : 'previous' do %>
+  <%= link_to current_page.first? ? 'javascript:void(0)' : url, :rel => 'prev', :remote => remote, class: 'paginate_button previous' do %>
+    <i class="fa fa-angle-left" aria-hidden="true"></i>
+  <% end %>
+<% end %>

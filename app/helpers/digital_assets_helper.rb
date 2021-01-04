@@ -1,0 +1,2 @@
+module DigitalAssetsHelper
+end

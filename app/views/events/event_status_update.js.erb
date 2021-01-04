@@ -1,0 +1,13 @@
+<% if @message.present? %>
+	toastr.error("<%= @message %>");
+<% else %>
+	toastr.success("<%= @success %>");
+	$("#update_event_status span#status-text").html("<%= @event.status.titleize %>");
+	$("#update_event_status ul.list-unstyled").html("<%= j render 'event_statuses' %>");
+  $("#update_event_status").toggleClass("open");
+  <% if @event.cancelled? %>
+    $("div.shivir-details-overlapping-div").addClass("overlay-active");
+  <% else %>
+  $("div.shivir-details-overlapping-div").removeClass("overlay-active");
+  <% end %>
+<% end %>

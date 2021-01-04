@@ -1,0 +1,2 @@
+class PgSywiretransferMerchant < ApplicationRecord
+end

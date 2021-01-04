@@ -1,0 +1,77 @@
+<div id="eventTransactionDetailsModal" class="modal fade Custommodal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="headtittle">Event Application Details</h2>
+                    <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag("close.png") %></button>
+                </div>
+            <div class="modal-body mCustomScrollbar">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form action="<%= (@event_order.pending? || @event_order.failure?) ? update_status_event_order_path(@event_order) : '' %>" method="get">
+                            <div class="tableCntrl tableCntrllist">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td data-th="Status">
+                                                    <div class="box bordered-input dropdown">
+                                                        <div class="dropdown-field selectTwo-dropdown">
+                                                            <%= select_tag 'status', options_for_select(EventOrder.statuses.collect{|k, v| [k.titleize, v]}, EventOrder.statuses[@event_order.status]), { class: 'simple-single' } %>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <% if @event_order.pending? || @event_order.failure? %>
+                                                    <td data-th="New Transaction Id">
+                                                        <div class="outbox">
+
+                                                            <div class="box bordered-input">
+                                                            <div class="dropdown dropdown-field">
+                                                                <input type="text" class="form-control noBorder field" placeholder="Transaction id" value="" name="transaction_id" required>  
+                                                            </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>    
+                                                <% end %>
+                                                <td data-th="Transaction Id"><%= event_order.try(:transaction_id) || "-" %></td>
+                                                <td data-th="Reg Ref Number"><span class="textoverflow"><%= event_order.try(:reg_ref_number) || "-" %></span></td>
+                                                <td data-th="Payment Method"><%= event_order.try(:payment_method) || "-" %></td>
+                                                <td data-th="Registered By">
+                                                    <div class="textgroup">
+                                                        <p class="primarybold"><%= event_order.try(:user).try(:sadhak_profile).try(:full_name) || "Guest User" %></p>
+                                                        <span><%= event_order.try(:user).try(:sadhak_profile).try(:syid) || "" %></span>
+                                                    </div>
+                                                </td>
+                                                <td data-th="Registered Sadhaks">
+                                                    <ul class="listsadhak">
+                                                        <% (event_order.try(:sadhak_profiles) || []).each do |sadhak_profile| %>
+                                                            <li><span class="primarybold"><%= sadhak_profile.try(:full_name) %></span></li>
+                                                        <% end %>
+                                                    </ul>
+                                                </td>
+                                                <td data-th="Created Date">
+                                                    <div class="textpanel">
+                                                        <p class="primarybold"><%= event_order.try(:created_at).try(:strftime, ('%b %d, %Y')) %></p>
+                                                        <span class="senary-color"><%= event_order.try(:created_at).try(:strftime, ("%I:%M:%S %p")) %></span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <% if @event_order.pending? || @event_order.failure? %>
+                                <div class="pannel-btn panel-sm">
+                                    <button type="submit" class="btn btn-info">SUBMIT</button>
+                                </div>
+                            <% end %>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+            </div>
+        </div>
+    </div>
+</div>

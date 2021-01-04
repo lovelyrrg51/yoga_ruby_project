@@ -1,0 +1,50 @@
+<% if @message.present? %>
+
+  toastr.error("<%= @message %>");
+
+<% else %>
+
+    <% if (@event.full_profile_needed? && !@sadhak_profile.completed?)  || (@event.is_ashram_residential_shivir? && !@has_other_info) || !@sadhak_profile.is_basic_profile_complete?%>
+
+    window.location = "<%= event_sadhak_profile_sadhak_profile_steps_path(@event, @sadhak_profile) %>";
+
+    <% else %>
+
+        var appearance = _.find($('tr.lineItemRow'), function (tr) {
+            return $(tr).attr('data-sadhak') === "<%= @from_syid %>";
+        });
+
+        var addedMemberlist = $('tr.lineItemRow').filter(function() {
+            return $(this).attr('data-sadhak').match(/SY\d+/);
+        });
+
+        var isAlreadyAdded = _.find(addedMemberlist, function (tr) {
+            return $(tr).attr('data-sadhak') === "<%= @sadhak_profile.syid %>";
+        });
+
+        if(!isAlreadyAdded) {
+
+            $(appearance).find('td.sadhak_profile_data div.textgroup p.primarybold').text("<%= @sadhak_profile.full_name %>");
+            $(appearance).find('td.sadhak_profile_data div.textgroup span').text("<%= @sadhak_profile.try(:syid) %>");
+            $(appearance).find('td.sadhak_profile_data div.textgroup').find("input[type='hidden']").val("<%= @sadhak_profile.id %>");
+            $(appearance).attr('data-sadhak', "<%= @sadhak_profile.try(:syid) %>");
+
+            $("div.event-registration.forgotsyid").addClass('hidden');
+            $("div.registeredshivyog").removeClass('hidden');
+            
+            $("form#event_register_syid_search_form").trigger('reset');
+            $("form#event_register-forgot-syid-form").trigger('reset')
+                                                    .find("select").trigger("change");
+
+            $('div#shadhakeditmodal').modal('hide');    
+
+        } else {
+
+          toastr.error("<%= @sadhak_profile.syid + '-' + @sadhak_profile.full_name %> is already added to the list.");
+
+        }
+
+
+    <% end %>
+
+<% end %>

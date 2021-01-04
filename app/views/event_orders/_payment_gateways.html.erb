@@ -1,0 +1,73 @@
+<% _amount = defined?(amount) ? amount : nil %>
+<div class="col-sm-12">
+    <div class="headtittle">
+        <h2>Payment Option</h2>
+    </div>
+    <div class="paymenttab mg-t30">
+        <ul class="nav nav-tabs nav-Customtab">
+        <% if event_online_payment_gatways(@event).size > 0 %>
+            <li class="active onlinePaymentTab"><a data-toggle="tab" href="javascript:void(0)" data-target="#onlinepayment">Online Payment</a></li>
+        <% end %>
+        <% if event_offline_payment_gateways(@event).size > 0 %>
+            <li><a class="offlinePaymentTab" data-toggle="tab" href="javascript:void(0)" data-target="#offlinepayment">Offline Payment</a></li>
+        <% end %>
+        </ul>
+        <div class="tab-content Custtab-content">
+            <% if event_online_payment_gatways(@event).size > 0 %>
+            <div id="onlinepayment" class="tab-pane fade in active">
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <ul class="custnav-pills">
+                            <% event_online_payment_gatways(@event).each_with_index do |ga, index| %>
+                            <li>
+                                <div class="Custradio">
+                                    <input <%= index == 0 ? 'checked=checked' : '' %> type="radio" name="online" data-id=<%= "#{index}_#{ga[:gateway_alias_name]}" %> data-type="online" value=<%= ga[:gateway_alias_name] %> class='radiotype payment_gateway_radio_button'>
+                                    <label for=<%= ga[:gateway_alias_name] %>><%= (event_online_payment_gatways(@event).size == 1 ? ga[:gateway_name] : ga[:gateway_alias_name]).humanize %></label>
+                                </div>
+                            </li>
+                            <% end %>
+                        </ul>
+                    </div>
+                    <div class="col-md-8 col-sm-12">
+                        <div class="tab-content Custpayment-maintab">
+                            <% event_online_payment_gatways(@event).each_with_index do |ga, index| %>
+                                <div data-type="online" style="display: <%= index.zero? ? 'block' : 'none' %>;" id=<%= "#{index}_#{ga[:gateway_alias_name]}" %> class='payment_gateway_display_div'>
+                                <%= render partial: ga[:partial_path], locals: {gateway: ga[:gateway_association].payment_gateway, event_order_id: EventOrder.find(params[:id]).try(:id), amount: _amount.present? ? _amount.rnd : registration_payment_summary(@event_order.event_order_line_items)[:total_payable_amount].rnd, currency: @event.currency_code, is_india_event: @event.country_id == 113} %>
+                                </div>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% end %>
+            <% if event_offline_payment_gateways(@event).size > 0 %>
+            <div id="offlinepayment" class="tab-pane fade">
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <ul class="custnav-pills">
+                        <% event_offline_payment_gateways(@event).each_with_index do |ga, index| %>
+                            <li class="active">
+                                <div class="Custradio">
+                                    <input <%= index == 0 ? 'checked=checked' : '' %> type="radio" name="offline" data-id=<%= "#{index}_#{ga[:gateway_alias_name]}" %> data-type="offline" value=<%= ga[:gateway_alias_name] %> class='radiotype payment_gateway_radio_button'>
+                                    <label for=<%= ga[:gateway_alias_name] %>><%= ga[:gateway_alias_name] %></label>
+                                </div>
+                            </li>
+                        <% end %>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-md-8 col-sm-12">
+                        <div class="tab-content">
+                            <% event_offline_payment_gateways(@event).each_with_index do |ga, index| %>
+                            <div data-type="offline" style="display: <%= index.zero? ? 'block' : 'none' %>;" id=<%= "#{index}_#{ga[:gateway_alias_name]}" %> class='payment_gateway_display_div'>
+                                <%= render partial: ga[:partial_path], locals: { gateway: ga[:gateway_association].try(:payment_gateway), event_order_id: EventOrder.find(params[:id]).try(:id), amount: _amount.present? ? _amount.rnd : registration_payment_summary(@event_order.event_order_line_items)[:total_payable_amount].rnd, currency: @event.currency_code } %>
+                            </div>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% end %>  
+        </div>
+    </div>
+</div>

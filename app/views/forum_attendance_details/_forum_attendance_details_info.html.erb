@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="tableCntrl tableCntrllist">
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td data-th="Forum Name">
+                              <%= @sy_club.name %>
+                            </td>
+                            <td data-th="Forum ID">
+                              <%= @sy_club.id %>
+                            </td>
+                            <td data-th="Episode Name">
+                              <%= @digital_asset.asset_name %>
+                            </td>
+                            <td data-th="Published On">
+                              <%= @digital_asset.published_on.strftime("%a %e %b %Y") %>
+                            </td>
+                            <td data-th="Conducted On Date">
+                              <%= @forum_attendance_detail.conducted_on.strftime("%a %e %b %Y") %>
+                            </td>
+                            <td data-th="Conducted On Time">
+                              <%= @forum_attendance_detail.conducted_on.strftime("%I:%M %p") %>
+                            </td>                            
+                            <td data-th="Venue">
+                              <%= @forum_attendance_detail.venue.present? ? @forum_attendance_detail.venue : @sy_club.full_address %>
+                            </td>
+                            <td data-th="Attendance Percentage(%)"><%= @forum_attendance_detail.attendance_percentage %> ( <%= @forum_attendance_detail.forum_attendances.select(&:is_attended).size %> / <%= @forum_attendance_detail.forum_attendances.size%>)</td>
+                            <td data-th="Edit Count"><%= @forum_attendance_detail.edit_count %></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

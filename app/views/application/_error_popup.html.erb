@@ -1,0 +1,17 @@
+<div id="error_popup_modal" class="modal fade Custommodal" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header" style="background: #990000">
+            <h2 class="headtittle" style="color: #fff"> Error </h2>
+            <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png", alt: "close"%></button>
+        </div>
+        <div class="modal-body mCustomScrollbar enablePopups">
+            <div class="row">
+              <div class="col-sm-12 primary-color" id="modal-content-text">
+                <%= @message%>
+              </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>

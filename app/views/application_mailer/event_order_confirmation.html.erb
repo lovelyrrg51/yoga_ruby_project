@@ -1,0 +1,138 @@
+<% payment = @options[:payment] %>
+<% gateway = @options[:gateway] %>
+<% event_order = @options[:event_order] %>
+<% line_items = @options[:line_items] %>
+<% is_fresh_order = @options[:is_fresh_order] %>
+<% if payment.present? and gateway.present? and event_order.present? %>
+  <tr>
+    <td style="padding: 20px 30px; background: #f8f8f8;" colspan="2">
+        <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+            <tr>
+                <td style="text-align: center;">
+                  <div style="margin: 20px 0 5px">
+                    <img src='data:image/png;base64,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'/>
+                    <span style="text-align: center; display: block; color: #666; font-weight: 700; font-size: 22px; margin: 20px 0 0;">
+                    <% if payment.present? and gateway.present? %>
+                      <% if is_fresh_order %>
+                        Registration Successful
+                      <% else %>
+                        Registration Updated
+                      <% end %>
+                    <% else %>
+                      Something went wrong.
+                    <% end %>
+                    </span>
+                  </div>
+                  <p style="margin: 0 0 30px; color: #909090; font-size: 15px; font-weight: 400;">Please find the details regarding registration(s)</p>
+                  <table style="margin: 40px 0 20px;">
+                    <tbody>
+                      <tr>
+                        <td style="font-size: 14px; text-transform: uppercase; font-weight: 500; color: #333; text-align: left; padding: 0 12px 6px 0;">Event Name :</td>
+                        <td style="font-size: 14px; color: #990000; padding: 0 0 6px; text-align: left; font-weight: 500;"><%= event_order.event.try(:event_name_with_location) %></td>
+                      </tr>
+                      <tr>
+                        <td style="font-size: 14px; text-transform: uppercase; font-weight: 500; color: #333; text-align: left; padding: 0 12px 6px 0;">Transaction id :</td>
+                        <td style="font-size: 14px; color: #990000; padding: 0 0 6px; text-align: left; font-weight: 500;"><%= payment.try(:transaction_number) %></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6"><p style="margin: 20px 0 15px; font-weight: 600;">Sadhak Profiles</p></td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                  <table cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+                    <thead style="font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc;">
+                      <tr>
+                        <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Sl. No.</th>
+                        <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Reg. No.</th>
+                        <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Name / SYID</th>
+                        <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Seating Category</th>
+                        <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Status</th>
+                        <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Remarks <sup style="color: #990000; font-size: 15px;">*</sup></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% line_items.each_with_index do |line_item, index| %>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= index+1 %></td>
+                            <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%=(line_item.event_registration.try(:serial_number).to_i + 100)%></td>
+                            <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;">
+                                <p style="display: block; font-weight: 500;"><%= line_item.sadhak_profile.try(:full_name).try(:titleize) %></p>
+                                <span style="display: block; font-weight: 500; font-size: 12px; color: #990000;"><%= line_item.sadhak_profile.try(:syid) %></span>
+                            </td>
+                            <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= line_item.event_seating_category_association.try(:seating_category).try(:category_name).try(:titleize) || "NA" %></td>
+                            <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= EventOrder.template_status_mapper[line_item.status] %></td>
+                            <% if line_item.sadhak_profile.profile_photo_status == 'pp_success' and line_item.sadhak_profile.photo_id_status == 'pi_success' && false%>
+                              <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px; color: #008000;">
+                                Please print the attached entry card
+                              </td>
+                            <% else %>
+                              <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;">
+                                <a href=<%= "#{Rails.application.config.app_base_url}/v1/sadhak_profiles/#{line_item.sadhak_profile.slug}/edit" %> style="color: #990000;">Click here</a> to update your photo and photo ID proof.
+                              </td>
+                            <% end %>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </td>
+            </tr>
+            <tr>
+              <td colspan="7">
+                <p style="margin: 40px 0 15px; font-weight: 600;">Event Registration Details</p>
+                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%; margin: 0 0 30px;">
+                  <thead style="font-size: 12px; color: #333; text-transform: uppercase; background: #fff8dc;">
+                    <tr>
+                      <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;"><%= event_order.event.product? ? 'Product' : 'Event' %> </th>
+                      <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;"><%= event_order.event.product? ? 'Product Expiry Date' : 'Event Start Date' %> </th>
+                      <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;"><%= event_order.event.product? ? 'Product Expiry Date' : 'Event End Date' %> </th>
+                      <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Registration Reference No. </th>
+                      <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Payment Method </th>
+                      <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Payment Status </th>
+                      <th style="padding: 8px 12px; border: 1px solid #ccc; text-align: left;">Total Amount Paid </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= event_order.event.try(:event_name_with_location) %></td>
+                        <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= event_order.event.event_start_date.try(:strftime, "%b, %d %Y") %></td>
+                        <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= event_order.event.event_end_date.try(:strftime, "%b, %d %Y") %></td>
+                        <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px; color: #990000"><%= event_order.try(:reg_ref_number) %></td>
+                        <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px;"><%= event_order.payment_method %></td>
+                        <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px; color: #008000;"><%= EventOrder.payment_status_mapper[payment.status] %></td>
+                        <td style="padding: 10px; border: 1px solid #ccc; font-size: 13px; font-weight: 600;"><b><%= event_order.event.try(:currency_code) %> <%= '%.2f' % payment.amount.to_f.round(2) %></td>
+                    </tr>
+                      <tr>
+                          <td colspan="5" style="padding: 10px; border: 1px solid #ccc; font-size: 14px; font-weight: 600; text-align: center;">Net Amount</td>
+                          <td colspan="2" style="padding: 10px; border: 1px solid #ccc; font-size: 16px; font-weight: 600; text-align: center;"><b><%= event_order.event.try(:currency_code) %> <%= '%.2f' % payment.amount.to_f.round(2) %></td>
+                      </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <tr>
+                <td style="font-size: 15px; font-weight: 500;">Note:<sup style="color: #990000; font-size: 15px;">*</sup> </td>
+            </tr>
+            <tr>
+                <td>
+                  <% photo_and_photo_id_statuses = line_items.collect{|item| item.sadhak_profile.profile_photo_status == 'pp_success' && item.sadhak_profile.photo_id_status == 'pi_success'} %>
+                  <% if photo_and_photo_id_statuses.include?(true)  && false%>
+                    <p style="font-size: 15px; margin: 20px 0 10px;">Please print the attached entry card and bring it along with your original photo ID proof</p>
+                  <% end %>
+                  <% if photo_and_photo_id_statuses.include?(false) %>
+                    <p style="font-size: 15px; margin: 0 0 10px;">Your photo and photo ID is under approval. Please make sure that you have uploaded your correct photo and photo ID proof. In case your photo and photo ID is not approved then you will be not be allowed entry into the shivir. In case you wish to update your photo and photo ID proof then please login to your SYID profile in <a href=<%= Rails.application.config.app_base_url %> style="color: #990000; text-decoration: underline;"><%= Rails.application.config.app_base_url %></a>.<!--  Once photo and photo ID is approved you will receive a confirmation email --></p>
+                    <!--  after which you can download the entry card by logging into your SYID profile. -->
+                  <% end %>
+                </td>
+            </tr>
+        </table>
+    </td>
+  </tr>
+<% else %>
+  <tr>
+    Either payment is missing or event order is missing.
+  </tr>
+<% end %>

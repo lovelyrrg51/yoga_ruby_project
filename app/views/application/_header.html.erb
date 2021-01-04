@@ -1,0 +1,368 @@
+<header class="headerCntr">
+	<!-- Top Navigation -->
+	<nav class="navbar navbar-default" role="navigation">
+	    <!-- START Nav wrapper-->
+	    <div class="nav-wrapper clearfix">
+	        <div class="col-xs-7">
+	            <ul class="nav navbar-nav menu-left">
+	                <li>
+	                    <a class="menu-collapsed menubar" href="javascript:void(0);"  onclick="menubar();"><i class="icon-menu"></i></a>
+	                </li>
+	                <li>
+	                    <a class="brand-logo" href="<%= root_path %>">
+	                    	<%= image_tag 'logo.png', class: "img-responsive", alt: "Shivyog" %>
+	                    </a>
+	                </li>
+	            </ul>
+	        </div>
+	        <div class="col-xs-5">
+	            <ul class="nav navbar-nav pull-right">
+	                <li>
+	                    <a href="javascript:void(0);" class="searchform"><i class="icon-search" aria-hidden="true"></i></a>
+	                </li>
+	                <% if signed_in? %>
+		                <!-- Notification -->
+		                <li class="dropdown hidden">
+		                    <a href="javascript:void(0);" class="prelative" data-toggle="dropdown"><i class="icon-notification" aria-hidden="true"></i> <span class="notify">15</span></a>
+		                    <div class="dropdown-menu dropdownCntrl dropwidth-lg droparrow mobiledrop">
+		                        <ul>
+	                        		<% 4.times do %>
+			                            <li>
+			                                <a href="javascript:void(0);">
+			                                    <div class="imgdetails">
+			                                        <div class="pro-img" style="background-image: url('profile.png');"></div>
+			                                        <div class="pro-details">
+			                                            <p class="primarybold details">Baba Ji</p>
+			                                            <p class="sub-details">Lorem ipsum dolor sit amet, consectetuer adipiscing elit volutpat. Praesent mattis interdum arcu eu feugiat.</p>
+			                                            <span>23 minitues ago</span>
+			                                        </div>
+			                                    </div>
+			                                </a>
+			                            </li>
+		                            <%end%>
+		                        </ul>
+		                    </div>
+		                </li>
+	                <%end%>
+		            <% unless signed_in?%>
+		                <li>
+		                    <a href="<%= new_user_session_path%>" class="login hidden-xs"><i class="icon-login"></i> Login</a>
+		                    <a href="<%= new_user_session_path%>" class="login visible-xs"><i class="icon-login"></i></a>
+		                </li>
+		            <%else%>
+		                <li class="dropdown">
+		                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+		                        <div class="shivyogprofile-login login-xs">
+				                        <div class="profile-img" style='background-image: url("<%= current_sadhak_profile.try(:advance_profile_thumb_url) || current_sadhak_profile.try(:advance_profile_s3_url) || "profile.png"%>");'>
+				                        </div>
+		                            <div class="profilename hidden-xs">
+		                                <%= current_sadhak_profile.try(:full_name) %><span><%= current_sadhak_profile.try(:syid) %></span>
+		                            </div>
+		                            <i class="fa fa-angle-down angledown hidden-xs"></i>
+		                        </div>
+		                    </a>
+		                    <div class="dropdown-menu dropdownCntrl droparrow dropwidth-md">
+		                        <ul>
+			                        <li class="active visible-xs">
+			                        	<a href="javascript:void(0);">
+			                        		<i class="icon-admin" aria-hidden="true"></i>
+			                               <span>
+			                                   <label class="profilename"><%= current_sadhak_profile.try(:first_name)%><span><%= current_sadhak_profile.try(:syid) %></span></label>
+			                               </span>
+			                         	</a>
+			                       	</li>
+		                            <%= content_tag :li do%><a href="javascript:void(0);"><i class="icon-smartphone" aria-hidden="true"></i><span><%= "+#{current_sadhak_profile.try(:address).try(:country_telephone_prefix)}" %>-<%= current_sadhak_profile.try(:mobile) %></span></a>
+		                            <%end if current_sadhak_profile.try(:mobile).present?%>
+		                            <%= content_tag :li do%><a href="javascript:void(0)"><i class="icon-email" aria-hidden="true"></i><span><%= current_sadhak_profile.try(:email) %></span></a>
+		                            <%end if current_sadhak_profile.try(:email).present?%>
+		                            <li class="<%= 'active' if controller_name.eql?('sadhak_profiles') && action_name.eql?('related_sadhak_profiles')%>" >
+		                                <%= link_to related_sadhak_profiles_sadhak_profile_path(current_sadhak_profile.id) do %>
+		                                  <i class="icon-editprofile" aria-hidden="true"></i><span>Edit Profile</span>
+		                                <% end %>
+		                            </li>
+		                            <li>
+		                                <%= link_to edit_user_registration_path do %><i class="icon-resetpassword" aria-hidden="true"></i><span>Reset Password</span>
+		                                <% end %>
+		                            </li>
+		                            <li><%= link_to  destroy_user_session_path, method: :delete do %><i class="icon-logout" aria-hidden="true"></i><span>Log Out</span><% end %></li>
+		                        </ul>
+		                    </div>
+		                </li>
+		            <%end%>
+	            </ul>
+	        </div>
+	    </div>
+	    <!-- END Nav wrapper-->
+	</nav>
+	<!-- Side Navigation -->
+	<aside class="asideCntrl">
+	    <div class="aside-inner mCustomScrollbar">
+	        <nav class="sidebar">
+	            <ul class="nav panel-group" id="accordion">
+
+  					<!-- Admin Panel -->
+	                <%= content_tag :li, class: ('active' if controller_name.eql?('admin') && action_name.eql?('merge_syid'))  do %>
+						<%= link_to({ controller: "admin", action: "merge_syid" }) do%>
+							<i class="icon-admin iconleft"></i><span>Admin Panel</span>
+						<%end%>
+	                  	<a href="javascript:void(0)" class="listText" onclick="menubar();"><span>Admin Panel <i class="icon-right-arrow"></i></span></a>
+	                <% end if policy(:admin).merge_syid? %>
+
+	          		<!-- Dashboard / Home -->
+					<li class="<%= 'active' if controller_name.eql?('homes') && action_name.eql?('index')%> ">
+						<%= link_to root_path do %>
+							<% if signed_in? && current_user.super_admin? %>
+								<i class="icon-dashboard iconleft"></i><span>Dashboard</span>
+							<%else%>
+								<i class="icon-simple-house-thin iconleft"></i><span>Home</span>
+							<%end%>
+						<%end%>
+						<a href="javascript:void(0)" class="listText" onclick="menubar();"><span><%= (signed_in? && current_user.super_admin?) ? 'Dashboard' : 'Home'%> <i class="icon-right-arrow"></i></span></a>
+					</li>
+
+	                <!-- Event Tab [upcoming event, registerd event, event panel] -->
+	                <%=  content_tag :li, class: 'panel' do %>
+	                	<a data-toggle="collapse" data-parent="#accordion" href="javascript:void(0);" data-target="#eventTab" aria-expanded="false" aria-controls="eventTab"><i class="icon-regevent iconleft"></i> <span>Event</span> <i class="fa fa-angle-down iconright"></i></a>
+	                	<a href="javascript:void(0)" data-target="#eventTab" class="listText" onclick="menubar();"><span>Event <i class="icon-right-arrow"></i></span></a>
+	                  	<div id="eventTab" class="panel-collapse collapse" role="tabpanel">
+	                      	<ul class="sub-nav panel-group" id="accordionLevel1">
+				                <!-- All Events -->
+			  	                <%= content_tag :li, class: "sub-panel #{'active' if controller_name.eql?('events') && action_name.eql?('index') }"  do %>
+			                  		<%= link_to({ controller: "events", action: "index" }) do%>
+			                    		<span>Event Panel</span>
+		                  			<%end%>
+				                <% end if policy(:event).index? %>
+	                      		<!-- Upcoming Events -->
+				                <li class="sub-panel <%= 'active' if controller_name.eql?('events') && action_name.eql?('upcoming_events')%> ">
+				                    <%= link_to upcoming_events_events_path do %>
+				                      <span>Upcoming Events</span>
+				                    <%end%>
+				                </li>
+			                	<!-- Download Entry Card -->
+		    	                <%= content_tag :li, class: "sub-panel" do %>
+				                  	<a data-toggle="collapse" data-parent="#accordion2" href="#collapsesubOne" aria-expanded="false" aria-controls="collapsesubOne"><span>Download Entry Card</span> <i class="iconright"></i>
+					                  </a>
+			                 	 	<div id="collapsesubOne" class="panel-collapse collapse" role="tabpanel">
+				                      	<ul class="sub-nav">
+			                          		<% (sadhak_generate_card_list || []).each do |args| %>
+				                              	<%= content_tag :li, class: "sub-panel" do %>
+			                                  		<%= link_to args[:event_name], generate_card_sadhak_profiles_path(sadhak_profile_id: current_sadhak_profile.try(:id), reg_ref_number: args[:reg_ref_number]), target: '_blank' %>
+				                              	<% end %>
+				                          	<% end %>
+				                     	 </ul>
+				                  	</div>
+				                <% end if signed_in? && current_sadhak_profile && policy(current_sadhak_profile).generate_card? && sadhak_generate_card_list.size > 0 && false%>
+				                <!-- Photo approval panel -->
+				                <%= content_tag :li, class: "sub-panel #{url_contains?('photo_approval') ? 'active' : ''}" do %>
+				                  	<a data-toggle="collapse" data-parent="#accordion2" href="#collapsesubTwo2" aria-expanded="<%= url_contains?('photo_approval') ? 'true' : 'false'%>" aria-controls="collapsesubTwo2"><span>Photo approval panel</span> <i class="iconright"></i>
+				                  	</a>
+				                    <div id="collapsesubTwo2" class="panel-collapse collapse <%= url_contains?('photo_approval') ? 'in' : ''%>" role="tabpanel">
+				                      	<ul class="sub-nav">
+					                        <% sadhak_photo_approval_events.each do |event|%>
+					                          	<% if policy(event).photo_approval? %>
+					                            	<li class="sub-panel <%= current_page?(controller: 'events', action: 'photo_approval', id: event.slug) ? 'active' : '' %>">
+					                              		<%= link_to event.event_name, photo_approval_event_path(event)%>
+					                            	</li>
+					                          	<%end%>
+					                        <%end%>
+				                      	</ul>
+				                    </div>
+				                <% end if signed_in? &&  sadhak_photo_approval_events.present? %>
+				                <!-- Registered Events -->
+				                <%=  content_tag :li, class: 'sub-panel' do %>
+				                    <a data-toggle="collapse" data-parent="#accordionLevel1" href="#registeredEvents" aria-expanded="false" aria-controls="registeredEvents"> <span>Registered Events</span> <i class="iconright"></i></a>
+				                    <div id="registeredEvents" class="panel-collapse collapse" role="tabpanel">
+				                        <ul class="sub-nav panel-group" id="accordionLevel2">
+				                            <% if current_sadhak_profile_registered_upcoming_events.any? %>
+				                                <li class="sub-panel"><a data-toggle="collapse" data-parent="#accordionLevel2" href="#upcomingEvents" aria-expanded="false" aria-controls="upcomingEvents"><span>Upcoming Events</span> <i class="iconright"></i></a>
+				                                    <div id="upcomingEvents" class="panel-collapse collapse" role="tabpanel">
+				                                        <ul class="sub-nav">
+				                                        <%current_sadhak_profile_registered_upcoming_events.each do |event_name, reg_ref_number|%>
+				                                            <li class="sub-panel"> <%= link_to event_name, check_registration_exists_event_orders_path(reg_ref_number: reg_ref_number) if reg_ref_number.present?%></li>
+				                                        <%end%>
+				                                        </ul>
+				                                    </div>
+				                                </li>
+				                            <% end %>
+				                            <% if current_sadhak_profile_registered_ongoing_events.any? %>
+				                                <li class="panel"><a data-toggle="collapse" data-parent="#accordion2" href="#registeredOngoingEvents" aria-expanded="false" aria-controls="registeredOngoingEvents"><span>Ongoing Events</span> <i class="iconright"></i></a>
+				                                    <div id="registeredOngoingEvents" class="panel-collapse collapse" role="tabpanel">
+				                                        <ul class="sub-nav">
+				                                            <%current_sadhak_profile_registered_ongoing_events.each do |event_name, reg_ref_number|%>
+				                                            <li class="sub-panel"><%= link_to event_name, check_registration_exists_event_orders_path(reg_ref_number: reg_ref_number) if reg_ref_number.present?%></li>
+				                                        <%end%>
+				                                        </ul>
+				                                    </div>
+				                                </li>
+				                            <% end %>
+				                        </ul>
+				                    </div>
+				                <% end if signed_in? && (current_sadhak_profile_registered_upcoming_events.any? || current_sadhak_profile_registered_ongoing_events.any?) %>
+
+		                </div>
+	                <% end %>
+
+	                <!-- Forum tab [forums, forum info, forum panel, offline forum data migration]-->
+	                <%= content_tag :li, class: 'panel' do %>
+	                	<!-- Forum -->
+	                	<a data-toggle="collapse" data-parent="#accordion" href="javascript:void(0);" data-target="#forumTab" aria-expanded="false" aria-controls="forumTab"><i class="icon-forum iconleft"></i> <span>Forum</span> <i class="fa fa-angle-down iconright"></i></a>
+	                	<a href="javascript:void(0)" data-target="#forumTab" class="listText" onclick="menubar();"><span>Forums<i class="icon-right-arrow"></i></span></a>
+
+		                <div id="forumTab" class="panel-collapse collapse" role="tabpanel">
+		                    <ul class="sub-nav panel-group">
+		                		<!-- All Forums -->
+	          	                <li class="sub-panel <%= 'active' if controller_name.eql?('sy_clubs') && action_name.eql?('index')%> ">
+				                    <%= link_to sy_clubs_path do %>
+				                       </i><span>Forums</span>
+				                    <%end%>
+				                </li>
+
+				                <!-- Sadhak members -->
+				                <%= content_tag :li, class: "sub-panel #{'active' if controller_name.eql?('sy_clubs') && action_name.eql?('sadhak_non_members') }" do %>
+			                  	    <%= link_to({ controller: "sy_clubs", action: "sadhak_non_members" }) do %>
+		                      			<span>Sadhak Non Members</span>
+				                    <%end%>
+			                  	<% end if policy(:sy_club).sadhak_non_members? %>
+
+		                    	<!-- Forum Info -->
+        		                <%= content_tag :li, class: "sub-panel #{'active' if controller_name.eql?('sy_club_members') && action_name.eql?('info')}"   do %>
+				                  	<%= link_to polymorphic_url(current_sadhak_profile.try(:forum_memberships).try(:first), action: :info), remote: true do%>
+					                    <span>Forum Info</span>
+				                  	<% end %>
+		                		<% end if current_sadhak_profile.try(:forum_memberships).present? %>
+
+				                <!-- Forum Panel -->
+				                <%= content_tag :li, class: "sub-panel #{'active' if controller_name.eql?('sy_clubs') && (action_name.eql?('forum_admin') || action_name.eql?('show')) }" do %>
+				                  	<% if policy(:sy_club).forum_admin? %>
+					                    <%= link_to({ controller: "sy_clubs", action: "forum_admin" }) do %>
+			                      			<span>Forum Panel</span>
+					                    <%end%>
+				                  	<% else %>
+				                      	<%= link_to(polymorphic_url(current_sadhak_profile.try(:sy_clubs).try(:first))) do %>
+					                        <span>Forum Panel</span>
+				                      	<%end%>
+			                  		<% end %>
+			                	<% end if policy(:sy_club).forum_admin? || current_sadhak_profile.try(:sy_clubs).present? %>
+			                	<!-- Offline Forum Data Migration -->
+			                  	<%= content_tag :li, class: "sub-panel #{'active' if controller_name.eql?('sy_clubs') && action_name.eql?('offline_forum_data_migration')}" do%>
+				                    <%= link_to({controller: "sy_clubs", action: "offline_forum_data_migration"}) do %>
+				                     	<span>Offline Forum Data Migration</span>
+				                    <%end%>
+			                  	<%end if policy(:admin).offline_forum_data_migration? %>
+													<!-- Expired forum member -->
+				                  	<%= content_tag :li, class: "sub-panel #{'active' if controller_name.eql?('sy_clubs') && action_name.eql?('expired_forum_members')}" do%>
+					                    <%= link_to({controller: "sy_clubs", action: "expired_forum_members"}) do %>
+					                     	<span>Expired Forum Members</span>
+					                    <%end%>
+				                  	<%end if policy(:sy_club).expired_forum_members? %>
+			                    </ul>
+			                </div>
+	                <% end %>
+
+    				<!-- Registration Status -->
+	                <li class="<%= 'active' if controller_name.eql?('event_orders') &&  %w(registration_status registration_details).include?(action_name) %>" >
+	                    <%= link_to registration_status_event_orders_path do %>
+	                        <i class="icon-file iconleft"></i><span>Registration Status</span>
+	                    <%end%>
+	                    <a href="javascript:void(0)" class="listText" onclick="menubar();"><span>Registration Status <i class="icon-right-arrow"></i></span></a>
+	                </li>
+
+					<!-- Sadhak Profile[create SYID, forgot SYID, forgot / generate SYID, search Sadhak] -->
+					<%=  content_tag :li, class: "panel" do %>
+		               	<a data-toggle="collapse" data-parent="#accordion" href="javascript:void(0);" data-target="#sadhakProfileTab" aria-expanded="false" aria-controls="sadhakProfileTab"><i class="icon-createsyid iconleft"></i> <span>Sadhak Profile</span> <i class="fa fa-angle-down iconright"></i></a>
+		               	<a href="javascript:void(0)" data-target="#sadhakProfileTab" class="listText" onclick="menubar();"><span>Sadhak Profile <i class="icon-right-arrow"></i></span></a>
+		                <div id="sadhakProfileTab" class="panel-collapse collapse" role="tabpanel">
+		                    <ul class="sub-nav panel-group">
+		                    	<!-- Create SYID -->
+								<li class="<%='sub-panel active' if controller_name.eql?('sadhak_profiles') && action_name.eql?('new')%> ">
+									<%= link_to new_sadhak_profile_path do %>
+										<span>Create SYID</span>
+									<%end%>
+								</li>
+				                <!--  Forgot / Generate Password-->
+								<li class="">
+									<%= link_to forgot_password_users_path, target: "_blank" do %>
+										<span>Forgot / Generate Password</span>
+									<%end%>
+								</li>
+				                <!-- Forgot SYID -->
+								<li class="<%='sub-panel active' if controller_name.eql?('sadhak_profiles') && action_name.eql?('forgot_syid')%> ">
+									<%= link_to forgot_syid_sadhak_profiles_path do %>
+										<span>Forgot SYID</span>
+									<%end%>
+								</li>
+				                <!-- Restore Sadhak Profile -->
+                              	<%= content_tag :li, class: "sub-panel #{'active' if controller_name.eql?('admin') && action_name.eql?('deleted_sadhak_profiles')}" do %>
+				                    <%= link_to({ controller: "admin", action: "deleted_sadhak_profiles" }) do%>
+				                      	<span>Restore Sadhak Profile</span>
+				                    <%end%>
+			                  	<% end if policy(:admin).deleted_sadhak_profiles? %>
+
+								<!-- Search Sadhak -->
+				                <%= content_tag :li, class: "sub-panel #{'active' if controller_name.eql?('admin') && action_name.eql?('search_sadhak')}" do %>
+				                  	<%= link_to({ controller: "admin", action: "search_sadhak" }) do%>
+				                    	<span>Search Sadhak</span>
+				                  	<%end%>
+				                <% end if policy(:admin).search_sadhak? %>
+		                    </ul>
+	                  	</div>
+					<% end%>
+
+
+					<!-- Sadhak Profile[create SYID, forgot SYID, forgot / generate SYID, search Sadhak] -->
+					<%=  content_tag :li, class: "panel" do %>
+		               	<a data-toggle="collapse" data-parent="#accordion" href="javascript:void(0);" data-target="#shivirEpisodeTab"><i class="icon-forumpanel iconleft"></i> <span>Farmer Episodes</span> <i class="fa fa-angle-down iconright"></i></a>
+		               	<a href="javascript:void(0)" data-target="#shivirEpisodeTab" class="listText" onclick="menubar();"><span>Farmer Episodes<i class="icon-right-arrow"></i></span></a>
+		                <div id="shivirEpisodeTab" class="panel-collapse collapse" role="tabpanel">
+		                    <ul class="sub-nav panel-group">
+                              	<!-- Shivir episodes upload -->
+								<% if policy(:collection).shivir_episode_upload_access?  %>
+								  <li class="<%= params[:controller] == "collections" && %w(new_episodes_collection edit_episodes_collection episodes_collections).include?( params[:action] ) ? 'active' : '' %>">
+								      <a href="<%= episodes_collections_collections_path(collection_type:'Farmer') %>"">Farmer Episodes</a>
+								  </li>
+								<% end %>
+				                <!-- shivir episode access -->
+				                <%= content_tag :li, class: "sub-panel #{'active' if controller_name.eql?('admin') && action_name.eql?('farmer_episode_access')}" do %>
+				                  	<%= link_to({ controller: "collections", action: "shivir_episode_access" }) do%>
+				                    	<span>Farmer Episodes Access</span>
+				                  	<%end%>
+				                <% end if policy(:collection).is_shivir_episode_access_admin? %>
+
+		                    </ul>
+	                  	</div>
+					<% end  if signed_in? && (policy(:collection).shivir_episode_upload_access? || policy(:collection).is_shivir_episode_access_admin?)%>
+
+					<!-- Payment Reconcilation -->
+					<%= content_tag :li, class: ('active' if controller_name.eql?('payment_reconcilations') && action_name.eql?('index')) do %>
+						<%= link_to({ controller: "payment_reconcilations", action: "index" }) do%>
+						  <i class="icon-credit-card iconleft"></i><span>Payment Reconcilation</span>
+						<%end%>
+						<a href="javascript:void(0)" class="listText" onclick="menubar();"><span>Payment Reconcilation <i class="icon-right-arrow"></i></span></a>
+					<% end if policy(:payment_reconcilation).index? %>
+					<!-- Shivir Episodes -->
+					<%=  content_tag :li, class: "panel" do %>
+						<a data-toggle="collapse" data-parent="#accordion" href="javascript:void(0);" data-target="#assetMangTab"><i class="icon-forumpanel iconleft"></i> <span>Shivir Episodes</span> <i class="fa fa-angle-down iconright"></i></a>
+						<a href="javascript:void(0)" data-target="#assetMangTab" class="listText" onclick="menubar();"><span>Shivir Episodes <i class="icon-right-arrow"></i></span></a>
+						<div id="assetMangTab" class="panel-collapse collapse" role="tabpanel">
+							<ul class="sub-nav panel-group">
+								<!-- Shivir episodes upload -->
+								<%= content_tag :li, class: "sub-panel #{'active' if controller_name.eql?('collections') && %w(shivir_collections_new_collections edit_episodes_collection shivir_collections).include?( params[:action] )}" do %>
+									<%= link_to(shivir_collections_collections_path) do %>
+										<span>Shivir Episodes</span>
+									<% end %>
+								<% end if policy(:collection).is_shivir_episode_access_admin? %>
+								<!-- shivir episode access -->
+				                <%= content_tag :li, class: "sub-panel #{'active' if controller_name.eql?('collections') && action_name.eql?('shivir_collections_access')}" do %>
+				                  	<%= link_to({ controller: "collections", action: "shivir_collections_access" }) do%>
+				                    	<span>Shivir Episodes Access</span>
+				                  	<%end%>
+				                <% end if policy(:collection).is_shivir_episode_access_admin? %>
+							</ul>
+						</div>
+					<% end  if signed_in? && (policy(:collection).shivir_episode_upload_access? || policy(:collection).is_shivir_episode_access_admin?)%>
+				</ul>
+	            </ul>
+	        </nav>
+	    </div>
+	</aside>
+</header><!-- /header -->

@@ -1,0 +1,5 @@
+$('#action_modal')
+    .modal('show')
+		.html("<%= j render 'change_sadhak_profile_status_form', locals: { sadhak_profile: @sadhak_profile }%>");
+$('form#change_sadhak_profile_status').validate();
+$('.basic-single').select2();

@@ -1,0 +1,52 @@
+<% uniq_token = SecureRandom.uuid %>
+
+<div class="row mg-b30 prelative nested-fields">
+    <div class="col-sm-6">
+        <div class="outbox">
+            <label>Access Duration From date to date</label>
+            <div class="box outerbox outerheight light-bg">
+                <div class="rangercode">
+                    <div class="dropdown-field numbercode">
+	                    <div class="input-group date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" data-minStartDate="<%= Date.today - SADHAK_MAX_AGE.years %>" >
+		                    <%= f.text_field :access_from_date, value: f.object.access_from_date.try(:strftime,'%b %d, %Y'), class: "form-control code-input", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true, required: true %>
+		                    <span class="input-group-addon">
+		                        <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+		                    </span>
+	                    </div>
+                    </div>
+                    <div class="dropdown-field">
+                        <label class="middletab mg-t10">To</label>
+                    </div>
+                    <div class="dropdown-field numbercode">
+                        <div class="input-group date" id="<%= uniq_token %>_end" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker">
+	                        <%= f.text_field :access_to_date, value: f.object.access_to_date.try(:strftime,'%b %d, %Y'), class: "form-control code-input", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true, required: true %>
+		                    <span class="input-group-addon">
+		                        <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+		                    </span>
+	                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="box bordered-input box-height">
+		  <%= f.text_field :sadhak_profile_ids, class: 'form-control noBorder field', data: { role: 'tagsinput' } %>
+		</div>
+    </div>
+    <div class="col-sm-12">
+        <div class="pannel-btn">
+            <%= link_to_remove_association f, class: "btn btn-info", data: { confirm: "Are you sure?"} do%>
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+            <%end%>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+

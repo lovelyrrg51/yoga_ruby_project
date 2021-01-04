@@ -1,0 +1,52 @@
+<% content_for(:title, 'Forum | References') %>
+<div class="CompleteprofileCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Forum</h2>
+        <span class="subheading">ShivYog Forum <strong class="texttransform"><%= @sy_club.name.try(:titleize) %></strong></span>
+    </div>
+    <div class="boxsection-lg boxsection-xs boxshadow prelative">
+        <div class="progressCntrl text-right">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:<%= @sy_club.completed.rnd %>%">
+                </div>
+            </div>
+            <span><%= @sy_club.completed.rnd %>%</span>
+        </div>
+        <div class="tab-content">
+          <%= form_for @sy_club, url: wizard_path, html: { id: "sy_club_reference_form" } do |f| %>
+              <div class="tab-pane" role="tabpanel" id="ReferenceSadhaks">
+                  <div class="row">
+                      <div class="col-sm-12">
+                          <div class="headtittle text-center">
+                              <h2>References of ShivYog Sadhaks</h2>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row mg-t30">
+                      <div class="col-sm-12">
+                          <div class="headtittle"><h2>Please provide <%= SyClub::NO_OF_SY_CLUB_REFERENCES.to_words %> references of ShivYog Sadhaks</h2></div>
+                      </div>
+                      <%= f.fields_for :sy_club_references do |ff| %>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input">
+                                <label>Reference Name</label>
+                                <div class="dropdown dropdown-field">
+                                    <%= ff.text_field :name, class: "form-control noBorder field", placeholder: "Name" %>
+                                </div>
+                            </div>
+                        </div>
+                      <% end %>
+                  </div>
+                  <div class="row mg-t30">
+                      <div class="col-sm-12">
+                          <div class="pannel-btn clearfix">
+                              <%= link_to 'PREVIOUS', previous_wizard_path(), class: "btn btn-info pull-left prev-step" %>
+                              <button class="btn btn-info pull-right">SAVE & CONTUNUE</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          <% end %>
+        </div>
+    </div>
+</div>

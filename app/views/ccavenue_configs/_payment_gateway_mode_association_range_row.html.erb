@@ -1,0 +1,32 @@
+<tr class="nested-fields">
+  <td class="tdoverlay">
+    <div class="outbox">
+          <div class="box bordered-input tablebox">
+             <div class="dropdown dropdown-field">
+                <%= f.text_field :min_value, value: f.object.min_value.to_i , class: 'form-control noBorder field', required: true, placeholder: "Min value" %>
+             </div>
+          </div>
+    </div>
+  </td>
+  <td>
+    <div class="outbox">
+        <div class="box bordered-input">
+           <div class="dropdown dropdown-field">
+              <%= f.text_field :max_value, value: (f.object.max_value.infinite? ? f.object.max_value : f.object.max_value.to_i) , class: 'form-control noBorder field mode_association_range_max_value', required: true, placeholder: "Max value" %>
+           </div>
+        </div>
+    </div>
+  </td>
+  <td>
+    <div class="outbox">
+        <div class="box bordered-input">
+           <div class="dropdown dropdown-field">
+              <%= f.text_field :percent, class: 'form-control noBorder field', required: true, placeholder: "Percent" %>
+           </div>
+        </div>
+    </div>
+  </td>
+  <td class="text-center">
+    <%= link_to_remove_association "",  f, { class: 'primary-color fa fa-trash-o' } %>
+  </td>
+</tr>

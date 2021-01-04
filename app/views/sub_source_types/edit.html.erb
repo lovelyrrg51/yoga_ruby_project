@@ -1,0 +1,34 @@
+<% content_for(:title, 'Admin | Source Info Type') %>
+
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Admin Panel</h2>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+            <%= render 'admin/admin_left_panel' %>
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                    
+                    <div class="rightContent">
+                      <div id="sub_source_types">
+                          <div class="row">
+                              <div class="col-sm-12 mg-b30">
+                                   <div class="headtittle text-center">
+                                      <h2>Sub Source Info Types</h2>
+                                  </div>
+                              </div>
+                              <div class="col-sm-12">
+                                  <div class="pannel-btn text-left">
+                                      <%= link_to "CREATE NEW", source_info_type_sub_source_types_path(@source_info_type), class: "btn btn-info" %>
+                                  </div>
+                                  <%= render "sub_source_types/form"%>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>

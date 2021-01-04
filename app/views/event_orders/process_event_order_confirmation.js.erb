@@ -1,0 +1,11 @@
+<% if @message.present? %>
+
+  toastr.error("<%= @message %>");
+
+<% else %>
+
+    var appearance = $("<%= escape_javascript(render(partial: 'event_orders/event_order_edit_confirmation')) %>");
+
+    appearance.modal('show');
+
+<% end %>

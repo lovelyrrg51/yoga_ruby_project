@@ -1,0 +1,30 @@
+<footer>
+    <div class="footerArea">
+        <div class="containerWrapper">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 text-center">
+                    <ul class="list-unstyled links">
+                        <li><%= link_to 'About ShivYog', about_shivyog_path%></li>
+                        <li class="hidden"><a href="javascript:void(0)">ShivYog Events</a></li>
+                        <li class="hidden"><a href="javascript:void(0)">Gallery</a></li>
+                        <li class="hidden"><a href="javascript:void(0)">ShivYog Channels</a></li>
+                        <li><%= link_to 'Contact Us', contact_us_path%></li>
+                        <li class="hidden"><a href="javascript:void(0)">Channels</a></li>
+                        <li><%= link_to 'Privacy Policy', privacy_policy_path%></li>
+                        <li><%= link_to 'refund Policy', refund_policy_path%></li>
+                        <% if false %>
+                            <li><%= link_to 'Terms & Conditions', terms_and_conditions_path%></li>
+                        <% end %>
+                    </ul>
+                </div>
+                <div class="col-md-12 col-sm-12 text-center">
+                    <div class="copyright">&copy; <%= Date.current.year %> ShivYog Foundation
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+

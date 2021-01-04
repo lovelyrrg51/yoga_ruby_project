@@ -1,0 +1,175 @@
+<% content_for(:title, 'Forum Admin | Members') %>
+<%= link_to "BACK", sy_clubs_path(), class: "btn btn-info" %>
+<div class="headingtittle-h2 text-center">
+    <h2>Forum Details Admin</h2>
+    <span class="subheading primary-color primarybold">Forum ID: <%= @sy_club.id %></span>
+    <span class="subheading">ShivYog Forum <strong class="texttransform"><%= @sy_club.name.try(:titleize) %></strong></span>
+</div>
+<div class="boxsection-lg boxshadow boxsection-xs">
+    <div class="row prelative">
+        <div class="overlapping <%= 'overlay-active' if @sy_club.disabled? %>"></div>
+        <div class="col-sm-12 mg-b20">
+            <div class="headtittle prelative">
+                <h2>Board Members</h2>
+                <% if policy(:sy_club).show? %>
+                  <div class="toggle toggleCntrl toggle-rect">
+                      <label class="switch">
+                          <input type="checkbox" id="toggleForumStatusInput" <%= 'checked' if @sy_club.enabled? %>>
+                          <span class="slider round">
+                              <span class="on">ENABLE</span>
+                              <span class="off">DISABLE</span>
+                          </span>
+                      </label>
+                  </div>
+                <% end %>
+            </div>
+        </div>
+        <%= render partial: "board_members_venue_details" %>
+        <div class="col-sm-12 mg-t50">
+            <ul class="panellist-btn text-right">
+                <%= link_to "ATTENDANCE", sy_club_forum_attendance_path(@sy_club), class: "btn btn-info" if policy(:forum_attendance_detail).forum_attendance? %>
+                <%= link_to "EDIT", sy_club_sy_club_steps_path(@sy_club), class: "btn btn-info"  if policy(:sy_club).show?%>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="boxsection-lg boxsection-xs boxshadow">
+    <div class="member adminCntrl">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="headtittle text-center">
+                    <h2>Members</h2>
+                </div>
+                <div class="pannel-btn mg-b30">
+                    <%= link_to "ADD MEMBER", polymorphic_url([@sy_club], action: :register) , class: 'btn btn-info' %>
+                </div>
+            </div>
+            <form>
+                <div class="col-sm-12">
+                    <a href="#transactions" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+                    <div class="refineCntrl collapse in" aria-expanded="true" id="transactions" role="tablist">
+                        <div class="refinesub-group">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="outbox">
+                                        <label>SYID</label>
+                                        <div class="box bordered-input">
+                                            <div class="dropdown dropdown-field">
+                                                <input type="text" class="form-control noBorder field" placeholder="SYID" name="sadhak_syid" value="<%= params[:sadhak_syid] %>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="outbox">
+                                        <label>Name</label>
+                                        <div class="box bordered-input">
+                                            <div class="dropdown dropdown-field">
+                                                <input type="text" class="form-control noBorder field" placeholder="Name" name="sadhak_name" value="<%= params[:sadhak_name] %>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="outbox">
+                                        <label>By Status</label>
+                                        <div class="box bordered-input dropdown">
+                                            <div class="dropdown-field selectTwo-dropdown">
+                                                <%= select_tag 'status', options_for_select(SyClubMember.statuses.collect{|k, v| [k.downcase.tr("_ ", " ").titleize, k]}, params[:status]), { prompt: "----- Select -----", class: "simple-single"} %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="pannel-btn text-right">
+                                        <%= link_to "CLEAR", members_sy_club_path(@sy_club), class: "btn btn-danger mg-r10" %>
+                                        <button class="btn btn-info">SEARCH</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <% if @sy_club_members.present? %>
+                <div class="col-sm-12 mg-t60">
+                    <div class="Boxdrop dropdown mg-x-b15">
+                        <%= render 'application/per_page' %> 
+                    </div>
+                    <div class="tableCntrl">
+                        <div class="table-responsive tableScrollbar">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Name / SYID</th>
+                                        <th>Expiration Date</th>
+                                        <th class="text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% @sy_club_members.each do |member| %>
+                                        <tr>
+                                            <td>
+                                                <div class="textgroup">
+                                                    <p class="primarybold"><%= member.try(:sadhak_full_name) %></p>
+                                                    <span><%= member.try(:sadhak_syid) %></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="textgroup">
+                                                    <p class="primarybold"><%= member.try(:expiration_date) %></p> 
+                                                </div>
+                                            </td>
+                                            <td class="<%= sy_club_member_status_color(member) %> text-center"><%= member.status.try(:titleize) %></td>
+                                        </tr>
+                                    <% end %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-pagination">
+                            <div class="show-pgnation">
+                            <p class="primarybold"><%= custom_page_entries_info(@sy_club_members) %></p>
+                            </div>
+                            <%= paginate @sy_club_members %>
+                        </div>
+                    </div>
+                </div>
+            <% else %>
+                <div>
+                <%= render partial: 'application/no_records', locals: { message: @filtering_params.present? ? "No Member Found." : "No Approved Member found for this Forum." }  %>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>
+
+<div id="forum_status_note_modal" class="modal fade Custommodal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="headtittle">Confirm Note</h2>
+            <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag("close.png") %></button>
+        </div>
+        <%= form_for @sy_club, html: { id: 'sy_club_form' } do |f| %>
+        <div class="modal-body rejectlist mCustomScrollbar">
+              <div class="row mg-t30">
+                <div class="col-sm-12">
+                    <div class="box bordered-input border-textarea">
+                        <div class="dropdown dropdown-field">
+                            <%= f.text_area(:status_notes, class: 'form-control noBorder field', required: true, placeholder: "Confirm note")%>
+                        </div>
+                    </div>
+                </div>
+                <%= f.hidden_field :status, value: "" %>
+              </div>
+        </div>
+        <div class="modal-footer">
+            <div class="pannel-btn text-right">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+                <%= f.submit "SUBMIT", {class: 'btn btn-info'} %>
+            </div>
+        </div>
+        <% end %>
+    </div>
+  </div>
+</div>

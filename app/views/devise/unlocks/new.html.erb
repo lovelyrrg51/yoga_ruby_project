@@ -1,0 +1,33 @@
+<div class="signup-box">
+  <div class="logo">
+    <a href="javascript:void(0);"><%= image_tag "v2/logo.png" %></a>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="wrapper">
+        <div id="login" class="animate form">
+          <%= form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f| %>
+            <div class="msg">RESEND UNLOCK INSTRUCTIONS</div>
+            <%= devise_error_messages! %>
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="material-icons">email</i>
+              </span>
+              <div class="form-line">
+                <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "Email" %>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-5">
+                <%= render "devise/shared/links" %>
+              </div>
+              <div class="col-xs-7">
+                <%= f.submit "Resend Unlock Instructions", class: 'btn btn-block bg-red waves-effect' %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

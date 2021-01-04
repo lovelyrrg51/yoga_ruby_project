@@ -1,0 +1,123 @@
+<div class="headingtittle-h2 text-center">
+    <h2>Forums</h2>
+    <span class="subheading">ShivYog Forum <strong class="texttransform"><%= @sy_club.name.try(:titleize) %></strong></span>
+</div>
+<div class="boxsection-lg boxshadow prelative boxsection-xs">
+    <div class="row">
+      <%= render partial: "board_members_venue_details" %>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-12 mg-t20">
+            <div class="regConfirmation">
+                <div class="row">
+                    <% unless @event_order.try(:failure?) || @event_order.try(:pending?) %>
+                      <div class="col-sm-12 mg-b20">
+                          <div class="headtittle mg-b30">
+                              <h2>Membership Confirmation</h2>
+                              <%= link_to "Register More Members", polymorphic_url([@sy_club], action: :register) , class: 'btn btn-info btn-register' %>
+                          </div>
+                          <div class="successCntrl text-center primarybold">
+                              <p class="succes-img">Congratulations, you have successfully registered for the Forum <%= @sy_club.name.try(:titleize) %>.</p>
+                          </div>
+                      </div>
+                    <% end %>
+                    <div class="col-sm-12">
+                        <div class="headtittle">
+                            <h2>Request Summary</h2>
+                        </div>
+                        <div class="paymenttable mg-t10">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Description</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="primarybold">Forum</td>
+                                            <td><%= @sy_club.name.try(:titleize) %></td>
+                                        </tr>
+                                        <% if @event_order.try(:failure?) || @event_order.try(:pending?) %>
+                                          <tr>
+                                              <td class="primarybold">Status</td>
+                                              <td class="primarybold primary-color"><%= @event_order.status.try(:titleize) %></td>
+                                          </tr>
+                                        <% else %>
+                                          <tr>
+                                              <td class="primarybold">Status</td>
+                                              <td class="primarybold success-color"><%= @event_order.status.try(:titleize) %></td>
+                                          </tr>
+                                        <% end %>
+                                        <tr>
+                                            <td class="primarybold">Amount</td>
+                                            <td class="primarybold primary-color"><%= "#{@event.currency_code} #{@event_order.tax_details['total_payable_amount']}" %></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="eventaddmember">
+                            <div class="row">
+                                <% if @event_order.event_order_line_items %>
+                                  <div class="col-sm-12">
+                                      <div class="headtittle">
+                                          <h2>Members</h2>
+                                      </div>
+                                      <div class="tableCntrl">
+                                          <div class="table-responsive tableScrollbar">
+                                              <table class="table">
+                                                  <thead>
+                                                      <tr>
+                                                          <th>Srl. No.</th>
+                                                          <th>Name / SYID</th>
+                                                          <th>Membership Expires On</th>
+                                                      </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    <% @event_order.event_order_line_items.includes(:sadhak_profile).each_with_index do |event_order_line_item, index| %>
+                                                      <tr>
+                                                          <td><%= index + 1 %></td>
+                                                          <td>
+                                                              <div class="textgroup">
+                                                                  <p class="primarybold"><%= event_order_line_item.full_name %></p>
+                                                                  <span><%= event_order_line_item.syid %></span>
+                                                              </div>
+                                                          </td>
+                                                          <td>
+                                                              <div class="textpanel">
+                                                                  <p class="primarybold"><%= event_order_line_item.event_registration.try(:expiration_date) %></p>
+                                                              </div>
+                                                          </td>
+                                                      </tr>
+                                                    <% end %>
+                                                  </tbody>
+                                              </table>
+                                          </div>
+                                      </div>
+                                  </div>
+                                <% end %>
+                                <div class="col-sm-12 mg-t10">
+                                    <div class="eventoption text-center">
+                                        <p class="tagtittle">Please print and keep your details with you</p>
+                                        <div class="eventaction">
+                                            <button class="btn btn-danger" onclick="window.print();return false;"><i class="fa fa-print mg-r5" aria-hidden="true"></i> Print</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    for (i = 0; i < 100 ; i++){
+        history.pushState(null, document.title, location.href);
+    }
+</script>

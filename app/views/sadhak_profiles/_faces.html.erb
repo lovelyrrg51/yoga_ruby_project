@@ -1,0 +1,19 @@
+<% if @face_images.present?%>
+<ul class="profilelist-snapshot text-center">
+	<%@face_images.each_with_index do |img_src, index|%>
+    <li>
+        <label class="radio-box">
+            <input type="radio" name="radio" />
+            <span class="radiocheck"><%= image_tag img_src %></span>
+        </label>
+    </li>
+  <%end%>
+</ul>
+<%else%>
+	<div class="face-error text-center">
+	<%= image_tag "facedetective.png"%>
+	    <h4>CANNOT DETECT FACE</h4>
+	    <p>You must submit a clear photo of your face to verify your identity.</p>
+	    <p>Please Go Back and Retake Photo</p>
+	</div>
+<%end%>

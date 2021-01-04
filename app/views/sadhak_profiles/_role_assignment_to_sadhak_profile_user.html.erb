@@ -1,0 +1,31 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="headtittle">Role Management</h2>
+                <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png", alt: "close"%></button>
+            </div>
+        <%= form_tag assign_role_to_sadhak_profile_user_sadhak_profile_path(@sadhak_profile), remote: true do %>
+        <div class="modal-body mCustomScrollbar">
+            <div class="row mg-t30">
+                <div class="col-sm-12">
+                    <div class="outbox">
+                        <label>Please Specify the role(s) to be provided to this sadhak</label>
+                        <div class="box multiplebox">
+                            <div class="dropdown-field multipleboxfield">
+                            <%= select_tag :user_roles, options_for_select(User::USER_ROLES.collect{|k| [k.humanize, k]}, @sadhak_profile.user.permissions.select{ |k,v| v == true}.keys), class: "multiple-select", multiple: true %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="pannel-btn text-right">
+                <button type="button" class="btn btn-danger mg-r5" data-dismiss="modal">CANCEL</button>
+                <button class="btn btn-danger mg-r5 resetForm" type="button">CLEAR</button>
+                <button class="btn btn-info">SAVE</button>
+            </div>
+        </div>
+        <% end %>
+    </div>
+</div>

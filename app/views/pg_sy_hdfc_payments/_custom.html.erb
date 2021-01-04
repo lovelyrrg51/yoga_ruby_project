@@ -1,0 +1,131 @@
+<div id="ccavenue" class="tab-pane active tabsubcontent">
+    <div class="ccpaymentdetails">
+        <div id="payment_mode_details_div">
+          <%= render partial: "pg_sy_hdfc_payments/payment_details", locals: { gateway: gateway, currency: currency, amount: amount.rnd, is_india_event: is_india_event } %>
+        </div>
+        <div class="warningmessage">
+            <p>Please dont attempt payments twice for same SYIDs. If fees is deducted from account and registration number not received then please inform Ashram helpline number or email to <a href="mailto:<%= GetSenderEmail.call(@event_order.event) %>" class="primary-color"><%= GetSenderEmail.call(@event_order.event) %></a> within 2 days of your transation.</p>
+        </div>
+        <div class="tabbillingaddress prelative">
+            <%= form_for :payment_details, url: pay_event_order_path(@event_order), method: :post, html: { id: "hdfc-gateway-payment-form" } do |f|  %>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="headtittle mg-t20 mg-b20">
+                            <h2>Billing Address</h2>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                           <label class="asterisk">Billing Name</label>
+                           <div class="dropdown dropdown-field">
+                              <input type="text" class="form-control noBorder field" placeholder="Billing name" name="payment_details[billing_name]" required>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                           <label class="asterisk">Billing Address</label>
+                           <div class="dropdown dropdown-field">
+                              <input type="text" class="form-control noBorder field" placeholder="Billing Address" name="payment_details[billing_address]" required>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                           <label class="asterisk">Country</label>
+                           <div class="dropdown dropdown-field">
+                              <input type="text" class="form-control noBorder field" placeholder="Country" name="payment_details[billing_address_country]" required>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                           <label class="asterisk">State</label>
+                           <div class="dropdown dropdown-field">
+                              <input type="text" class="form-control noBorder field" placeholder="State" name="payment_details[billing_address_state]" required>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                           <label class="asterisk">City</label>
+                           <div class="dropdown dropdown-field">
+                              <input type="text" class="form-control noBorder field" placeholder="City" name="payment_details[billing_address_city]" required>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                           <label class="asterisk">Postal Code</label>
+                           <div class="dropdown dropdown-field">
+                              <input type="text" class="form-control noBorder field" placeholder="Postal code" size="6" name="payment_details[billing_address_postal_code]" required>
+                           </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="shivyog-sepeator"></div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="headtittle mg-t20 mg-b20">
+                            <h2>Contact</h2>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                           <label class="asterisk">Billing Tel</label>
+                           <div class="dropdown dropdown-field">
+                              <input type="text" class="form-control noBorder field" placeholder="Phone" name="payment_details[billing_phone]" required>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box bordered-input">
+                           <label class="asterisk">Billing Email</label>
+                           <div class="dropdown dropdown-field">
+                              <input type="text" class="form-control noBorder field" placeholder="Email" name="payment_details[billing_email]" required="">
+                           </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="pannel-btn text-right">
+                            <button class="btn btn-info" type="submit"  data-disable-with="PROCESSING...!">PAY NOW</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <input type="hidden" name="payment_details[amount]" value=<%= (amount + gateway_charges(gateway, amount).rnd)  %>>
+                <input type="hidden" name="payment_details[payment_gateway_mode_association_id]" value="" >
+                <input type="hidden" name="<%= ENCRYPT_PAYMENT_DETAILS_KEY.encrypt %>" value=<%= encryped_payment_details({ amount: (amount + gateway_charges(gateway, amount).rnd), event_order_id: event_order_id, config_id: gateway.try(gateway.try(:payment_gateway_type).try(:relation_name)).try(:id).to_s, method: gateway.try(:payment_gateway_type).try(:name).to_s, payment_date: Date.today.to_s, payment_gateway_mode_association_id: "", upgrade: @upgrade.present?, parent_event_order_id: @parent_event_order_id }) %>>
+
+                <input type="hidden" name="payment_details[upgrade]" value=<%= @upgrade.present? %> >
+                <input type="hidden" name="payment_details[parent_event_order_id]" value=<%= @parent_event_order_id %> >
+                <input type="hidden" name="payment_details[event_order_id]" value=<%= event_order_id %>>
+                <input type="hidden" name="payment_details[config_id]" value=<%= gateway.try(gateway.payment_gateway_type.relation_name).try(:id).to_s %>>
+                <input type="hidden" name="method" value=<%= gateway.try(:payment_gateway_type).try(:name).to_s %>>
+                <input type="hidden" name="payment_details[payment_date]" value=<%= Date.today.to_s %>>
+                <input type="hidden" name="<%= EVENT_ORDER_LINE_ITEM_IDS.encrypt %>" value=<%= @before_event_order_line_items.to_json.encrypt %> >
+                <input type="hidden" name="<%= SADHAK_PROFILE_DETAILS.encrypt %>" value=<%= @sadhak_details_hash.to_json.encrypt %> >
+            <% end %>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+  (function(){
+    $('#hdfc-gateway-payment-form').validate();
+
+    $('#hdfc-gateway-payment-form').submit(function() {
+        var target_url;
+        if(document.location.href === document.referrer || document.referrer === ""){
+            target_url = "<%= Rails.application.config.app_base_url %>"
+        }else{
+            var target_url = document.referrer
+        }
+        for (i = 0; i < 100 ; i++){
+            window.history.pushState(null, document.title, target_url);
+        }
+    });
+
+  }());
+</script>

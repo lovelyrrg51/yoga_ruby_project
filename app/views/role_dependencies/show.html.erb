@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User role:</strong>
+  <%= @role_dependency.user_role %>
+</p>
+
+<p>
+  <strong>Start date:</strong>
+  <%= @role_dependency.start_date %>
+</p>
+
+<p>
+  <strong>End date:</strong>
+  <%= @role_dependency.end_date %>
+</p>
+
+<p>
+  <strong>Is restriction:</strong>
+  <%= @role_dependency.is_restriction %>
+</p>
+
+<%= link_to 'Edit', edit_role_dependency_path(@role_dependency) %> |
+<%= link_to 'Back', role_dependencies_path %>

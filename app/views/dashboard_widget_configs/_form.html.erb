@@ -1,0 +1,27 @@
+<%= form_for @dashboard_widget_config, html:{class: "table-screen-next"} do |f| %>
+  <div class="prelative mg-b30">
+    <div class="overlapping "></div>
+    <div class="row mg-t30">
+        <div class="col-sm-6">
+            <div class="box bordered-input">
+                <label class="asterisk">Name</label>
+                <div class="dropdown dropdown-field">
+                    <%= f.text_field :name, disabled: true, class: 'form-control noBorder field', required: true, placeholder: "Name" %>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="CustomCheckbox mg-b30">
+                <%= f.check_box :is_visible %>
+                <label>Visible</label>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="pannel-btn text-right">
+                <button type="reset" class="btn btn-danger mg-r10" >CLEAR</button>
+                <%= f.submit params[:action] == "edit" ? "UPDATE" : 'CREATE', {class: 'btn btn-info'} %>
+            </div>
+        </div>
+    </div>
+  </div>
+<% end %>

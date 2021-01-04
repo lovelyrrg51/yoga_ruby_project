@@ -1,0 +1,9 @@
+<% if flash.present?  %>
+  $('.flash-message').html("<%= escape_javascript(render partial: 'layouts/v2/flash_messages') %>");
+  <% flash.clear %>
+<% else %>
+  $("#registration_action_proceed_btn").attr("data-toggle","modal");
+  $("#registration_action_proceed_btn").attr("data-target","#cancel_registration");
+  $("#payment_mode_details_div").html("<%= escape_javascript(render partial: 'cancel_registration', locals: { pay_or_refund: @pay_or_refund, from_event_order: @from_event_order, event: @event,db_refundable_amount: @db_refundable_amount, cancellation_charges_by_policy: @cancellation_charges_by_policy, net_amount: @net_amount, enc_request_params: @enc_request_params }) %>");
+  $("#cancel_registration").modal('show');
+<% end %>

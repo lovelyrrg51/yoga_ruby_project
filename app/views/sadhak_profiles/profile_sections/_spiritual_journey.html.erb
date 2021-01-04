@@ -1,0 +1,77 @@
+<div class="panel">
+    <div class="panel-heading" role="tab" id="headingFive">
+        <h4 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion4" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                <i class="more-less glyphicon glyphicon-plus"></i>
+                <% if @sadhak_profile.spiritual_journey.try(:is_complete?) %>
+                <i class="success-btn">
+                 <%= image_tag "check-mark.png" %>
+                </i>
+                <% else %>
+                <i class="error-btn"><%= image_tag "warning.png" %></i>
+                <% end %>
+                <span>Spiritual Journey </span>
+            </a>
+        </h4>
+    </div>
+    <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+        <div class="panel-body">
+            <%= form_for @sadhak_profile, html: { id: 'sadhak_profile_spiritual_journey_form' } do |f| %>
+                <%= f.fields_for :spiritual_journey do |ff| %>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="box bordered-input dropdown">
+                                <label class="asterisk">Source of Information</label>
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%= ff.select :source_info_type_id, options_for_select(SourceInfoType.pluck(:source_name, :id), ff.object.source_info_type_id), { include_blank: ' ----- Select ----- ' }, { class: 'basic-single', required: true } %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input">
+                               <label class="">First Event Attended (Place)</label>
+                               <div class="dropdown dropdown-field">
+                                  <%= ff.text_field :first_event_attended, class: 'form-control noBorder field', placeholder: "First event attended place"%>  
+                               </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input dropdown">
+                                <label class="">First Event Attended (Year)</label>
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%= ff.select :first_event_attended_year, options_for_select(1980.. Date.today.year, ff.object.first_event_attended_year), { include_blank: ' ----- Select ----- '}, { class: 'basic-single'} %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bordered-input dropdown">
+                                <label class="">First Event Attended (Month)</label>
+                                <div class="dropdown-field selectTwo-dropdown">
+                                    <%= ff.select :first_event_attended_month, options_for_select(1..12, ff.object.first_event_attended_month), { include_blank: ' ----- Select ----- ' }, { class: 'basic-single'} %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="box bordered-input border-textarea">
+                               <label class="">Reason for Joining SHIVYOG TM</label>
+                               <div class="dropdown dropdown-field">
+                                  <%= ff.text_area :reason_for_joining, class: 'form-control noBorder field', placeholder: "Reason for joining SHIVYOG TM"%>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%= ff.hidden_field :sadhak_profile_id, value: @sadhak_profile.id %>
+                <% end %>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="pannel-btn">
+                            <%= f.hidden_field :sp_accordion_id, value: 'collapseFive', id: 'sadhak_profile_spiritual_journey_accodion_id'  %>
+                            <%= button_tag 'CLEAR', class: 'btn btn-danger mg-r10 resetForm', type: 'reset' %>
+                            <%= f.submit 'SAVE', class: 'btn btn-info' %>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>

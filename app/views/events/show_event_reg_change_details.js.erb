@@ -1,0 +1,11 @@
+<% if @message.present? %> 
+
+  toastr.error("<%= @message %>");
+
+<% else %>
+
+    $("#eventRegChangeDetailsModal").remove();
+    $("body").append("<%= escape_javascript(render(partial: 'events/show_event_reg_change_details', locals: {event_order: @event_order})) %>");
+    $("#eventRegChangeDetailsModal").modal('show');
+
+<% end %>

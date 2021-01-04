@@ -1,0 +1,6 @@
+$("#cropped_image").html("<%= j render 'faces' %>");
+<% if @face_images.present? %>
+	$('#snapshotSubmit').attr('disabled', false);
+<%else%>
+	$('#snapshotSubmit').attr('disabled', true);
+<%end%>

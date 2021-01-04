@@ -1,0 +1,47 @@
+<% uniq_token = SecureRandom.uuid %>
+<% _overlay = defined?(overlay) ? overlay : nil %>
+<div class="col-sm-6">
+  <div class="overlapping <%= 'overlay-active' if _overlay && f.object.try(:country_id) %>"></div>
+    <div class="box bordered-input dropdown">
+        <label class="asterisk">Country</label>
+        <div class="dropdown-field selectTwo-dropdown">
+            <%= f.select :country_id, options_for_select(DbCountry.pluck(:name, :id), f.object.try(:country_id)),{ include_blank: " ----- Select -----" }, { class: "form-control country-select basic-single", "data-changable-id": "#{uniq_token}", id: "country_#{uniq_token}", onChange: "countrySelectChange('#{uniq_token}')", required: 'required' } %> 
+        </div>
+    </div>
+</div>
+<div class="col-sm-6">
+  <div class="overlapping <%= 'overlay-active' if _overlay && f.object.try(:state_id) %>"></div>
+    <div class="box bordered-input dropdown">
+        <label class="asterisk">State</label>
+        <div class="dropdown-field selectTwo-dropdown">
+            <%= f.select :state_id, options_for_select(f.object.try(:db_country).try(:states_with_other).try(:pluck, :name, :id) || [],  f.object.try(:state_id)), { include_blank: " ----- Select ----- " }, { class: "form-control state-select basic-single", "data-changable-id": "#{uniq_token}", onChange: "stateSelectChange('#{uniq_token}')", id: "state_#{uniq_token}", required: 'required' } %>
+        </div>
+    </div>
+</div>
+<div class="col-sm-6 prelative">
+    <div class="overlapping <%= 'overlay-active' unless f.object.try(:other_state?) && f.object.try(:is_in_other_state?)%>" id="otherStateOverl_<%= uniq_token %>"></div>
+    <div class="box bordered-input">
+       <label class="asterisk">Other State</label>
+       <div class="dropdown dropdown-field">
+          <%= f.text_field :other_state, value: f.object.try(:other_state), class: "form-control noBorder field", id: "otherState_#{uniq_token}", placeholder: "Other state" %>  
+       </div>
+    </div>
+</div>
+<div class="col-sm-6">
+  <div class="overlapping <%= 'overlay-active' if _overlay && f.object.try(:city_id) %>"></div>
+    <div class="box bordered-input dropdown">
+        <label class="asterisk">City</label>
+        <div class="dropdown-field selectTwo-dropdown">
+            <%= f.select :city_id, options_for_select(f.object.try(:db_state).try(:cities_with_other).try(:pluck, :name, :id) || [], f.object.try(:city_id)), { include_blank: " ----- Select ----- " }, { class: "form-control city-select basic-single", "data-changable-id": "#{uniq_token}", onChange: "citySelectChange('#{uniq_token}')", id: "city_#{uniq_token}", required: 'required' }%>
+        </div>
+    </div>
+</div>
+<div class="col-sm-6 prelative">
+    <div class="overlapping <%= 'overlay-active' unless f.object.try(:other_city?) && f.object.try(:is_in_other_city?) %>" id="otherCityOverl_<%= uniq_token %>" ></div>
+    <div class="box bordered-input">
+       <label class="asterisk">Other City</label>
+       <div class="dropdown dropdown-field">
+          <%= f.text_field :other_city, value: f.object.try(:other_city), class: "form-control noBorder field", id: "otherCity_#{uniq_token}", placeholder: "Other city" %>  
+       </div>
+    </div>
+</div>

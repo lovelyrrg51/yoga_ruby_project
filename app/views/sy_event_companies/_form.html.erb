@@ -1,0 +1,124 @@
+<%= form_for @sy_event_company, html:{id: "sy_event_company_form"} do |f| %>
+  <div class="prelative mg-b30">
+      <div class="overlapping"></div>
+      <div class="row mg-t30">
+          <div class="col-sm-6">
+              <div class="box bordered-input">
+                  <label>Company Name</label>
+                  <div class="dropdown dropdown-field">
+                      <%= f.text_field :name, class: "form-control noBorder field", required: true, placeholder: "Company name"%>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="box bordered-input">
+                  <label class="asterisk">LLPIN Number</label>
+                  <div class="dropdown dropdown-field">
+                      <%= f.text_field :llpin_number, class: "form-control noBorder field", required: true, placeholder: "LLPIN number"%>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="box bordered-input">
+                  <label class="asterisk">GSTIN Number</label>
+                  <div class="dropdown dropdown-field">
+                      <%= f.text_field :gstin_number, class: "form-control noBorder field", required: true, placeholder: "GSTIN number"%>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="box bordered-input">
+                  <label>Invoice Prefix</label>
+                  <div class="dropdown dropdown-field">
+                      <%= f.text_field :invoice_prefix, class: "form-control noBorder field", placeholder: "Invoice Prefix"%>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="box bordered-input">
+                  <label>Receipt Prefix</label>
+                  <div class="dropdown dropdown-field">
+                      <%= f.text_field :receipt_prefix, class: "form-control noBorder field", placeholder: "Receipt Prefix"%>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="box bordered-input">
+                  <label>Refund Prefix</label>
+                  <div class="dropdown dropdown-field">
+                      <%= f.text_field :refund_prefix, class: "form-control noBorder field", placeholder: "Refund Prefix"%>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="box bordered-input">
+                  <label class="asterisk">Company Type</label>
+                  <div class="dropdown dropdown-field">
+                    <%= f.select :company_type, options_for_select(SyEventCompany.company_types.collect{|k, v| [k.downcase.tr("_ ", " ").titleize, k]}, f.object.company_type), {},{ prompt: "----- Select -----", class: "simple-single"}%>
+                  </div>
+              </div>
+          </div>
+          <%= f.fields_for :address do |addr| %>
+          <!-- Commented Search as per discussion -->
+<!--             <div class="col-sm-12">
+                <div class="box bordered-input">
+                    <label>Search Address</label>
+                    <div class="dropdown dropdown-field">
+                      <div class="input-group box-input-group">
+                        <span class="input-group-addon"><i class="icon-google-maps"></i></span>
+                          <%#= text_field_tag :autocomplete_search, "", class: 'form-control noBorder field', "data-google-address-autocomplete": 'autocomplete', placeholder: "Search address"%>
+                      </div>
+                    </div>
+                </div>
+            </div>  -->           
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label class="asterisk">Address Line 1</label>
+                    <div class="dropdown dropdown-field">
+                        <%= addr.text_field :first_line, class: "form-control noBorder field", required: 'required', placeholder: "First line address"%>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label>Address Line 2</label>
+                    <div class="dropdown dropdown-field">
+                        <%= addr.text_field :second_line, class: "form-control noBorder field", placeholder: "Second line address"%>
+                    </div>
+                </div>
+            </div>
+            <%= render 'application/country_state_city_select',f: addr %>
+            <div class="col-sm-6">
+                <div class="box bordered-input">
+                    <label class="asterisk">Postal Code</label>
+                    <div class="dropdown dropdown-field">
+                        <%= addr.text_field :postal_code, class: "form-control noBorder field", required: true, placeholder: "Postal code"%>
+                    </div>
+                </div>
+            </div>
+          <% end %>
+          <div class="col-sm-6 mg-b30">
+            <div class="outbox">
+                <label class="asterisk">Terms & Conditions</label>
+                    <%= cktext_area_tag "sy_event_company[terms_and_conditions]", f.object.terms_and_conditions, cols: 40, ckeditor: { uiColor: '#AADC6E', toolbar: 'mini' }, required: true %>
+            </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="CustomCheckbox mg-b30">
+                  <%= f.check_box :automatic_invoice %>
+                  <label>Automatically send Invoice</label>
+              </div>
+          </div>
+          <div class="col-sm-12">
+              <div class="pannel-btn text-right">
+                <% if params[:action] == "edit" %>
+                    <%= link_to "CLEAR", edit_sy_event_company_path(@sy_event_company), class: "btn btn-danger mg-r10" %>
+                <% else %>
+                    <button type="reset" class="btn btn-danger mg-r10 resetForm" >CLEAR</button>
+                <% end %>
+                <%= f.submit params[:action] == "edit" ? "UPDATE" : 'CREATE', {class: 'btn btn-info'} %>
+              </div>
+          </div>
+      </div>
+  </div>
+<% end %>

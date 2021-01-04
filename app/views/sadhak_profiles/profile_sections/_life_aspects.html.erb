@@ -1,0 +1,68 @@
+<div class="panel">
+    <div class="panel-heading" role="tab" id="headingTen">
+        <h4 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#sp_accordion_id" href="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+                <i class="more-less glyphicon glyphicon-plus"></i>
+                <% if @sadhak_profile.aspects_of_life.try(:is_complete?) %>
+                <i class="success-btn">
+                 <%= image_tag "check-mark.png" %>
+                </i>
+                <% else %>
+                <i class="error-btn"><%= image_tag "warning.png" %></i>
+                <% end %>
+                <span>Aspects of Life</span>
+            </a>
+        </h4>
+    </div>
+    <div id="collapseTen" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTen">
+        <div class="panel-body">
+            <%= form_for :aspect_feedback, url: sadhak_profile_aspect_feedback_path(@sadhak_profile, @aspect_feedback), method: :patch, html: { id: 'sadhak_profile_aspect_feedback_form' } do |f| %>
+               <div class="row">
+                    <div class="col-sm-12">
+                        <div class="headtittle"><h2>Please rate various aspects of your life before and after joining ShivYog<sup>TM</sup></h2></div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="shivyogCntrl shivyogmg">
+                            <div class="tableCntrl">
+                                <div class="table-responsive ">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Before</th>
+                                                <th>After</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <% @aspect_feedback.each do |af| %>
+                                            <tr>
+                                                <td><%= af.aspect_type.humanize %></td>
+
+                                                <td><input id="<%= af.id %>_before" type="text" class="rating aspect_feedback_click_rating before_after_aspect_feedback" data-size="xs" data-step="1" data-id=<%= af.id %> data-to-do='before', value=<%= af.rating_before/5 %> ></td>
+
+                                                <td><input id="<%= af.id %>_after" type="text" class="rating aspect_feedback_click_rating before_after_aspect_feedback" data-id=<%= af.id %> data-to-do='after' data-size="xs" data-step="1", value=<%= af.rating_after/5 %> ></td>
+
+                                                <%= f.hidden_field "[#{af.id}][rating_before]", value: af.rating_before, id: "hidden_#{af.id}_before" %>
+                                                <%= f.hidden_field "[#{af.id}][rating_after]", value: af.rating_after, id: "hidden_#{af.id}_after" %>
+                                            </tr>
+                                        <% end %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="pannel-btn">
+                            <%= hidden_field_tag :sadhak_profile_aspect_feedback_sp_accordion_id, "collapseTen"%>
+                            <%= f.submit 'CLEAR', class: 'btn btn-danger mg-r10', type: 'reset' %>
+                            <%= f.submit 'SAVE', class: 'btn btn-info' %>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Shivyog Information</title>
+  <style type="text/css">
+  body, td { color:#000000; font-size:14px; font-family:Verdana,Helvetica,Arial; }
+  .divider { background-color:#555555; height:2px; }
+  .episode h2 { margin-top:0; margin-bottom:8px; font-size:18px; }
+  .episode p { margin:8px 0; }
+  .episode td a img { border:solid 1px #777777; height:170px; width:170px; }
+  .episode .duration { font-size:11px;color:#555555; }
+  #footer { font-size:11px; color:#555555; }
+  #footer a { color:#555555;}
+  </style>
+</head>
+<body>
+  <table width="100%" id="background" border="0" cellpadding="0" cellspacing="0">
+    <tr><td align="center" valign="top">
+      <table width="650" id="main" border="0" cellpadding="0" cellspacing="20">
+        <tr>
+          <td id="header" colspan="2" style="border-bottom: 1px solid #900;  background: #900;" height='80px'>
+            <a href=<%="http://#{Rails.application.config.app_base_url}"%>><img src="http://www.shivyog.com/wp-content/uploads/2015/03/sy_logo_orange.png" width="40%" height="56" alt="Shivyog Emerging Infinite"></a>
+          </td>
+        </tr>
+        <tr>
+          <td class="divider" colspan="2" bgcolor="#555555" height="2"></td>
+        </tr>
+          <tr class="episode">
+            <td>
+              <a href=<%="#{Rails.application.config.app_base_url}/"%>><img src="https://dmhtmt59mq15j.cloudfront.net/assets/images/pic3-2597e250cc000b0043c28b1fcbfe91cc.jpg" height="185px" alt=<%= "Getting Started with Shivyog Portal."%> ></a>
+            </td>
+            <td valign="top">
+              <% if @options[:sy_club].present? %>
+                <% sy_club = @options[:sy_club] %>
+                <% requester_sp = sy_club.requester_user.sadhak_profile%>
+                <% responder_sp = sy_club.responder_user.present? ? sy_club.responder_user.sadhak_profile : nil %>
+                <% requester_name = requester_sp.present? ? requester_sp.full_name : sy_club.requester_user.name %>
+                <% responder_name = responder_sp.present? ? responder_sp.full_name : sy_club.responder_user.present? ? sy_club.responder_user.name : "NA" %>
+                <% status_was = sy_club.status_was.present? ? sy_club.status_was.titleize : "NA" %>
+                <p>Hi Admin, <b><%= (sy_club.status == 'proposed' or sy_club.status_was.nil?) ? requester_name : responder_name %></b> <%= sy_club.status == 'proposed' ? "waiting your approval on below forum" : sy_club.status_was.present? ? "changed forum status from #{status_was} to #{sy_club.status.titleize}" : "created a new forum" %>.</p>
+                <p><b>Forum</b> : <a href=<%="#{Rails.application.config.app_base_url}/v1/forums/#{sy_club.id}/admin/members"%>><%= "#{sy_club.name.titleize}"%></a></p>
+                <% if requester_sp.present? %>
+                  <p><b>Requester details:</b></p>
+                  <p><b>Name:</b> <%= requester_sp.full_name.present? ? requester_sp.full_name.titleize : 'NA' %>, <b>SYID:</b> <%= requester_sp.syid.present? ? requester_sp.syid : 'NA' %>, <b>Email:</b> <%= requester_sp.email.present? ? requester_sp.email : 'NA' %></p>
+                <% else %>
+                  <p><b>No requester details found.</b></p>
+                  <!-- <h4><a href=<%#="#{Rails.application.config.app_base_url}/#/help"%> style="color:#900;">Click here</a> to learn how to register.</h4> -->
+                  <h4><a href=<%="#{Rails.application.config.app_base_url}/"%> style="color:#900;">Click here</a> to learn how to register.</h4>
+                  <h4><a href=<%="#{Rails.application.config.app_base_url}/"%> style="color:#900;">Click here</a> to visit our website.</h4>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <tr>
+          <td class="divider" colspan="2" bgcolor="#555555" height="2"></td>
+        </tr>
+        <tr>
+          <td id="footer" colspan="2" align="center">
+            <p>If you need any help, please mail us at <a style="color:#900;" href="mailto:info@shivyog.com"><i>info@shivyog.com</i></a></p>
+            <p>&copy;<%=Date.current.year%> Shiv Yog. All Rights Reserved.</p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>

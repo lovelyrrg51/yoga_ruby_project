@@ -1,0 +1,105 @@
+<tr>
+  <td style="padding: 20px 30px; background: #f8f8f8;" colspan="2">
+    <% (@options[:event_details] || []).each do |graced_by, events| %>
+      <table cellpadding="8" cellspacing="0" border="0" width="1000px;" style="border-collapse:collapse; margin:0 auto; background:#fff; border:1px solid #b1b1b1; margin-bottom:10px;width:100%; text-align:center">
+        <tbody>
+          <tr>
+            <td>
+              <!-- baba ji Level 1 start -->
+              <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top:15px;">
+                <tr>
+                  <td style=style="line-height:23px;font-size:30px;color:#ff7806" width="100%"><strong>Graced by - <%= graced_by %></strong></td>
+                </tr>
+              </table>
+              <% common_event_ids = events.collect{|e| e.id }  %>
+              <% event_addresses = @options[:address_details].select{|a| common_event_ids.include?(a.addressable_id)} %>
+              <% ( event_addresses || []).group_by(&:db_country).sort_by { |_country| _country[0].name }.each do |db_country, addresses| %>
+                  <% next if addresses.size == 0 %>
+                <table ccellpadding="8" cellspacing="0" border="1" width="100%" align="left" style="margin-top:15px; border-collapse: collapse; border:1px solid #b1b1b1; align:'center'">
+                  <tr style="background:#a70000;">
+                    <td style="color:#fff; font-size:15px; padding:10px;" colspan="5">
+                      <strong>Country: </strong><%= db_country.name.present? ? db_country.name : 'NA' %>
+                    </td>
+                  </tr>
+                  <% state_addresses = addresses.group_by(&:db_state).sort_by { |_state| _state[0].name } %>
+                  <% state_addresses.each do |state, st_adds| %>
+                    <% event_ids = st_adds.collect{|a| a.addressable_id } %>
+                        <% user_events = events.select{|e| event_ids.include?(e.id)} %>
+                        <% if user_events.present? and user_events.count > 0 %>
+                      <tr style="background:#ececec;">
+                        <td style="color:#000; padding:10px; font-size:14px;" colspan="5">
+                          <strong>State:</strong> <%= state.name %>
+                        </td>
+                      </tr>	
+                      <tr style="font-weight:bold; text-align:center">
+                        <td width="25%">
+                          Event name
+                        </td>
+                        <td width="25%">
+                          Event date
+                        </td>
+                        <td width="10%">
+                          Total Registration
+                        </td>
+                        <td width="10%">
+                          Total Capacity
+                        </td>
+                        <td width="30%" style="padding:0px">
+                          <table border="0" cellpadding="20" cellspacing="0" width="100%" align="center">
+                            <tr>
+                              <td style="border-right:1px solid #b1b1b1; font-weight:bold;"  width="25%">Category Name</td>
+                              <td style="border-right:1px solid #b1b1b1; font-weight:bold;"  width="25%">Category seats</td>
+                              <td style="border-right:1px solid #b1b1b1; font-weight:bold;"  width="25%">Seats occupied </td>
+                              <td style="font-weight:bold;" width="25%">Extra seats</td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                          <% user_events.sort_by{|e| e[:event_start_date]}.each do |e| %>
+                            <% seating_category_details = [] %>
+                            <% e.event_seating_category_associations.each do |sc| %>
+                                <% seating_category_details.push({
+                                total_seats: sc.try(:seating_capacity),
+                                seats_occupied: e.event_registrations.where(event_seating_category_association_id: sc.id, status: EventRegistration.valid_registration_statuses).count,
+                                extra_seats: e.event_registrations.where(event_seating_category_association_id: sc.id, is_extra_seat: true, status: EventRegistration.valid_registration_statuses).count,
+                                category_name: sc.try(:seating_category).try(:category_name)  		}) %>
+                            <% end %>
+                        <tr style="text-align:center">
+                          <td width="25%">
+                            <%= e.event_name %>
+                          </td>
+                          <td width="25%">
+                            <%= e.event_start_date.to_s %> to <%= e.event_end_date.to_s %>
+                          </td>
+                          <td width="10%">
+                            <%= e.valid_event_registrations.size rescue "NA"%>
+                          </td>
+                          <td width="10%">
+                            <%= e.event_seating_category_associations.collect{|s| s.seating_capacity}.sum rescue "NA"%>
+                          </td>
+                            <td width="30%" style="padding:0px">
+                              <table border="0" cellpadding="22" cellspacing="0" width="100%">
+                                <% seating_category_details.sort_by { |_d| _d[:category_name] }.each do |sc_detail| %>
+                                  <tr>
+                                    <td style="border-bottom:1px solid #b1b1b1; border-right:1px solid #b1b1b1;" width="27%"><%= sc_detail.category_name %></td>
+                                    <td style="border-bottom:1px solid #b1b1b1; border-right:1px solid #b1b1b1;" width="26%"><%= sc_detail.total_seats %></td>
+                                    <td style="border-bottom:1px solid #b1b1b1; border-right:1px solid #b1b1b1;" width="27%"><%= sc_detail.seats_occupied %></td>
+                                    <td style="border-bottom:1px solid #b1b1b1;" width="20%"><%= sc_detail.extra_seats %></td>
+                                  </tr>
+                                <% end %>
+                              </table>
+                            </td>
+                        </tr>
+                      <% end %>
+                    <% end %>
+                  <% end %>
+                </table>
+                  <% end %>
+            <!-- baba ji Level 2 start -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    <% end %>
+  </td>
+</tr>

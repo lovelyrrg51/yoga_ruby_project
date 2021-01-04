@@ -1,0 +1,138 @@
+<% content_for(:title, 'Event | Registration Status') %>
+
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Event</h2>
+        <span class="subheading primary-color primarybold">Event ID: <%= @event.id %></span>
+        <span class="subheading"><%= @event.event_name %></span>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+         <%= render partial: 'events/event_organize_left_panel', locals: { event: @event } %>
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxsection-xs boxshadow prelative">
+
+                    <div class="rightContent">
+                        <div id="applicationstatus" class="">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="headtittle text-center">
+                                        <h2>Application Status</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mg-t30 mg-b30">
+                                <div class="col-sm-12">
+                                    <a href="#applicationRefine" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+                                    <div class="refineCntrl collapse in" aria-expanded="true" id="applicationRefine" role="tabpanel">
+                                        <div class="refinesub-group clearfix">
+                                            <form action="" method="get" id="">
+                                                <div class="col-sm-6">
+                                                    <div class="outbox">
+                                                        <label class="asterisk">Reg. Ref. Number</label>
+                                                        <div class="box bordered-input">
+                                                            <div class="dropdown dropdown-field">
+                                                                <input type="text" class="form-control noBorder field" placeholder="Reg. ref. number" value="<%= params[:reg_ref_number] %>" name="reg_ref_number">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="outbox">
+                                                        <label class="asterisk">Transaction Id</label>
+                                                        <div class="box bordered-input">
+                                                            <div class="dropdown dropdown-field">
+                                                                <input type="text" class="form-control noBorder field" placeholder="Transaction id" value="<%= params[:transaction_id] %>" name="transaction_id">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="outbox">
+                                                        <label class="asterisk">Status</label>
+                                                        <div class="box bordered-input dropdown">
+                                                            <div class="dropdown-field selectTwo-dropdown">
+                                                                <%= select_tag 'status', options_for_select(event_order_selectable_statuses(@event), params[:status]), { prompt: '----- Select -----', class: 'basic-single' } %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div class="pannel-btn text-right">
+                                                       <%= link_to "CLEAR", application_status_event_path(@event), class: "btn btn-danger mg-r10" %>
+                                                      <%= submit_tag 'SEARCH', { class: 'btn btn-info', data: {  disable_with: "SEARCHING...!" } } %>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% unless @event_orders.present? %>
+                                    <div>
+                                        <%= render partial: 'application/no_records', locals: { message: "No Event Registrations Found." }  %>
+                                    </div>
+                                <% end %>
+                            </div>
+                            <% if @event_orders.present? %>
+                                <div class="row mg-t30">
+                                    <div class="col-sm-12">
+                                        <div class="Boxdrop dropdown">
+                                        <%= render 'application/per_page' %>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="tableCntrl">
+                                            <div class="table-responsive ">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="width-50">
+                                                                <div class="CustomCheckbox">
+                                                                <%= check_box_tag "select_event_order_update_status", "", false %>
+                                                                    <label></label>
+                                                                </div>
+                                                                <div class="boxicon-drop dropdown">
+                                                                    <button class="btn boxdrop-btn" data-toggle="dropdown">
+                                                                        <span class="btnarrow"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                                                                    </button>
+                                                                    <div class="dropdown-menu dropdownCntrl">
+                                                                        <ul class="list-unstyled">
+                                                                            <li class="active">
+                                                                            <%= link_to "Approved", "javascript:void(0)", onclick: "approveRejectSelectedEventOrder('#{ EventOrder.statuses['approve']}')"%>
+                                                                            <li>
+                                                                            <%= link_to "Rejected", "javascript:void(0)", onclick: "approveRejectSelectedEventOrder('#{ EventOrder.statuses['rejected']}')"%>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </th>
+                                                            <th>Reg. Ref. Number</th>
+                                                            <th>Transaction Id</th>
+                                                            <th>Status</th>
+                                                            <th class="text-center">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% @event_orders.each do |event_order|%>
+                                                            <%= render partial: 'event_orders/application_status_table_row', locals: { event_order: event_order}  %>
+                                                        <% end %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        <div class="table-pagination">
+                                        <div class="show-pgnation">
+                                            <p class="primarybold"><%= custom_page_entries_info(@event_orders) %></p>
+                                        </div>
+                                        <%= paginate @event_orders %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,32 @@
+<div class="prelative mg-t30">
+    <div class="overlapping overlay-active add-rc-member-form-div"></div>
+      <div class="row">
+          <div class="col-sm-6">
+              <div class="outbox">
+                  <label class="asterisk">SYID</label>
+                  <div class="box bordered-input">
+                     <div class="dropdown dropdown-field">
+                        <%= text_field_tag "search-field-syid", "", class: "form-control noBorder field", placeholder: 'SYID' %>
+                        <label id="search-field-syid-error-label" class="error" for=""></label>
+                     </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="outbox">
+                  <label class="asterisk">First Name</label>
+                  <div class="box bordered-input">
+                     <div class="dropdown dropdown-field">
+                        <%= text_field_tag "search-field-first_name", "", class: 'form-control noBorder field', placeholder: 'First name' %>
+                        <label id="search-field-first_name-error-label" class="error" for=""></label>
+                     </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-12">
+              <div class="pannel-btn text-right">
+                  <button class="btn btn-info event-rcmember-form-add-button" type="button">ADD</button>
+              </div>
+          </div>
+      </div>
+</div>

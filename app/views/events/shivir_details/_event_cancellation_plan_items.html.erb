@@ -1,0 +1,43 @@
+<% if cancellation_plan_items.present? %>
+    <div class="tableCntrl">
+        <div class="table-responsive tableScrollbar">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Day(s) Before</th>
+                        <th>Amount</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody id="event_cancellation_plan_items_table">
+    						<% cancellation_plan_items.each do |event_cancellation_plan_item| %>
+    							<tr>
+    								<td>
+    									<span class="primarybold"><%= event_cancellation_plan_item.days_before %></span>
+    								</td>
+    								<td>
+    									<span class="primary-color primarybold"><%= ('%.2f' % event_cancellation_plan_item.amount) %></span>
+    								</td>
+    								<td>
+    									<%= event_cancellation_plan_item.amount_type.titleize %>
+    								</td>
+    							</tr>
+    						<% end %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="pannel-btn text-right">
+        <button class="btn btn-danger mg-r10" onClick="Turbolinks.visit(window.location.href)" type="button">CLEAR</button>
+        <button class="btn btn-info">SAVE</button>
+    </div>
+<% else %>
+    <%= render partial: 'application/no_records', locals: { message: is_params_blank.present? ? 'Select One Registration Cancellation Policy' : 'No Registration Cancellation Policy Items Available.' } %>
+<% end %>
+
+
+
+
+
+
+

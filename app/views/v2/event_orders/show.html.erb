@@ -1,0 +1,35 @@
+<%= content_for(:title, "Event Application #{@event_order.reg_ref_number}") %>
+
+<section id="registration-status-banner">
+</section>
+
+<div class="container">
+  <div class="row clearfix">
+    <div class="col-sm-12">
+      <div class="heading_subtitle"><h2><%= @event.event_name_with_location %></h2></div>
+      <div class="dashed_divider m-b-30"></div>
+
+      <div class="card">
+        <div class="body">
+          <%= render "v2/events/detail" %>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="body">
+          <%= render "registration_summary" %>
+        </div>
+      </div>
+
+      <div class="card" >
+        <div class="body" data-behavior="vue">
+          <payment-page :gateways="<%= @order_data.gateways.keys.to_json %>"
+                        :wizard="<%= false.to_json %>"
+                        :order-data="<%= @order_data.to_json %>"
+            />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

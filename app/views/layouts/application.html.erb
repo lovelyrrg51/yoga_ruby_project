@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for?(:title) ? "#{content_for(:title)} | ShivYog | Emerging Infinite" : 'ShivYog | Emerging Infinite' %></title>
+    <meta charset="utf-8">
+    <meta name="description" content="Shivyog">
+    <meta name="Author" content="Designed by MetaDesign Solutions">
+    <!-- change into index, follow -->
+    <!-- Mobile Specific Metas ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- CSS ================================================== -->
+    <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i"%>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'https://js.stripe.com/v2/' %>
+    <%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{ENV['GOOGLE_AUTOCOMPLETE_ADDRESS_ID']}&libraries=places" %>
+    <%= yield :stylesheets %>
+    <%= yield :javascripts %>
+    <script type="text/javascript">
+        // window.onload
+        var current_url  = document.location.toString()
+        if (current_url.indexOf('/#/') > -1){
+          window.location =  document.location.toString().replace('/#','')
+        }
+
+    </script>
+  </head>
+  <body class="noscroll <%= 'height-full' if is_header_footer_hidden?%>">
+    <script type="text/javascript">
+
+    </script>
+    <%= action_cable_meta_tag %>
+    <% unless flash.empty? %>
+      <script type="text/javascript">
+        <% flash.each do |f| %>
+          <% type = f[0].to_s.gsub('alert', 'error').gsub('notice', 'info') %>
+          toastr["<%= type %>"]("<%= f[1].html_safe.gsub("\n", ' ') %>");
+        <% end %>
+        <% flash.clear() %>
+      </script>
+    <% end %>
+    <section id="wrapper" class="wrapperCntrl">
+      <% if is_header_footer_hidden?%>
+         <%= yield %>
+      <%else%>
+        <%= render partial: 'header' %>
+        <section class="SectionCntrl Sectionmin">
+          <div class="containerWrapper">
+            <%= yield %>
+          </div>
+        </section>
+        <%= render partial: 'application/global_search_shivyog_forum' %>
+      <%end%>
+      <div class="overlay"></div>
+    </section>
+    <div class="overlayload overlay-active">
+      <div class="loader">
+        <%= image_tag "bg-loader.gif", class: "center-block"%>
+        <p>Loading...</p>
+      </div>
+    </div>
+    <%= render partial: 'footer' unless is_header_footer_hidden? %>
+    <%= any_login_here if defined?(AnyLogin) && AnyLogin.enabled %>
+    <%= render 'error_popup'%>
+  </body>
+</html>

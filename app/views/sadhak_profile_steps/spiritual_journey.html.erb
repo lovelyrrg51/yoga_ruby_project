@@ -1,0 +1,131 @@
+
+<div class="CompleteprofileCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Profile</h2>
+    </div>
+    <div class="boxsection-md boxshadow prelative">
+        <div class="progressCntrl text-right ">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:<%= @sadhak_profile.completed.to_i %>%">
+                </div>
+            </div>
+            <span><%= @sadhak_profile.completed.to_i %>%</span>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane active" role="tabpanel" id="Spiritualjounery">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="headtittle text-center">
+                            <h2>Spiritual Journey</h2>
+                        </div>
+                    </div>
+                </div>
+                <%= form_for @sadhak_profile, url: wizard_path, html: { id: 'sadhak_profile_steps_spiritual_journey_form' } do |f| %>
+                    <%= f.fields_for :spiritual_journey do |ff| %>
+                        <div class="row mg-t30">
+                            <% unless ff.object.source_info_type_id.present? %>
+                                <div class="col-sm-6">
+                                    <div class="box bordered-input dropdown">
+                                        <label class="asterisk">Source of Information</label>
+                                        <div class="dropdown-field selectTwo-dropdown">
+                                            <%= ff.select :source_info_type_id, options_for_select(SourceInfoType.pluck(:source_name, :id), ff.object.source_info_type_id), { include_blank: ' ----- Select ----- ' }, { class: 'basic-single', required: true } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% else %>
+                                <div class="col-sm-6">
+                                    <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.source_info_type_id.present? %>"></div>
+                                        <div class="box bordered-input">
+                                           <label class="asterisk">Source of Information</label>
+                                           <div class="dropdown dropdown-field"> 
+                                              <input type="text" name="" value="<%= SourceInfoType.find_by_id(ff.object.source_info_type_id).try(:source_name) %>" class="form-control noBorder field" disabled="true" > 
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                            <div class="col-sm-6">
+                                <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.first_event_attended.present? %>"></div>
+                                    <div class="box bordered-input">
+                                       <label class="">First Event Attended (Place)</label>
+                                       <div class="dropdown dropdown-field">
+                                          <%= text_field_tag ff.object.first_event_attended.blank? ? "sadhak_profile[spiritual_journey_attributes][first_event_attended]" : "", ff.object.first_event_attended, class: 'form-control noBorder field' , disabled: ff.object.first_event_attended.present? , placeholder: "First event attended (place)"%>  
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% unless ff.object.first_event_attended_year.present? %>
+                                <div class="col-sm-6">
+                                    <div class="box bordered-input dropdown">
+                                        <label class="">First Event Attended (Year)</label>
+                                        <div class="dropdown-field selectTwo-dropdown">
+                                            <%= ff.select :first_event_attended_year, options_for_select(1980.. Date.today.year, ff.object.first_event_attended_year), { include_blank: ' ----- Select ----- '}, { class: 'basic-single' } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% else %>
+                                <div class="col-sm-6">
+                                    <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.first_event_attended_year.present? %>"></div>
+                                        <div class="box bordered-input">
+                                           <label class="">First Event Attended (Year)</label>
+                                           <div class="dropdown dropdown-field">
+                                              <input type="text" name="" value="<%= ff.object.first_event_attended_year %>" class="form-control noBorder field" disabled="true" placeholder="First event attended (year)"> 
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                            <% unless ff.object.first_event_attended_month.present? %>
+                                <div class="col-sm-6">
+                                    <div class="box bordered-input dropdown">
+                                        <label class="">First Event Attended (Month)</label>
+                                        <div class="dropdown-field selectTwo-dropdown">
+                                            <%= ff.select :first_event_attended_month, options_for_select(1..12, ff.object.first_event_attended_month), { include_blank: ' ----- Select ----- ' }, { class: 'basic-single' } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% else %>
+                                <div class="col-sm-6">
+                                    <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.first_event_attended_month.present? %>"></div>
+                                        <div class="box bordered-input">
+                                           <label class="">First Event Attended (Month)</label>
+                                           <div class="dropdown dropdown-field">
+                                              <input type="text" name="" value="<%= ff.object.first_event_attended_month %>" class="form-control noBorder field" disabled="true" placeholder="First event attended (month)">
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                            <div class="col-sm-12">
+                                <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.reason_for_joining.present? %>"></div>
+                                    <div class="box bordered-input border-textarea">
+                                       <label class="">Reason for Joining SHIVYOG TM</label>
+                                       <div class="dropdown dropdown-field">
+                                          <%= text_area_tag ff.object.reason_for_joining.blank? ? "sadhak_profile[spiritual_journey_attributes][reason_for_joining]" : "", ff.object.reason_for_joining, class: 'form-control noBorder field', disabled: ff.object.reason_for_joining.present?, placeholder: "Reason for joining SHIVYOG TM" %>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mg-t30">
+                            <div class="col-sm-12">
+                                <div class="pannel-btn clearfix">
+                                    <%= link_to 'PREVIOUS', previous_wizard_path(previous: true), class: "btn btn-info mg-r5" %>
+                                    <div class="pull-right">
+                                        <%= link_to 'SKIP', next_wizard_path, class: "btn btn-info mg-r5" unless @event.full_profile_needed? %>
+                                        <%= f.submit  "SAVE & CONTINUE", class: ' btn btn-info' %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,68 @@
+// @import url('https://fonts.googleapis.com/css?family=Ubuntu');
+
+// Reset browser specific style
+@import "reset";
+
+// Vendors
+@import "fonts";
+@import "font-awesome";
+@import "bootstrap4";
+@import "mdb";
+@import "v2/all";
+
+@import "owl.carousel";
+@import "owl.theme.custom";
+@import "selectize";
+@import "pace/themes/white/pace-theme-flash";
+@import "flatpickr";
+
+// Plugins
+@import "v2/hover";
+@import "v2/materialize";
+@import "v2/animate-custom";
+@import "v2/megamenu/fade-up";
+@import "v2/megamenu/megamenu";
+@import "v2/megamenu/grd-orange";
+@import "v2/storelocator";
+@import "v2/plugins/bootstrap-select";
+@import "v2/plugins/sweetalert";
+@import "dataTables.bootstrap4";
+@import "v2/plugins/bootstrap-datepicker";
+@import "jquery.datetimepicker";
+@import "v2/events_calendar/css/calendar";
+@import "v2/events_calendar/css/custom";
+
+// All page
+@import "v2/event";
+@import "forums";
+
+
+.cta_button:focus{
+  color: #fff !important;
+}
+
+.non-refundable {
+  color: #ffffff;
+}
+
+#prevNextCtrls a:focus{
+  color: #ffffff !important;
+}
+
+.forum_details_box {
+  margin-top: 0;
+}
+
+// Override Bootstrap 4 button:focus
+button:focus {
+  outline: none !important;
+}
+
+// Overrid mdb border-radius
+.btn {
+  border-radius: 0;
+}
+#subscribe_newsletter-error{
+  font-size: 14px;
+  color: #F44336;
+}

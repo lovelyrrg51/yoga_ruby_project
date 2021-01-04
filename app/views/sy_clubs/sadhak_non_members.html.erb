@@ -1,0 +1,158 @@
+<div class="headingtittle-h2 text-center">
+    <h2>Sadhak Non Members</h2>
+</div>
+<% uniq_token = SecureRandom.uuid %>
+<div class="mg-b50">
+  <a href="#transactions" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+  <div class="refineCntrl collapse filter-panel" aria-expanded="true" id="transactions" role="tablist">
+      <div class="refinesub-group sadhak_non_member">
+        <ul class="refinelist">
+            <li>
+                <label class="radio-box radiobg">
+                <%= radio_button_tag("radio", "", !params[:search_by_forum].present?, 'data-target': "#searchbyaddress" )%>
+                    <span class="radiocheck">Search By Address</span>
+                </label>
+            </li>
+            <li>
+                <label class="radio-box radiobg">
+                <%= radio_button_tag("radio", "", params[:search_by_forum].present?, 'data-target': "#searchbyforum" )%>
+                    <span class="radiocheck">Search By Forum Name</span>
+                </label>
+            </li>
+        </ul>
+        <div class="mg-t30"></div>
+
+        <!-- searchbyaddress -->
+        <%= form_tag '/v1/forums/sadhak_non_members', method: :get do |f| %>
+          <div class="tabs" id="searchbyaddress"  style="<%= 'display: none;' if params[:search_by_forum].present? %>">
+            <div class="row">
+              <div class="col-sm-6">
+                  <div class="outbox">
+                      <label>Country</label>
+                      <div class="box bordered-input dropdown">
+                          <div class="dropdown-field selectTwo-dropdown">
+                              <%=  select_tag :country_id, options_for_select(DbCountry.pluck(:name, :id)||[], params[:country_id]), include_blank: " ----- Select ----- ", class: "basic-single", id: "country_#{uniq_token}", onChange: "countrySelectChange('#{uniq_token}')"%>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-6" style="display: none;">
+                  <div class="outbox">
+                      <label>State</label>
+                      <div class="box bordered-input dropdown">
+                          <div class="dropdown-field selectTwo-dropdown">
+                              <%=  select_tag :state_id, options_for_select(@states.try(:pluck, :name, :id)||[], params[:state_id]), include_blank: " ----- Select ----- ", class: "basic-single", "data-changable-id": "#{uniq_token}", onChange: "stateSelectChange('#{uniq_token}')", id: "state_#{uniq_token}" %>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-6" style="display: none;">
+                  <div class="outbox">
+                      <label>City</label>
+                      <div class="box bordered-input dropdown">
+                          <div class="dropdown-field selectTwo-dropdown">
+                              <%=  select_tag :city_id, options_for_select(@cities.try(:pluck, :name, :id)||[], params[:city_id]), include_blank: " ----- Select ----- ", class: "basic-single", id: "city_#{uniq_token}", "data-visible": false%>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                  <div class="pannel-btn text-right">
+                      <%= link_to 'CLEAR', nil, class: "btn btn-danger mg-r10" %>
+                      <%= submit_tag "Filter", class: "btn btn-info"%>
+                  </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- searchbyforum -->
+        <%= form_tag '/v1/forums/sadhak_non_members', method: :get do |f| %>
+          <div class="tabs" id="searchbyforum"  style="<%= 'display: none;' unless params[:search_by_forum].present? %>" >
+            <%= hidden_field_tag :search_by_forum, value: true %>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="outbox">
+                  <label>Forum</label>
+                  <div class="box bordered-input dropdown">
+                    <div class="dropdown-field">
+                      <%=  select_tag :forum_id, options_for_select(@sy_clubs, @forum.try(:id)), include_blank: " ----- Select ----- ", class: "basic-single" %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12">
+                  <div class="pannel-btn text-right">
+                      <%= link_to 'CLEAR', nil, class: "btn btn-danger mg-r10" %>
+                      <%= submit_tag "Filter", class: "btn btn-info"%>
+                  </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+  </div>
+</div>
+
+<div class="row">
+	<% if @non_members.present? %>
+	  <div class="col-sm-12">
+	    <div class="Boxdrop dropdown mg-t30">
+	      <%= render 'application/per_page' %>
+	    </div>
+	  </div>
+
+	  <div class="col-sm-12">
+	    <div class="tableCntrl">
+	      <div class="table-responsive tableScrollbar">
+	        <table class="table">
+	          <thead>
+	            <tr>
+	              <th class="primarybold">SYID</th>
+                <th class="primarybold">Sadhak Name</th>
+                <th class="primarybold">City</th>
+                <th class="primarybold">State</th>
+	              <th class="primarybold">Country</th>
+                <th class="primarybold">mobile</th>
+	              <th class="primarybold">email</th>
+	            </tr>
+	          </thead>
+	          <tbody>
+	            <% (@non_members || []).each do |sy_profile| %>
+	              <tr>
+	                <td><%= sy_profile.syid %></td>
+                  <td><%= sy_profile.try(:full_name) %></td>
+                  <td><%= sy_profile.address.try(:city_name) %></td>
+                  <td><%= sy_profile.address.try(:state_name) %></td>
+	                <td><%= sy_profile.address.try(:country_name) %></td>
+                  <td><%= sy_profile.mobile %></td>
+	                <td><%= sy_profile.email %></td>
+	              </tr>
+	            <% end %>
+	          </tbody>
+	        </table>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="table-pagination">
+	    <div class="show-pgnation">
+	      <p class="primarybold"><%= custom_page_entries_info(@non_members) %></p>
+	    </div>
+	    <%= paginate @non_members %>
+	  </div>
+  <%else%>
+		<%= render partial: 'application/no_records', locals: { message: 'No Sadhak Profiles Found.' } %>
+	<% end %>
+</div>
+
+<script>
+  $(function() {
+    checkStateCityVisibility("<%= uniq_token %>")
+    $('div.sadhak_non_member input[type="radio"]').on('change', function() {
+        $('.tabs').hide();
+        $($(this).data("target")).show();
+    });
+  });
+</script>

@@ -1,0 +1,132 @@
+<div id="ddraft" class="tab-pane tabsubcontent">
+    <div class="ccpaymentdetails">
+        <div class="table-responsive paymenttable">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th class="text-right">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="primarybold">Registration Charge</td>
+                        <td class="text-right primarybold"><%= "#{currency} #{number_with_precision(amount, precision: 2)}" %></td>
+                    </tr>
+                    <tr>
+                        <td class="primarybold">Additional Charges (<%= gateway.try(gateway.try(:payment_gateway_type).try(:relation_name).to_sym).try(:tax_amount).rnd %>%)</td>
+                        <td class="text-right primarybold"><%= "#{currency} #{number_with_precision(gateway_charges(gateway, amount).rnd, precision: 2)}" %></td>
+                    </tr>
+                    <tr>
+                        <td class="primaryblackbold">Total Payable Amount</td>
+                        <td class="text-right primaryblackbold"><%= "#{currency} #{number_with_precision((amount + gateway_charges(gateway, amount).rnd), precision: 2)}" %></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="warningmessage">
+            <p>Please enter Demand Draft details below. In case there is more than one demand draft, then registration will need to be done seperately from each profile.</p>
+        </div>
+        <div class="tabbillingaddress mg-t30">
+          <%= form_for :payment_details, url: pay_event_order_path(@event_order), method: :post, html: { id: "ddraft-gateway-payment-form" } do |f| %>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="box bordered-input">
+                       <label class="asterisk">Full Name:</label>
+                       <div class="dropdown dropdown-field">
+                          <input type="text" class="form-control noBorder field" placeholder="Full name" name="payment_details[full_name]" required>
+                       </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box bordered-input">
+                       <label class="asterisk">Contact:</label>
+                       <div class="dropdown dropdown-field">
+                          <input type="text" class="form-control noBorder field" placeholder="Contact number" name="payment_details[mobile]" required>
+                       </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box bordered-input">
+                       <label class="asterisk">Email:</label>
+                       <div class="dropdown dropdown-field">
+                          <input type="email" class="form-control noBorder field" placeholder="Email" name="payment_details[email]" required>
+                       </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box bordered-input">
+                       <label class="asterisk">Demand Draft Number:</label>
+                       <div class="dropdown dropdown-field">
+                          <input type="text" class="form-control noBorder field" placeholder="Demand draft number" size="20" name="payment_details[dd_number]" required>
+                       </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box bordered-input clearfix">
+                       <label class="asterisk">Demand Draft Date</label>
+                       <div class="calenderdate dropdown-field">
+                            <% uniq_token = SecureRandom.uuid %>
+                            <input type="text" class="form-control noBorder field datepicker" placeholder="Demand draft date" size="2" name="payment_details[dd_date]" readonly="true" id=<%= "#{uniq_token}_start" %> data-role="syDatepicker" data-syDatepickerId='uniq_token' required>
+                        </div>
+                   </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box bordered-input">
+                       <label class="asterisk">Bank Name</label>
+                       <div class="dropdown dropdown-field">
+                          <input type="text" class="form-control noBorder field" placeholder="Bank name" name="payment_details[bank_name]" required>
+                       </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="box">
+                    <div class="CustomCheckbox pg_sydd_payment_ack_div">
+                        <input type="checkbox" name="payment_details[is_terms_accepted]" id="pg_sydd_payment_ack_checkbox">
+                        <label>I argee to the <%= link_to "Terms and conditions", demand_draft_payment_terms_and_conditions_path , target: :_blank, class: "primary-color anchorlink" %></label>
+                    </div>
+                    <span class="labelerror pg_sydd_payment_ack_checkbox_error_span"></span>
+                  </div>
+                    <div class="pannel-btn text-right mg-t30">
+                        <button type="submit" class="btn btn-info" data-disable-with="PROCESSING...!">Pay Now</button>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="payment_details[amount]" value=<%= (amount + gateway_charges(gateway, amount).rnd) %>>
+            <input type="hidden" name="payment_details[event_order_id]" value=<%= event_order_id %>>
+            <input type="hidden" name="payment_details[config_id]" value=<%= gateway.try(gateway.try(:payment_gateway_type).try(:relation_name)).try(:id).to_s %>>
+            <input type="hidden" name="method" value=<%= gateway.try(:payment_gateway_type).try(:name).to_s %>>
+            <input type="hidden" name="payment_details[payment_date]" value=<%= Date.today.to_s %>>
+            <input type="hidden" name="payment_details[upgrade]" value=<%= @upgrade.present? %> >
+            <input type="hidden" name="payment_details[parent_event_order_id]" value=<%= @parent_event_order_id %> >
+            <input type="hidden" name="<%= ENCRYPT_PAYMENT_DETAILS_KEY.encrypt %>" value=<%= encryped_payment_details({ amount: (amount + gateway_charges(gateway, amount).rnd), event_order_id: event_order_id, config_id: gateway.try(gateway.try(:payment_gateway_type).try(:relation_name)).try(:id).to_s, method: gateway.try(:payment_gateway_type).try(:name).to_s, payment_date: Date.today.to_s, upgrade: @upgrade.present?, parent_event_order_id: @parent_event_order_id }) %>>
+            <input type="hidden" name="<%= EVENT_ORDER_LINE_ITEM_IDS.encrypt %>" value=<%= @before_event_order_line_items.to_json.encrypt %> >
+            <input type="hidden" name="<%= SADHAK_PROFILE_DETAILS.encrypt %>" value=<%= @sadhak_details_hash.to_json.encrypt %> >
+          <% end %>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+  (function(){
+    $('#ddraft-gateway-payment-form').validate();
+
+    $('#ddraft-gateway-payment-form').submit(function(){
+    if(!$('input#pg_sydd_payment_ack_checkbox').prop('checked'))
+    {
+      $('input#pg_sydd_payment_ack_checkbox').parents('div.CustomCheckbox.pg_sydd_payment_ack_div').siblings('span.pg_sydd_payment_ack_checkbox_error_span').text('This field is required.');
+      return false;
+    }
+
+    var target_url;
+    if(document.location.href === document.referrer || document.referrer === ""){
+        target_url = "<%= Rails.application.config.app_base_url %>"
+    }else{
+        var target_url = document.referrer
+    }
+    for (i = 0; i < 100 ; i++){
+      window.history.pushState(null, document.title, target_url);
+    }
+  });
+
+  }());
+</script>

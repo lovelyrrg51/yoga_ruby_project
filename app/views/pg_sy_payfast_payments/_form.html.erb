@@ -1,0 +1,17 @@
+<%= form_for(@pg_sy_payfast_payment) do |f| %>
+  <% if @pg_sy_payfast_payment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@pg_sy_payfast_payment.errors.count, "error") %> prohibited this pg_sy_payfast_payment from being saved:</h2>
+
+      <ul>
+      <% @pg_sy_payfast_payment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

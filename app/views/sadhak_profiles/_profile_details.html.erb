@@ -1,0 +1,97 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="headtittle">Profile Info</h2>
+            <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png", alt: "close"%></button>
+        </div>
+        <div class="modal-body mCustomScrollbar">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="tableCntrl tableCntrllist">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td data-th="Name / SYID">
+                                            <div class="textgroup">
+                                                <p class="primarybold"><%= @sadhak_profile.full_name%></p>
+                                                <span><%= @sadhak_profile.syid%></span>
+                                            </div>
+                                        </td>
+                                        <td data-th="Date Of Birth">
+                                            <%= @sadhak_profile.date_of_birth%>
+                                        </td>
+                                        <td data-th="Gender">
+                                            <%= @sadhak_profile.gender.try(:humanize)%>
+                                        </td>
+    <!--                                     <td data-th="Marital Status">
+                                            <%#= @sadhak_profile.marital_status.try(:humanize)%>
+                                        </td> -->
+                                        <td data-th="Mobile">
+                                            <%= @sadhak_profile.mobile%>
+                                        </td>
+                                        <td data-th="Email">
+                                            <span class="primarybold primary-color"><%= @sadhak_profile.email%></span>
+                                        </td>
+                                        <td data-th="Profile Photo">
+                                            <div class="profileimg display-table">
+                                                <div class="display-table-cell">
+                                                <%= link_to @sadhak_profile.try(:advance_profile_thumb_url) || @sadhak_profile.try(:advance_profile_s3_url) || "javascript:void(0);", target: '_blank' do%>
+                                                    <%= image_tag get_preview_or_default_image_for_file({ file_url: @sadhak_profile.try(:advance_profile_thumb_url) || @sadhak_profile.try(:advance_profile_s3_url)}), class: "mCS_img_loaded", alt: "profile image" %>
+                                                <%end%>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td data-th="Profile Photo Status">
+                                            <%= @sadhak_profile.try(:profile_photo_status).try(:slice, (3..-1)).try(:humanize) %>
+                                        </td>
+                                        <td data-th="Photo Id Proof ">
+                                            <div class="profileimg display-table">
+                                                <div class="display-table-cell">
+                                                <%= link_to @sadhak_profile.try(:advance_profile_identity_proof_s3_url ) || "javascript:void(0);", target: '_blank' do %>
+                                                     <%= image_tag get_preview_or_default_image_for_file({ file_url: @sadhak_profile.try(:advance_profile_identity_proof_s3_url) }), class: "mCS_img_loaded", alt: "profile image" %>
+                                                <%end%>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td data-th="Photo Id Document">
+                                            <%= @sadhak_profile.photo_id_proof_type_name %>
+                                        </td>
+                                        <td data-th="Photo Id Proof Number">
+                                            <%= @sadhak_profile.photo_id_proof_number %>
+                                        </td>
+                                        <td data-th="Photo Id Proof Status">
+                                            <%= @sadhak_profile.try(:photo_id_status).try(:slice, (3..-1)).try(:humanize) %>
+                                        </td>
+                                        <td data-th="Address">
+                                            <%= @sadhak_profile.full_address %>
+                                        </td>
+                                        <td data-th="Address Proof ">
+                                            <div class="profileimg display-table">
+                                                <div class="display-table-cell">
+                                                <%= link_to  @sadhak_profile.try(:advance_profile_address_proof_s3_url) || "javascript:void(0);", target: '_blank' do%>
+
+                                                    <%= image_tag get_preview_or_default_image_for_file({ file_url: @sadhak_profile.try(:advance_profile_address_proof_s3_url) }), class: "mCS_img_loaded", alt: "profile image" %>
+                                                <%end%>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td data-th="Address Proof Document">
+                                            <%= @sadhak_profile.address_proof_type_name %>
+                                        </td>
+                                        <td data-th="Address Proof Status">
+                                            <%= @sadhak_profile.try(:address_proof_status).try(:slice, (3..-1)).try(:humanize) %>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="headtittle">Forum Info</h2>
+            <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png", alt: "close"%></button>
+        </div>
+        <div class="modal-body mCustomScrollbar">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="tableCntrl tableCntrllist">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td data-th="Name / SYID">
+                                            <div class="textgroup">
+                                                <p class="primarybold"><%= @sadhak_profile.full_name %></p>
+                                                <span><%= @sadhak_profile.syid %></span>
+                                            </div>
+                                        </td>
+                                        <td data-th="Forum Name">
+                                            <%= @sadhak_profile.try(:active_forum_name)%>
+                                        </td>
+                                        <td data-th="Forum Merbership Expiration Date">
+                                            <div class="textpanel">
+                                                <p class="primarybold"><%= @sadhak_profile.try(:expiration_date)%></p>
+                                                <span class="senary-color"><%=  @sadhak_profile.try(:expiration_date).present? ? '11:59:00 PM' : ''%></span>
+                                            </div>
+                                        </td>
+                                        <td data-th="Board Member Designation">
+                                            <%= @sadhak_profile.try(:board_member_position)%>
+                                        </td>
+                                        <td data-th="Board Member Forum Name">
+                                            <%= @sadhak_profile.try(:board_member_forum_name)%>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+        </div>
+    </div>
+</div>

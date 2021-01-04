@@ -1,0 +1,24 @@
+<tr id="<%= @sadhak_profile.syid %>">
+  <td><span class="primary-color"><%= @sadhak_profile.syid %></span></td>
+  <td><%= @sadhak_profile.full_name %></td>
+  <td><span class="primary-color"><%= @sadhak_profile.email %></span></td>
+  <td><%= @sadhak_profile.city_name %></td>
+  <td>
+    <% if @event.event_seating_category_associations.count > 1 %>
+      <div class="box bordered-input dropdown tabledrop" data-categories="<%= @event.event_seating_category_associations.collect{|sc| [sc.id, '%.2f' % sc.price.rnd] } %>" >
+          <div class="dropdown-field selectTwo-dropdown">
+            <%= select_tag "event_order[event_order_line_items_attributes][#{@sadhak_profile.id}][event_seating_category_association_id]", options_from_collection_for_select(@event.event_seating_category_associations.order(:price), 'id', 'category_name'), { prompt: "Select Category" , id: "event_order[event_order_line_items_attributes][#{@sadhak_profile.id}][event_seating_category_association_id]", data: { syid: @sadhak_profile.try(:syid), seating_categories: @event.event_seating_category_associations.collect{|sc| {id: sc.id.to_s, price: sc.price.rnd}} }, class: 'basic-single event-register-seating-category-select-tag'} %>
+          </div>
+      </div>
+    <% else %>
+      <%= @event.event_seating_category_associations.try(:order, :price).try(:first).try(:category_name) %>
+      <%= hidden_field_tag "event_order[event_order_line_items_attributes][#{@sadhak_profile.id}][event_seating_category_association_id]", @event.try(:event_seating_category_associations).try(:last).try(:id) %>
+    <% end %>
+  </td>
+  <td><span class="primarybold"><%= @event.event_seating_category_associations.size == 1 ? number_with_precision(@event.event_seating_category_associations.order(:price).first.price.rnd, precision: 2) : "-" %></td>
+  <td class="text-center"><a href="javascript:void(0)" class="primary-color"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
+  <%= hidden_field_tag "event_order[event_order_line_items_attributes][#{@sadhak_profile.id}][sadhak_profile_id]", @sadhak_profile.id %>
+</tr>
+<script>
+  $(".basic-single").select2();
+</script>

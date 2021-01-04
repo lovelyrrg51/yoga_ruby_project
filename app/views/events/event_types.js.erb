@@ -1,0 +1,8 @@
+$("#event_event_type_id").empty();
+$("#event_event_type_id").append('<option value=""> ----- Select ------</option>');
+<% @event_types.each do |name,id| %>
+  $option = $("<option></option>")
+        .attr("value", '<%= id %>')
+        .text('<%= name %>');
+  $("#event_event_type_id").append($option);
+<% end %>

@@ -1,0 +1,21 @@
+<%= stylesheet_pack_tag "sign_up" %>
+<%= javascript_pack_tag "sign_up", defer: true %>
+
+
+<div class="row">
+  <div class="col-sm-12">
+    <div id="wrapper">
+      <div id="login" class="animate form">
+        <div id="vue-sign-up"></div>
+        <div class="row m-t-15">
+          <div class="col-sm-12">
+            <%= link_to user_google_oauth2_omniauth_authorize_path,
+              class:"btn-block signin_with_google waves-effect" do %>
+              <span class="google_icon"></span>&nbsp;&nbsp;Sign in with Google
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

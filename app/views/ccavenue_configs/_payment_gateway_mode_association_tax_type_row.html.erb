@@ -1,0 +1,23 @@
+<tr class="nested-fields">
+  <td class="">
+    <div class="outbox">
+        <div class="box bordered-input dropdown tablebox">
+            <div class="dropdown-field selectTwo-dropdown">
+                <%= f.select :tax_type_id, options_for_select(TaxType.pluck(:name, :id), f.object.tax_type_id), {  include_blank: " ----- Select ----- " }, { class: 'basic-single',required: 'required'  }%>
+            </div>
+        </div>
+    </div>
+  </td>
+  <td>
+    <div class="outbox">
+            <div class="box bordered-input">
+               <div class="dropdown dropdown-field">
+                  <%= f.text_field :percent, class: 'form-control noBorder field', required: true, placeholder: "Percent" %> 
+               </div>
+            </div>
+        </div>
+  </td>
+  <td class="text-center">
+    <%= link_to_remove_association "",  f, { class: 'primary-color fa fa-trash-o' } %>
+  </td>
+</tr>

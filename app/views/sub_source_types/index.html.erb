@@ -1,0 +1,67 @@
+<% content_for(:title, 'Admin | Source Info Type') %>
+
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Admin Panel</h2>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+            <%= render 'admin/admin_left_panel' %>
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxsection-xs boxshadow prelative">
+                    
+                    <div class="rightContent">
+                      <div id="sub_source_types">
+                          <div class="row">
+                              <div class="col-sm-12 mg-b30">
+                                   <div class="headtittle text-center">
+                                      <h2>Sub Source Info Types</h2>
+                                      <span class="subheading"><%= @source_info_type.try(:source_name) %></span>
+                                  </div>
+                              </div>
+                              <div class="col-sm-12">
+                                  <%= render "sub_source_types/form"%>
+                              </div>
+                              <% if @sub_source_types.present? %>
+                                <div class="col-sm-12">
+                                    <div class="tableCntrl">
+                                        <div class="table-responsive tableScrollbar">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sub Source Name</th>
+                                                        <th class="text-center">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <% @sub_source_types.each do |sub_source_type|%>
+                                                    <tr>
+                                                        <td><%= sub_source_type.sub_source_name %></td>
+                                                        <td class="text-center">
+                                                            <%= link_to "", edit_source_info_type_sub_source_type_path(@source_info_type , sub_source_type), class: "mg-r10 primary-color fa fa-pencil" %>
+                                                            <%= link_to "", source_info_type_sub_source_type_path(@source_info_type , sub_source_type), method: :delete,data: {confirm: "Are you sure?"}, class: " primary-color fa fa-trash-o"%>
+                                                        </td>
+                                                    </tr>
+                                                  <% end %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="table-pagination">
+                                            <div class="show-pgnation">
+                                                <p class="primarybold"><%= custom_page_entries_info(@sub_source_types) %></p>
+                                            </div>
+                                            <%= paginate @sub_source_types %>
+                                        </div>
+                                    </div>
+                                </div>
+                              <% else %>
+                                <%= render partial: 'application/no_records', locals: {message: 'No Sub Source Info Type Found.'} %>
+                              <% end %>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>

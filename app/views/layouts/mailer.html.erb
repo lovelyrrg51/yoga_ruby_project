@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>Registration Successfull</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        p:empty, div:empty {
+            display: none;
+        }
+    </style>
+</head>
+
+<body style="margin: 0; padding: 0;">
+    <table border="0" cellpadding="0" cellspacing="0" width="640" style="border-collapse: collapse; margin: auto; font-family: 'Roboto', sans-serif; margin: 15px auto;">
+        <tr style="background: #990000;">
+            <td style="padding: 15px; text-align: left;">
+                <img src="https://s3.amazonaws.com/syportalattachments/email_template_images/shivyog-logo.png" />
+            </td>
+<!--             <td style="text-align: right; padding: 10px;">
+                <ul style="list-style: none;">
+                    <li style="display: inline-block; padding: 0 5px 0 0;"><a href=""><img src='https://s3.amazonaws.com/syportalattachments/email_template_images/fb_logo.png'/></a></li>
+                    <li style="display: inline-block; padding: 0 5px 0 0;"><a href=""><img src='https://s3.amazonaws.com/syportalattachments/email_template_images/twitter_logo.png'/></a></li>
+                    <li style="display: inline-block; padding: 0 5px 0 0;"><a href=""><img src='https://s3.amazonaws.com/syportalattachments/email_template_images/youtube_logo.png'/></a></li>
+                    <li style="display: inline-block; padding: 0 5px 0 0;"><a href=""><img src='https://s3.amazonaws.com/syportalattachments/email_template_images/gplus_logo.png'/></a></li>
+                </ul>
+            </td> -->
+        </tr>
+
+        <%= yield %>
+
+        <tr>
+            <td colspan="2">
+                <div class="footer" style="background: #4a4545; padding: 15px 0; text-align: center;">
+                    <p style="color: #ffffff; margin: 0; font-size: 14px;">If you need any help please mail us at <a href="mailto:<%= (@options && @options[:from]) || 'support@absclp.com' %>" style="color: #d2691e; margin: 0 0 0 5px; text-decoration: underline; cursor: pointer;"> <%= (@options && @options[:from]) || 'support@absclp.com' %></a></p>
+                    <p style="color: #ffffff; margin: 10px 0 0; font-size: 13px;">&copy;<%= Date.current.year%> ShivYog. All Rights Reserved.</p>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

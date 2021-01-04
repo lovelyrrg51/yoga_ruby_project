@@ -1,0 +1,27 @@
+<div id="show_resend_pre_approval_email_modal<%= event_order.id %>" class="modal fade Custommodal" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="headtittle">Resend Pre Approval Email</h4>
+        <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag("close.png") %></button>
+      </div>
+      <%= form_for :event_order, url: @redirect_url, method: :get, html: { id: 'event_show_resend_pre_approval_email_form' } do |f| %>
+        <div class="modal-body rejectlist mCustomScrollbar">
+          <div class="row mg-t30">
+            <div class="col-sm-12">
+              <div class="outbox">
+                <label class="asterisk">Do you really want to resend transaction receipt of reference number <span class="primary-color"><%= event_order.try(:reg_ref_number) %></span> ?</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="pannel-btn mg-t20 text-right">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+            <%= f.submit "SEND", class: "btn btn-info" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

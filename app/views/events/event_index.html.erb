@@ -1,0 +1,11 @@
+<%= content_tag :table, role: :datatable, class: 'table table-striped table-bordered', cellspacing: "0", width: "90%", data: { url: datatables_events_path(format: :json)} do %>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Grace By</th>
+      <th>Date</th>
+      <th>Link</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+<% end %>

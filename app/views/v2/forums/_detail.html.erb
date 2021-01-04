@@ -1,0 +1,136 @@
+<div class="card">
+    <div class="body">
+        <div class="header p-10-0"><h2>Forum Details</h2></div>
+        <div class="row clearfix m-b-30 mt-3">
+          <!-- Forum Registration Form Goes Here... -->
+          <div class="col-md-6 col-lg-6">
+            <div id="pop-map" class="forum-map"></div>
+          </div>
+          <div class="col-md-6 col-lg-6">
+            <div class="row clearfix forum_details_box m-b-30">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="forum_specifications">
+                                <span class="title">Forum ID: </span><%= @sy_club.id %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <% SyClubUserRole.find_each do |role| %>
+                        <% if @sy_club.sy_club_user_roles.include?(role) %>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="forum_specifications">
+                                        <span class="title"><%= ((@sy_club.new_record? || ( @sy_club.sadhak_profiles.count == 2 && @sy_club.sy_club_sadhak_profile_associations.pluck(:sy_club_user_role_id).include?(1))) ? role&.role_name.tr("0-9", "")&.titleize : role&.role_name&.titleize) %>: </span><%= @sy_club.send(role.role_name&.downcase&.to_sym)&.full_name %>
+                                    </div>
+                                </div>
+                            </div>
+                        <% end %>
+                    <% end %>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="forum_specifications">
+                                <span class="title">Venue: </span><%= @sy_club&.address&.street_address %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="forum_specifications">
+                                <span class="title">Forum Name: </span><%= @sy_club.name %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="forum_specifications">
+                                <span class="title">Contact Details: </span>
+
+                                <% if @sy_club.contact_details.present? %>
+                                <%= "+#{@sy_club.country_telephone_prefix}-#{@sy_club.contact_details}" %> / <%= "#{@sy_club.email}" %>
+                                <%else%>
+                                <p>Please write a email to <%= @sy_club.try(:address).try(:country_id) == 113 ? 'forum@shivyogindia.com' : 'info@absclp.com'%></p>
+                                <% end %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <% if @clp_event %>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="forum_specifications">
+                                <span class="title">Annual contribution towards digital content for continuous learning program (per year) <%= "#{@clp_event.currency_code} #{@clp_event.event_seating_category_associations.try(:first).try(:price).rnd}" %> <%= @clp_event.try(:address).try(:country_id) == 113 ? '+ taxes extra. (Non Refundable)' : ''%></span>
+                            </div>
+                        </div>
+                    </div>
+                    <% end %>
+                </div>
+            </div>
+
+            <% if back_to_forum_button %>
+                <div class="banner_button">
+                <%= link_to register_v2_forum_path(@sy_club) do%>
+                    <div class="cta_button_small">Back to Forum</div>
+                <% end %>
+                </div>
+            <% end %>
+          </div>
+          <!-- Forum Registration Form Goes Here... -->
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+  //function forum_Map() {
+  // alert('called');
+  var latlng = {lat: <%= @sy_club&.address&.lat %>, lng: <%= @sy_club&.address&.lng %>};
+  var map = new google.maps.Map(document.getElementById('pop-map'), {
+    zoom: 6,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    center: latlng,
+    scrollwheel: true
+  });
+
+  var contentString = '<div class="pop-content">' +
+    '<h4><%=j @sy_club.name %></h4>' +
+    '<h4>Forum ID: <%= @sy_club.id %></h4>' +
+    '<h6>Thursday 11:30 AM </h6>' +
+    '<h5><strong>Venue</strong></h5>' +
+    '<p><%=j @sy_club&.address&.street_address %></p>,' +
+    '<div class="banner_button m-l-20">' +
+    '<a href="forum_member_registration.htm"><div class="cta_button">Join This Forum</div></a>' +
+    '</div>' +
+    '</div>';
+
+  var infowindow = new google.maps.InfoWindow({
+    content: contentString
+  });
+
+  var marker = new google.maps.Marker({
+    position: latlng,
+    map: map,
+    animation: google.maps.Animation.DROP,
+    title: 'Ashburn Quante Square'
+  });
+  marker.addListener('click', function () {
+    infowindow.open(map, marker);
+    if (marker.getAnimation() !== null) {
+      marker.setAnimation(null);
+    } else {
+      marker.setAnimation(google.maps.Animation.BOUNCE);
+      setTimeout(function () {
+        marker.setAnimation(null);
+      }, 1500);
+    }
+  });
+  //}
+</script>

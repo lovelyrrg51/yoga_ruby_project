@@ -1,0 +1,199 @@
+
+<div class="leftCntrl">
+    <div class="leftmenu-list">
+        <div class="innerlist mCustomScrollbar left-Scrollbar">
+            <ul class="leftnav-list list-unstyled panel-group" id="accordion3">
+              <!-- Address Proof -->
+              <% if policy(:admin).address_proof_types?  %>
+                  <li class="<%= params[:controller] == "address_proof_types" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= address_proof_types_path %>'>Address Proof</a>
+                  </li>
+              <% end %>
+              <!-- Authorizations -->
+              <% if policy(:admin).authorizations?  %>
+                  <li class="<%= (params[:controller] == "admin" && params[:action] == "authorizations") ? 'active' : '' %>">
+                      <a href='<%= authorizations_admin_index_path %>'>Authorizations</a>
+                  </li>
+              <% end %>
+              <!-- Cities -->
+              <% if policy(:admin).db_cities?  %>
+                  <li class="<%= (params[:controller] == "db_cities" && %w(edit new index_for_admin).include?( params[:action] )) || (params[:controller] == "db_countries" && params[:action] == "country_index_for_state_city") || (params[:controller] == "db_states" && params[:action] == "state_index_for_city") ? 'active' : '' %>">
+                      <a href='<%= country_index_for_state_city_db_countries_path %>'>Cities</a>
+                  </li>
+              <% end %>
+              <!-- Companies -->
+              <% if policy(:admin).sy_event_companies? %>
+                  <li class="<%= params[:controller] == "sy_event_companies" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= sy_event_companies_path %>'>Companies</a>
+                  </li>
+              <% end %>
+              <!-- Countries -->
+              <% if policy(:admin).db_countries?  %>
+                  <li class="<%= params[:controller] == "db_countries" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= db_countries_path %>'>Countries</a>
+                  </li>
+              <% end %>
+              <!-- Dashboard Widgets -->
+              <% if policy(:admin).dashboard_widget_configs?  %>
+                  <li class="<%= params[:controller] == "dashboard_widget_configs" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= dashboard_widget_configs_path %>'>Dashboard Widgets</a>
+                  </li>
+              <% end %>
+              <!-- Discount Plan -->
+              <% if policy(:admin).discount_plans?  %>
+                  <li class="<%= params[:controller] == "discount_plans" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= discount_plans_path %>'>Discount Plan</a>
+                  </li>
+              <% end %>
+              <!-- Event Cancellation Plan -->
+              <% if policy(:admin).event_cancellation_plans?  %>
+                  <li class="<%= %w(event_cancellation_plans event_cancellation_plan_items).include?( params[:controller] ) && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= event_cancellation_plans_path %>'>Event Cancellation Plan</a>
+                  </li>
+              <% end %>
+              <!-- Event Types -->
+              <% if policy(:admin).event_types?  %>
+                  <li class="<%= params[:controller] == "event_types" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= event_types_path %>'>Event Types</a>
+                  </li>
+              <% end %>
+              <!-- Forum Membership Validite -->
+              <% if policy(:admin).sy_club_validity_windows?  and false%>
+                  <li class="<%= params[:controller] == "sy_club_validity_windows" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= sy_club_validity_windows_path %>'>Forum Membership Validite</a>
+                  </li>
+              <% end %>
+              <!-- Frequent Sadhna Type -->
+              <% if policy(:admin).frequent_sadhna_types?  %>
+                  <li class="<%= params[:controller] == "frequent_sadhna_types" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= frequent_sadhna_types_path %>'>Frequent Sadhna Type</a>
+                  </li>
+              <% end %>
+              <!-- Global Preferences -->
+              <% if policy(:admin).global_preferences?  %>
+                <li class="panel <%= GlobalPreference.group_names.include?(params[:group_name]) && 'active' || '' %>">
+                    <a href="#admin_panel_global_preferences_submenu" data-toggle="collapse" aria-expanded="<%= GlobalPreference.group_names.include?(params[:group_name]) ? 'true' : 'false' %>" data-parent="#accordion3">Global Preferences<i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                    <div class="subCntrl-menu panel-collapse collapse <%= GlobalPreference.group_names.include?(params[:group_name]) ? 'in' : '' %>" id="admin_panel_global_preferences_submenu" aria-expanded="false" role="tabpanel">
+                        <ul>
+                          <% GlobalPreference.group_names.each_key do |group_name|%>
+                            <li class="<%= params[:group_name] == group_name ? 'subactive' : '' %>">
+                              <a href="<%= global_preferences_path(group_name: group_name) %>">
+                                <%= group_name == "SyClub" ? "Forum" : group_name %>
+                              </a>
+                            </li>
+                          <% end %>
+                        </ul>
+                    </div>
+                </li>
+              <% end %>
+              <!-- Merge SYID -->
+              <% if policy(:admin).merge_syid? %>
+                <li class="<%= params[:action] == 'merge_syid' ? 'active' : '' %>">
+                  <a href='<%= merge_syid_admin_index_path %>'>Merge SYID </a>
+                </li>
+              <% end %>
+              <!-- Medical Practitioner Speciality Area -->
+              <% if policy(:admin).medical_practitioner_speciality_areas?  %>
+                  <li class="<%= params[:controller] == "medical_practitioner_speciality_areas" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= medical_practitioner_speciality_areas_path %>'>Medical Practitioner Speciality Area</a>
+                  </li>
+              <% end %>
+              <!-- Payment Gateways -->
+              <% if policy(:admin).payment_gateway_types?  %>
+                  <% controller_array = PaymentGatewayType.pluck(:relation_name).collect{ |relation_name| relation_name.pluralize } << "payment_gateway_types" %>
+                  <li class=" <%= controller_array.include?( params[:controller] ) && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= payment_gateway_types_path %>'>Payment Gateways</a>
+                  </li>
+              <% end %>
+              <!-- Payment Modes -->
+              <% if policy(:admin).payment_modes?  %>
+                  <li class="<%= params[:controller] == "payment_modes" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= payment_modes_path %>'>Payment Modes</a>
+                  </li>
+              <% end %>
+              <!-- Photo Approval Panel -->
+              <% if policy(:admin).photo_approval_admin_panel? %>
+                <li class="<%= params[:action] == 'photo_approval_admin_panel' ? 'active' : '' %>">
+                  <a href='<%= photo_approval_admin_panel_admin_index_path %>'>Photo Approval Panel</a>
+                </li>
+              <% end %>
+              <!-- Photo Id -->
+              <% if policy(:admin).photo_id_types?  %>
+                  <li class="<%= params[:controller] == "photo_id_types" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= photo_id_types_path %>'>Photo Id</a>
+                  </li>
+              <% end %>
+              <!-- Physical Exercise Type -->
+              <% if policy(:admin).physical_exercise_types?  %>
+                  <li class="<%= params[:controller] == "physical_exercise_types" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= physical_exercise_types_path %>'>Physical Exercise Type</a>
+                  </li>
+              <% end %>
+              <!-- Profession -->
+              <% if policy(:admin).professions?  %>
+                  <li class="<%= params[:controller] == "professions" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= professions_path %>'>Profession</a>
+                  </li>
+              <% end %>
+              <!-- Registration Centers -->
+              <% if policy(:admin).registration_centers?  %>
+                  <li class="<%= params[:controller] == "registration_centers" && %w(edit_for_admin new_for_admin index_for_admin).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= index_for_admin_registration_centers_path %>'>Registration Centers</a>
+                  </li>
+              <% end %>
+              <!-- Registration Invoices -->
+              <% if policy(:admin).registration_invoices?  %>
+                  <li class="<%= params[:action] == 'registration_invoices' ? 'active' : '' %>">
+                      <a href='<%= registration_invoices_admin_index_path %>'>Registration Invoices</span></a>
+                  </li>
+              <% end %>
+              <!-- Merge SYID -->
+              <% if policy(:admin).sadhaks_episodes? %>
+                <li class="<%= params[:action] == 'sadhaks_episodes' ? 'active' : '' %>">
+                  <a href='<%= sadhaks_episodes_admin_index_path %>'>Sadhaks Episodes </a>
+                </li>
+              <% end %>
+              <!--Seating Category -->
+              <% if policy(:admin).seating_categories?  %>
+                  <li class="<%= params[:controller] == "seating_categories" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= seating_categories_path %>'>Seating Category</a>
+                  </li>
+              <% end %>
+              <!-- Shivyog Teaching -->
+              <% if policy(:admin).shivyog_teachings?  %>
+                  <li class="<%= params[:controller] == "shivyog_teachings" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= shivyog_teachings_path %>'>Shivyog Teaching</a>
+                  </li>
+              <% end %>
+              <!-- Source Information Type -->
+              <% if policy(:admin).source_info_types?  %>
+                  <li class="<%= %w(source_info_types sub_source_types).include?( params[:controller] ) && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= source_info_types_path %>'>Source Information Type</a>
+                  </li>
+              <% end %>
+              <!-- States -->
+              <% if policy(:admin).db_states?  %>
+                  <li class="<%= params[:controller] == "db_states" && %w(edit new index_for_admin).include?( params[:action] ) || (params[:controller] == "db_countries" && params[:action] == "country_index_for_state") ? 'active' : '' %>">
+                      <a href='<%= country_index_for_state_db_countries_path %>'>States</a>
+                  </li>
+              <% end %>
+              <!-- Tax Types -->
+              <% if policy(:admin).tax_types?  %>
+                  <li class="<%= params[:controller] == "tax_types" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= tax_types_path %>'>Tax Types</a>
+                  </li>
+              <% end %>
+              <!-- Venue Type -->
+              <% if policy(:admin).venue_types?  %>
+                  <li class="<%= params[:controller] == "venue_types" && %w(edit new index).include?( params[:action] ) ? 'active' : '' %>">
+                      <a href='<%= venue_types_path %>'>Venue Type</a>
+                  </li>
+              <% end %>
+            </ul>
+        </div>
+    </div>
+    <a href="javascript:void(0)" class="btn btn-info leftmenu-btn mg-x-t30">
+      <i class="fa fa-angle-double-left" aria-hidden="true"></i> 
+      <span>OPEN MENU</span>
+    </a>
+</div>

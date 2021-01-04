@@ -1,0 +1,81 @@
+/ Mobile Header
+.wsmobileheader.clearfix
+  a id="wsnavtoggle" class="wsanimated-arrow"
+    span
+  span class="smllogo"
+    = image_tag "v2/home/logo.png", width: 80, alt: "Shivyog"
+  = link_to v2_contact_path, class: "callusbtn" do
+    i class="fa fa-envelope" aria-hidden="true"
+
+/ Main nav
+section.wsnavmenu.margin-bottom-0
+  .wsmainfull.menutop.clearfix
+    .wsmainwp.container.clearfix
+
+      .desktoplogo
+        = link_to root_path do
+          = image_tag "v2/home/logo.png", alt: "Shivyog"
+
+      nav.wsmenu.clearfix
+        ul.wsmenu-list
+          = top_menu "About" do
+            = menu_link_to "Our Story", v2_our_story_path
+            = menu_link_to "What is Shiv Yog", v2_what_is_shivyog_path
+            = menu_link_to "Shiv Yog Foundation", v2_shivyog_foundation_path
+            = menu_link_to "Seva (Charity) Projects", v2_seva_projects_path
+            = menu_link_to "Contact Us", v2_contact_path
+
+          = top_menu "Dr. Shivanand" do
+            = menu_link_to "Dr. Avdhoot Shivanand (Bio)", v2_dr_shivanand_path
+            = menu_link_to "Contributions", v2_contributions_path
+            = menu_link_to "Awards and Recognitions", v2_awards_recognitions_path
+
+          = top_menu "Events" do
+            = menu_link_to "About Shiv Yog Events", v2_about_shivyog_events_path
+            = menu_link_to "Events Calendar", v2_events_path
+            = menu_link_to "Upcoming Events", upcoming_v2_events_path
+            = menu_link_to "Share Your Experience", "#!"
+            = menu_link_to "Shiv Yog Instructors", v2_teachers_path
+
+          = top_menu "Forums" do
+            = menu_link_to "What are Shiv Yog Forums", v2_what_are_sy_forums_path
+            = menu_link_to "Seva (Charity) Through Forums", v2_seva_through_forums_path
+            = menu_link_to "Join or Create a Forum", v2_act_now_path
+            = menu_link_to "Find a Forum", v2_forums_path
+            = menu_link_to "FAQs", v2_shivyog_faqs_path
+
+          = top_menu "Blog" do
+            = menu_link_to "Read", v2_blogs_path
+            = menu_link_to "Watch", v2_watch_path
+            = menu_link_to "Quotes", v2_quotes_path
+            = menu_link_to "Shiv Yog TV", "#!"
+
+          = top_menu "More" do
+            = menu_link_to "Shiv Yog Dharma", v2_shivyog_dharma_path
+            = menu_link_to "Cosmic Farming", v2_cosmic_farming_path
+            = menu_link_to "Cosmic Medicine", v2_cosmic_medicine_path
+
+          - if current_user&.super_admin? || current_user&.india_admin?
+            = top_menu "Admin" do
+              = menu_link_to "V1 admin", "/v1/admin"
+              = menu_link_to "CMS admin", comfy_admin_cms_path
+
+          - if current_user
+            = top_menu (current_sadhak_profile&.first_name || 'Sadhak').truncate(10) do
+              = menu_link_to "Registration Status", registration_status_v2_event_orders_path
+              = menu_link_to "Digital Content", v2_digital_contents_path
+              = menu_link_to "My Profile", edit_v2_sadhak_profile_path(current_sadhak_profile.id)
+              = menu_link_to "Family Profiles", family_profiles_v2_sadhak_profiles_path
+              = menu_link_to "Add Profile", new_v2_sadhak_profile_path
+              = menu_link_to "Forgot Password", forgot_password_users_path
+              = menu_link_to "Forgot SYID", v2_forgot_syid_path
+              = menu_link_to "Log out", destroy_user_session_path, method: :delete
+          - else
+            = top_menu "Sadhak" do
+              = menu_link_to "Log in", new_user_session_path
+              = menu_link_to "Create Account", new_user_registration_path
+              = menu_link_to "Registration Status", registration_status_v2_event_orders_path
+              = menu_link_to "Digital Content", v2_digital_contents_path
+              = menu_link_to "Forgot Password", forgot_password_users_path
+              = menu_link_to "Forgot SYID", v2_forgot_syid_path
+

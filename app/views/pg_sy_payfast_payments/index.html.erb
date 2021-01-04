@@ -1,0 +1,23 @@
+<h1>Listing pg_sy_payfast_payments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pg_sy_payfast_payments.each do |pg_sy_payfast_payment| %>
+      <tr>
+        <td><%= link_to 'Show', pg_sy_payfast_payment %></td>
+        <td><%= link_to 'Edit', edit_pg_sy_payfast_payment_path(pg_sy_payfast_payment) %></td>
+        <td><%= link_to 'Destroy', pg_sy_payfast_payment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Pg sy payfast payment', new_pg_sy_payfast_payment_path %>

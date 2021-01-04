@@ -1,0 +1,31 @@
+<div id="shivirdetails">
+  <div class="row">
+      <div class="col-sm-12 text-center">
+          <div class="headtittle">
+              <h2>Shivir Details <span class="sub-tittle">Registration Discount Plan</span></h2>
+          </div>
+          <%= render 'shivir_status'%>
+      </div>
+  </div>
+  <div class="detailshivir registradiscountplan">
+   <%= form_for @event do |f|%>
+      <div class="row mg-t30">
+          <div class="col-sm-4">
+              <div class="outbox">
+                  <label class="asterisk">Registration Discount Plan </label>
+                  <div class="box bordered-input dropdown">
+                      <div class="dropdown-field selectTwo-dropdown">
+                        <%= f.select :discount_plan_id, options_for_select(DiscountPlan.pluck(:name, :id), @discount_plan.try(:id)), { include_blank: "Select Registration Discount Plan" }, { onchange: "onDiscountPlanChange()", class: "basic-single" }%>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-12" id="discount_plan">
+            <% if @event.discount_plan.present? %>
+              <%= render "event_discount_plan_associations_row", locals: { discount_plan: @discount_plan, discount_plan_events: @discount_plan_events, f: f } %>
+            <% end %>
+          </div>
+      </div>
+      <% end %>
+  </div>
+</div>

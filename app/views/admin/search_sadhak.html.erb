@@ -1,0 +1,393 @@
+<% uniq_token = SecureRandom.uuid %>
+<% uniq_token1 = SecureRandom.uuid %>
+<div class="adminCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Sadhak Search</h2>
+    </div>
+    <div class="row">
+        <div class="overflow-row">
+            <div class="rightCntrl">
+                <div class="boxsection-lg boxshadow prelative">
+                    <div class="rightContent">
+                        <div class="Searchsadhak">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <a href="#RegisterInvoices" class="refinemenu primary-color" data-toggle="collapse" aria-expanded="true"><i class="fa fa-filter" aria-hidden="true"></i> Refine</a>
+                                    <div class="refineCntrl collapse" aria-expanded="true" id="RegisterInvoices" role="tablist">
+                                    <%= form_tag search_sadhak_admin_index_path, method: 'GET' do %>
+                                        <div class="refinesub-group">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <div class="outbox">
+                                                        <label>First Name</label>
+                                                        <div class="box bordered-input">
+                                                            <div class="dropdown dropdown-field">
+                                                                <%= text_field_tag :first_name, params[:first_name], class: "form-control noBorder field", placeholder:"First name" %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="outbox">
+                                                        <label>Last Name</label>
+                                                        <div class="box bordered-input">
+                                                            <div class="dropdown dropdown-field">
+                                                                <%= text_field_tag :last_name, params[:last_name], class: "form-control noBorder field", placeholder:"Last name" %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="outbox">
+                                                        <label>SYID</label>
+                                                        <div class="box bordered-input">
+                                                            <div class="dropdown dropdown-field">
+                                                            <%= text_field_tag :syid, params[:syid], class: "form-control noBorder field", placeholder:"SYID" %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="outbox">
+                                                        <label>Email</label>
+                                                        <div class="box bordered-input">
+                                                            <div class="dropdown dropdown-field">
+                                                            <%= text_field_tag :email, params[:email], class: "form-control noBorder field", placeholder:"Email" %> 
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="outbox">
+                                                        <label>Mobile</label>
+                                                        <div class="box bordered-input">
+                                                            <div class="dropdown dropdown-field">
+                                                            <%= text_field_tag :mobile, params[:mobile], class: "form-control noBorder field", placeholder:"Mobile Number" %>  
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="outbox">
+                                                        <label>Profile Status</label>
+                                                        <div class="box bordered-input dropdown">
+                                                            <div class="dropdown-field selectTwo-dropdown">
+                                                                <%= select_tag :status, options_for_select(SadhakProfile.statuses.map{ |k, v| [k.humanize, k] }, params[:status]), include_blank: " ----- Select ----- ", class: "basic-single" %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="outbox">
+                                                        <label>Occupation</label>
+                                                        <div class="box bordered-input">
+                                                            <div class="dropdown dropdown-field">
+                                                            <%= text_field_tag :occupation, params[:occupation], class: "form-control noBorder field", placeholder:"Occupation" %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="outbox">
+                                                        <label>Profession</label>
+                                                        <div class="box bordered-input dropdown">
+                                                            <div class="dropdown-field selectTwo-dropdown">
+                                                                <%= select_tag :profession_id, options_for_select(Profession.pluck(:name, :id), params[:profession_id]), include_blank: " ----- Select ----- ", class: "basic-single" %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="sepeator"></div>
+                                            <div class="row mg-t30">
+                                                <div class="col-sm-4">
+                                                    <div class="outbox">
+                                                        <label>Country</label>
+                                                        <div class="box bordered-input dropdown">
+                                                            <div class="dropdown-field selectTwo-dropdown">
+                                                            <%=  select_tag :country_id, options_for_select(DbCountry.pluck(:name, :id)||[], params[:country_id]), include_blank: " ----- Select ----- ", class: "basic-single", id: "country_#{uniq_token}", onChange: "countrySelectChange('#{uniq_token}')"%>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="outbox">
+                                                        <label>State</label>
+                                                        <div class="box bordered-input dropdown">
+                                                            <div class="dropdown-field selectTwo-dropdown">
+                                                                <%=  select_tag :state_id, options_for_select(@states.try(:pluck, :name, :id)||[], params[:state_id]), include_blank: " ----- Select ----- ", class: "basic-single", "data-changable-id": "#{uniq_token}", onChange: "stateSelectChange('#{uniq_token}')", id: "state_#{uniq_token}" %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="outbox">
+                                                        <label>City</label>
+                                                        <div class="box bordered-input dropdown">
+                                                            <div class="dropdown-field selectTwo-dropdown">
+                                                                <%=  select_tag :city_id, options_for_select(@cities.try(:pluck, :name, :id)||[], params[:city_id]), include_blank: " ----- Select ----- ", class: "basic-single", id: "city_#{uniq_token}"%>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="outbox">
+                                                        <label>Registration Center</label>
+                                                        <div class="box bordered-input dropdown">
+                                                            <div class="dropdown-field selectTwo-dropdown">
+                                                            
+                                                            <%=  select_tag :registration_center_id, options_for_select(RegistrationCenter.pluck(:name, :id), params[:registration_center_id]), include_blank: " ----- Select ----- ", class: "basic-single"%>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="sepeator"></div>
+                                            <div class="row mg-t30">
+                                                <div class="col-sm-6">
+                                                    <div class="outbox">
+                                                        <label>Search Registrations By Date</label>
+                                                        <div class="box outerbox outerheight light-bg">
+                                                            <div class="rangercode">
+                                                                <div class="dropdown-field numbercode">
+                                                                    <div class="input-group date" id="<%= uniq_token %>_start" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" data-maxStartDate="<%= Date.current.end_of_day() %>" data-minStartDate="<%= Date.today - SADHAK_MAX_AGE.years %>" >
+                                                                    <%= text_field_tag :registration_from, params[:registration_from], class: "form-control code-input", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true %>
+                                                                    <span class="input-group-addon">
+                                                                        <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                                                    </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="dropdown-field">
+                                                                    <label class="middletab mg-t10">To</label>
+                                                                </div>
+                                                                <div class="dropdown-field numbercode">
+                                                                    <div class="input-group date" id="<%= uniq_token %>_end" data-syDatepickerId="<%= uniq_token %>" data-role="syDatepicker" 
+                                                                    data-maxStartDate="<%= Date.current.end_of_day() %>">
+                                                                        <%= text_field_tag :registration_to, params[:registration_to], class: "form-control code-input", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true %>
+                                                                    <span class="input-group-addon">
+                                                                        <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                                                    </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="outbox">
+                                                        <label>Search SYID By Creation Date</label>
+                                                        <div class="box outerbox outerheight light-bg">
+                                                            <div class="rangercode">
+                                                                <div class="dropdown-field numbercode">
+                                                                    <div class="input-group date" id="<%= uniq_token1 %>_start" data-syDatepickerId="<%= uniq_token1 %>" data-role="syDatepicker" data-maxStartDate="<%= Date.current.end_of_day() %>" data-minStartDate="<%= Date.today - SADHAK_MAX_AGE.years %>">
+                                                                        <%= text_field_tag :creation_from, params[:creation_from], class: "form-control code-input ", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true %>
+                                                                    <span class="input-group-addon">
+                                                                        <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                                                    </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="dropdown-field">
+                                                                    <label class="middletab mg-t10">To</label>
+                                                                </div>
+                                                                <div class="dropdown-field numbercode">
+                                                                    <div class="input-group date" id="<%= uniq_token1 %>_end" data-syDatepickerId="<%= uniq_token1 %>" data-role="syDatepicker"
+                                                                    data-maxStartDate="<%= Date.current.end_of_day() %>">
+                                                                        <%= text_field_tag :creation_to, params[:creation_to], class: "form-control code-input ", placeholder: Date.current.strftime('%b %d, %Y'), readonly: true %>
+                                                                    <span class="input-group-addon">
+                                                                        <button type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                                                    </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="pannel-btn text-right">
+                                                        <%= link_to 'CLEAR', search_sadhak_admin_index_path, class: "btn btn-danger mg-r10"%>
+                                                        <%= button_tag "SEARCH", class: "btn btn-info" %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <%end%>
+                                    </div>
+                                </div>
+                                <% if @filtering_params.present? %>
+                                    <% if @qsadhak_profiles.present? %>
+                                        <div class="col-sm-12 mg-t30">
+                                            <div class="col-sm-3">
+                                                <div class="Boxdrop dropdown">
+                                                    <%= render 'application/per_page' %>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div class="pannel-btn">
+                                                    <ul>    
+                                                        <li><button class="btn btn-info" onClick="$('#email_list').modal('show')">EMAIL LIST</button></li>
+                                                        <li>
+                                                        <%= link_to 'EXPORT TO EXCEL', generate_file_sadhak_profiles_path(@filtering_params.permit!), class: "btn btn-info", :target=>'_blank' %>
+                                                        </li>
+                                                        <li>
+                                                        <%= link_to 'SEND MESSAGE', new_message_sadhak_profiles_path(sadhak_profile_ids: "", data_sender_type: DATA_SENDER_TYPE[0]), remote: true, class: "btn btn-info"%>
+                                                        </li>
+                                                        
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="tableCntrl">
+                                                <div class="table-responsive tableScrollbar">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>
+                                                                    <div class="CustomCheckbox">
+                                                                        <input type="checkbox" name="check", id="select-all">
+                                                                        <label></label>
+                                                                    </div>
+                                                                </th>
+                                                                <th>First Name / SYID</th>
+                                                                <th>City</th>
+                                                                <th>Forum Name</th>
+                                                                <th class="text-center">More</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody class="data_list_container">
+
+                                                        <% @qsadhak_profiles.each do |sadhak|%>
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="CustomCheckbox">
+                                                                        <input type="checkbox" name="check", data-id="<%= sadhak.id%>">
+                                                                        <label></label>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="profile">
+                                                                        <div class="profileimg" style='background-image: url("<%= sadhak.try(:advance_profile_thumb_url) || sadhak.try(:advance_profile_s3_url)|| image_path('profile.png')%>");'>
+                                                                        
+                                                                        </div>
+                                                                        <div class="textgroup">
+                                                                            <p class="primarybold"><%= sadhak.try(:first_name)%></p>
+                                                                            <span><%= sadhak.try(:syid)%></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td><%= sadhak.try(:city_name) %></td>
+                                                                <td><%= sadhak.try(:active_forum_name) || ''%></td>
+                                                                <td class="text-center">
+                                                                    <div class="dropover dropdown">
+                                                                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                                                                        </button>
+                                                                        <ul class="dropdown-menu mCustomScrollbar">
+                                                                            <li>
+                                                                                <%= link_to 'Send Message', new_message_sadhak_profiles_path(sadhak_profile_ids: sadhak.id, data_sender_type: DATA_SENDER_TYPE[1]), remote: true%>
+                                                                            </li>
+                                                                            <li>
+                                                                                  <%= link_to 'Reset Password', reset_user_password_sadhak_profile_path(sadhak.slug), remote: true%>
+                                                                            </li>
+                                                                            <li>
+                                                                                <%= link_to 'Shivir Info', shivir_info_sadhak_profile_path(sadhak.slug), remote: true%>
+                                                                            </li>
+                                                                            <li>
+                                                                                <%= link_to 'Forum Info', forum_info_sadhak_profile_path(sadhak.slug), remote: true%>
+                                                                            </li>
+                                                                            <li>
+                                                                                <%= link_to 'Profile Details', profile_details_sadhak_profile_path(sadhak.slug), remote: true%>
+                                                                            </li>
+                                                                            <li>
+                                                                                <%= link_to 'Role management', role_assignment_to_sadhak_profile_user_sadhak_profile_path(sadhak.slug), remote:  true%>
+                                                                            </li>
+                                                                              <li>
+                                                                                <%= link_to 'Change Sadhak Status', change_sadhak_profile_status_sadhak_profile_path(sadhak.slug), remote:  true%>
+                                                                            </li>
+                                                                            <li>
+                                                                                <%= link_to 'Edit Sadhak', edit_sadhak_profile_path(sadhak.slug), target: "_blank"%>
+                                                                            </li>
+                                                                            <li>
+                                                                                <%= link_to 'View Logs', sadhak_profile_logs_sadhak_profile_path(sadhak.slug), remote: true%>
+                                                                            </li>
+                                                                            <li>
+                                                                                <%= link_to 'Update Photo For Sadhak', edit_sadhak_profile_photo_sadhak_profile_path(sadhak.slug), remote: true%>
+                                                                            </li>
+                                                                            <li>
+                                                                                <%= link_to 'Delete', sadhak_profile_path(sadhak.slug), remote: true, method: :delete, data: {confirm: "This action will delete all the data related to this sadhak profile. Are you sure?"} %>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        <%end%>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                              <div class="table-pagination clearfix">
+                                                <div class="show-pgnation">
+                                                  <p class="primarybold"><%= custom_page_entries_info(@qsadhak_profiles) %></p>
+                                                </div>
+                                                <%= paginate @qsadhak_profiles %>
+                                              </div>
+                                            </div>
+                                        </div>
+                                    <%else%>
+                                        <%= render partial: 'application/no_records', locals: { message: "No Records Found." }  %>
+                                    <%end%>
+                                <%else%>
+                                    <div class="col-sm-12 mg-t60 mg-b60">
+                                        <div class="mg-offer">
+                                            <p></p>
+                                        </div>
+                                    </div>
+                                <%end%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% if @filtering_params.present?%>
+    <div id="action_modal" class="modal fade Custommodal" role="dialog">
+    </div>
+
+    <div id="email_list" class="modal fade Custommodal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn btn-info btnclose" data-dismiss="modal"><%= image_tag "close.png", alt: "close"%></button>
+                    <h2 class="headtittle">Send Report</h2>
+                </div>
+                <%= form_tag generate_file_sadhak_profiles_path(@filtering_params.permit!), { id: 'send_report_to_email_list' } do %>
+                <div class="modal-body mCustomScrollbar">
+                        <div class="row">
+                            <div class="col-sm-12">
+                              <div class="outbox">
+                               <label class="asterisk">Recipients</label>
+                                  <div class="box bordered-input prelative">
+                                      <div class="dropdown box-taginput">
+                                        <%= text_field_tag :recipients, "", class: 'form-control noBorder field box-field tagsinput', 'data-role': 'tagsinput', required: true, style: "display:none;", placeholder: "Recipients" %>
+                                      </div>
+                                      <div class="merge-error"></div>
+                                  </div>
+                              </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="pannel-btn pull-right">
+                    		<%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+                        <button type="button" class="btn btn-danger mg-r5" data-dismiss="modal">CANCEL</button>
+                        <%= submit_tag  "SEND", class: ' btn btn-info' %>
+                    </div>
+                </div>
+                <%end%>
+            </div>
+        </div>
+    </div>
+<%end%>

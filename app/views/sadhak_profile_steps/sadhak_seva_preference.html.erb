@@ -1,0 +1,143 @@
+
+<div class="CompleteprofileCntrl">
+    <div class="headingtittle-h2 text-center">
+        <h2>Profile</h2>
+    </div>
+    <div class="boxsection-md boxshadow prelative">
+        <div class="progressCntrl text-right">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:<%= @sadhak_profile.completed.to_i %>%">
+                </div>
+            </div>
+            <span><%= @sadhak_profile.completed.to_i %>%</span>
+        </div>
+        <div class="tab-content">
+            <%= form_for @sadhak_profile, url: wizard_path, html: { id: 'sadhak_profile_step_sadhak_seva_preference_form' } do |f| %>
+                <%= f.fields_for :sadhak_seva_preference, @sadhak_seva_preference do |ff| %>
+                    <div class="tab-pane active" role="tabpanel" id="SadhakSeva">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="headtittle text-center">
+                                    <h2>Sadhak Seva Preference</h2>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 mg-t30">
+                                <div class="outbox mg-b20">
+                                    <label>Are you affiliated with other voluntary organisations?</label>
+                                    <div class="gender">
+                                        <ul class="clearfix list-unstyled">
+                                            <li>
+                                                <div class="Custradio">
+                                                    <%= radio_button_tag 'radio_voluntary_organisation', '', @sadhak_profile.sadhak_seva_preference.voluntary_organisation.present?, { class: 'radiotype yes_no_radio_voluntary_organisation_', disabled: ff.object.voluntary_organisation.present? } %>
+                                                    <label for="voluntaryyes">Yes</label>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="Custradio">
+                                                    <%= radio_button_tag 'radio_voluntary_organisation', '', @sadhak_profile.sadhak_seva_preference.voluntary_organisation.blank?, { class: 'radiotype yes_no_radio_voluntary_organisation_', id: 'no_radio_voluntary_organisation_', disabled: ff.object.voluntary_organisation.present? } %>
+                                                    <label for="voluntaryyo">No</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                   </div>
+                                </div>
+                                <div class="prelative">
+                                    <div class="overlapping overlay-active" id="voluntary_organisation_toggle_div"></div>
+                                    <div class="box bordered-input border-textarea">
+                                       <div class="dropdown dropdown-field">
+                                          <%= text_field_tag ff.object.voluntary_organisation.blank? ? "sadhak_profile[sadhak_seva_preference_attributes][voluntary_organisation]" : "", ff.object.voluntary_organisation, class: 'form-control noBorder field', id: 'voluntary_organisation_text_area', disabled: ff.object.voluntary_organisation.present?, placeholder: "Desciption" %>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% unless ff.object.availability.present? %>
+                                <div class="col-sm-6">
+                                    <div class="box bordered-input dropdown">
+                                        <label>Please indicate your availability</label>
+                                        <div class="dropdown-field selectTwo-dropdown">
+                                            <%= ff.select :availability, options_for_select(sadhak_seva_preference_availability_list, ff.object.availability), { include_blank: ' ----- Select ----- ' }, { class: 'basic-single', required: true } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% else %>
+                                <div class="col-sm-6">
+                                    <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.availability.present? %>"></div>
+                                        <div class="box bordered-input">
+                                           <label class="asterisk">Please indicate your availability</label>
+                                           <div class="dropdown dropdown-field">
+                                              <input type="text" name="" value="<%= ff.object.availability %>" class="form-control noBorder field" disabled="true" placeholder="Availability"> 
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                            <% unless ff.object.seva_preference.present? %>   
+                                <div class="col-sm-6">
+                                    <div class="box bordered-input dropdown">
+                                        <label>Seva Preference</label>
+                                        <div class="dropdown-field selectTwo-dropdown">
+                                            <%= ff.select :seva_preference, options_for_select(sadhak_seva_preference_seva_preference_list, ff.object.seva_preference), { include_blank: ' ----- Select ----- ' }, { class: 'basic-single', required: true } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% else %>
+                                <div class="col-sm-6">
+                                    <div class="prelative">
+                                    <div class="overlapping <%= 'overlay-active' if ff.object.seva_preference.present? %>"></div>
+                                        <div class="box bordered-input">
+                                           <label class="asterisk">Seva Preference</label>
+                                           <div class="dropdown dropdown-field">
+                                              <input type="text" name="" value="<%= ff.object.seva_preference %>" class="form-control noBorder field" disabled="true" placeholder="Seva preference"> 
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                            <div class="col-sm-12">
+                                <div class="outbox mg-b20">
+                                    <label>Do you have any professional qualifications or expertise that would be valuable for the foundation?</label>
+                                    <div class="gender">
+                                        <ul class="clearfix list-unstyled">
+                                            <li>
+                                                <div class="Custradio">
+                                                    <%= radio_button_tag 'radio_expertise', '', @sadhak_profile.sadhak_seva_preference.expertise.present?, { class: 'radiotype yes_no_radio_expertise_', disabled: ff.object.expertise.present? } %>
+                                                    <label for="foundationYes">Yes</label>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="Custradio">
+                                                    <%= radio_button_tag 'radio_expertise', '', @sadhak_profile.sadhak_seva_preference.expertise.blank?, { class: 'radiotype yes_no_radio_expertise_', id: 'no_radio_expertise_', disabled: ff.object.expertise.present? } %>
+                                                    <label for="foundationNo">No</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                   </div>
+                                </div>
+                                <div class="prelative">
+                                    <div class="overlapping overlay-active" id="expertise_toggle_div"></div>
+                                    <div class="box bordered-input border-textarea">
+                                       <div class="dropdown dropdown-field">
+                                          <%= text_field_tag ff.object.expertise.blank? ? "sadhak_profile[sadhak_seva_preference_attributes][expertise]" : "", ff.object.expertise, class: 'form-control noBorder field', id: 'expertise_text_area', disabled: ff.object.expertise.present?, placeholder: "Desciption" %>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mg-t30">
+                            <div class="col-sm-12">
+                                <div class="pannel-btn clearfix">
+                                    <%= link_to 'PREVIOUS', previous_wizard_path(previous: true), class: "btn btn-info mg-r5" %>
+                                    <div class="pull-right">
+                                        <%= link_to 'SKIP', next_wizard_path, class: "btn btn-info mg-r5" unless @event.full_profile_needed? %>
+                                        <%= f.submit  "SAVE & CONTINUE", class: ' btn btn-info' %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>
+            <% end %>
+        </div>
+    </div>
+</div>

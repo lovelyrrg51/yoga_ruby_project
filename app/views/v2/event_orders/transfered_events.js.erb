@@ -1,0 +1,13 @@
+<% if flash.present? %>
+  $('.flash-message').html("<%= escape_javascript(render partial: 'layouts/v2/flash_messages') %>");
+  <% flash.clear %>
+<% else %>
+  var eventSelect =  $("select[name='event_order[to_event_id]']");
+  <% @events.each do |event| %>
+    eventSelect.append($("<option/>", {
+    value: "<%= event.try(:slug) %>",
+    text : "<%= event.try(:event_name) %>"
+    }));
+  <% end %>
+eventSelect.selectize()
+<% end %>

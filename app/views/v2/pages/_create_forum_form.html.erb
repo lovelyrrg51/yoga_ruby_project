@@ -1,0 +1,45 @@
+<div class="modal fade" id="create_a_forum_form" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center mb-4">
+        <div class="heading_title">Create a New Shiv Yog Forum</div>
+        <div class="heading_title_small">Start a topic to engage with Shiv Yogis and exchange exciting ideas about spiritual growth. Remember in the below form fields marked with an * are required.</div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <%= form_for @forum_request, url: v2_forums_request_index_path do |f| %>
+        <div class="modal-body mx-3">
+          <div class="md-form mb-5">
+            <%= f.text_field :name, class: 'form-control validate', required: true %>
+            <%= f.label :name, "Name of the Forum" %>
+          </div>
+          <div class="md-form mb-5">
+            <%= f.text_field :no_of_people, class: 'form-control validate', required: true %>
+            <%= f.label :no_of_people, "Maximum number of people can join" %>
+          </div>
+          <div class="md-form mb-5">
+            <%= f.text_area :about_forum, rows: 3, class: 'form-control md-textarea validate', required: true %>
+            <%= f.label :about_forum, "About the Forum" %>
+          </div>
+          <div class="md-form mb-5">
+            <%= f.text_area :description, rows: 3, class: 'form-control md-textarea validate', required: true %>
+            <%= f.label :description, "Brief details of Forum" %>
+          </div>
+          <div class="md-form mb-5">
+            <%= f.text_field :motive, class: 'form-control validate', required: true %>
+            <%= f.label :motive, "Motive of opening this forum" %>
+          </div>
+
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <div class="shivyog-btn">
+            <%= f.button :submit, class: 'cta_button_small bg-red waves-effect'  do %>
+              <i class="fa fa-paper-plane-o ml-1"></i> Submit
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

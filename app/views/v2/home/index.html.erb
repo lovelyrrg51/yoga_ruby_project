@@ -1,0 +1,562 @@
+<section id="banner-img">
+  <video muted loop autoplay poster="<%= asset_path "v2/home_bg_cover.jpg" %>" id="bgvid" class="home-page hidden-xs hidden-sm">
+    <source src="<%= asset_path "shivyog-logo-1024-580.webm" %>" type="video/webm" />
+  </video>
+  <div class="very_light_overlay"></div>
+</section>
+
+<div class="clear"></div>
+
+<section id="what_is_shivyog">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="heading_subtitle">Become The Creator Of Your Own Destiny</div>
+        <div class="dashed_divider"></div>
+        <div class="heading_title">Start your Shiv Yog journey today</div>
+        <p>Shiv Yog defines God as the source of the infinite potential within every human being. Every human being has the potential to go beyond the limited identification with the body and mind. Shiv Yog provides us easy and practical ways to establish a connection with the infinite dimension from where everything in the manifest universe has been created. It is a scientific approach to living a 200% life - 100% worldly and 100% spiritual. It is a journey from Mindfulness to Inner Consciousness to Self-realization.</p>
+
+        <div class="text-align-center">
+          <div class="shivyog-btn display-inline-block">
+            <a href="#"><div class="cta_button_small bg-red waves-effect">Read More</div></a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <%= shivyog_video_tag youtube_id: "xVNCgUDUDjw",
+          image: "v2/shivyog_video_img.jpg",
+          border: false
+        %>
+
+        <%= render "v2/shared/social_links" %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="clear"></div>
+
+<section id="attend_shivyog_program">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="heading_subtitle">Find a Shiv Yog Program to attend</div>
+        <p class="blue_bg_para">Shiv Yog meditation is a potent, powerful tool to calm your mind and bring an all-pervading sense of peace into your life. It takes you from a state of unease to a state of quiet mindfulness. To start your journey attend a <%= link_to "Shiv Yog Intro", v2_what_is_shivyog_path %> program at a location nearest to you.</p>
+
+        <% @upcoming_events.each do |upcoming_event| %>
+          <%= link_to v2_event_path(upcoming_event.id) do %>
+            <div class="event_listing">
+              <div class="event_title"><%= upcoming_event.event_name %></div>
+              <div class="event_date">(<%= upcoming_event.event_date %>)</div>
+            </div>
+          <% end %>
+        <% end %>
+
+          <div class="text-align-center">
+            <div class="shivyog-btn display-inline-block">
+              <%= link_to upcoming_v2_events_path do %>
+                <div class="cta_button_small bg-red waves-effect">More Events</div>
+              <% end %>
+            </div>
+          </div>
+
+      </div>
+
+      <div class="col-sm-6">
+        <div class="heading_subtitle">Shiv Yog cosmic healing forums</div>
+        <p>Shiv Yog forums are weekly gatherings of small groups of committed Shiv Yogis who come together to pray collectively, share positive ideas and emotions, sing and chant together, meditate and perform selfless service. Dr. Avdhoot Shivanand, the founder of Shiv Yog, conceived and created these forums as a way to help people all over the world to experience more positivity and happiness in their lives. Shiv Yog forums are quietly bringing about a revolution in the world and working weekly to improve the lives of thousands of human beings. Become part of a worldwide movement - join a forum now. </p>
+
+        <div class="find_event_form">
+          <%= search_form_for @q, url: v2_forums_path, method: :get, id: "find_forum_form" do |f| %>
+            <div class="input-group md-form">
+                <%= f.search_field(:name_cont, class: "form-control white-bg input-border-bottom", id: "find_a_forum") %>
+                <label class="find_a_forum_input_label" for="find_a_forum">Find A Forum</label>
+                <div class="input-group-append">
+                  <button onclick="javascript:$('#find_forum_form').submit()" class="btn_textbox_submit btn-block bg-red waves-effect">Search</button>
+                </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="clear"></div>
+
+<section id="upgrade_software">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col-sm-12">
+          <div class="heading_subtitle">Upgrade The Software Of Your Life With Shiv Yog</div>
+          <div class="dashed_divider"></div>
+          <div class="heading_title">Create the life you want to live</div>
+          <p>We are used to upgrading the software on every piece of equipment we have but we never upgrade the software of the most powerful machine on earth - the human organism. We never upgrade our own body and mind. As a result most human beings are content to lead lives based on scripts that came pre-loaded with their machines. Shiv Yog can help you rewrite the script of your life and help you achieve that which your heart truly seeks. Don't be stuck with obsolete software. Upgrade the software of your life now!</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="babaji_statement"><div class="babaji_statement_text">"You are the creator of your own destiny!" ~ Dr. Avdhoot Shivanand</div></div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="col-sm-12">
+              <div class="shivyog-btn display-inline-block">
+                <a href="#"><div class="cta_button_small bg-red waves-effect">Read More</div></a>
+              </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="clear"></div>
+
+<section id="shivyog_channels">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="heading_subtitle">Shiv Yog Channels</div>
+            <div class="dashed_divider"></div>
+            <ul class="shivyog_channels">
+              <li>
+                <div class="channel_img">
+                  <a href="#">
+                    <%= image_tag "v2/channel_img_01.jpg", class: "img-fluid" %>
+                  </a>
+                </div>
+                <div class="channel_title"><a href="#">Shiv Yog</a></div>
+              </li>
+              <li>
+                <div class="channel_img">
+                  <a href="#">
+                    <%= image_tag "v2/channel_img_02.jpg", class: "img-fluid" %>
+                  </a>
+                </div>
+                <div class="channel_title"><a href="#">Shiv Yog Cosmic Farming</a></div>
+              </li>
+              <li>
+                <div class="channel_img">
+                  <a href="#">
+                    <%= image_tag "v2/channel_img_03.jpg", class: "img-fluid" %>
+                  </a>
+                </div>
+                <div class="channel_title"><a href="#">Shiv Yog Cosmic Medicine</a></div>
+              </li>
+              <li>
+                <div class="channel_img">
+                  <a href="#">
+                    <%= image_tag "v2/channel_img_04.jpg", class: "img-fluid" %>
+                  </a>
+                </div>
+                <div class="channel_title"><a href="#">Shiv Yog Dharma</a></div>
+              </li>
+              <li>
+                <div class="channel_img">
+                  <a href="#">
+                    <%= image_tag "v2/channel_img_05.jpg", class: "img-fluid" %>
+                  </a>
+                </div>
+                <div class="channel_title"><a href="#">Integrative Cosmic Therapy</a></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="clear"></div>
+
+<section id="shivyog_testimonials">
+  <div class="container">
+    <div class="row m-b-30">
+      <div class="col-sm-12">
+      <div class="heading_subtitle">Meet Shiv Yogis From Around The World</div>
+      <div class="dashed_divider_dark"></div>
+      <div class="heading_title">See what they are saying about Shiv Yog</div>
+        <div class="testimonial-carousel owl-carousel owl-theme">
+          <div class="item">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="textimonial_text_box">
+                  <p>"what is Shiv Yog for me? I feel like home. Life is feeling like a water, so easily flowing and we are a big family and we love the correct unconditional love what we have and give. I had this dream years ago too. People, life, peaceful times and happy and making big things. Thank you Bless you. Namah shivay !"</p>
+                </div>
+
+                <div class="testimonial_client_box">
+                  <div class="client_img">
+                    <%= image_tag "v2/karen.jpg", class: "img-fluid" %>
+                  </div>
+                  <div class="client_info">
+                    <div class="client_name">Karin Hofbauer</div>
+                    <div class="client_designation">Austria</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="textimonial_text_box">
+                  <p>To be so close to go was another big experience for me and the meditations you did with us were incredible, So high energy! And family responsibility you want to give us (To hail up or Shiv Yog University in Austria) makes me speechless. Thank you thank you for trusting us. Bless us that we even fulfill this job.</p>
+                </div>
+
+                <div class="testimonial_client_box">
+                  <div class="client_img">
+                    <%= image_tag "v2/heinz_img.jpg", class: "img-fluid" %>
+                  </div>
+                  <div class="client_info">
+                    <div class="client_name">Heinz</div>
+                    <div class="client_designation">President forum, Vienna</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="textimonial_text_box">
+                  <p>I live in Austria. Shiv Yog is promoting a healthy lifestyle. I work hard, every day, many days and my soul is now used to it. I work my soul with widita tiau (sadhana) that has been given to me by Shiv Yog. I feel so much pain has got healed in this shivir and am thankful for everything in my life Thank You & Bless you</p>
+                </div>
+
+                <div class="testimonial_client_box">
+                  <div class="client_img">
+                    <%= image_tag "v2/emese_img.jpg", class: "img-fluid" %>
+                  </div>
+                  <div class="client_info">
+                    <div class="client_name">EMESE SZAKACS</div>
+                    <div class="client_designation">Austria</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="textimonial_text_box">
+                  <p>Shiv Yog has changed me and my life completely. Shiv Yog brings the best out in me, makes me the goddess and I was always wishing for purifying myself layer by layer in shivir after shivir. I am reborn as a better me. I find Shiv Yog, the ultimate personality in the world. Ever since then I listen to Baba ji</p>
+                </div>
+
+                <div class="testimonial_client_box">
+                  <div class="client_img">
+                    <%= image_tag "v2/michael_img.png", class: "img-fluid" %>
+                  </div>
+                  <div class="client_info">
+                    <div class="client_name">Michaela Grittnes</div>
+                    <div class="client_designation">Human resource department in charge of company health programs & employee events</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="textimonial_text_box">
+                  <p>Now I feel  free! I heal my fear, I heal my pain, I heal my doubts. I'm really new born. Now my life is going to change. I feel healed from my emotions & gratitude for all. It's a miracle that I came to Shiv Yog I feel blessed. Namah shivay</p>
+                </div>
+
+                <div class="testimonial_client_box">
+                  <div class="client_img">
+                    <%= image_tag "v2/renate_img.png", class: "img-fluid" %>
+                  </div>
+                  <div class="client_info">
+                    <div class="client_name">Renate debingen</div>
+                    <div class="client_designation">Plants nursery gardener</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="heading_title text-align-center">Watch some videos of Shiv Yogis sharing their experiences</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-3">
+        <%= shivyog_video_tag youtube_id: "ea09qfVVNJo",
+          image: "v2/video_01.jpg",
+          border: false,
+          sub_caption: "A fish in the ocean finds light"
+        %>
+      </div>
+      <div class="col-sm-3">
+        <%= shivyog_video_tag youtube_id: "2kfdsPMb09I",
+          image: "v2/video_02.jpg",
+          border: false,
+          sub_caption: "ShivYog Cosmic healing Experience"
+        %>
+      </div>
+      <div class="col-sm-3">
+        <%= shivyog_video_tag youtube_id: "JQUsZqfl8_U",
+          image: "v2/video_03.jpg",
+          border: false,
+          sub_caption: "Seeker from Canada"
+        %>
+      </div>
+      <div class="col-sm-3">
+        <%= shivyog_video_tag youtube_id: "SJytc1_rCqo",
+          image: "v2/video_04.jpg",
+          border: false,
+          sub_caption: "Seeker from Transylvania"
+        %>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</section>
+
+<div class="clear"></div>
+
+<section id="shivyog_journey">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="heading_subtitle">Start Your Shivyog Journey</div>
+        <div class="dashed_divider"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="heading_title">Serve humanity by starting a forum</div>
+        <p>Shiv Yog Cosmic Healing forums are designed for helping people to heal from past traumas, phobias, anxiety issues, anger issues, energy disturbances and health issues of psychosomatic origin. Positive minded people come together on a weekly basis to participate in spiritual processes that help to raise their collective consciousness. As the forums grow, an increasing number of human beings are able to experience robust health, healthy relationships, material abundance, inner bliss and professional success. <strong>As Dr. Avdhoot Shivanand says</strong>, "<em><u>Healthy people make healthy nations.</u></em>" By taking the lead in creating a Shiv Yog Cosmic Healing Forum you will be doing a great service to humanity. Click below to send in your application to start a Shiv Yog Forum in your area today!</p>
+        <div class="shivyog-btn">
+          <a href="#">Read More</a>
+        </div>
+        <div class="text-align-center">
+          <div class="shivyog-btn display-inline-block">
+            <a href="#"><div class="cta_button_small bg-red waves-effect">Create a Shiv Yog Forum</div></a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="heading_title">Attend a Shiv Yog transformation workshop</div>
+        <p>Shiv Yog offers a complete program for transforming all aspects of your life. </p>
+
+        <div class="row">
+          <div class="col-sm-6 clearfix">
+
+            <div class="shivyog_instructors_box">
+              <div class="teacher_pic text-align-center">
+                <a href="#!">
+                  <%= image_tag "v2/teacher_pic_small.jpg", class: "img-fluid" %>
+                </a>
+              </div>
+              <div class="teacher_name text-align-center"><strong><a target="_blank" href="#">Instructor</a></strong></div>
+              <div class="teacher_designation text-align-center">Professor, University of California</div>
+
+              <div class="shivyog-btn text-align-center">
+                <a class="waves-effect teachers_profile_btn_small" href="#">View Profile</a>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-sm-6 clearfix">
+            <div class="shivyog_instructors_box">
+              <div class="teacher_pic text-align-center">
+                <a href="#!">
+                  <%= image_tag "v2/teacher_pic_small.jpg", class: "img-fluid" %>
+                </a>
+              </div>
+              <div class="teacher_name text-align-center"><strong><a target="_blank" href="#">Instructor</a></strong></div>
+              <div class="teacher_designation text-align-center">Professor, University of California</div>
+              <div class="shivyog-btn text-align-center">
+                <a class="waves-effect teachers_profile_btn_small" href="#">View Profile</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-align-center">
+          <div class="shivyog-btn display-inline-block">
+            <a href="#"><div class="cta_button_small bg-red waves-effect">Find a Shiv Yog Instructor</div></a>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</section>
+
+<div class="clear"></div>
+
+<section id="pearls_of_wisdom">
+  <div class="container">
+    <div class="row m-b-30">
+      <div class="col-sm-12">
+        <div class="heading_subtitle">Pearls of Wisdom from Dr. Shivanand </div>
+        <div class="dashed_divider"></div>
+      </div>
+    </div>
+    <div class="row d-none d-md-block">
+      <div class="col-sm-12">
+        <div id="pearls-of-wisdom-carousel" class="owl-carousel owl-theme">
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_01.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_02.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_03.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_04.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_05.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_06.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_07.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_08.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_09.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_10.jpg", class: "img-fluid" %></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row d-block d-sm-block d-md-none">
+      <div class="col-sm-12">
+        <div id="pearls-of-wisdom-carousel-mobile" class="owl-carousel owl-theme">
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_mobile_01.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_mobile_02.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_mobile_03.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_mobile_04.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_mobile_05.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_mobile_06.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_mobile_07.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_mobile_08.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_mobile_09.jpg", class: "img-fluid" %></div>
+          <div class="item"><%= image_tag "v2/pearls_of_wisdom_mobile_10.jpg", class: "img-fluid" %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="clear"></div>
+
+<section id="blog_section">
+  <div class="container">
+    <div class="row m-b-30">
+      <div class="col-sm-12">
+        <div class="heading_subtitle">Read Our Blog</div>
+        <div class="dashed_divider"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <% @blogs.each do |blog| %>
+        <% blog.fragments.each do |fr| %>
+          <div class="col-sm-3">
+            <div class="shivyog_blog">
+              <div class="blog_img">
+                <%= fr.content[/img.*?src="(.*?)"/i,1].nil? ? (link_to (image_tag  "v2/read-img1.jpg", class: 'img-fluid'), v2_blog_path(blog.slug)) : ( link_to (image_tag fr.content[/img.*?src="(.*?)"/i,1], class: 'img-fluid'), v2_blog_path(blog.slug)) %>
+              </div>
+              <div class="blog_title">
+                <%= link_to blog.title, v2_blog_path(blog.slug)%>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="text-align-center">
+          <div class="shivyog-btn display-inline-block">
+            <%= link_to v2_blogs_path do %>
+              <div class="cta_button_small bg-red waves-effect">Read More</div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="clear"></div>
+
+<%= render "v2/shared/newsletter" %>
+
+<div class="clear"></div>
+<!-- Video Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+         </button>
+      <!-- 16:9 aspect ratio -->
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always">></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Video Modal -->
+
+
+<div class="modal fade" id="request_a_callback_form" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title">Request a Call Back</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <!--<i class="fa fa-user prefix grey-text"></i>-->
+          <input type="text" id="form1" class="form-control validate" />
+          <label data-error="wrong" data-success="right" for="form1">Name</label>
+        </div>
+
+    <div class="md-form mb-5">
+          <!--<i class="fa fa-user prefix grey-text"></i>-->
+          <input type="text" id="form2" class="form-control validate" />
+          <label data-error="wrong" data-success="right" for="form2">SYID</label>
+        </div>
+
+        <div class="md-form mb-4">
+          <!--<i class="fa fa-envelope prefix grey-text"></i>-->
+          <input type="email" id="form3" class="form-control validate" />
+          <label data-error="wrong" data-success="right" for="form3">Email</label>
+        </div>
+
+    <div class="md-form mb-4">
+          <!--<i class="fa fa-phone prefix grey-text"></i>-->
+          <input type="text" id="form4" class="form-control validate" />
+          <label data-error="wrong" data-success="right" for="form4">Phone</label>
+        </div>
+
+    <div class="md-form mb-4">
+          <!--<i class="fa fa-phone prefix grey-text"></i>-->
+          <textarea class="form-control md-textarea" id="form5" name="form5" rows="3" required></textarea>
+          <label data-error="wrong" data-success="right" for="form5">Tell Us About Yourself</label>
+        </div>
+
+    <div class="md-form mb-4">
+          <!--<i class="fa fa-phone prefix grey-text"></i>-->
+          <input type="text" id="form6" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="form6">What is Your Request</label>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <div class="shivyog-btn"><a href="#" class="cta_button_small bg-red waves-effect"><i class="fa fa-paper-plane-o ml-1"></i>Submit</a></div>
+      </div>
+    </div>
+  </div>
+</div>

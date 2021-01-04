@@ -1,0 +1,5 @@
+$('#action_modal')
+    .modal('show')
+    .html("<%=  j render 'edit_sadhak_profile_photo_form', locals: { sadhak_profile: @sadhak_profile } %>");
+$('form#edit_sadhak_profile_advance_profile').validate(advance_profile_validation_obj);
+$('.basic-single').select2();
